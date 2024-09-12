@@ -2,6 +2,61 @@
 
 
 
+# SQLAlchemy Core define
+
+使用 Table 对象直接定义表结构，例如
+
+```python
+from sqlalchemy import Table, Column, Integer, String, MetaData
+
+metadata_obj = MetaData()
+user_table = Table(
+  "user_account",
+  metadata_obj,
+  Column("id", Integer, primary_key=True),
+  Column("name", String(30)),
+  # ... 其他字段
+)
+```
+
+
+
+
+
+# SQLAlchemy Declarative define
+
+```python
+from sqlalchemy.orm import DeclarativeBase
+class Base(DeclarativeBase):
+    pass
+```
+
+## 关于空的Base类
+
+通过定义自己的 `Base` 类，可以在将来添加自定义方法或属性，这些将被所有模型类继承，提供了更多的灵活性和可扩展性。这种方法允许您在将来轻松地向所有模型添加共同的功能，而不需要修改每个单独的模型类。例如，为所有表添加一个 `created_at` 列：
+
+   ```python
+   from sqlalchemy.orm import DeclarativeBase
+   from sqlalchemy import Column, DateTime
+   from datetime import datetime
+
+   class Base(DeclarativeBase):
+       created_at = Column(DateTime, default=datetime.utcnow)
+   ```
+
+在大型项目中，可以将 `Base` 类定义在一个单独的文件中（如 `database.py`）可以提高代码的组织性。这样，您可以在其他文件中导入 `Base`，而不是每次都导入 `DeclarativeBase`。
+
+还可以在 `Base` 类中添加元数据配置或其他 SQLAlchemy 相关的设置。
+
+### 旧版本SQLAlchemy：
+
+值得注意的是，SQLAlchemy 在不同版本中对声明式基类的处理有所变化：
+
+- 在旧版本中，使用 `declarative_base()` 函数来创建基类。
+- 在 SQLAlchemy 2.0 中，引入了 `DeclarativeBase` 类。
+
+定义自己的 `Base` 类的做法部分源于早期版本的习惯，并且在新版本中仍然保留了这种灵活性。
+
 # Flask-SQLAlchemy Table define VS SQLAlchemy Table define
 
 ## 1. Flask-SQLAlchemy 定义方式
@@ -18,24 +73,7 @@ class Article_Meta_Data(db.Model):
   # ... 其他字段
 ```
 
-## 2. SQLAlchemy Core 定义方式
 
-- 使用 Table 对象直接定义表结构
-- 较低级别的 API
-- 示例：
-
-```python
-from sqlalchemy import Table, Column, Integer, String, MetaData
-
-metadata_obj = MetaData()
-user_table = Table(
-  "user_account",
-  metadata_obj,
-  Column("id", Integer, primary_key=True),
-  Column("name", String(30)),
-  # ... 其他字段
-)
-```
 
 ## 3. SQLAlchemy ORM 定义方式
 

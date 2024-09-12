@@ -34,7 +34,8 @@ and here is my changed file
     "Comment": "Ctrl+/",
     "Source Code Mode": "Ctrl+Shift+/",
     "Code Fences": "Ctrl+`",
-    "Delete Line / Sentence" : "Ctrl+Shift+K"
+    "Delete Line / Sentence" : "Ctrl+Shift+K",
+    "Open Folder" : "Ctrl+Shift+O"
   },
 
   "monocolorEmoji": false, //default false. Only work for Windows
