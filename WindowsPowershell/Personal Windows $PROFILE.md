@@ -22,7 +22,7 @@ personal windows powershell command, for my convinence
 
 I write down some use command for my convinence, here is my `$PROFILE` source code
 
-```ps1
+```powershell
 oh-my-posh init pwsh --config $env:POSH_THEMES_PATH\robbyrussell.omp.json | Invoke-Expression
 cls
 # Import the Chocolatey Profile that contains the necessary code to enable
@@ -57,6 +57,32 @@ function Open-Smart {
 Set-Alias -Name open -Value Open-Smart
 ```
 
+
+
 # Command `open`
 
 it will open a file with maximized windows, but if it open a folder, it use default size.
+
+```powershell
+# Custom aliases add by Plain 2024-09-19
+function Open-Smart {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$Path
+    )
+
+    $Path = Resolve-Path $Path
+
+    if (Test-Path -Path $Path -PathType Container) {
+        # It's a folder, open with normal size
+        Start-Process -FilePath "explorer.exe" -ArgumentList $Path
+    } else {
+        # It's a file, open maximized
+        Start-Process -FilePath $Path -WindowStyle Maximized
+    }
+}
+
+# Set alias 'open' for the custom function
+Set-Alias -Name open -Value Open-Smart
+```
+
