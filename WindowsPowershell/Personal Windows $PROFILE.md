@@ -55,6 +55,29 @@ function Open-Smart {
 
 # Set alias 'open' for the custom function
 Set-Alias -Name open -Value Open-Smart
+
+# custom command add by Plain 2024-09-23
+function Touch-File {
+    param(
+        [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
+        [string[]]$Path
+    )
+
+    foreach ($file in $Path) {
+        if (Test-Path -Path $file) {
+            # File exists, update its timestamp
+            (Get-Item $file).LastWriteTime = Get-Date
+            Write-Host "Updated timestamp: $file"
+        }
+        else {
+            # File doesn't exist, create it
+            New-Item -ItemType File -Path $file | Out-Null
+            Write-Host "Created new file: $file"
+        }
+    }
+}
+
+Set-Alias -Name touch -Value Touch-File
 ```
 
 
@@ -84,5 +107,34 @@ function Open-Smart {
 
 # Set alias 'open' for the custom function
 Set-Alias -Name open -Value Open-Smart
+```
+
+# Command `touch`
+
+it will like Linux comamnd `touch` if there no file, it will created one, if have file, it will renew the timestamp
+
+```powershell
+# custom command add by Plain 2024-09-23
+function Touch-File {
+    param(
+        [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
+        [string[]]$Path
+    )
+
+    foreach ($file in $Path) {
+        if (Test-Path -Path $file) {
+            # File exists, update its timestamp
+            (Get-Item $file).LastWriteTime = Get-Date
+            Write-Host "Updated timestamp: $file"
+        }
+        else {
+            # File doesn't exist, create it
+            New-Item -ItemType File -Path $file | Out-Null
+            Write-Host "Created new file: $file"
+        }
+    }
+}
+
+Set-Alias -Name touch -Value Touch-File
 ```
 
