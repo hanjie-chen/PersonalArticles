@@ -63,3 +63,72 @@ note:
 
 `git checkout -b checkend-development`
 
+
+
+# Git ignore
+
+当python程序运行的时候，会产生一些临时的文件，存放在本地路径的`__pycache__`文件夹中，但是当我们提交的时候并不希望这些临时文件被提交，这个时候，我们可以写一个`.gitignore`文件来忽略某些特定的文件
+
+
+
+## Global ignore
+
+为了方便，我一般使用全局的，这样子就不用每个repository都配置过去了，只需要进入`~`(user home directory)
+
+然后创建一个`.gitignore`文件，并且配置git使用这个全局文件
+
+```shell
+cd ~
+git config --global core.excludesfile ~/.gitignore
+```
+
+
+
+经典`.gitignore` 方案，来自github[^1]
+
+```python
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+```
+
+
+
+# Reference
+
+[^1]: [Some common .gitignore configurations (github.com)](https://gist.github.com/octocat/9257657)
+
