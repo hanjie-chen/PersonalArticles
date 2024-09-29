@@ -124,6 +124,10 @@ git config --global core.excludesfile ~/.gitignore
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+## python auto generated file
+__pycache__/
+*.pyc
 ```
 
 
