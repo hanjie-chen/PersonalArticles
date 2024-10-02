@@ -154,6 +154,10 @@ json代码如下
 
 [彻底卸载VSCode_如何彻底删除vscode-CSDN博客](https://blog.csdn.net/qq_29339467/article/details/104074758)
 
+# Visio
+
+下载和激活：[Microsoft Visio 专业版 2019_visio 2019-CSDN博客](https://blog.csdn.net/milkhq/article/details/105714076)
+
 # Reference
 
 [^1]: [how to setting the edge search bar](https://answers.microsoft.com/zh-hans/microsoftedge/forum/all/edge使用必应搜/6637cc55-5366-4a01-adc3-fd5db4b666fd)
