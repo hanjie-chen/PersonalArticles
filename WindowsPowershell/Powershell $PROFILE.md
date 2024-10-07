@@ -18,7 +18,7 @@ personal windows powershell command, for my convinence
 
 
 
-# Personal Windows `$PROFILE`
+# Powershell `$PROFILE`
 
 I write down some use command for my convinence, here is my `$PROFILE` source code
 
