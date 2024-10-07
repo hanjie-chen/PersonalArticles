@@ -1,4 +1,4 @@
-# Latex数学公式
+# Latex基本数学公式+符号
 
 只需要两个$即可
 
@@ -40,3 +40,12 @@ $$
 \lvert C_{2} \rvert
 $$
 
+# Latex 公式推导 等号对齐
+
+`{algin}` 和 `&=` 配合使用
+$$
+\begin{align}
+Error &= \frac{1}{N}\times(Target-Output)^2\\
+      &=\frac{1}{N}\times\sum_{i=1}^{N}(target_{i}-output_{i})^2
+\end{align}
+$$
