@@ -49,3 +49,10 @@ Error &= \frac{1}{N}\times(Target-Output)^2\\
       &=\frac{1}{N}\times\sum_{i=1}^{N}(target_{i}-output_{i})^2
 \end{align}
 $$
+
+# Latex 数学定义
+
+使用符号`\triangleq` 来定义一个变量
+$$
+Net_{1\times m} \triangleq f_a(Input_{1\times n} \cdot Weights_{n\times m}^{hidden} + Bias_{1\times m}^{hidden})
+$$
