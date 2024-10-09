@@ -56,3 +56,11 @@ $$
 $$
 Net_{1\times m} \triangleq f_a(Input_{1\times n} \cdot Weights_{n\times m}^{hidden} + Bias_{1\times m}^{hidden})
 $$
+
+
+# Latex 增加变量之间空隙
+
+使用`\quad` 可以增加公式之间空隙，从而达到美化效果
+$$
+Hidden_{1\times m} = f_a(Net_{1\times m}^{hidden}) \quad \Rightarrow \quad hidden_i = f_a(net_i^{hidden})
+$$
