@@ -94,7 +94,9 @@ win键打开开始菜单，选择设置图标，右键设置个性化，可以�
 
    如上，我会将转移到Data盘的 下载、视频、图片、音乐给隐藏掉。这样子就可以通过侧边栏的此电脑直接访问，而不用进入Data盘查看。
 
+# 默认应用
 
+修改pdf文件默认为edge打开：[PDF默认用edge打开的修改方法_win10pdf老用edge打开-CSDN博客](https://blog.csdn.net/nofall_bird/article/details/138244710)
 
 # Reference
 

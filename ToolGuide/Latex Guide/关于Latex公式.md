@@ -64,3 +64,13 @@ $$
 $$
 Hidden_{1\times m} = f_a(Net_{1\times m}^{hidden}) \quad \Rightarrow \quad hidden_i = f_a(net_i^{hidden})
 $$
+
+
+# Latex 表示函数导数
+
+直接暴力的在函数右上角加上`'`即可，例如：
+$$
+\frac{\partial (output_i)}{\partial (net_i^{output})} = \frac {\partial f_a(net_i^{output})} {\partial net_i^{output}}=f_a^{'}(net_i^{output})
+$$
+
+
