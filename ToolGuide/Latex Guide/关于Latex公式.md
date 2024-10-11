@@ -1,4 +1,4 @@
-# Latex基本数学公式+符号
+# Latex 速查指南
 
 只需要两个$即可
 
@@ -73,4 +73,6 @@ $$
 \frac{\partial (output_i)}{\partial (net_i^{output})} = \frac {\partial f_a(net_i^{output})} {\partial net_i^{output}}=f_a^{'}(net_i^{output})
 $$
 
+# Reference
 
+[Latex简明速查手册(8页) - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/508559139)
