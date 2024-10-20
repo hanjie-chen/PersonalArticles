@@ -30,7 +30,7 @@ You are an expert-level LLM prompt engineer with extensive knowledge across vari
 
 
 
-# Imporve leanring note
+# Imporve leanring note Prompt
 
 I'm seeking assistance in refining my learning notes on [topic]. 
 
@@ -61,7 +61,7 @@ Refined Learning Notes Review: Neural Network Back Propagation Algorithm
 I'm seeking expert assistance in refining my comprehensive learning notes on the neural network back propagation algorithm. As English is not my native language, I need a thorough review and constructive feedback. Please analyze the following aspects of my notes:
 
 1. Title and Section Header Evaluation:
-   a) Assess the accuracy and relevance of current titles and section headers.
+   a) Assess the accuracy and relevance of title and section header.
    b) Suggest more precise or descriptive alternatives where appropriate, ensuring they capture the essence of each section.
 
 2. Structure and Language Review:
@@ -85,9 +85,9 @@ I'm seeking expert assistance in refining my comprehensive learning notes on the
 Please provide your feedback in a structured format, addressing each point separately with specific examples and explanations for your suggestions. 
 
 Important Notes:
-- I will provide the entire set of notes for context, but we will discuss and refine each section independently.
+- I will provide the entire set of notes for context, but we will discuss and refine the section that I pointed.
 - Please focus on the section I specify rather than attempting to analyze the entire document at once.
 - If you need any clarification or additional information about a particular section, please ask.
 
-Are you ready to proceed with this approach? If so, I will share the complete notes, and we can begin our section-by-section review.
+Are you ready to proceed with this approach? If so, I will share the complete notes, and we can begin our section review.
 
