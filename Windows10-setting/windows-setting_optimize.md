@@ -98,6 +98,12 @@ win键打开开始菜单，选择设置图标，右键设置个性化，可以�
 
 修改pdf文件默认为edge打开：[PDF默认用edge打开的修改方法_win10pdf老用edge打开-CSDN博客](https://blog.csdn.net/nofall_bird/article/details/138244710)
 
+# 激活windows系统
+
+[[微零微\]-Windows/Office全系列激活教程-KMS在线激活-KMS激活服务器-Windows11一句命令永久激活-Windows10一句命令永久激活 (jihuowin.com)](https://jihuowin.com/index.php)
+
+参考这个链接
+
 # Reference
 
 [^Bilibili]: [电脑到手后你应该立刻修改的设置！_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1am4y1R7pi/?spm_id_from=333.880.my_history.page.click&vd_source=617c4a2b4e326fc6b6269aada0d25986)
