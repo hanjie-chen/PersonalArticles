@@ -2,10 +2,9 @@
 
 在基础知识阶段，我们将学习这些概念：
 
-1. 了解ORM（对象关系映射）
-2. 学习SQLAlchemy的核心组件：Engine, Connection, MetaData
-3. 掌握基本的CRUD操作（创建、读取、更新、删除）
-4. 学习如何定义模型（Model）和表（Table）
+1. 学习SQLAlchemy的核心组件：Engine, Connection, MetaData
+2. 掌握基本的CRUD操作（创建、读取、更新、删除）
+3. 学习如何定义模型（Model）和表（Table）
 
 # 关于ORM(Object-Relational Mapping)
 
@@ -275,3 +274,234 @@ x: 13  y: 14
 
 总之，`session` 提供了更高层次的抽象，适合复杂的应用程序，而 `engine.connect` 则适合简单的、低级别的数据库操作。
 
+# Core Components of SQLAlchemy: Metadata
+
+想象一下你在设计一座房子：
+
+- 你需要一张蓝图，上面标注了每个房间的位置、大小、用途
+- 你还需要施工说明，告诉工人如何建造这座房子
+
+在 SQLAlchemy 中，Metadata 就像这张蓝图：
+
+- 它记录了所有表的"设计图"（表名、列名、数据类型等）
+- 它还带有"施工说明书"（create_all、drop_all 等方法）来指导数据库按照设计图建表
+
+## Core define
+
+使用 Table 对象直接定义表结构，例如
+
+```python
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+
+# 创建一个空白的"设计图"
+metadata_obj = MetaData()
+
+# 在设计图上画出表的结构
+user_table = Table(
+	"user_account",
+	metadata_obj,	# 把表的设计添加到这张图纸上
+	Column("id", Integer, primary_key=True),
+	Column("name", String(30)),
+  	# ... 其他字段
+)
+address_table = Table(
+	"address",
+	metadata_obj,
+	Column("id", Integer, primary_key=True),
+	Column("user_id", ForeignKey("user_account.id"), nullable=False),
+	Column("email_address", String, nullable=False),
+	)
+
+# 根据设计图建造真实的数据库表
+metadata_obj.create_all(engine)
+```
+
+~~正常人都不会用的~~
+
+## ORM Declarative Forms define
+
+先看完整的代码
+
+```python
+from typing import List
+from typing import Optional
+from sqlalchemy import ForeignKey
+from sqlalchemy import Table, Column, Integer, String
+from sqlalchemy import MetaData
+from sqlalchemy import text
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+
+class Base(DeclarativeBase):
+    pass
+
+class User(Base):
+    __tablename__ = "user_account"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(30))
+    fullname: Mapped[Optional[str]]
+    addresses: Mapped[List["Address"]] = relationship(back_populates="user")
+    def __repr__(self) -> str:
+        return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
+
+class Address(Base):
+    __tablename__ = "address"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email_address: Mapped[str]
+    user_id = mapped_column(ForeignKey("user_account.id"))
+    user: Mapped[User] = relationship(back_populates="addresses")
+    def __repr__(self) -> str:
+        return f"Address(id={self.id!r}, email_address={self.email_address!r})"
+
+engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
+
+# Base.metadata 自动收集了所有模型类的表结构信息
+Base.metadata.create_all(engine)
+```
+
+### 关于空的Base类
+
+通过定义空的 `Base` 类，可以在将来添加自定义方法或属性，而这些将被所有模型类继承，无需修改每个单独的模型类。
+
+例如，为所有表添加一个 `created_at` 列：
+
+   ```python
+   from sqlalchemy.orm import DeclarativeBase
+   from sqlalchemy import Column, DateTime
+   from datetime import datetime
+
+   class Base(DeclarativeBase):
+       created_at = Column(DateTime, default=datetime.utcnow)
+   ```
+
+在大型项目中，可以将 `Base` 类定义在一个单独的文件中以提高代码的组织性。
+
+> 新旧版本变化：
+>
+> 值得注意的是，SQLAlchemy 在不同版本中对声明式基类的处理有所变化，在旧版本中，使用 `declarative_base()` 函数来创建基类。在 SQLAlchemy 2.0 中，引入了 `DeclarativeBase` 类。
+
+---
+
+### Mapped 和 mapped_column
+
+`Mapped` 和 `mapped_column` 是 SQLAlchemy 2.0 中的新概念：类型注解 (type annotations)
+
+- `Mapped[]` 用于类型提示，指定ORM映射属性的类型
+- `mapped_column()` 定义列的具体属性，创建 Column 对象
+
+结合User & Address Class 解读
+
+```python
+class User(Base):
+    __tablename__ = "user_account"
+    
+    # 定义一个整数类型的主键列
+    id: Mapped[int] = mapped_column(primary_key=True)
+    
+    # 定义一个最大长度为30的字符串列
+    name: Mapped[str] = mapped_column(String(30))
+    
+    # 定义一个可为空的字符串列 Optional[] 默认为null 
+    fullname: Mapped[Optional[str]]
+    
+    # 定义一个到 Address 模型的一对多关系。
+    addresses: Mapped[List["Address"]] = relationship(back_populates="user")
+
+
+class Address(Base):
+    __tablename__ = "address"
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email_address: Mapped[str]
+    
+    # 定义一个外键列。注意这里没有使用 `Mapped`，因为它不是直接映射到模型属性的。
+    user_id = mapped_column(ForeignKey("user_account.id"))
+    
+    # 定义到 User 模型的多对一关系。
+    user: Mapped[User] = relationship(back_populates="addresses")
+```
+
+
+
+> 在旧版本的 SQLAlchemy 中，可能会看到这样的代码：
+>
+> ```python
+> class User(Base):
+>     __tablename__ = "user_account"
+>     
+>     id = Column(Integer, primary_key=True)
+>     name = Column(String(30))
+>     fullname = Column(String)
+>     addresses = relationship("Address", back_populates="user")
+> ```
+>
+> 新版本的主要区别在于使用了类型注解和 `Mapped` 类型，使得代码更加明确和类型安全。不过，SQLAlchemy 2.0 仍然支持旧的定义方式。
+
+more details please read [Table Configuration with Declarative — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/orm/declarative_tables.html#orm-declarative-table)
+
+### Metadata特性
+
+所有继承自 Base 的模型类的表信息都会自动注册到 Base.metadata
+
+可以通过 metadata.tables 访问所有已注册的表
+
+```python
+# 创建所有表
+Base.metadata.create_all(engine)
+
+# 删除所有表
+Base.metadata.drop_all(engine)
+
+# 检查表是否存在
+Base.metadata.reflect(engine)
+```
+
+
+
+## Run ORM Declarative code
+
+```bash
+2024-09-13 10:11:23,848 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2024-09-13 10:11:23,848 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("user_account")
+2024-09-13 10:11:23,848 INFO sqlalchemy.engine.Engine [raw sql] ()
+2024-09-13 10:11:23,849 INFO sqlalchemy.engine.Engine PRAGMA temp.table_info("user_account")
+2024-09-13 10:11:23,849 INFO sqlalchemy.engine.Engine [raw sql] ()
+2024-09-13 10:11:23,849 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("address")
+2024-09-13 10:11:23,849 INFO sqlalchemy.engine.Engine [raw sql] ()
+2024-09-13 10:11:23,850 INFO sqlalchemy.engine.Engine PRAGMA temp.table_info("address")
+2024-09-13 10:11:23,850 INFO sqlalchemy.engine.Engine [raw sql] ()
+2024-09-13 10:11:23,850 INFO sqlalchemy.engine.Engine 
+CREATE TABLE user_account (
+        id INTEGER NOT NULL, 
+        name VARCHAR(30) NOT NULL, 
+        fullname VARCHAR, 
+        PRIMARY KEY (id)
+)
+
+
+2024-09-13 10:11:23,850 INFO sqlalchemy.engine.Engine [no key 0.00013s] ()
+2024-09-13 10:11:23,852 INFO sqlalchemy.engine.Engine 
+CREATE TABLE address (
+        id INTEGER NOT NULL, 
+        email_address VARCHAR NOT NULL, 
+        user_id INTEGER, 
+        PRIMARY KEY (id), 
+        FOREIGN KEY(user_id) REFERENCES user_account (id)
+)
+
+
+2024-09-13 10:11:23,852 INFO sqlalchemy.engine.Engine [no key 0.00033s] ()
+2024-09-13 10:11:23,853 INFO sqlalchemy.engine.Engine COMMIT
+```
+
+SQLAlchemy 在创建表之前，会先执行的 PRAGMA 语句，检查主数据库（main）和临时数据库（temp）中这些表是否已经存在，确保不会重复创建已存在的表。
+
+```
+PRAGMA main.table_info("user_account")
+PRAGMA temp.table_info("user_account")
+PRAGMA main.table_info("address")
+PRAGMA temp.table_info("address")
+```
