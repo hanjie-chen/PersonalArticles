@@ -2,9 +2,8 @@
 
 在基础知识阶段，我们将学习这些概念：
 
-1. 学习SQLAlchemy的核心组件：Engine, Connection, MetaData
-2. 掌握基本的CRUD操作（创建、读取、更新、删除）
-3. 学习如何定义模型（Model）和表（Table）
+1. 掌握基本的CRUD操作（创建、读取、更新、删除）
+2. 学习如何定义模型（Model）和表（Table）
 
 # 关于ORM(Object-Relational Mapping)
 
@@ -31,9 +30,10 @@ ORM的基本概念
 ```python
 # Python示例,使用SQLAlchemy
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 class User(Base):
     __tablename__ = 'users'
@@ -424,8 +424,6 @@ class Address(Base):
     user: Mapped[User] = relationship(back_populates="addresses")
 ```
 
-
-
 > 在旧版本的 SQLAlchemy 中，可能会看到这样的代码：
 >
 > ```python
@@ -438,7 +436,7 @@ class Address(Base):
 >     addresses = relationship("Address", back_populates="user")
 > ```
 >
-> 新版本的主要区别在于使用了类型注解和 `Mapped` 类型，使得代码更加明确和类型安全。不过，SQLAlchemy 2.0 仍然支持旧的定义方式。
+> 新版本的主要区别在于使用了`something: Mapped[int]`和`mapped_cloumn`，使得代码更加明确和类型安全。不过，SQLAlchemy 2.0 仍然支持旧的定义方式。
 
 more details please read [Table Configuration with Declarative — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/orm/declarative_tables.html#orm-declarative-table)
 
@@ -505,3 +503,8 @@ PRAGMA temp.table_info("user_account")
 PRAGMA main.table_info("address")
 PRAGMA temp.table_info("address")
 ```
+
+# CUDR Operation
+
+the document need to check in this part: [Using INSERT Statements — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/tutorial/data_insert.html)
+
