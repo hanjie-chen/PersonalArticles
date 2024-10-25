@@ -238,7 +238,7 @@ x: 2  y: 4
 
 - `OLLBACK`: 结束事务并回滚。这通常是因为在 `with` 块结束时自动处理事务
 
-## `engine.connect()` vs `session(engine)`
+## ORM
 
 `Session` 是 SQLAlchemy ORM (对象关系映射) 的核心概念，它提供了一个更高级的抽象层来管理数据库交互。
 
@@ -266,13 +266,6 @@ x: 11  y: 12
 x: 13  y: 14
 2024-09-07 16:06:34,300 INFO sqlalchemy.engine.Engine ROLLBACK
 ```
-
-### 如何选择？
-
-- 如果你的项目使用 ORM，并且需要处理复杂的对象映射和事务逻辑，`session` 是更好的选择。它简化了事务管理，并提供了丰富的功能来处理对象的生命周期。
-- 如果你只是需要执行简单的 SQL 语句，或者项目不需要使用 ORM，`engine.connect` 可以提供更直接和高效的方式来与数据库交互。
-
-总之，`session` 提供了更高层次的抽象，适合复杂的应用程序，而 `engine.connect` 则适合简单的、低级别的数据库操作。
 
 # Core Components of SQLAlchemy: Metadata
 
@@ -506,5 +499,76 @@ PRAGMA temp.table_info("address")
 
 # CUDR Operation
 
-the document need to check in this part: [Using INSERT Statements — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/tutorial/data_insert.html)
+同样的，存在Core方式的CUDR和ORM方式的CUDR，我们会分别介绍这2种，当然着重于ORM
 
+## Core CUDR
+
+### Insert()
+
+```python
+from sqlalchemy import insert
+stmt = insert(user_table).values(name="plain")
+
+# 通过print可以看到
+>>> print(stmt)
+INSERT INTO user_account (name) VALUES (:name)
+# 转换为特定数据库的SQL语句
+>>> compiled = stmt.compile()
+>>> compiled.params
+{'name': 'plain'}
+```
+
+关于`compile()` 
+
+`compiled.params` 可以提供了对绑定参数的访问，如果指定了特定的数据库引擎，`compile()` 可能会生成针对该数据库优化的 SQL。
+
+示例：
+
+```python
+# 假设我们有一个 PostgreSQL 引擎
+from sqlalchemy import create_engine
+engine = create_engine('postgresql://user:pass@localhost/dbname')
+
+# 现在编译时指定引擎
+compiled = stmt.compile(engine)
+
+# 这可能会生成 PostgreSQL 特定的 SQL
+print(compiled)  # 可能会有细微的 PostgreSQL 特定差异
+
+# 获取实际执行时需要的参数字典
+execution_params = compiled.params
+```
+
+### Select()
+
+```python
+from sqlalchemy import select
+stmt = select(user_table).where(user_table.c.name == "spongebob")
+
+>>> print(stmt)
+SELECT user_account.id, user_account.name
+FROM user_account
+WHERE user_account.name = :name_1
+```
+
+more details in [Basic.py file](./Basic.py)
+
+### Update() and Delete()
+
+```python
+# 1. 基本的UPDATE操作
+basic_update = (
+    update(user_table)
+    .where(user_table.c.name == "patrick")    # 指定更新条件
+    .values(fullname="Patrick Star")          # 设置要更新的值
+)
+# 4. 基本的DELETE操作
+basic_delete = (
+    delete(user_table)
+    .where(user_table.c.name == "patrick")    # 指定删除条件
+)
+```
+
+more details in [Basic.py file](./Basic.py)
+
+## ORM CUDR
