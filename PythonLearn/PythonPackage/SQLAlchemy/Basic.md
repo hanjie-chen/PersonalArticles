@@ -518,27 +518,6 @@ INSERT INTO user_account (name) VALUES (:name)
 {'name': 'plain'}
 ```
 
-关于`compile()` 
-
-`compiled.params` 可以提供了对绑定参数的访问，如果指定了特定的数据库引擎，`compile()` 可能会生成针对该数据库优化的 SQL。
-
-示例：
-
-```python
-# 假设我们有一个 PostgreSQL 引擎
-from sqlalchemy import create_engine
-engine = create_engine('postgresql://user:pass@localhost/dbname')
-
-# 现在编译时指定引擎
-compiled = stmt.compile(engine)
-
-# 这可能会生成 PostgreSQL 特定的 SQL
-print(compiled)  # 可能会有细微的 PostgreSQL 特定差异
-
-# 获取实际执行时需要的参数字典
-execution_params = compiled.params
-```
-
 ### Select()
 
 ```python
@@ -550,8 +529,6 @@ SELECT user_account.id, user_account.name
 FROM user_account
 WHERE user_account.name = :name_1
 ```
-
-more details in [Basic.py file](./Basic.py)
 
 ### Update() and Delete()
 
@@ -572,3 +549,281 @@ basic_delete = (
 more details in [Basic.py file](./Basic.py)
 
 ## ORM CUDR
+
+### Session.new()
+
+session.new 是 SQLAlchemy Session 对象的一个属性，它表示所有已经被添加到 session 中但还没有被提交到数据库的新对象集合。
+
+让我们通过代码来理解：
+
+```python
+# User类的实例代表数据库表中的一行数据
+plain = User(name="plain", fullname="Plain Ethan")
+krabs = User(name="ehkrabs", fullname="Eugene H. Krabs")
+
+# 此时这些对象还不在 session.new 中
+print(session.new)  # 输出：IdentitySet([])
+
+# 添加到 session
+session.add(plain)
+session.add(krabs)
+
+# 现在这些对象出现在 session.new 中
+print(session.new)  # 输出：IdentitySet([User(...), User(...)])
+
+# 当执行 flush 或 commit 后，这些对象就不再在 session.new 中了
+session.flush()
+print(session.new)  # 输出：IdentitySet([])
+
+```
+
+相关的其他 Session 状态集合：
+
+- `session.dirty`: 包含已修改但未提交的对象
+- `session.deleted`: 包含已标记为删除但未提交的对象
+- `session.identity_map`: 包含所有被 session 跟踪的对象
+
+这些集合共同构成了 SQLAlchemy 的对象状态管理系统，帮助实现了高效的数据库操作和事务管理。
+
+### Session.get()
+
+`session.get(entity, primary_key)` 接收两个主要参数:
+1. 第一个参数是实体类(在这个例子中是 `User` 类)
+2. 第二个参数是主键值(在这个例子中是 `4`)
+
+如果这条记录已经在 session 的 identity map 中存在,则直接返回已存在的对象
+
+如果不存在,则会发送 SQL 查询到数据库获取数据
+
+一些使用示例:
+```python
+# 通过 id 获取单个用户
+user = session.get(User, 1)  # 获取 id=1 的用户
+
+# 如果记录不存在,返回 None
+non_exist_user = session.get(User, 999)  # 返回 None
+
+# 如果表使用复合主键,可以传入元组
+# 假设 Order 表使用 (order_id, user_id) 作为复合主键
+order = session.get(Order, (order_id, user_id))
+```
+
+
+
+### Session.flush() & Session.commit()
+
+flush 只是将当前 session 中的改动同步到数据库，但这些改动还在事务中，还没有真正提交
+
+commit 会真正地提交事务，使改动永久保存到数据库，实际上commit()会先执行 flush 操作，然后提交当前事务，然后开启新事务
+
+通常不需要手动调用 `flush()`，让 SQLAlchemy 自动处理
+
+记住：`flush()` 就像是把改动写入草稿，而 `commit()` 才是真正的保存。
+
+
+
+### Session.delete()
+
+```python
+1. 标记删除
+session.delete(user)  
+# 此时：
+# - 对象被标记为 'marked for deletion'
+# - 对象仍然存在于 session 中
+# - 数据库中的数据还未被删除
+
+2. flush 同步
+# 自动触发 flush 或手动 flush 时：
+session.flush()  
+# - 生成 DELETE SQL 语句
+# - 在当前事务中执行删除操作
+# - 数据在当前事务中已不可见
+
+3. 最终提交
+session.commit()
+# - 删除操作被永久化到数据库
+# - 事务被提交
+# - 删除无法撤销
+```
+
+一个具体的例子：
+```python
+# 假设有一个用户对象
+user = session.get(User, 1)
+
+# 1. 标记删除
+session.delete(user)
+# 此时可以通过 session.rollback() 取消删除
+
+# 2. 执行 flush (通常自动触发)
+session.flush()
+# 此时数据库中执行了 DELETE 语句，但在事务中
+# 仍然可以通过 rollback() 撤销
+
+# 3. 提交事务
+session.commit()
+# 删除永久生效，无法撤销
+```
+
+关键点：
+- `session.delete()` 不是仅作用于未提交的数据，它会真实删除数据库中的记录
+- 但删除操作要等到 `commit()` 后才真正永久生效
+- 在 `commit()` 之前，可以通过 `session.rollback()` 撤销删除操作
+
+所以 `session.delete()` 的行为和 `add()`/`update()` 是一致的：
+- 首先在 session 中标记改动
+- 然后通过 flush 同步到数据库
+- 最后通过 commit 永久保存
+
+
+
+### Rollback
+
+`session.rollback()` 会撤销所有未 commit 的改动，让我详细解释一下：
+
+```python
+### session.rollback() 的作用
+
+1. 撤销范围
+- 所有未 commit 的操作都会被撤销，包括：
+  * add() - 添加的新对象
+  * delete() - 标记删除的对象
+  * update - 对象属性的修改
+  * flush() - 已经 flush 但未 commit 的改动
+
+2. 工作原理
+- 回滚当前事务中的所有数据库操作
+- 重置 session 中对象的状态
+- 使对象回到最后一次 commit 时的状态
+
+3. 示例代码
+session = Session(engine)
+
+# 假设有一个用户对象
+user = User(name="test")
+session.add(user)                # 新增
+user.name = "new_name"          # 修改
+session.delete(other_user)       # 删除
+
+# 即使执行了 flush，只要还没 commit，都可以回滚
+session.flush()
+
+session.rollback()  
+# 此时：
+# - add 的对象被移除
+# - 修改被撤销
+# - 删除标记被清除
+# - 所有对象恢复到上次 commit 的状态
+```
+
+一个完整的例子：
+```python
+# 开始新事务
+session = Session(engine)
+
+try:
+    # 进行一系列操作
+    user1 = User(name="user1")
+    session.add(user1)          # 添加新用户
+    
+    user2.name = "new_name"     # 修改现有用户
+    
+    session.delete(user3)       # 删除用户
+    
+    # 如果出现错误
+    if something_wrong:
+        session.rollback()      # 撤销所有改动
+    else:
+        session.commit()        # 提交所有改动
+except Exception as e:
+    session.rollback()          # 发生异常时回滚
+    raise
+finally:
+    session.close()             # 最后关闭 session
+```
+
+所以可以把 SQLAlchemy 的事务操作理解为：
+- `commit()` 是保存所有改动
+- `rollback()` 是撤销所有未保存的改动
+- `flush()` 是预览改动效果，但还可以通过 `rollback()` 撤销
+
+### Session.close()
+
+```python
+### session.close() 详解
+
+1. 主要作用
+- 释放数据库连接，返回到连接池
+- 清空当前 session 中的所有对象
+- 结束当前事务（未提交的事务会回滚）
+
+2. 自动关闭的情况
+- 使用 with 语句时会自动关闭：
+    with Session() as session:
+        # 代码块结束时自动调用 close()
+        pass
+
+- 使用 scoped_session 时会在请求结束时自动关闭：
+    # Flask-SQLAlchemy 就是这样处理的
+    db.session.remove()  # 内部会调用 close()
+
+3. 常见问题
+# 问题1：使用已关闭的 session
+session.close()
+user = session.query(User).first()  # 错误：Session已关闭
+
+# 问题2：忘记关闭导致连接泄露
+session = Session()
+try:
+    # 一些操作
+    return result  # 忘记关闭！
+except Exception:
+    raise  # 异常时也忘记关闭！
+
+# 正确做法
+session = Session()
+try:
+    # 一些操作
+    session.commit()
+    return result
+except Exception:
+    session.rollback()
+    raise
+finally:
+    session.close()  # 确保总是关闭
+```
+
+最佳实践：
+
+1. 使用上下文管理器（推荐）
+```python
+# 方式1：使用 with 语句
+with Session() as session:
+    user = session.query(User).first()
+    session.commit()
+    # 自动关闭
+
+# 方式2：在 Flask 等框架中使用 scoped_session
+# 无需手动关闭，框架会处理
+```
+
+2. 手动管理时的完整模式
+```python
+session = Session()
+try:
+    # 1. 执行数据库操作
+    user = User(name="test")
+    session.add(user)
+    
+    # 2. 提交或回滚
+    session.commit()
+    
+except Exception as e:
+    # 3. 异常处理
+    session.rollback()
+    raise
+    
+finally:
+    # 4. 确保关闭
+    session.close()
+```
