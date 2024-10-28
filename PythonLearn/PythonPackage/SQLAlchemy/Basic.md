@@ -828,5 +828,351 @@ finally:
     session.close()
 ```
 
+### 查询 query & select
+
+查询对象类型
+
+```python
+# 使用模型类名(User)而不是表名(user_account)
+# 因为SQLAlchemy ORM操作的是Python对象，而不是直接操作数据库表
+session.query(User)  # 正确
+# session.query('user_account')  # 错误
+```
+
+查询结果获取方法
+
+```python
+# 假设我们查询name="sandy"的用户
+query = session.query(User).filter_by(name="sandy")
+
+# 1. first() - 返回第一个结果，如果没有返回None
+user = query.first()
+
+# 2. one() - 期望且仅返回一个结果
+# - 如果没有结果或有多个结果，会抛出异常
+user = query.one()  # 可能抛出 NoResultFound 或 MultipleResultsFound
+
+# 3. one_or_none() - 期望零个或一个结果
+# - 如果有多个结果会抛出异常
+user = query.one_or_none()  # 返回结果或None
+
+# 4. all() - 返回所有结果的列表
+users = query.all()  # 返回列表，可能为空
+
+# 5. scalar() - 返回第一个结果的第一个字段
+# - 通常用于查询单个值
+count = session.query(func.count(User.id)).scalar()
+
+# 6. get() - 通过主键获取
+# - 这是query对象的特殊方法
+user = session.query(User).get(1)  # 获取id=1的用户
+# 新版本推荐使用:
+user = session.get(User, 1)
+```
+
+现代方式（2.0风格）的查询 ==recommended==
+
+```python
+from sqlalchemy import select
+
+# 新的查询语法使用select()函数
+stmt = select(User).where(User.name == "sandy")
+
+# 执行查询的方法：
+# 1. scalar() - 返回单个标量结果
+user = session.scalar(stmt)
+
+# 2. scalar_one() - 返回一个结果，如果没有或有多个则抛出异常
+user = session.scalar_one(stmt)
+
+# 3. scalar_one_or_none() - 返回一个结果或None
+user = session.scalar_one_or_none(stmt)
+
+# 4. execute()后跟scalars().all() - 返回所有结果
+users = session.execute(stmt).scalars().all()
+```
+
+复杂查询示例
+
+```python
+# 多条件查询
+stmt = (
+    select(User)
+    .where(User.name == "sandy")
+    .where(User.fullname.isnot(None))
+)
+
+# 排序
+stmt = (
+    select(User)
+    .order_by(User.name.desc())  # 降序
+    .limit(5)  # 限制返回数量
+)
+
+# 聚合查询
+from sqlalchemy import func
+stmt = (
+    select(func.count(User.id))
+    .select_from(User)
+    .where(User.name.like('s%'))
+)
+
+# JOIN查询
+stmt = (
+    select(User, Address)
+    .join(Address)
+    .where(Address.email_address.like('%@gmail.com'))
+)
+
+# 分组查询
+stmt = (
+    select(User.name, func.count(Address.id))
+    .join(Address)
+    .group_by(User.name)
+    .having(func.count(Address.id) > 1)
+)
+```
+
+5. **查询方法的选择建议**
+- 当期望只有一个结果时：
+  - 确定必须有结果：使用 `one()`
+  - 可能没有结果：使用 `one_or_none()`
+  - 只需要第一个结果：使用 `first()`
+
+- 当需要多个结果时：
+  - 使用 `all()` 获取列表
+  - 使用 `scalars().all()` (2.0风格)
+
+- 当通过主键查询时：
+  - 使用 `session.get(User, id)`
+
+- 当需要分页时：
+```python
+# 分页查询
+page = 2
+per_page = 10
+stmt = (
+    select(User)
+    .order_by(User.id)
+    .offset((page - 1) * per_page)
+    .limit(per_page)
+)
+```
+
+记住，新版本SQLAlchemy推荐使用2.0风格的查询语法（使用`select()`），它提供了更好的类型提示和一致性。但是旧式的`query()`语法仍然可用，并在许多现有代码中使用。
+
 # ORM relationship
 
+关于ORM relationship的相关特质
+
+## 关系加载策略
+
+我们可以通过具体例子来理解4个不同的关系加载策略，假设我们有这样的数据：
+
+- 10个用户
+- 每个用户有3个地址
+
+让我们比较不同加载策略的查询情况：
+
+### Select in load()
+
+```python
+# 使用 selectinload
+stmt = select(User).options(selectinload(User.addresses))
+users = session.execute(stmt).scalars().all()
+
+# 实际执行的SQL：
+# Query 1: SELECT * FROM user_account;  # 获取10个用户
+# Query 2: SELECT * FROM address WHERE user_id IN (1,2,3,4,5,6,7,8,9,10);  # 一次获取所有地址
+```
+
+### Lazy Load(default) - N+1问题
+
+```python
+# 不使用 selectinload
+stmt = select(User)
+users = session.execute(stmt).scalars().all()  # 1次查询获取用户
+for user in users:
+    print(user.addresses)  # 每个用户都会触发一次新查询！
+
+# 实际执行的SQL：
+# Query 1: SELECT * FROM user_account;  # 获取10个用户
+# Query 2: SELECT * FROM address WHERE user_id = 1;  # 获取用户1的地址
+# Query 3: SELECT * FROM address WHERE user_id = 2;  # 获取用户2的地址
+# ... （总共执行11次查询！）
+```
+
+### Joined Load
+
+```python
+# 使用 joinedload
+stmt = select(User).options(joinedload(User.addresses))
+users = session.execute(stmt).scalars().all()
+
+# 实际执行的SQL：
+# SELECT user_account.*, address.* 
+# FROM user_account 
+# LEFT OUTER JOIN address ON user_account.id = address.user_id
+# 
+# 问题：
+# 1. 如果每个用户有3个地址，结果集会有30行（10用户 × 3地址）
+# 2. 数据有重复，用户信息会重复3次
+# 3. 数据量大时，传输和处理的数据量会急剧增加
+```
+
+网络开销分析：
+
+```python
+# 假设每次数据库连接有20ms的网络延迟：
+
+# 懒加载：
+# 11次查询 × 20ms = 220ms 的网络延迟
+
+# JOIN加载：
+# 1次查询 × 20ms = 20ms 的网络延迟
+# 但是传输的数据量更大（因为数据重复）
+
+# Select IN：
+# 2次查询 × 20ms = 40ms 的网络延迟
+# 传输的数据量最优（没有重复）
+```
+
+最佳实践建议：
+- 小数据量、一对一关系：可以使用 joinedload
+- 大数据量、一对多关系：使用 selectinload
+- 不确定是否需要关联数据：使用默认的懒加载
+
+
+
+## Session 执行方法
+
+```python
+# 1. session.scalar(stmt)
+user = session.scalar(stmt)  # 简洁写法
+
+# 2. session.execute(stmt).scalar()
+user = session.execute(stmt).scalar()  # 完整写法
+```
+
+这两种方式本质上是一样的，`session.scalar()` 实际上是 `session.execute().scalar()` 的快捷方式。
+
+**使用推荐：**
+
+1. 查询单个结果时，用 `session.scalar()`：
+```python
+# 获取单个用户
+user = session.scalar(select(User).where(User.id == 1))
+```
+
+2. 查询多个结果时，用 `session.execute().scalars().all()`：
+```python
+# 获取多个用户
+users = session.execute(select(User)).scalars().all()
+```
+
+3. 需要对结果做更多处理时，用 `execute()`：
+```python
+# 需要进一步处理结果
+result = session.execute(select(User))
+for user in result.scalars():
+    # 处理每个用户
+    pass
+```
+
+省流：
+
+`session.scalar()` 查询单个结果
+
+`session.execute()` 返回 Result 对象，提供更多控制和灵活性，适用于多行结果
+
+## Stmt 函数
+
+常见函数
+
+```python
+from sqlalchemy import select, and_, or_
+from sqlalchemy.orm import joinedload
+
+# 1. 基础查询
+# 查询单个
+stmt = select(User).where(User.id == 1)
+user = session.scalar(stmt)
+
+# 查询多个
+stmt = select(User)
+users = session.execute(stmt).scalars().all()
+
+# 2. 条件查询
+stmt = (
+    select(User).where(
+        and_(
+            User.age >= 18,
+            User.name.like('A%')  # 名字以A开头
+        )
+    )
+)
+
+# 3. 排序
+stmt = (
+    select(User)
+    .order_by(User.age.desc())  # 降序
+    .order_by(User.name)        # 升序
+)
+
+# 4. 限制结果数量
+stmt = (
+    select(User)
+    .limit(10)        # 最多10条
+    .offset(20)       # 跳过前20条
+)
+
+# 5. 关联查询
+# 内连接（只返回有地址的用户）
+stmt = (
+    select(User)
+    .join(User.addresses)
+    .distinct()
+)
+
+# 左连接（包含没有地址的用户）
+stmt = (
+    select(User)
+    .outerjoin(User.addresses)
+)
+
+# 6. 预加载关联数据
+stmt = (
+    select(User)
+    .options(joinedload(User.addresses))  # 一次性加载地址信息
+)
+
+# 7. 聚合函数
+from sqlalchemy import func
+stmt = (
+    select(func.count(User.id))
+    .where(User.age > 18)
+)
+count = session.scalar(stmt)
+```
+
+常用的修改器（Modifiers）：
+- `.where()`: 添加条件
+- `.join()`: 内连接
+- `.outerjoin()`: 左连接
+- `.distinct()`: 去重
+- `.order_by()`: 排序
+- `.limit()`: 限制数量
+- `.offset()`: 跳过记录
+- `.options()`: 配置加载选项
+
+常用的过滤条件：
+- `==`: 等于
+- `!=`: 不等于
+- `.in_()`: 在列表中
+- `.like()`: 模糊匹配
+- `.ilike()`: 不区分大小写的模糊匹配
+- `>`, `<`, `>=`, `<=`: 比较
+- `and_()`: 且
+- `or_()`: 或
+- `.is_(None)`: 为空
+- `.is_not(None)`: 不为空

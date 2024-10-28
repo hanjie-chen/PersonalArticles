@@ -20,20 +20,6 @@ l) 学习如何扩展SQLAlchemy（自定义类型、插件等）
 
 2. 针对个人网站开发的SQLAlchemy最佳实践：
 
-a) 使用声明式基类来定义模型：
-```python
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String
-
-Base = declarative_base()
-
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    username = Column(String(50), unique=True, nullable=False)
-    email = Column(String(120), unique=True, nullable=False)
-```
-
 b) 使用连接池来管理数据库连接：
 ```python
 from sqlalchemy import create_engine
@@ -107,24 +93,6 @@ c) Python SQLAlchemy Cheatsheet：https://www.pythonsheets.com/notes/python-sqla
    这是一个快速参考指南，包含了 SQLAlchemy 的常用操作和示例代码。
 
 5. 在个人网站项目中使用SQLAlchemy时可能遇到的常见陷阱或挑战，以及如何避免它们：
-
-a) N+1 查询问题：
-   陷阱：在循环中查询关联对象，导致大量额外的数据库查询。
-   解决方法：使用 joinedload 或 subqueryload 进行预加载。
-
-```python
-from sqlalchemy.orm import joinedload
-
-# 不好的做法
-users = session.query(User).all()
-for user in users:
-    print(user.posts)  # 每个用户都会触发一次额外的查询
-
-# 好的做法
-users = session.query(User).options(joinedload(User.posts)).all()
-for user in users:
-    print(user.posts)  # 不会触发额外的查询
-```
 
 b) 会话管理不当：
    陷阱：长时间保持会话开启或在多线程环境中共享会话。
