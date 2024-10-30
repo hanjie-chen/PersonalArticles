@@ -398,6 +398,7 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(30))
     
     # 定义一个可为空的字符串列 Optional[] 默认为null 
+    # 如果不适用Optional[] 默认 not null
     fullname: Mapped[Optional[str]]
     
     # 定义一个到 Address 模型的一对多关系。

@@ -1,4 +1,4 @@
-# Python Type Annotations
+# Type Annotations
 
 在 Python 中，冒号(`:`)有多种用途，其中最常见的包括类型注解、代码块定义和字典/切片操作。
 
