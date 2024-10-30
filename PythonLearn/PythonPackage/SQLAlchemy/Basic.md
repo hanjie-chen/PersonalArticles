@@ -362,12 +362,12 @@ Base.metadata.create_all(engine)
 例如，为所有表添加一个 `created_at` 列：
 
    ```python
-   from sqlalchemy.orm import DeclarativeBase
-   from sqlalchemy import Column, DateTime
+   from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+   from sqlalchemy import DateTime
    from datetime import datetime
 
    class Base(DeclarativeBase):
-       created_at = Column(DateTime, default=datetime.utcnow)
+       created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
    ```
 
 在大型项目中，可以将 `Base` 类定义在一个单独的文件中以提高代码的组织性。
@@ -394,13 +394,18 @@ class User(Base):
     # 定义一个整数类型的主键列
     id: Mapped[int] = mapped_column(primary_key=True)
     
-    # 定义一个最大长度为30的字符串列
+    # 定义一个最大长度为30的字符串列 默认nullable=False
     name: Mapped[str] = mapped_column(String(30))
     
-    # 定义一个可为空的字符串列 Optional[] 默认为null 
+    # 定义一个可为空的字符串列 Optional[] 
     # 如果不适用Optional[] 默认 not null
     fullname: Mapped[Optional[str]]
-    
+
+# 	same as following
+#	存在Optional 默认nullable=True
+#   fullname: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+#	fullname: Mapped[Optional[str]] = mapped_column(String)
+
     # 定义一个到 Address 模型的一对多关系。
     addresses: Mapped[List["Address"]] = relationship(back_populates="user")
 
@@ -409,6 +414,7 @@ class Address(Base):
     __tablename__ = "address"
     
     id: Mapped[int] = mapped_column(primary_key=True)
+    # 不指定String长度 使用数据库默认值
     email_address: Mapped[str]
     
     # 定义一个外键列。注意这里没有使用 `Mapped`，因为它不是直接映射到模型属性的。
@@ -433,6 +439,99 @@ class Address(Base):
 > 新版本的主要区别在于使用了`something: Mapped[int]`和`mapped_cloumn`，使得代码更加明确和类型安全。不过，SQLAlchemy 2.0 仍然支持旧的定义方式。
 
 more details please read [Table Configuration with Declarative — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/orm/declarative_tables.html#orm-declarative-table)
+
+***
+
+Python 常用的内置类型（特别是在数据库上下文中）：
+
+```python
+int        # 整数
+float      # 浮点数
+str        # 字符串
+bool       # 布尔值
+bytes      # 字节串
+datetime   # 日期时间（来自 datetime 模块）
+date       # 日期（来自 datetime 模块）
+time       # 时间（来自 datetime 模块）
+```
+
+SQLAlchemy 常用的数据库列类型：
+
+```python
+from sqlalchemy import (
+    String,          # VARCHAR
+    Integer,         # INTEGER
+    Float,           # FLOAT
+    Numeric,         # DECIMAL
+    Boolean,         # BOOLEAN
+    Date,            # DATE
+    DateTime,        # DATETIME
+    Time,            # TIME
+    Text,            # TEXT
+    LargeBinary,     # BLOB
+    JSON,            # JSON
+    BigInteger,      # BIGINT
+    SmallInteger,    # SMALLINT
+)
+```
+
+[完整的 SQLAlchemy 类型列表](https://docs.sqlalchemy.org/en/20/core/types.html)
+
+如果 Mapped[] 中的 Python 类型与 mapped_column() 中的数据库列类型不兼容，SQLAlchemy 会在运行时抛出错误。例如：
+
+```python
+# 这会导致错误，因为类型不兼容
+id: Mapped[int] = mapped_column(String)  # 错误！
+
+# 这些是正确的类型匹配
+id: Mapped[int] = mapped_column(Integer)
+name: Mapped[str] = mapped_column(String)
+is_active: Mapped[bool] = mapped_column(Boolean)
+```
+
+SQLAlchemy 的类型系统会检查这些类型是否兼容。以下是一些常见的类型对应关系：
+
+```python
+Python 类型    SQLAlchemy 类型
+int           Integer, BigInteger, SmallInteger
+float         Float, Numeric
+str           String, Text
+bool          Boolean
+datetime      DateTime
+date          Date
+time          Time
+bytes         LargeBinary
+dict          JSON
+```
+
+***
+
+在 SQLAlchemy 2.0+ 中，如果你只写 `Mapped[str]` 而不使用 `mapped_column()`，SQLAlchemy 会使用一些默认的配置：
+
+对于简单的 `Mapped[str]`：
+
+```python
+# 这两种写法是等价的
+email_address: Mapped[str]
+email_address: Mapped[str] = mapped_column(String())  # String() 没有指定长度
+```
+
+在这种情况下，SQLAlchemy 会使用数据库的默认 VARCHAR 长度：
+- MySQL/MariaDB: 默认是 VARCHAR(255)
+- PostgreSQL: 没有特定限制，但推荐还是明确指定长度
+- SQLite: 没有强制的长度限制
+
+最佳实践：
+```python
+class Address(Base):
+    __tablename__ = "address"
+    
+    # 不推荐：依赖默认值
+    email_address1: Mapped[str]
+    
+    # 推荐：明确指定长度
+    email_address2: Mapped[str] = mapped_column(String(255))
+```
 
 ### Metadata特性
 
