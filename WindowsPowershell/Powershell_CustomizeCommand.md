@@ -4,9 +4,7 @@ Author: 陈翰杰
 Instructor: Sonnet 3.5
 CoverImage: ./image/cover_image.jpg
 RolloutDate: 2024-09-19
-UltimateModifiedDate:
 Category: windows/windows command/windows powershell
-
 ---
 
 ```

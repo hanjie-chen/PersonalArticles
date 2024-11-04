@@ -249,6 +249,23 @@ git checkout origin/<your-branch> -- <path/to/file>
 
 您是否需要我进一步解释这些命令或git的工作原理？
 
+# Git 查看与此仓库管理的远程repository
+
+可以使用以下命令查看当前Git仓库关联的远程地址：
+
+```bash
+git remote -v
+```
+
+执行这个命令后，你会看到类似于以下的输出：
+
+```
+origin  https://github.com/username/repository.git (fetch)
+origin  https://github.com/username/repository.git (push)
+```
+
+其中，`origin`是默认的远程名称，后面跟着的就是远程仓库的URL。如果你有多个远程仓库，都会在这里列出。
+
 # Reference
 
 [^1]: [Some common .gitignore configurations (github.com)](https://gist.github.com/octocat/9257657)

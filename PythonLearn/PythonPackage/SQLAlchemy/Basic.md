@@ -650,7 +650,7 @@ more details in [Basic.py file](./Basic.py)
 
 ## ORM CUDR
 
-### Session.new()
+### Session.new() & session.add()
 
 session.new 是 SQLAlchemy Session 对象的一个属性，它表示所有已经被添加到 session 中但还没有被提交到数据库的新对象集合。
 

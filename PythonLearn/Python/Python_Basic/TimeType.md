@@ -165,3 +165,56 @@ class User(Base):
 这种设计是因为：
 1. 内置类型是最基础的，几乎所有 Python 程序都会用到
 2. 而时间相关的类型是相对特殊的功能，不是所有程序都需要，所以放在标准库中
+
+# 字符串转换为时间类型
+
+从 Python 3.7 开始，`date` 类（`datetime.date`）增加了一个类方法 `fromisoformat()`，用于直接从 ISO 格式的日期字符串创建 `date` 对象。
+
+- ISO 格式的日期字符串格式为 `'YYYY-MM-DD'`，与您的日期字符串格式一致。
+- 因此，您可以直接使用 `date.fromisoformat('2024-09-19')` 将字符串转换为 `date` 对象。
+
+对于低于 Python 3.7 的版本，由于没有 `date.fromisoformat()` 方法，需要通过 `datetime.strptime()` 来实现。
+
+如下所示：
+
+```python
+>>> from datetime import datetime, date
+>>> today_test = "2024-11-04"
+>>> rollout = date.fromisoformat(today_test)
+>>> rollout
+datetime.date(2024, 11, 4)
+>>> rollout_test = datetime.strptime(today_test, '%Y-%m-%d').date()
+>>> rollout_test
+datetime.date(2024, 11, 4)
+```
+
+# 获取文件最后修改时间
+
+#### 使用 `date.fromtimestamp()` 获取文件的最后修改日期
+
+`date.fromtimestamp(timestamp)` 方法用于从时间戳创建一个 `date` 对象。
+
+时间戳是一个浮点数，表示自 1970 年 1 月 1 日（UTC）以来的秒数。
+
+**示例：**
+
+```
+pythonCopytimestamp = os.stat(md_path).st_mtime
+ultimate_modified_date = date.fromtimestamp(timestamp)
+```
+
+这将直接获得文件最后修改的日期（不包含时间部分）。
+
+使用 `os.stat` 获取文件的最后修改时间，得到的是一个时间戳。
+
+如下所示：
+```python
+>>> import os
+>>> timestamp = os.stat("/home/Plain/Personal_Project/Test-Website/Readme.md").st_mtime
+>>> timestamp
+1724061924.119663
+>>> modfiled_date = date.fromtimestamp(timestamp)
+>>> modfiled_date
+datetime.date(2024, 8, 19)
+```
+
