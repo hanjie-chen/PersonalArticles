@@ -1061,6 +1061,50 @@ stmt = (
 
 记住，新版本SQLAlchemy推荐使用2.0风格的查询语法（使用`select()`），它提供了更好的类型提示和一致性。但是旧式的`query()`语法仍然可用，并在许多现有代码中使用。
 
+### Session.execute
+
+在SQLAlchemy 2.x中，确实存在两种主要的查询执行方式：直接使用`scalar()`系列方法和使用`execute()`方法。这两种方式各有其适用场景，让我们来分析一下：
+
+1. 直接使用`scalar()`系列方法：
+   - `scalar()`
+   - `scalar_one()`
+   - `scalar_one_or_none()`
+
+2. 使用`execute()`方法，然后根据需要调用其他方法如`scalars().all()`
+
+推荐使用哪种方式主要取决于您的具体需求：
+
+1. 当您期望查询返回单个结果时，直接使用`scalar()`系列方法更为简洁和直接：
+
+   - 如果您确定查询只会返回一个结果或None，使用`scalar_one_or_none()`
+   - 如果您确定查询必定会返回一个结果，使用`scalar_one()`
+   - 如果您想要第一个结果（如果有的话），使用`scalar()`
+
+   这些方法直接返回ORM对象，无需进一步处理。
+
+2. 当您需要更灵活的结果处理，或者预期会返回多个结果时，使用`execute()`方法更合适：
+
+   - `execute()`返回一个`Result`对象，它提供了更多的灵活性和控制
+   - 您可以根据需要调用`scalars()`、`all()`、`first()`等方法
+   - 这种方式适合处理多行结果，或者当您需要对结果进行进一步处理时
+
+总的来说，SQLAlchemy 2.x推荐的做法是：
+
+- 对于单一结果查询，优先使用`scalar()`系列方法，因为它们更简洁，直接返回ORM对象。
+- 对于可能返回多个结果的查询，或需要更多结果处理选项的情况，使用`execute()`方法。
+
+例如：
+
+```python
+# 查询单个用户
+user = session.scalar_one_or_none(select(User).where(User.id == 1))
+
+# 查询多个用户
+users = session.execute(select(User).where(User.age > 18)).scalars().all()
+```
+
+这种方式既保持了代码的简洁性，又提供了足够的灵活性来处理各种查询场景。
+
 # ORM relationship
 
 关于ORM relationship的相关特质

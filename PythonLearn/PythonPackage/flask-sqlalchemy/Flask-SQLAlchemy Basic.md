@@ -182,9 +182,9 @@ class Article_Meta_Data(db.Model):
 
 但是！这里有一个重要的前提：**你的模型类必须在调用 `db.create_all()` 之前被 Python 解释器导入和执行**。
 
-## Create Table
 
-### `db.create_all()` 的基本行为
+
+## Create Table
 
 ```python
 with app.app_context():
@@ -192,10 +192,13 @@ with app.app_context():
 ```
 
 这段代码会：
+
 - 创建不存在的表
 - 不会修改已存在的表
 - 不会删除已存在的表
 - 不会覆盖现有数据
+
+### `db.create_all()`
 
 让我们看看 `create_all()` 的工作原理：
 
@@ -238,7 +241,6 @@ with app.app_context():
     db.drop_all()   # 删除所有表
     db.create_all() # 重新创建
 ```
-⚠️ 警告：这会删除所有数据！
 
 **使用数据库迁移**（推荐，生产环境）：
 
@@ -256,3 +258,105 @@ $ flask db migrate -m "Add email column"
 # 应用迁移
 $ flask db upgrade
 ```
+
+
+
+## `app.app_context()`
+
+### Application instance and its context
+
+首先，我们需要理解，每个 `Flask` 对象都代表一个独立的应用实例。当你创建一个 Flask 应用时，你实际上是在创建这个应用的实例：
+
+```python
+app = Flask(__name__)
+```
+
+这个 `app` 对象就是一个特定的应用实例。而`app.app_context()` 创建了一个应用上下文（Application Context）这是一个独立的执行环境，其中的操作都与特定的应用实例相关联。
+
+Flask 使用 `_app_ctx_stack` 来跟踪当前活动的应用上下文。当你使用 `with app.app_context():` 时：
+
+该应用的上下文被推送到 `_app_ctx_stack`。
+
+在 `with` 块内，`current_app` 代理对象指向栈顶的应用上下文。退出 `with` 块时，上下文被弹出。
+
+```python
+with app.app_context():
+    # 这个应用的上下文被推送到栈顶
+    ...
+# 退出 with 块时，上下文被弹出
+```
+
+在多应用场景中，每个应用都有自己的上下文。例如：
+
+```python
+app1 = Flask('app1')
+app2 = Flask('app2')
+
+with app1.app_context():
+    # 这里的操作属于 app1
+    ...
+
+with app2.app_context():
+    # 这里的操作属于 app2
+    ...
+```
+
+让我们看一个完整的例子来理解这个过程：
+
+```python
+from flask import Flask, current_app
+
+app1 = Flask('app1')
+app2 = Flask('app2')
+
+@app1.route('/')
+def index1():
+    return f"This is {current_app.name}"
+
+@app2.route('/')
+def index2():
+    return f"This is {current_app.name}"
+
+# 在脚本中使用
+with app1.app_context():
+    print(current_app.name)  # 输出: app1
+    
+with app2.app_context():
+    print(current_app.name)  # 输出: app2
+
+# 嵌套使用
+with app1.app_context():
+    print(current_app.name)  # 输出: app1
+    with app2.app_context():
+        print(current_app.name)  # 输出: app2
+    print(current_app.name)  # 输出: app1
+```
+
+> note:
+>
+> 在 CLI 命令中：如果使用 `@app.cli.command()` 装饰器，Flask 也会自动提供上下文。
+>
+> 在测试中可以使用 `app.test_request_context()` 来模拟请求上下文。
+
+### 为什么 db.create_all() 需要应用上下文？
+
+`db.create_all()` 需要应用上下文的原因有几个：
+
+1. **数据库配置**：数据库连接信息通常存储在应用配置中（如 `app.config['SQLALCHEMY_DATABASE_URI']`）。
+
+2. **多应用支持**：如果你的项目有多个 Flask 应用，每个使用不同的数据库，上下文确保使用正确的配置。
+
+3. **延迟初始化**：Flask-SQLAlchemy 使用延迟初始化模式，某些设置只有在应用上下文中才能完成。
+
+### 视图函数的自动处理
+
+在处理 Web 请求时，Flask 会自动为每个请求创建和管理应用上下文，所以在视图函数中不需要显式使用 `with app.app_context()`。
+
+```python
+@app.route('/')
+def index():
+    # 这里已经在应用上下文中了
+    return f"Current app: {current_app.name}"
+```
+
+# CURD
