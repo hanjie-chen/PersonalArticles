@@ -1105,6 +1105,19 @@ users = session.execute(select(User).where(User.age > 18)).scalars().all()
 
 这种方式既保持了代码的简洁性，又提供了足够的灵活性来处理各种查询场景。
 
+### 关于select更进一步的说明
+
+当我们导入并且使用了``select`之后，就不需要导入其他的关键字了比如说`where`, `order_by` 等，因为select自带了：
+
+[SELECT and Related Constructs — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/core/selectable.html#sqlalchemy.sql.expression.Select)
+
+其中我们可以看到select包含的方法：
+```python
+__init__(), add_columns(), add_cte(), alias(), as_scalar(), c, column(), column_descriptions, columns_clause_froms, correlate(), correlate_except(), corresponding_column(), cte(), distinct(), except_(), except_all(), execution_options(), exists(), exported_columns, fetch(), filter(), filter_by(), from_statement(), froms, get_children(), get_execution_options(), get_final_froms(), get_label_style(), group_by(), having(), inherit_cache, inner_columns, intersect(), intersect_all(), is_derived_from(), join(), join_from(), label(), lateral(), limit(), offset(), options(), order_by(), outerjoin(), outerjoin_from(), prefix_with(), reduce_columns(), replace_selectable(), scalar_subquery(), select(), select_from(), selected_columns, self_group(), set_label_style(), slice(), subquery(), suffix_with(), union(), union_all(), where(), whereclause, with_for_update(), with_hint(), with_only_columns(), with_statement_hint()
+```
+
+
+
 # ORM relationship
 
 关于ORM relationship的相关特质

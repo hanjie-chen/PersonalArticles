@@ -359,4 +359,118 @@ def index():
     return f"Current app: {current_app.name}"
 ```
 
-# CURD
+# CUDR
+
+Flask-SQLAlchemy CUDR与sqlalchemy ORM CUDR非常相似.
+
+## Insert
+
+实例化Table class –> add –> commit
+
+```python
+# part code of import_articles_scripts
+article = Article_Meta_Data(
+            title=metadata.get('Title', 'Untitled'),
+            author=metadata.get('Author', 'Unknown'),
+            instructor=metadata.get('Instructor'),
+            cover_image_url=metadata.get('CoverImage'),
+            rollout_date=metadata.get('RolloutDate'),
+            ultimate_modified_date=metadata.get('UltimateModifiedDate'),
+            category=metadata.get('Category', 'Uncategorized'),
+            brief_introduction=brief_intro_text
+        )
+db.session.add(article_metadata)
+db.session.commit()
+```
+
+## Query
+
+query语句`stmt`需要放到`db.session.execute()`中执行，只需 `select` 前面加上 `db.` 即可，因为 `db.select` 本质就是`sqlalchemy.select`
+
+例如，一个复杂的查询可能看起来像这样：
+
+```python
+result = db.session.execute(
+    db.select(User, Address)
+    .join(Address)
+    .where(User.name == "plain")
+    .order_by(User.id)
+)
+```
+
+### `db.select` 本质探索
+
+从 [flask-sqlalchemy extension.py](https://github.com/pallets-eco/flask-sqlalchemy/blob/3e3e92ba557649ab5251eda860a67656cc8c10af/src/flask_sqlalchemy/extension.py) 源码中我们可以看到，SQLAlchemy 类并没有直接定义 select 方法，而是通过 `__getattr__` 魔术方法来处理未定义的属性访问。这个机制非常巧妙，让我们看看具体是如何工作的：
+
+```python
+import typing as t
+import sqlalchemy as sa
+import sqlalchmey.event as sa.event
+import sqlalchemy.orm as sa.orm
+
+class SQLALchemy:
+
+    # ... igonre before code
+
+    
+    def __getattr__(self, name: str) -> t.Any:
+    if name == "relation":
+        return self._relation
+
+    if name == "event":
+        return sa_event
+
+    if name.startswith("_"):
+        raise AttributeError(name)
+
+    # 关键在这里
+    for mod in (sa, sa_orm):
+        if hasattr(mod, name):
+            return getattr(mod, name)
+
+    raise AttributeError(name)
+```
+
+这段代码的工作流程是：
+
+1. 当我们访问 `db.select` 时，Python 首先会查找 SQLAlchemy 类中是否有这个属性
+2. 如果没有找到，就会调用 `__getattr__` 方法
+3. 在 `__getattr__` 中，它会依次在 `sa` (SQLAlchemy) 和 `sa_orm` (SQLAlchemy ORM) 模块中查找这个属性
+4. 由于 `select` 函数存在于 `sqlalchemy` 模块中，所以 `hasattr(sa, 'select')` 返回 True
+5. 然后通过 `getattr(sa, 'select')` 返回原始的 SQLAlchemy select 函数
+
+这就解释了为什么：
+
+1. `db.select` 实际上就是 `sqlalchemy.select`
+2. 在源码中找不到 select 的直接定义
+3. `type(db.select())` 显示 `<class 'sqlalchemy.sql.selectable.Select'>` 即为SQLAlchemy 的 Select 对象
+
+这种设计模式被称为代理模式（Proxy Pattern），Flask-SQLAlchemy 通过这种方式把 SQLAlchemy 的大部分功能都代理到了 `db` 对象上，使得我们可以直接通过 `db` 对象访问 SQLAlchemy 的功能。
+
+### `sqlalchemy.select` VS `db.select`
+
+既然我们考虑到实际上`db.select`就是`sqlalchemy.select`，那么直接使用`sqlalchemy.select`是否会因为节省了加载 `__getattr__()` 更快呢？
+
+实际上这两种写法在执行速度上是完全一样的，没有任何性能差异
+
+```python
+# 方式1
+from sqlalchemy import select
+select(User)  # 直接调用sqlalchemy.select
+
+# 方式2
+db.select(User)  # 通过__getattr__获取后调用sqlalchemy.select
+```
+
+虽然 `db.select` 需要通过 `__getattr__` 魔术方法来获取函数，但这个过程：
+
+- 只发生在第一次访问 `db.select` 时
+- 后续访问会直接使用已经缓存的属性
+- 这个额外开销在实际查询执行时间中可以忽略不计
+
+但是还是推荐使用 `db.select` 因为：
+
+- 所有数据库相关的操作都通过 `db` 对象进行，如果将来 Flask-SQLAlchemy 需要对 select 做扩展或修改，你的代码不需要改变
+
+- 从软件工程的角度来看，使用 `db.select` 是更好的实践。这符合依赖注入和关注点分离的原则，也使得代码更容易维护和测试。
+
