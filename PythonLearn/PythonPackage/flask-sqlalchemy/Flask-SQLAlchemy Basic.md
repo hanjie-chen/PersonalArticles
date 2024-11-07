@@ -474,3 +474,28 @@ db.select(User)  # 通过__getattr__获取后调用sqlalchemy.select
 
 - 从软件工程的角度来看，使用 `db.select` 是更好的实践。这符合依赖注入和关注点分离的原则，也使得代码更容易维护和测试。
 
+## Delete & Update
+
+首先使用query语句筛选出特定的条目，例如
+
+```python
+article = db.session.execute(
+    db.select(Article_Meta_Data)
+    .where(Article_Meta_Data.title == "test-article")
+)
+```
+
+### Delete
+
+```python
+db.session.delete(article)
+db.session.commit()
+```
+
+### Update
+
+```python
+article.author = Plain
+db.session.commit()
+```
+
