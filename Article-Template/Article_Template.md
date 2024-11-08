@@ -4,8 +4,6 @@ Author: 陈翰杰
 Instructor: chatGPT 3.5
 CoverImage: ./image/cover_image.jpg
 RolloutDate: 2023-XX-XX
-UltimateModifiedDate:
-Category: XXX
 ---
 
 ```

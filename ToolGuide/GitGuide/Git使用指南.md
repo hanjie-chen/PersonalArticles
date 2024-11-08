@@ -1,16 +1,15 @@
 ---
 Title: Git使用指南
 Author: 陈翰杰
-Instructor: GPT-4o, Sonnet
+Instructor: GPT-4o, Sonnet3.5
 CoverImage: ./image/cover_image.jpg
 RolloutDate: 2024-08-26
-UltimateModifiedDate:
-Category: XXX
+Category: ToolGuide/GitGuide/GitUsage
 ---
 
 ```
 BriefIntroduction: 
-git速查指南
+本人总结的git速查指南
 ```
 
 <!-- split -->
@@ -19,7 +18,7 @@ git速查指南
 
 # 写在前面/Before we beginning
 
-git 速查指南
+虽然有很多的Git资料，但是自从LLM出现之后，我遇到问题一般直接提问LLM，爽的一批
 
 # Title: Git使用指南
 

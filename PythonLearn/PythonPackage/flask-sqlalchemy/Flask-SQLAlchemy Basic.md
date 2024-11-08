@@ -232,6 +232,10 @@ class User(db.Model):
 # 再次执行 db.create_all() -> 不会添加新字段！
 ```
 
+> note
+>
+> `db.create_all()` 会根据 `app.config['SQLALCHEMY_DATABASE_URI']` 自动创建数据库文件
+
 ### 如何处理表结构更新？
 
 **删除重建**（开发环境）：

@@ -1,27 +1,31 @@
+---
+Title: SQLAlchemy Basic Knowledge
+Author: 陈翰杰
+Instructor: chatGPT 3.5
+CoverImage: ./image/cover_image.jpg
+RolloutDate: 2024-11-07
+---
+
+```
+BriefIntroduction: 
+这是关于 SQLalchemy 基础知识的部分笔记总结
+```
+
+<!-- split -->
+
 # SQLAlchemy Basic Knowledge
-
-在基础知识阶段，我们将学习这些概念：
-
-1. 掌握基本的CRUD操作（创建、读取、更新、删除）
-2. 学习如何定义模型（Model）和表（Table）
 
 # 关于ORM(Object-Relational Mapping)
 
 ORM是一种编程技术,用于在面向对象编程语言和关系型数据库之间建立映射关系，全称是Object-Relational Mapping,即对象关系映射。
 
-通过使用这种技术，可以直接通过编程语言来擦欧总数据库，而不需要直接编写SQL语句。而且写得代码可以方便的在不同的数据库系统之间迁移
+通过使用这种技术，可以直接通过编程语言来操作数据库，而不需要直接编写SQL语句。而且写得代码可以方便的在不同的数据库系统之间迁移
 
 ORM的基本概念
 
 - 实体(Entity): 对应数据库中的表。
 - 属性(Property): 对应表中的列。
 - 关系(Relationship): 表示实体之间的关联(如一对多,多对多等)。
-
-常见框架
-
-- Java: Hibernate, MyBatis
-- Python: SQLAlchemy, Django ORM
-- .NET: Entity Framework
 
 ## Python SQLAlchemy示例
 

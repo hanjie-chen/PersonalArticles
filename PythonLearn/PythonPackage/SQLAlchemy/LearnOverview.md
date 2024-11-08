@@ -18,30 +18,6 @@ j) 掌握复杂查询和原生SQL的使用
 k) 了解事件系统和钩子函数
 l) 学习如何扩展SQLAlchemy（自定义类型、插件等）
 
-## 官方文档中最重要的几个章节或页面，以及阅读顺序建议：
-
-a) ORM 教程：https://docs.sqlalchemy.org/en/14/orm/tutorial.html
-b) Engine 配置：https://docs.sqlalchemy.org/en/14/core/engines.html
-c) 会话基础：https://docs.sqlalchemy.org/en/14/orm/session_basics.html
-d) 关系配置：https://docs.sqlalchemy.org/en/14/orm/relationships.html
-e) 查询指南：https://docs.sqlalchemy.org/en/14/orm/query.html
-f) 事件系统：https://docs.sqlalchemy.org/en/14/core/event.html
-
-建议按照上述顺序阅读，这样可以从基础逐步深入到更高级的主题。
-
-## 2-3个适合初学者的SQLAlchemy教程或资源推荐：
-
-a) SQLAlchemy 官方教程：https://docs.sqlalchemy.org/en/14/orm/tutorial.html
-   这是最权威和全面的教程，虽然有些地方可能比较深奥，但值得仔细阅读。
-
-b) Real Python 的 SQLAlchemy ORM 教程：https://realpython.com/python-sqlite-sqlalchemy/
-   这个教程非常适合初学者，通过实际的例子讲解了 SQLAlchemy 的基本用法。
-
-c) Python SQLAlchemy Cheatsheet：https://www.pythonsheets.com/notes/python-sqlalchemy.html
-   这是一个快速参考指南，包含了 SQLAlchemy 的常用操作和示例代码。
-
-
-
 # Next action
 
 让我对照你的学习路线图分析一下你的学习进度：
