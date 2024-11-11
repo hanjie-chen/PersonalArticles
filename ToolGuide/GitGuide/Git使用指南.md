@@ -168,7 +168,7 @@ git config --global core.excludesfile ~/.gitignore
 
 
 
-经典`.gitignore` 方案，来自github[^1]
+参考了经典`.gitignore` 方案，来自github[^1]
 
 ```python
 # Compiled source #
@@ -198,6 +198,7 @@ git config --global core.excludesfile ~/.gitignore
 *.log
 *.sql
 *.sqlite
+*.db
 
 # OS generated files #
 ######################
