@@ -117,4 +117,52 @@ def post():
 from markupsafe import escape
 escaped_content = escape(user_input)
 ```
-next: [Quickstart — Flask Documentation (3.0.x)](https://flask.palletsprojects.com/en/stable/quickstart/#routing)
+# Routing
+
+Flask 会基于 URL 匹配自动调用路由函数，我们只要在 app.py 中正确定义路由和相应的函数，并且在 templates 中使用 `url_for()` 正确引用这些函数。
+
+> `url_for()` 函数根据在 Flask 应用中定义的路由函数名生成 URL 在这个例子中，它会生成 "/Articles" 的 URL。
+
+例如
+
+```python
+@app.route("/")
+def index():
+    # use the file in the templates
+    return render_template("index.html")
+
+@app.route("/Articles")
+def article_index():
+    # 从数据库中获取所有文章
+    articles = db.session.execute(db.select(Article_Meta_Data)).scalars().all()
+    return render_template("article_index.html", articles=articles)
+```
+
+在 index.html 中
+
+```html
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-sm navbar-custom fixed-top">
+      <div class="container">
+        <div class="collapse navbar-collapse" id="mynavbar">
+          <ul class="navbar-nav ms-auto">
+            <!-- 文章页面就可以包含分类和标签了 不用另外起一个页面 -->
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('article_index') }}">
+                 Article
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+```
+
+
+在 index.html 中，使用了 `{{ url_for('article_index') }}` 来生成链接。这里的 'article_index' 是指向在 app.py 中定义的函数名
+
+当用户点击这个链接时，浏览器会发送一个 GET 请求到 "/Articles" 路径。
+
+Flask 接收到这个请求后，会查找匹配 "/Articles" 路径的路由。它找到了定义的 `@app.route("/Articles")` 装饰器，因此会调用 `article_index()` 函数。
+
+## Variable Rules
