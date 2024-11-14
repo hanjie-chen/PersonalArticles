@@ -2,7 +2,7 @@
 Title: Personal Windows PS Command
 Author: 陈翰杰
 Instructor: Sonnet 3.5
-CoverImage: ./image/cover_image.jpg
+CoverImage: ./images/cover_image.webp
 RolloutDate: 2024-09-19
 Category: windows/windows command/windows powershell
 ---
@@ -13,6 +13,8 @@ personal windows powershell command, for my convinence
 ```
 
 <!-- split -->
+
+![cover](./images/cover_image.webp)
 
 # How to use these customize commands
 

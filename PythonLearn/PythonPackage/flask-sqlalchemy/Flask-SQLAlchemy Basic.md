@@ -1,3 +1,24 @@
+---
+Title: Flask-SQLAlchemy 基础
+Author: 陈翰杰
+Instructor: Sonnet 3.5
+CoverImage: ./images/cover_image.webp
+RolloutDate: 2024-11-14
+---
+
+```
+BriefIntroduction: 
+这里存放文章简介，原本的想法的类似与论文的摘要功能，我想着要不要把chatGPT3.5接入进来。让她帮我生成文章简介，看看我自己写的文章简介和她写的文章简介哪一个更好。
+```
+
+<!-- split -->
+
+![cover](./images/cover_image.webp)
+
+# Before we beginning
+
+最好可以先看完 [SQLAlchemy Basic](../SQLAlchemy/Basic.md) 然后再来看这部分
+
 # Flask-SQLAlchemy Basic
 
 for flask-sqlalchemy 3.x and sqlalchemy 2.x
