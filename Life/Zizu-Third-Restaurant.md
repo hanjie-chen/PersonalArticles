@@ -1,9 +1,9 @@
 ---
-Title: XXXX
+Title: 紫竹第三餐厅必坑指南
 Author: 陈翰杰, jiuqi-liu
 Instructor: chatGPT 3.5
 CoverImage: ./image/cover_image.jpg
-RolloutDate: 2023-XX-XX
+RolloutDate: 2024-11-14
 
 ---
 
@@ -27,6 +27,14 @@ BriefIntroduction:
 购买面条的具体位置如下：
 
 ![noddles_place](./image/noddles_palce.png)
+
+面条菜单：
+
+<img src="./images/noddles-menu.jpg" alt="menu" style="zoom:33%;" />
+
+> ! [note]
+>
+> 注意小黑板上会有额外的菜单
 
 推荐：
 
@@ -68,4 +76,16 @@ BriefIntroduction:
 
 烤鱼，强烈推荐，非常好吃
 
-烤鱼分为3种：罗非鱼，鱼，鲈鱼
+烤鱼分为3种：罗非鱼，鱼，鲈鱼（35 CNY）
+
+青花椒烤鲈鱼
+
+<img src="./images/grilled-fish.jpg" alt="fish" style="zoom:50%;" />
+
+## 干锅
+
+牛肉干锅，28 CNY
+
+有时候好吃，有时候不好吃吗，取决于配菜，有时候是蒜苔（我不喜欢），有时候是土豆洋葱青红椒，味道还可以的
+
+<img src="./images/dry-pot-beef.jpg" alt="beef" style="zoom:50%;" />
