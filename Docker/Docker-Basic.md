@@ -135,3 +135,62 @@ Docker 的 Ubuntu 镜像是经过特别精简的版本，Ubuntu Docker 镜像的
 - 正是因为这种精简的特性，Docker 容器才能实现快速启动和低资源消耗
 - 与完整的虚拟机相比，Docker 容器确实非常轻量级 
 
+# `docker run` command
+
+```bash
+docker run -d -p 8080:80 docker/welcome-to-docker
+```
+
+这个命令可以拆分成几个部分：
+
+1. `docker run`
+   - 这是基础命令，表示"运行一个容器"
+   - 相当于告诉Docker："我要启动一个新的容器"
+
+2. `-d`
+   - 代表 "detached" 模式
+   - 意思是在后台运行容器
+   - 如果不加这个参数，容器会在前台运行，占据你的终端窗口
+
+3. `-p 8080:80`
+   - `-p` 表示端口映射（port mapping）
+   - `8080:80` 的格式是 `主机端口:容器端口`
+   - 意思是：把容器内的80端口映射到主机的8080端口
+   - 这样你就可以通过访问 `localhost:8080` 来访问容器中运行的web服务
+
+4. `docker/welcome-to-docker`
+   - 这是容器镜像的名称
+   - `docker/` 是镜像所属的组织/用户
+   - `welcome-to-docker` 是具体的镜像名称
+   - 这是一个官方提供的示例镜像，运行后会显示一个欢迎页面
+
+用生活中的例子来解释的话：
+- 如果把容器比作一个外卖餐盒
+- `docker run` 就是打开这个餐盒
+- `-d` 就是把餐盒放在一边，你可以继续做其他事
+- `-p 8080:80` 就像是在餐盒上开了个小窗口（80），然后用一根吸管（8080）连接到外面，这样你就可以喝到里面的饮料了
+- `docker/welcome-to-docker` 就是这个餐盒的品牌和型号
+
+运行这个命令后：
+1. Docker会先下载这个镜像（如果本地没有的话）
+2. 然后创建一个新的容器
+3. 在后台运行这个容器
+4. 设置端口映射，让你可以通过 `http://localhost:8080` 访问容器中的web服务
+
+这就是为什么文章中说运行这个命令后，可以通过浏览器访问 `http://localhost:8080` 来看到欢迎页面。
+
+默认情况下，使用 `-p` 参数时就会监听所有接口：
+
+```bash
+docker run -d -p 8080:80 docker/welcome-to-docker
+```
+这个命令实际上等同于：
+```bash
+docker run -d -p 0.0.0.0:8080:80 docker/welcome-to-docker
+```
+
+2. 如果你想明确指定监听地址，可以使用完整格式：
+```bash
+docker run -d -p [host-ip]:[host-port]:[container-port] image-name
+```
+

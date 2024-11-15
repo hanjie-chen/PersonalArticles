@@ -76,3 +76,62 @@ function Touch-File {
 Set-Alias -Name touch -Value Touch-File
 ```
 
+# Command `tree`
+
+Linux like command tree, to instead of the powershell nature `tree`
+
+```powershell
+function Show-TreeWithFiles {
+    param (
+        [string]$Path = ".",
+        [string]$Indent = "",
+        [bool]$IsLast = $true
+    )
+
+    $items = Get-ChildItem -Path $Path
+    $count = $items.Count
+    $current = 0
+
+    foreach ($item in $items) {
+        $current++
+        $isLastItem = ($current -eq $count)
+        $prefix = if ($Indent -eq "") {
+            if ($isLastItem) { "└───" } else { "├───" }
+        } else {
+            if ($isLastItem) { "$Indent└───" } else { "$Indent├───" }
+        }
+
+        # 使用 Write-Host 的 -NoNewline 参数来分段输出
+        Write-Host "$prefix" -NoNewline
+
+        # 使用 $PSStyle.FileInfo 的颜色设置
+        if ($item.PSIsContainer) {
+            # 目录使用 Directory 的颜色设置
+            Write-Host ($PSStyle.FileInfo.Directory + $item.Name + $PSStyle.Reset)
+        } else {
+            # 文件使用对应扩展名的颜色设置
+            $extension = $item.Extension.ToLower()
+            $colorCode = $PSStyle.FileInfo.Extension[$extension]
+            if ($colorCode) {
+                Write-Host ($colorCode + $item.Name + $PSStyle.Reset)
+            } else {
+                # 如果没有定义颜色，使用默认颜色
+                Write-Host $item.Name
+            }
+        }
+
+        if ($item.PSIsContainer) {
+            $newIndent = if ($Indent -eq "") {
+                if ($isLastItem) { "    " } else { "│   " }
+            } else {
+                if ($isLastItem) { "$Indent    " } else { "$Indent│   " }
+            }
+            Show-TreeWithFiles -Path $item.FullName -Indent $newIndent -IsLast $isLastItem
+        }
+    }
+}
+
+# 创建别名，使用 -Force 参数覆盖原有的 tree 命令
+Set-Alias -Name tree -Value Show-TreeWithFiles -Force
+```
+

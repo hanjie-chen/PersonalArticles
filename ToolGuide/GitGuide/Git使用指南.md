@@ -2,7 +2,7 @@
 Title: Git使用指南
 Author: 陈翰杰
 Instructor: GPT-4o, Sonnet3.5
-CoverImage: ./image/cover_image.jpg
+CoverImage: ./images/cover_image.png
 RolloutDate: 2024-08-26
 Category: ToolGuide/GitGuide/GitUsage
 ---
@@ -14,7 +14,7 @@ BriefIntroduction:
 
 <!-- split -->
 
-![cover image](./image/cover_image.jpeg)
+![cover image](./images/cover_image.png)
 
 # 写在前面/Before we beginning
 
@@ -53,6 +53,16 @@ note:
 - **对于已被跟踪的文件**: 如果这些文件只是进行了修改，而没有新文件需要添加，那么可以直接使用`git commit -a -m "message"`来提交这些更改。这个命令会自动将所有已被跟踪文件的修改提交，而不需要先手动`git add`它们。
 
 所以，`git add`主要用于将新文件或目录添加到版本控制中，而`git commit -a`则用于提交已经在版本控制中的文件的修改。
+
+另一种方式：
+
+同时执行2个命令：
+
+```bash
+git add . && git commit -m "message"
+```
+
+
 
 # 分支管理checkout
 
