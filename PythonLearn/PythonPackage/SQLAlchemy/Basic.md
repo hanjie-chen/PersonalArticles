@@ -2,7 +2,7 @@
 Title: SQLAlchemy Basic Knowledge
 Author: 陈翰杰
 Instructor: chatGPT 3.5
-CoverImage: ./image/cover_image.jpg
+CoverImage: ./images/cover_image.png
 RolloutDate: 2024-11-07
 ---
 
@@ -12,6 +12,8 @@ BriefIntroduction:
 ```
 
 <!-- split -->
+
+<img src="./images/cover_image.png" alt="cover" style="zoom:60%;" />
 
 # SQLAlchemy Basic Knowledge
 
