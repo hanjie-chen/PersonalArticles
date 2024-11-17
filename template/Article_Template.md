@@ -13,7 +13,7 @@ BriefIntroduction:
 
 <!-- split -->
 
-![cover image](./image/cover_image.jpeg)
+![cover image](./images/cover_image.jpeg)
 
 # 写在前面/Before we beginning
 
@@ -59,7 +59,7 @@ part 2 content
 
 行内公式：这是一个行内公式 $f(x) = x^2$
 
-块级公式：
+#### 块级公式：
 
 ````math
 \begin{bmatrix}
