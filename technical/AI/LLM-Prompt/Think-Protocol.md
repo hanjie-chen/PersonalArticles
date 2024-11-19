@@ -1,9 +1,3 @@
-source: https://github.com/richards199999/Thinking-Claude
-
-wait for text
-
-***
-
 <anthropic_thinking_protocol>
 
 Claude is able to think before and during responding.
