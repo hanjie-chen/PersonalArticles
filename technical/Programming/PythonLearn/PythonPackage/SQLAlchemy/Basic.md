@@ -15,7 +15,7 @@ BriefIntroduction:
 
 <img src="./images/cover_image.png" alt="cover" style="zoom:60%;" />
 
-# SQLAlchemy Basic Knowledge
+# SQLAlchemy Core Components
 
 # 关于ORM(Object-Relational Mapping)
 
@@ -75,7 +75,7 @@ ORM与传统数据库操作的对比:
 
 ORM方式更接近于面向对象的编程思维,代码更加直观和易于维护。
 
-# Core Components of SQLAlchemy: Engine
+# Engine
 
 Sqlalchemy engine 使用函数`create_engine` 连接数据库
 
@@ -112,7 +112,7 @@ engine = create_engine('sqlite+pysqlite:///:memory:', echo=True)
 
    - `echo=True`是一个可选参数，表示SQLAlchemy将会打印所有生成的SQL语句到标准输出。这对于调试和学习SQLAlchemy的SQL生成过程非常有用。
 
-# Core Components of SQLAlchemy: Connection
+# Connection
 
 ## Build connect and Execute SQL statement
 
@@ -273,7 +273,7 @@ x: 13  y: 14
 2024-09-07 16:06:34,300 INFO sqlalchemy.engine.Engine ROLLBACK
 ```
 
-# Core Components of SQLAlchemy: Metadata
+# Metadata
 
 想象一下你在设计一座房子：
 
@@ -726,6 +726,36 @@ commit 会真正地提交事务，使改动永久保存到数据库，实际上c
 
 记住：`flush()` 就像是把改动写入草稿，而 `commit()` 才是真正的保存。
 
+> 应用场景：
+>
+> 如果需要在commit()之前就需要用到主键id 那么可以显示调用flush()
+>
+> ```python
+> from sqlalchemy.ext.declarative import declarative_base
+> 
+> Base = declarative_base()
+> 
+> class User(Base):
+>     __tablename__ = 'users'
+>     id = Column(Integer, primary_key=True)
+>     name = Column(String)
+> 
+> # 创建用户
+> user = User(name="Alice")
+> session.add(user)
+> print(user.id)  # 输出: None
+> 
+> # flush 之后
+> session.flush()
+> print(user.id)  # 输出: 1 (已经有 ID 了)
+> 
+> # 这时其他事务还看不到这条数据
+> # commit 之后其他事务才能看到
+> session.commit()
+> ```
+
+
+
 
 
 ### Session.delete()
@@ -1122,7 +1152,78 @@ users = session.execute(select(User).where(User.age > 18)).scalars().all()
 __init__(), add_columns(), add_cte(), alias(), as_scalar(), c, column(), column_descriptions, columns_clause_froms, correlate(), correlate_except(), corresponding_column(), cte(), distinct(), except_(), except_all(), execution_options(), exists(), exported_columns, fetch(), filter(), filter_by(), from_statement(), froms, get_children(), get_execution_options(), get_final_froms(), get_label_style(), group_by(), having(), inherit_cache, inner_columns, intersect(), intersect_all(), is_derived_from(), join(), join_from(), label(), lateral(), limit(), offset(), options(), order_by(), outerjoin(), outerjoin_from(), prefix_with(), reduce_columns(), replace_selectable(), scalar_subquery(), select(), select_from(), selected_columns, self_group(), set_label_style(), slice(), subquery(), suffix_with(), union(), union_all(), where(), whereclause, with_for_update(), with_hint(), with_only_columns(), with_statement_hint()
 ```
 
+## ORM CUDR <u>***SELECT***</u>
 
+source: [Using SELECT Statements — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/tutorial/data_select.html)
+
+
+
+### `.where` usage
+
+在SQLAlchemy 2.0中，可以使用多个`.where()`子句，它们会以AND的方式连接起来
+
+```python
+exist_check = db.session.execute(
+    db.select(Article_Meta_Data)
+    .where(Article_Meta_Data.title == article_metadata.title)
+    .where(Article_Meta_Data.category == article_metadata.category)
+).scalar()
+```
+
+不过，还有几种等效的替代写法：
+
+在where中用逗号分隔多个条件（会自动以AND连接）：
+
+```python
+exist_check = db.session.execute(
+    db.select(Article_Meta_Data).where(
+        Article_Meta_Data.title == article_metadata.title,
+        Article_Meta_Data.category == article_metadata.category
+    )
+).scalar()
+```
+
+使用and_函数：
+
+```python
+from sqlalchemy import and_
+
+exist_check = db.session.execute(
+    db.select(Article_Meta_Data).where(
+        and_(
+            Article_Meta_Data.title == article_metadata.title,
+            Article_Meta_Data.category == article_metadata.category
+        )
+    )
+).scalar()
+```
+
+> ! [note]
+>
+> 关于 `and_()` 和 `or_()` 的用法参考下面这个例子
+>
+> ```python
+> from sqlalchemy import and_, or_
+> print(
+>     select(Address.email_address).where(
+>         and_(
+>             or_(User.name == "squidward", User.name == "sandy"),
+>             Address.user_id == User.id,
+>         )
+>     )
+> )
+> ```
+>
+> equal to
+>
+> ```sql
+> SELECT address.email_address
+> FROM address, user_account
+> WHERE (user_account.name = :name_1 OR user_account.name = :name_2)
+> AND address.user_id = user_account.id
+> ```
+
+这些方法都是等价的，会生成相同的SQL查询。
 
 # ORM relationship
 
