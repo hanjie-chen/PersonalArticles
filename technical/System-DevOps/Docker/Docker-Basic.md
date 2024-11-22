@@ -1,31 +1,22 @@
 # Docker Basic
 
-所以，如果您想真正掌握Docker技术：
+学习路径：
 
-1. 重点学习Docker Engine的使用
-2. 掌握命令行操作
+1. 重点学习Docker Engine的使用——docker 命令的使用
 3. 理解Docker的核心概念（容器、镜像、网络、存储等）
 4. 学习Docker Compose、Dockerfile的编写等
 
-## Docker desktop VS Docker Engine
+以 [docker/getting-started-todo-app: Sample application to get started with Docker](https://github.com/docker/getting-started-todo-app) 为例
 
-### Docker Engine
+> ![note]
+>
+> Docker Engine是核心技术组件，包含CLI、API和运行时；Docker Desktop则是其图形界面封装，提供可视化管理工具，主要用于开发环境。生产环境通常直接使用Engine。
 
-这是真正需要学习和掌握的Docker技术核心，包含了所有基本的Docker功能：dockerd（Docker守护进程）、Docker CLI（命令行接口）、Docker API、容器运行时
-
-install docker engine: [Install | Docker Docs](https://docs.docker.com/engine/install/)
-
-### Docker Desktop
-
-本质上是一个包装了Docker Engine的图形化应用程序，提供了容器和镜像的可视化管理，简单的设置界面和一些额外的开发工具集成
-
-在生产环境中，几乎都是直接使用Docker Engine的命令行操作。这也是为什么在Linux服务器上，通常只安装Docker Engine。
-
-## Docker Architecture
+# Docker Architecture
 
 ![architecture](./images/docker-architecture.webp)
 
-Docker的架构是基于客户端-服务器模型的。主要包括以下几个部分：
+Docker的架构是基于 Client-Server 模型的。主要包括以下几个部分：
 
 1. Docker Client
    - 这是用户与Docker交互的主要方式。
@@ -59,7 +50,13 @@ Docker的架构是基于客户端-服务器模型的。主要包括以下几个�
 
 这种架构允许Docker在不同的环境中一致地运行，无论是本地开发机器、公司服务器还是云平台。它使得应用程序的开发、测试和部署变得更加简单和标准化。
 
-# Docker Containers Command
+Docker hub & Docker Image
+
+[Docker Hub](https://hub.docker.com) 是 Docker 官方维护的公共镜像仓库，类似于 GitHub，包含了大量官方和社区维护的镜像
+
+以Ubuntu镜像为例，与Server ISO（2.6GB）不同，Docker镜像经过精简（约30MB），仅保留基础组件。镜像可自动下载存储，支持本地缓存复用，通过docker images查看。
+
+# `docker run` command
 
 `docker run -i -t ubuntu /bin/bash` 命令详解
 
@@ -105,37 +102,7 @@ Docker的架构是基于客户端-服务器模型的。主要包括以下几个�
 
 需要注意的是，这个容器在你退出 bash shell 后就会停止运行，除非你特别指定了其他参数（比如 `--rm` 参数会在容器停止后自动删除容器）。
 
-# Docker hub & Docker Image
-
-[Docker Hub](https://hub.docker.com) 是 Docker 官方维护的公共镜像仓库，类似于 GitHub 之于代码，包含了大量官方和社区维护的镜像
-
-如果我查看 [Get Ubuntu Server | Download | Ubuntu](https://ubuntu.com/download/server) 镜像，那么就会发现其大小在2.6 GB 左右，难道 `docker run ubuntu` 命令要去拿这个大小的 iso 文件吗？
-
-其实不是，关于 Ubuntu 镜像，这里有一个重要的区别：
-
-Docker Hub 上的 Ubuntu 镜像和 Ubuntu Server ISO 是完全不同的
-
-Docker 的 Ubuntu 镜像是经过特别精简的版本，Ubuntu Docker 镜像的大小远远小于 Ubuntu Server ISO，最新的 Ubuntu Docker 镜像大约只有 30 MB，这个大小是压缩后的大小，解压后可能会稍大一些，但仍然远小于完整的 Ubuntu Server
-
-镜像大小的原因：
-- Docker 镜像是经过特别精简的版本，只包含最基本的系统组件
-- 它们移除了许多不必要的包和服务，只保留运行容器所需的最小集合
-- 这种精简版的 Ubuntu 被称为 "Minimal Ubuntu"
-
-下载和存储：
-- 当你运行 `docker run ubuntu` 时，Docker 会从 Docker Hub 下载这个约 29 MB 的镜像
-- Docker 会自动管理镜像的存储，你不需要手动创建文件夹
-- 镜像默认存储在 Docker 的数据目录中，通常在 Linux 系统的 `/var/lib/docker` 目录下 [6]
-
-本地镜像：
-- 如果你已经下载过镜像，Docker 会直接使用本地的镜像，不会再次从 Docker Hub 下载
-- 你可以使用 `docker images` 命令查看本地已有的镜像
-
-轻量级特性：
-- 正是因为这种精简的特性，Docker 容器才能实现快速启动和低资源消耗
-- 与完整的虚拟机相比，Docker 容器确实非常轻量级 
-
-# `docker run` command
+***
 
 ```bash
 docker run -d -p 8080:80 docker/welcome-to-docker
@@ -194,3 +161,139 @@ docker run -d -p 0.0.0.0:8080:80 docker/welcome-to-docker
 docker run -d -p [host-ip]:[host-port]:[container-port] image-name
 ```
 
+# `docker ps` command
+
+要查看正在运行的 Docker 容器，可以使用以下命令：
+
+```bash
+docker ps
+```
+
+这个命令会显示所有正在运行的容器，包括以下信息：
+- CONTAINER ID：容器的唯一标识符
+- IMAGE：容器使用的镜像
+- COMMAND：容器启动时运行的命令
+- CREATED：容器的创建时间
+- STATUS：容器的当前状态
+- PORTS：容器映射的端口
+- NAMES：容器的名称
+
+如果你想查看所有容器（包括已停止的容器），可以使用：
+
+```bash
+docker ps -a
+```
+
+# `docker compose` command
+
+`docker compose` 命令基于当前目录下的 compose.yaml 或者 docker-compose.yaml 文件来操作
+
+**项目隔离**
+
+- 每个使用 Docker Compose 的项目都是独立的
+- 容器名称会自动加上项目名作为前缀
+- 网络也是独立的，默认创建的网络名称为 `项目名_default`
+
+例如：
+
+**docker compose up -d**
+
+- 只会启动当前 compose 文件中定义的服务
+- `-d` 表示 detached 模式（后台运行）
+- 会自动使用当前目录名作为项目名称前缀
+- 如果服务之前没有构建过镜像，会自动构建
+
+```bash
+# 只会启动 getting-started-todo-app 项目中定义的服务
+sudo docker compose up -d
+```
+
+**docker compose down**
+
+- 只会停止和删除当前 compose 文件中定义的服务的容器
+- 同时也会删除默认网络
+- 不会影响其他项目的容器
+
+```bash
+# 只会关闭 getting-started-todo-app 项目的容器
+sudo docker compose down
+```
+
+
+
+
+
+
+
+## `docker compose watch`
+
+`docker compose watch` 是 Docker Compose 的一个重要功能，主要用于开发环境中实现实时更新。它的主要作用和特点如下：
+
+**实时文件监控**
+
+- 监视项目中的源代码文件变化
+- 当检测到文件变更时，自动重新构建和更新相关的容器
+- 无需手动重启容器或重新运行 compose 命令
+
+**工作原理**
+
+- 持续监控指定的目录和文件
+- 当发现文件变化时，根据配置执行以下操作之一：
+  - 同步文件变更到容器中
+  - 重新构建容器
+  - 重启受影响的服务
+
+这个命令特别适合在开发环境中使用，它极大地提高了使用 Docker 进行开发时的效率。在文章中的 todo 应用例子里，正是这个命令让我们能够实时看到对前端样式、后端逻辑的修改效果，而不需要手动重启任何服务。
+
+## `docker compose ps`
+
+`docker ps` 和 `docker compose ps` 有以下几个主要区别：
+
+**显示范围不同**：
+
+- `docker ps`：显示所有正在运行的容器，无论它们是如何启动的（手动启动、Docker Compose 启动等）
+- `docker compose ps`：只显示由当前目录下的 docker-compose.yml（或 compose.yml）文件创建的容器
+
+**上下文不同**：
+
+- `docker ps`：在全局 Docker 环境中工作
+- `docker compose ps`：在特定的 Compose 项目上下文中工作，与当前目录的 compose 文件相关联
+
+**输出格式不同**：
+
+`docker ps` 默认显示：
+
+- CONTAINER ID
+- IMAGE
+- COMMAND
+- CREATED
+- STATUS
+- PORTS
+- NAMES
+
+`docker compose ps` 通常更关注于 Compose 服务，显示：
+
+- NAME（使用 compose 项目名称作为前缀）
+- COMMAND
+- SERVICE
+- STATUS
+- PORTS
+
+**使用场景**：
+
+- `docker ps`：适合查看系统中所有运行的容器
+- `docker compose ps`：适合在使用 Docker Compose 开发时查看特定项目的容器状态
+
+例如，在你的项目中：
+```bash
+# docker compose ps 只会显示 getting-started-todo-app 相关的容器
+sudo docker compose ps
+
+# docker ps 会显示系统中所有运行的容器
+sudo docker ps
+```
+
+建议：
+- 当你在特定项目目录下工作时，使用 `docker compose ps` 更清晰
+- 当你需要查看系统整体容器状态时，使用 `docker ps`
+- 如果你想看到所有容器（包括停止的），可以使用 `docker ps -a` 或 `docker compose ps -a`

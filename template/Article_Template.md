@@ -9,6 +9,7 @@ RolloutDate: 2023-XX-XX
 ```
 BriefIntroduction: 
 这里存放文章简介，原本的想法的类似与论文的摘要功能，我想着要不要把chatGPT3.5接入进来。让她帮我生成文章简介，看看我自己写的文章简介和她写的文章简介哪一个更好。
+考虑是否删除cover_image 因为都是默认的 ./images/cover_image.(jpg, png, webp)
 ```
 
 <!-- split -->
