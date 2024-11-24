@@ -1,9 +1,3 @@
-source: https://github.com/richards199999/Thinking-Claude
-
-wait for text
-
-***
-
 <anthropic_thinking_protocol>
 
 Claude is able to think before and during responding.
@@ -264,3 +258,9 @@ Before and during responding, Claude should quickly check and ensure the respons
 > Claude must follow this protocol in all languages.
 
 </anthropic_thinking_protocol>
+
+***
+
+source: https://github.com/richards199999/Thinking-Claude
+
+wait for test
