@@ -276,6 +276,42 @@ origin  https://github.com/username/repository.git (push)
 
 其中，`origin`是默认的远程名称，后面跟着的就是远程仓库的URL。如果你有多个远程仓库，都会在这里列出。
 
+
+
+# Git 回撤修改
+
+如果修改了文件，但是没有进行git add && git commit 例如这面这种状态
+
+```bash
+Plain@Linux-VM:~/Personal_Project/getting-started-todo-app$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   compose.yml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+这种情况下回撤修改非常简单，可以直接使用 git 提示中显示的命令：
+
+```bash
+git restore compose.yml
+```
+
+需要注意的是：
+1. 这个操作会直接丢弃你对 compose.yml 的所有修改
+2. 这个操作无法撤销，所以在执行之前请确认你真的要放弃这些修改
+
+如果你想在回撤之前查看具体修改了什么内容，可以使用：
+```bash
+git diff compose.yml
+```
+
+这样可以看到具体的修改内容，再决定是否要回撤修改。
+
 # Reference
 
 [^1]: [Some common .gitignore configurations (github.com)](https://gist.github.com/octocat/9257657)
