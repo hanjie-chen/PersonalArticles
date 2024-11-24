@@ -1,61 +1,3 @@
-# Docker Basic
-
-学习路径：
-
-1. 重点学习Docker Engine的使用——docker 命令的使用
-3. 理解Docker的核心概念（容器、镜像、网络、存储等）
-4. 学习Docker Compose、Dockerfile的编写等
-
-以 [docker/getting-started-todo-app: Sample application to get started with Docker](https://github.com/docker/getting-started-todo-app) 为例
-
-> ![note]
->
-> Docker Engine是核心技术组件，包含CLI、API和运行时；Docker Desktop则是其图形界面封装，提供可视化管理工具，主要用于开发环境。生产环境通常直接使用Engine。
-
-# Docker Architecture
-
-![architecture](./images/docker-architecture.webp)
-
-Docker的架构是基于 Client-Server 模型的。主要包括以下几个部分：
-
-1. Docker Client
-   - 这是用户与Docker交互的主要方式。
-   - 当你在命令行输入Docker命令时，你就是在使用Docker客户端。
-   - 例如，当你输入 `docker run` 命令时，客户端会将这个命令发送给Docker守护进程。
-
-2. Docker Daemon (dockerd)
-   - 这是Docker的核心，运行在后台。
-   - 它负责管理Docker对象，如镜像、容器、网络和数据卷。
-   - 守护进程接收来自Docker客户端的命令并执行它们。
-
-3. Docker Images
-   - 这些是用来创建Docker容器的只读模板。
-   - 镜像包含了运行应用所需的所有内容：代码、运行时环境、库、环境变量和配置文件。
-
-4. Docker Containers
-   - 容器是镜像的可运行实例。
-   - 你可以创建、启动、停止、移动或删除容器。
-   - 每个容器都是相互隔离的安全平台。
-
-5. Docker Registry
-   - 这是用来存储Docker镜像的地方。
-   - Docker Hub是一个公共注册表，任何人都可以使用。
-   - 你也可以运行自己的私有注册表。
-
-工作流程：
-1. 用户通过Docker客户端发出命令。
-2. Docker守护进程接收这些命令并管理Docker对象。
-3. 如果需要，守护进程会从注册表拉取或推送镜像。
-4. 守护进程使用这些镜像创建和管理容器。
-
-这种架构允许Docker在不同的环境中一致地运行，无论是本地开发机器、公司服务器还是云平台。它使得应用程序的开发、测试和部署变得更加简单和标准化。
-
-Docker hub & Docker Image
-
-[Docker Hub](https://hub.docker.com) 是 Docker 官方维护的公共镜像仓库，类似于 GitHub，包含了大量官方和社区维护的镜像
-
-以Ubuntu镜像为例，与Server ISO（2.6GB）不同，Docker镜像经过精简（约30MB），仅保留基础组件。镜像可自动下载存储，支持本地缓存复用，通过docker images查看。
-
 # `docker run` command
 
 `docker run -i -t ubuntu /bin/bash` 命令详解
@@ -92,6 +34,7 @@ Docker hub & Docker Image
 - 这将在容器内启动一个 bash shell，让你可以在容器内执行命令
 
 实际效果：
+
 - 运行这个命令后，你会进入到一个 Ubuntu 容器的命令行界面
 - 你可以像使用普通的 Ubuntu 系统一样，在容器内执行各种 Linux 命令
 - 要退出容器，你可以：
@@ -132,6 +75,7 @@ docker run -d -p 8080:80 docker/welcome-to-docker
    - 这是一个官方提供的示例镜像，运行后会显示一个欢迎页面
 
 用生活中的例子来解释的话：
+
 - 如果把容器比作一个外卖餐盒
 - `docker run` 就是打开这个餐盒
 - `-d` 就是把餐盒放在一边，你可以继续做其他事
@@ -139,6 +83,7 @@ docker run -d -p 8080:80 docker/welcome-to-docker
 - `docker/welcome-to-docker` 就是这个餐盒的品牌和型号
 
 运行这个命令后：
+
 1. Docker会先下载这个镜像（如果本地没有的话）
 2. 然后创建一个新的容器
 3. 在后台运行这个容器
@@ -151,12 +96,15 @@ docker run -d -p 8080:80 docker/welcome-to-docker
 ```bash
 docker run -d -p 8080:80 docker/welcome-to-docker
 ```
+
 这个命令实际上等同于：
+
 ```bash
 docker run -d -p 0.0.0.0:8080:80 docker/welcome-to-docker
 ```
 
 2. 如果你想明确指定监听地址，可以使用完整格式：
+
 ```bash
 docker run -d -p [host-ip]:[host-port]:[container-port] image-name
 ```
@@ -170,6 +118,7 @@ docker ps
 ```
 
 这个命令会显示所有正在运行的容器，包括以下信息：
+
 - CONTAINER ID：容器的唯一标识符
 - IMAGE：容器使用的镜像
 - COMMAND：容器启动时运行的命令
@@ -285,6 +234,7 @@ sudo docker compose down
 - `docker compose ps`：适合在使用 Docker Compose 开发时查看特定项目的容器状态
 
 例如，在你的项目中：
+
 ```bash
 # docker compose ps 只会显示 getting-started-todo-app 相关的容器
 sudo docker compose ps
@@ -294,6 +244,7 @@ sudo docker ps
 ```
 
 建议：
+
 - 当你在特定项目目录下工作时，使用 `docker compose ps` 更清晰
 - 当你需要查看系统整体容器状态时，使用 `docker ps`
 - 如果你想看到所有容器（包括停止的），可以使用 `docker ps -a` 或 `docker compose ps -a`
