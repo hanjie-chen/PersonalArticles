@@ -9,7 +9,6 @@ RolloutDate: 2024-11-22
 ```
 BriefIntroduction: 
 Flask learning note, flask version >= 3.0.X
-
 ```
 
 <!-- split -->
@@ -384,19 +383,7 @@ def login_post():
 
 # Static folder
 
-'static' 是 Flask 中的一个内置特殊 endpoint，Flask 默认会注册这个端点来处理静态文件，所以不能创建名为 'static' 的视图函数，因为这会与 Flask 的内置静态文件处理冲突
-
-**Flask 如何处理静态文件**
-
-```python
-from flask import Flask
-app = Flask(__name__,
-           static_folder='static',     # 默认值，可以修改
-           static_url_path='/static'   # 默认值，可以修改
-)
-```
-- `static_folder`: 指定存放静态文件的文件夹路径
-- `static_url_path`: 指定访问静态文件的 URL 前缀
+`static` 是 Flask 中的一个内置特殊 endpoint，Flask 默认会注册这个 endpoint 来处理静态文件，所以无法创建名为 'static' 的视图函数，因为这会与 Flask 的内置静态文件处理冲突
 
 ## default static folder
 
@@ -504,30 +491,100 @@ app.add_url_rule('/uploads/<path:filename>', 'serve_uploads', serve_uploads)
 
 ### `send_from_directory()`
 
-这两种方式能够添加额外的静态文件夹，核心在于 `send_from_directory` 函数：
+这两种方式能够添加额外的静态文件夹，核心在于 `send_from_directory` 函数，它是 Flask 提供的一个用于安全地发送文件的函数。
+
+它从指定目录中发送文件给客户端，提供文件下载和静态文件服务
 
 ```python
-from flask import send_from_directory
-
-# 基本使用
-@app.route('/files/<path:filename>')
-def serve_files(filename):
-    return send_from_directory('files_folder', filename)
-
-# 带安全检查的使用
-@app.route('/files/<path:filename>')
-def serve_files_safe(filename):
-    try:
-        return send_from_directory('files_folder', filename, as_attachment=False)
-    except FileNotFoundError:
-        abort(404)
+send_from_directory(directory, path, **kwargs)
 ```
 
-`send_from_directory` 不仅仅是简单地读取和发送文件，而是包含了完整的安全检查、MIME 类型处理、缓存控制等功能，确保文件传输的安全性和效率。
+- `directory`: 文件所在的目录路径
+- `path`: 要发送的文件名
+- `**kwargs`: 其他可选参数(如 mimetype, as_attachment 等)
+
+for example
+
+```python
+from flask import Flask, send_from_directory
+
+app = Flask(__name__)
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    return send_from_directory('uploads', filename)
+```
+
+**主要特点**:
+
+- **安全性**: 自动处理路径遍历攻击，防止访问目录外的文件
+- **便捷性**: 自动处理 MIME 类型
+- **灵活性**: 可以控制文件是直接在浏览器打开还是作为附件下载
+
+**代码示例 - 文件下载**:
+
+```python
+from flask import Flask, send_from_directory
+
+app = Flask(__name__)
+
+@app.route('/download/<filename>')
+def download_file(filename):
+    # 作为附件下载
+    return send_from_directory('uploads', 
+                             filename,
+                             as_attachment=True)
+
+@app.route('/view/<filename>')
+def view_file(filename):
+    # 直接在浏览器中查看
+    return send_from_directory('uploads', filename)
+```
 
 ### `@app.route` VS `add_url_rule`
 
 如果静态文件夹需要额外的处理逻辑（如权限检查、日志记录等）就用 @app.route 方式；如果只是单纯提供文件访问就用 add_url_rule 方式。
+
+## `add_url_rule` 详解
+
+```python
+app.add_url_rule('/rendered_articles/<path:filename>',
+                 endpoint='rendered_articles',
+                 view_func=lambda filename: send_from_directory(app.config['RENDERED_ARTICLES_FOLDER'], filename))
+```
+
+这段代码的作用是：
+
+- 创建一个 URL 规则，处理所有以 `/rendered_articles/` 开头的请求
+- 当访问类似 `/rendered_articles/some-file.html` 的 URL 时，会自动调用指定的 `view_func`
+- `view_func` 使用 `send_from_directory` 来发送文件
+
+### 实际工作流程
+
+在代码中，这个规则主要在 `article_details.html` 模板中被使用：
+
+```python
+@app.route("/Articles/<int:article_id>")
+def view_article(article_id):
+    # ...
+    relative_path = f"{category_path}/{html_filename}"
+    # 这个路径最终会通过模板被访问：/rendered_articles/category_path/article_id.html
+```
+
+```python
+# 当用户访问 /rendered_articles/some-category/123.html 时：
+
+# 1. Flask 匹配 URL 规则
+'/rendered_articles/<path:filename>' 匹配这个请求
+
+# 2. 提取 filename 参数
+filename = 'some-category/123.html'
+
+# 3. 调用 view_func
+send_from_directory(app.config['RENDERED_ARTICLES_FOLDER'], filename)
+
+# 4. 返回文件内容给用户
+```
 
 # next
 
