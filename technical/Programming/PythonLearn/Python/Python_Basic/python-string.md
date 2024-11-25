@@ -1,3 +1,15 @@
+# 切片操作
+
+从第一个字符开始截取到末尾
+
+```python
+# 使用 [1:] 从索引1开始截取到末尾
+text = "Hello"
+new_text = text[1:]  # 结果: "ello"
+```
+
+
+
 # f-string
 
 Python 的 f-string（格式化字符串字面值），是 Python 3.6+ 引入的一个很方便的特性。
