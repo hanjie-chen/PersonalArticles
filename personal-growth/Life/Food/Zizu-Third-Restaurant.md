@@ -40,7 +40,7 @@ BriefIntroduction:
 
 ## 猪肉油泼面（宽面）
 
-![pork_noddles](./image/)
+![pork_noddles](./images/)
 
 > ! [note]
 >
@@ -72,13 +72,13 @@ jiuqi老师尝过之后不推荐：
 
 # 烤鱼
 
-购买位置
-
-
-
-
-
 烤鱼，强烈推荐，非常好吃
+
+菜单
+
+<img src="./images/fish-menu.jpg" alt="menu" style="zoom:40%;" />
+
+
 
 烤鱼分为3种：罗非鱼（28 CNY），黑鱼（32 CNY），鲈鱼（35 CNY）
 
@@ -102,4 +102,21 @@ jiuqi老师尝过之后不推荐：
 
 味道不错，鸡肉很新鲜，部位大多是鸡翅根，骨头比较多，比较咸
 
-<img src="./images/dry-pot-chicken.jpeg" alt="chiken" style="zoom:30%;" />
+<img src="./images/dry-pot-chicken.jpeg" alt="chiken" style="zoom:25%;" />
+
+# 砂锅
+
+感觉味道都很一般，似乎都有粉丝？我是不太喜欢粉丝的。
+
+## 羊肉砂锅
+
+羊肉砂锅羊膻味太重，根本无法下嘴
+
+<img src="./images/lamb-clay-pot.jpg" alt="lamp" style="zoom:30%;" />
+
+# 快餐窗口
+
+这个我也不知道叫做什么菜，jiuqi老师尝了之后大概是糯米包肉末包咸蛋黄，反正jiuqi老师给出的评价是不太好吃
+
+<img src="./images/windows-food.jpg" alt="windows-food" style="zoom:50%;" />
+

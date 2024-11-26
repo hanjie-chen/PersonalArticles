@@ -2,7 +2,7 @@
 Title: Flask basic knowledge
 Author: 陈翰杰
 Instructor: Sonnet 3.5
-CoverImage: ./images/cover_image.jpg
+CoverImage: ./images/cover_image.png
 RolloutDate: 2024-11-22
 ---
 
@@ -586,6 +586,130 @@ send_from_directory(app.config['RENDERED_ARTICLES_FOLDER'], filename)
 # 4. 返回文件内容给用户
 ```
 
-# next
 
-[Quickstart — Flask Documentation (3.1.x)](https://flask.palletsprojects.com/en/stable/quickstart/#rendering-templates)
+
+# Render Template
+
+Flask 使用 `render_template` 函数渲染 html 文件，默认会在 `templates` 文件夹中寻找模板文件
+
+
+
+> ! [note]
+>
+> 默认在 `templates` 文件夹中加载模板 可以通过设置 `template_folder` 修改
+>
+> ```python
+> app = Flask(__name__, template_folder='my_templates')
+> ```
+
+它加载指定的模板文件，然后将传入的变量数据注入到模板中，最后返回渲染后的 HTML 字符串
+
+```
+├── app.py
+└── templates/
+    └── hello.html
+```
+
+```python
+from flask import render_template
+
+@app.route('/hello/<name>')
+def hello(name=None):
+    return render_template('hello.html', person=name)
+```
+
+## `render_template` method
+
+`render_template` 是 Flask 用于渲染 Jinja2 模板的函数
+
+它加载指定的模板文件，然后将传入的变量数据注入到模板中，最后返回渲染后的 HTML 字符串
+
+
+
+基本语法如下
+
+```python
+from flask import render_template
+
+@app.route('/')
+def index():
+    return render_template('template_name.html',
+                         variable1=value1,
+                         variable2=value2)
+```
+
+基础用法
+
+```python
+@app.route('/hello')
+def hello():
+    name = "World"
+    return render_template('hello.html', name=name)
+```
+
+对应的模板 (`hello.html`):
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello Page</title>
+</head>
+<body>
+    <h1>Hello, {{ name }}!</h1>
+</body>
+</html>
+```
+
+
+
+#### 使用上下文处理器
+```python
+# 在应用中注册上下文处理器
+@app.context_processor
+def utility_processor():
+    def format_price(amount):
+        return f"￥{amount:.2f}"
+    return dict(format_price=format_price)
+
+# 在视图函数中
+@app.route('/shop')
+def shop():
+    items = [
+        {'name': 'Item 1', 'price': 99.99},
+        {'name': 'Item 2', 'price': 149.99}
+    ]
+    return render_template('shop.html', items=items)
+```
+
+模板中使用 (`shop.html`):
+```html
+<div class="shop">
+    {% for item in items %}
+        <div class="item">
+            <h3>{{ item.name }}</h3>
+            <p>价格: {{ format_price(item.price) }}</p>
+        </div>
+    {% endfor %}
+</div>
+```
+
+
+
+**组织模板文件**
+
+```
+templates/
+    ├── base.html          # 基础模板
+    ├── components/        # 可重用组件
+    │   ├── header.html
+    │   └── footer.html
+    ├── auth/             # 认证相关模板
+    │   ├── login.html
+    │   └── register.html
+    └── main/             # 主要页面模板
+        ├── index.html
+        └── about.html
+```
+
+
+
