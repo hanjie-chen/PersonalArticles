@@ -47,16 +47,44 @@ part 1 content
 
 > quota other thing, or actually note?
 
+差异高亮显示
+
+```diff
+- 这行被删除了
++ 这行是新增的
+```
+
+> [!NOTE]
+> 这是一个普通提示信息
+
+> [!TIP]
+> 这是一个提示
+
+> [!IMPORTANT]
+> 这是一个重要信息
+
+> [!WARNING]
+> 这是一个警告信息
+
+> [!CAUTION]
+> 这是一个危险警告
+
 # Part 2
 
 part 2 content
 
+emoji 表情支持 比如
 
+```emoji
+:peach:
+```
+
+:peach:
 
 # Math formula support/数学公式支持
 
 - `$$...$$` 是传统的 LaTeX 分隔符
-- ````math...```` 是 GitHub Flavored Markdown (GFM) 的特定语法
+- `math...` 是 GitHub Flavored Markdown (GFM) 的特定语法
 
 行内公式：这是一个行内公式 $f(x) = x^2$
 
@@ -83,9 +111,15 @@ w_{(n-1)0}^{hidden} & w_{(n-1)1}^{hidden} & \cdots & w_{(n-1)(m-1)}^{hidden}
 
 
 
+
+
 # Appendix
 
 附加材料
+
+- [ ] 主任务
+  - [x] 子任务1
+  - [x] 子任务2
 
 # 参考文献
 

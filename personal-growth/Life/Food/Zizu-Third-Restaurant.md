@@ -4,12 +4,11 @@ Author: 陈翰杰, jiuqi-liu
 Instructor: 
 CoverImage: ./images/cover_image.jpg
 RolloutDate: 2024-11-14
-
 ---
 
 ```
 BriefIntroduction: 
-这是我在紫竹第三餐厅吃饭总结出来的经验
+这是我和同事jiuqi在紫竹第三餐厅吃饭总结出来的经验
 ```
 
 <!-- split -->
@@ -32,7 +31,7 @@ BriefIntroduction:
 
 <img src="./images/noddles-menu.jpg" alt="menu" style="zoom:33%;" />
 
-> ! [note]
+> [!note]
 >
 > 注意小黑板上会有额外的菜单
 
@@ -42,11 +41,21 @@ BriefIntroduction:
 
 ![pork_noddles](./images/)
 
-> ! [note]
+> [!note]
 >
 > 注意，宽面是由师傅现场拉面的，个人感觉味道更好
 >
 > 而细面则不是现场，而是现成的（感觉更像是在市场上面购买的）
+
+## 牛肉油泼面
+
+jiuqi 说味道还可以，但是相比于其价格 27 CNY， 还是猪肉油泼面更具性价比
+
+<img src="./images/beef-noddles.jpg" alt="beef_noddles" style="zoom:33%;" />
+
+> [!note]
+>
+> 注意其中的花生米是额外添加的，需要 2 CNY
 
 ## 臊子面（细面）
 
@@ -103,6 +112,12 @@ jiuqi老师尝过之后不推荐：
 味道不错，鸡肉很新鲜，部位大多是鸡翅根，骨头比较多，比较咸
 
 <img src="./images/dry-pot-chicken.jpeg" alt="chiken" style="zoom:25%;" />
+
+## 干锅牛蛙
+
+感觉味道一般，不推荐，其中大块的牛蛙肉并不入味，相比于28 CNY的价格，还是不太划算的
+
+<img src="./images/frog-dry-pot.jpg" alt="frog" style="zoom:50%;" />
 
 # 砂锅
 
