@@ -590,21 +590,22 @@ send_from_directory(app.config['RENDERED_ARTICLES_FOLDER'], filename)
 
 # Render Template
 
-Flask 使用 `render_template` 函数渲染 html 文件，默认会在 `templates` 文件夹中寻找模板文件
+Flask 使用 `render_template` 函数加载 html 文件，默认会在 `templates` 文件夹中寻找模板文件。
 
-
+原理：加载指定的模板文件 –> 传入的变量数据注入到模板中 –> 返回渲染后的 HTML 字符串
 
 > ! [note]
 >
-> 默认在 `templates` 文件夹中加载模板 可以通过设置 `template_folder` 修改
+> 可以通过设置 `template_folder` 修改默认 `templates` 文件夹
 >
 > ```python
 > app = Flask(__name__, template_folder='my_templates')
 > ```
 
-它加载指定的模板文件，然后将传入的变量数据注入到模板中，最后返回渲染后的 HTML 字符串
+for example
 
 ```
+/ 项目结构
 ├── app.py
 └── templates/
     └── hello.html
@@ -612,43 +613,14 @@ Flask 使用 `render_template` 函数渲染 html 文件，默认会在 `template
 
 ```python
 from flask import render_template
-
+# 路由函数
 @app.route('/hello/<name>')
 def hello(name=None):
     return render_template('hello.html', person=name)
 ```
 
-## `render_template` method
-
-`render_template` 是 Flask 用于渲染 Jinja2 模板的函数
-
-它加载指定的模板文件，然后将传入的变量数据注入到模板中，最后返回渲染后的 HTML 字符串
-
-
-
-基本语法如下
-
-```python
-from flask import render_template
-
-@app.route('/')
-def index():
-    return render_template('template_name.html',
-                         variable1=value1,
-                         variable2=value2)
-```
-
-基础用法
-
-```python
-@app.route('/hello')
-def hello():
-    name = "World"
-    return render_template('hello.html', name=name)
-```
-
-对应的模板 (`hello.html`):
 ```html
+<!-- hello.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -662,54 +634,197 @@ def hello():
 
 
 
-#### 使用上下文处理器
+## Jinja2
+
+Flask默认使用Jinja2作为模板引擎，因此拥有一些高级特性
+
+### delimiter
+
+`{{ }}` - 用于输出变量或表达式的值
+
+这里的变量由 `render_template` 函数传递过来
+
+```html
+<p>Hello, {{ username }}</p>
+<p>Current time: {{ datetime.now() }}</p>
+```
+
+`{% %}` - 用于控制逻辑（if语句、for循环等）
+
+```html
+{% if user.is_logged_in %}
+    <p>Welcome back!</p>
+{% else %}
+    <p>Please log in</p>
+{% endif %}
+```
+
+`{# #}` - 用于注释
+
+这个注释在模板渲染时就被移除，而HTML注释会被发送到浏览器上
+
+```html
+<!-- 这个注释会在页面源代码中可见 -->
+<p>Hello World</p>
+
+{# 这个注释在最终的HTML中完全不可见 #}
+<p>Hello World</p>
+```
+
+### Global variable
+
+### Template Inheritance
+
+这是Jinja2最强大的特性之一，使用 `{% extends %}` 和 `{% block %}` 标签实现。
+
+```html
+<!-- base.html -->
+<!doctype html>
+<html>
+    <head>
+        {% block head %}
+        
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+        
+        {% endblock %}
+    </body>
+</html>
+
+<!-- child.html -->
+{% extends "base.html" %}
+{% block head %}
+    <title>My Page</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Hello World!</h1>
+{% endblock %}
+```
+
+### Macros
+
+宏类似于其他编程语言中的函数，可以重复使用模板代码。
+
+```html
+{# macros.html #}
+{% macro input_field(name, label, type="text", value="", required=False) %}
+    <div class="form-group">
+        <label for="{{ name }}">{{ label }}</label>
+        <input type="{{ type }}" 
+               name="{{ name }}" 
+               id="{{ name }}"
+               value="{{ value }}"
+               {% if required %}required{% endif %}>
+    </div>
+{% endmacro %}
+
+{% macro alert(message, type="info") %}
+    <div class="alert alert-{{ type }}">
+        {{ message }}
+    </div>
+{% endmacro %}
+```
+
+使用宏：
+
+```html
+{# form.html #}
+{% from "macros.html" import input_field, alert %}
+
+<form method="post">
+    {{ input_field("username", "用户名", required=True) }}
+    {{ input_field("password", "密码", type="password", required=True) }}
+    {{ input_field("email", "邮箱", type="email") }}
+    
+    {% if error %}
+        {{ alert(error, type="danger") }}
+    {% endif %}
+    
+    <button type="submit">提交</button>
+</form>
+```
+
+### Include
+
+使用 `{% include %}` 可以包含其他模板文件：
+
+```html
+{# components/header.html #}
+<header>
+    <h1>网站标题</h1>
+    <nav>...</nav>
+</header>
+
+{# components/footer.html #}
+<footer>
+    <p>版权信息</p>
+</footer>
+
+{# page.html #}
+<!DOCTYPE html>
+<html>
+<body>
+    {% include 'components/header.html' %}
+    
+    <main>
+        <h2>页面内容</h2>
+    </main>
+    
+    {% include 'components/footer.html' %}
+</body>
+</html>
+```
+
+### Import
+
+可以导入整个模板文件作为模块：
+
+```html
+{# forms.html #}
+{% macro input(name, type="text") %}
+    <input type="{{ type }}" name="{{ name }}">
+{% endmacro %}
+
+{% macro textarea(name, rows=5) %}
+    <textarea name="{{ name }}" rows="{{ rows }}"></textarea>
+{% endmacro %}
+
+{# page.html #}
+{% import 'forms.html' as forms %}
+
+<form>
+    {{ forms.input('username') }}
+    {{ forms.textarea('description') }}
+</form>
+```
+
+### Context Processors
+
+在Flask中注册上下文处理器，使变量在所有模板中可用：
+
 ```python
-# 在应用中注册上下文处理器
 @app.context_processor
 def utility_processor():
     def format_price(amount):
-        return f"￥{amount:.2f}"
-    return dict(format_price=format_price)
-
-# 在视图函数中
-@app.route('/shop')
-def shop():
-    items = [
-        {'name': 'Item 1', 'price': 99.99},
-        {'name': 'Item 2', 'price': 149.99}
-    ]
-    return render_template('shop.html', items=items)
+        return f"¥{amount:.2f}"
+    
+    return dict(
+        format_price=format_price,
+        current_year=datetime.now().year
+    )
 ```
 
-模板中使用 (`shop.html`):
+在任何模板中使用：
+
 ```html
-<div class="shop">
-    {% for item in items %}
-        <div class="item">
-            <h3>{{ item.name }}</h3>
-            <p>价格: {{ format_price(item.price) }}</p>
-        </div>
-    {% endfor %}
-</div>
+<p>价格: {{ format_price(100) }}</p>
+<footer>&copy; {{ current_year }}</footer>
 ```
 
 
-
-**组织模板文件**
-
-```
-templates/
-    ├── base.html          # 基础模板
-    ├── components/        # 可重用组件
-    │   ├── header.html
-    │   └── footer.html
-    ├── auth/             # 认证相关模板
-    │   ├── login.html
-    │   └── register.html
-    └── main/             # 主要页面模板
-        ├── index.html
-        └── about.html
-```
 
 
 
