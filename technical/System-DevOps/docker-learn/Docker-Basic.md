@@ -8,7 +8,7 @@
 
 以 [docker/getting-started-todo-app: Sample application to get started with Docker](https://github.com/docker/getting-started-todo-app) 为例
 
-> ![note]
+> [!note]
 >
 > Docker Engine是核心技术组件，包含CLI、API和运行时；Docker Desktop则是其图形界面封装，提供可视化管理工具，主要用于开发环境。生产环境通常直接使用Engine。
 

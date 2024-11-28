@@ -65,7 +65,7 @@ flask --app hello run
 python -m flask --app hello run
 ```
 
-> ! [note]
+> [!note]
 >
 > 如果 py 文件叫做 app.py / wsgi.py 可以省略 `-app` 参数直接使用 `flask run` 命令
 >
@@ -89,7 +89,7 @@ Press CTRL+C to quit
 --host=192.168.0.100 - 监听特定的 IP 地址
 ```
 
-> ! [note]
+> [!note]
 >
 > Flask 的 `--host` 参数并不支持直接指定 IP 地址段范围（如 CIDR 表示法 192.168.0.0/24）。`--host` 参数只能指定服务器要监听的具体 IP 地址。
 
@@ -594,7 +594,7 @@ Flask 使用 `render_template` 函数加载 html 文件，默认会在 `template
 
 原理：加载指定的模板文件 –> 传入的变量数据注入到模板中 –> 返回渲染后的 HTML 字符串
 
-> ! [note]
+> [!note]
 >
 > 可以通过设置 `template_folder` 修改默认 `templates` 文件夹
 >
@@ -636,7 +636,11 @@ def hello(name=None):
 
 ## Jinja2
 
-Flask默认使用Jinja2作为模板引擎，因此拥有一些高级特性
+Flask默认使用Jinja2作为模板引擎，因此拥有一些高级特性 
+
+> [!note]
+>
+> 更详细的内容请看 [Template Designer Documentation — Jinja Documentation (3.1.x)](https://jinja.palletsprojects.com/en/stable/templates/)
 
 ### delimiter
 
@@ -824,7 +828,9 @@ def utility_processor():
 <footer>&copy; {{ current_year }}</footer>
 ```
 
+# Redirects and Errors
 
+next : [Quickstart — Flask Documentation (3.1.x)](https://flask.palletsprojects.com/en/stable/quickstart/#redirects-and-errors)
 
 
 

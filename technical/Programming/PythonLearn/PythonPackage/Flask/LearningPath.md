@@ -83,32 +83,4 @@
       └── run.py
       ```
 
-6. **示例代码 - Markdown渲染**:
-   ```python
-   from markdown import markdown
-   import os
-   
-   def render_markdown_to_html(markdown_content, output_path):
-       html_content = markdown(markdown_content, extensions=['fenced_code', 'tables'])
-       
-       # 添加Bootstrap样式
-       html_template = f"""
-       <!DOCTYPE html>
-       <html>
-       <head>
-           <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-           <link href="/static/css/custom.css" rel="stylesheet">
-       </head>
-       <body>
-           <div class="container mt-4">
-               {html_content}
-           </div>
-       </body>
-       </html>
-       """
-       
-       with open(output_path, 'w', encoding='utf-8') as f:
-           f.write(html_template)
-   ```
-
 总的来说，你的方向是对的，建议花1-2天时间过一遍Flask官方文档的核心部分，然后就可以继续开发了。记住，不需要完全精通Flask才能继续开发，在开发过程中遇到问题再查询文档是很正常的学习方式。
