@@ -55,3 +55,4 @@ Docker hub & Docker Image
 [Docker Hub](https://hub.docker.com) 是 Docker 官方维护的公共镜像仓库，类似于 GitHub，包含了大量官方和社区维护的镜像
 
 以Ubuntu镜像为例，与Server ISO（2.6GB）不同，Docker镜像经过精简（约30MB），仅保留基础组件。镜像可自动下载存储，支持本地缓存复用，通过docker images查看。
+
