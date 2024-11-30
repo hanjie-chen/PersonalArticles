@@ -247,16 +247,15 @@ sudo docker ps
 
 # `docker build` command
 
-是的，你的理解基本正确！让我详细解释一下 `docker build` 的工作过程：
+**基本用法**
 
-1. **基本用法**
 ```bash
 docker build -t my-app:1.0 .
 # -t 指定镜像名称和标签
 # .  表示使用当前目录作为构建上下文
 ```
 
-2. **构建过程详解**
+**构建过程详解**
 
 当你运行 `docker build` 时，Docker 会：
 
