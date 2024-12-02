@@ -1,20 +1,23 @@
-### 1. Docker 数据管理的三种方式
+# Docker 数据管理的三种方式
 
-1. **Volumes（数据卷）**
-   - Docker 管理的持久化数据
-   - 存储在 Docker 管理的区域（通常在 `/var/lib/docker/volumes/`）
-   - 最佳的数据持久化方式
+**Volumes（数据卷）**
 
-2. **Bind Mounts（绑定挂载）**
-   - 直接将主机的文件或目录挂载到容器中
-   - 可以在任何位置存储
-   - 适合开发环境
+- Docker 管理的持久化数据
+- 存储在 Docker 管理的区域（通常在 `/var/lib/docker/volumes/`）
+- 最佳的数据持久化方式
 
-3. **tmpfs mounts**
-   - 临时文件系统，数据存在内存中
-   - 容器停止后数据消失
+**Bind Mounts（绑定挂载）**
 
-### 2. 实际操作示例
+- 直接将主机的文件或目录挂载到容器中
+- 可以在任何位置存储
+- 适合开发环境
+
+**tmpfs mounts**
+
+- 临时文件系统，数据存在内存中
+- 容器停止后数据消失
+
+# Volumes
 
 让我们通过具体例子来说明如何使用 Volume 和环境变量：
 
@@ -41,8 +44,6 @@ Rendered_Articles = "rendered_articles"
 #### 2.3 创建 docker-compose.yml
 
 ```yaml
-version: '3.8'
-
 services:
   web:
     build: .
@@ -58,23 +59,7 @@ services:
       - FLASK_APP=app.py
       - FLASK_DEBUG=1
     command: flask run --debug --host=0.0.0.0
-
-volumes:
-  articles-data:  # 声明命名卷
-  rendered-articles:
-```
-
-#### 2.4 数据初始化
-
-需要将你的测试数据复制到 volume 中。创建一个初始化容器：
-
-```yaml
-version: '3.8'
-
-services:
-  web:
-    # ... 上面的配置保持不变 ...
-
+  
   # 添加初始化服务
   init-data:
     image: alpine
@@ -87,7 +72,7 @@ services:
       - /home/Plain/Personal_Project/articles-data-test:/host-data:ro
 
 volumes:
-  articles-data:
+  articles-data:  # 声明命名卷
   rendered-articles:
 ```
 

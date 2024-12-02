@@ -33,13 +33,17 @@ BriefIntroduction:
 
 > [!note]
 >
-> 注意小黑板上会有额外的菜单
+> 注意小黑板上会有额外的菜单，但是我好像都没有尝试过
+>
+> <img src="./images/noddles-small-black.jpg" alt="small black" style="zoom:25%;" />
+>
+> 
 
 
 
 ## 猪肉油泼面（宽面）
 
-![pork_noddles](./images/)
+<img src="./images/pork-noddles.jpg" alt="pork_noddles" style="zoom:45%;" />
 
 > [!note]
 >
@@ -69,9 +73,13 @@ jiuqi老师尝过之后不推荐：
 
 # 盖浇饭
 
+菜单：
+
+<img src="./images/rice-menu.jpg" alt="rice menu" style="zoom:50%;" />
+
 购买位置：
 
-![rice](./image/test)
+<img src="./images/chicken-cutlet-rice.jpg" alt="rice" style="zoom:33%;" />
 
 目前只推荐鸡排饭（18 CNY），实惠好吃，但是好吃的部分只有刚煎出来的鸡排
 
@@ -112,6 +120,10 @@ jiuqi老师尝过之后不推荐：
 味道不错，鸡肉很新鲜，部位大多是鸡翅根，骨头比较多，比较咸
 
 <img src="./images/dry-pot-chicken.jpeg" alt="chiken" style="zoom:25%;" />
+
+配菜有时候会比较单调，只有青椒，但是味道还是一样的
+
+<img src="./images/dry-pot-chicken-green.jpg" alt="chicken-green pepper" style="zoom:50%;" />
 
 ## 干锅牛蛙
 
