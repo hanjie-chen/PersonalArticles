@@ -62,14 +62,12 @@ services:
   
   # 添加初始化服务
   init-data:
-    image: alpine
-    volumes:
-      - articles-data:/app/articles-data
-    command: >
-      sh -c "cp -r /host-data/* /app/articles-data/"
+    image: my-website
     volumes:
       - articles-data:/app/articles-data
       - /home/Plain/Personal_Project/articles-data-test:/host-data:ro
+	command: >
+      sh -c "cp -r /host-data/* /app/articles-data/"
 
 volumes:
   articles-data:  # 声明命名卷
