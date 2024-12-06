@@ -114,6 +114,8 @@ Press CTRL+C to quit
 # ...
 ```
 
+需要注意的这里的 debug mode 不仅仅检测 `.py` 文件是否改变，而且同时检测templates 文件夹中 `.html` 文件是否改变[^flask-config]
+
 ## HTML Escaping
 
 当处理用户输入时需要特别注意 XSS 攻击。HTML Escaping 是一种防御机制，将特殊字符转换为对应的 HTML 实体（如 `<` 变成 `&lt;`），防止恶意脚本执行。
@@ -831,6 +833,14 @@ def utility_processor():
 # Redirects and Errors
 
 next : [Quickstart — Flask Documentation (3.1.x)](https://flask.palletsprojects.com/en/stable/quickstart/#redirects-and-errors)
+
+
+
+# Reference
+
+[^flask-config]: 参考文档 [Configuration Handling — Flask Documentation (3.1.x)
+
+
 
 
 

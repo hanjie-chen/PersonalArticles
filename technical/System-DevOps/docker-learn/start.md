@@ -41,7 +41,6 @@ docker-learn/
 │   └── best-practices.md  # 开发最佳实践
 │
 └── README.md             # 项目说明和目录导航
-
 ```
 
 
@@ -50,26 +49,7 @@ docker-learn/
 
 现在让我详细说明每个阶段的具体内容：
 
-## 第一阶段：Docker基础（预计2周）
 
-### 学习目标
-1. 理解Docker的基本概念和架构
-2. 掌握Docker的基本命令
-3. 能够运行和管理简单的容器
-
-### 关键知识点
-- Docker的核心概念：容器、镜像、仓库
-- 基本命令：docker run, pull, push, ps, images等
-
-### 实践练习
-- 安装Docker环境
-- 运行Hello World容器
-- 尝试运行不同的基础镜像（nginx, mysql等）
-
-### 验证方式
-- 能够独立完成Docker的安装和配置
-- 理解并能使用基本的Docker命令
-- 可以运行简单的容器应用
 
 ## 第二阶段：Dockerfile与环境配置（预计2周）
 

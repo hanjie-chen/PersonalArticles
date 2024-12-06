@@ -159,7 +159,143 @@ git branch -a   # 查看所有分支（本地和远程）
 
 这样可以确保你删除的是正确的分支。如果你有任何其他关于 Git 分支管理的问题，欢迎继续询问！
 
-# Git ignore
+# Git pull
+
+好的，我来为您解释如何使用git pull强制覆盖本地未提交的修改。这个操作需要谨慎使用，因为它会丢失您本地的所有未提交更改。以下是步骤：
+
+1. 首先，确保您在正确的分支上：
+   ```
+   git checkout <your-branch>
+   ```
+
+2. 然后，使用以下命令强制覆盖本地更改：
+   ```
+   git fetch --all
+   git reset --hard origin/<your-branch>
+   ```
+
+这里的步骤解释：
+
+- `git fetch --all` 从远程仓库获取所有最新的提交，但不会合并或修改您的本地文件。
+- `git reset --hard origin/<your-branch>` 将您当前分支的本地文件强制重置为远程分支的状态。
+
+请注意，这个操作是不可逆的。它会丢弃所有本地未提交的更改，包括暂存的和未暂存的更改。您的本地分支将与远程分支完全一致。
+
+如果您只想更新某些文件而不是整个分支，可以使用以下命令：
+
+```
+git checkout origin/<your-branch> -- <path/to/file>
+```
+
+这将仅覆盖指定的文件，而不影响其他文件。
+
+最后，我想强调一下，在执行这些操作之前，如果您的本地更改可能有价值，最好先创建一个备份或使用 `git stash` 来保存您的更改。这样，如果您之后发现需要这些更改，还可以恢复它们。
+
+您是否需要我进一步解释这些命令或git的工作原理？
+
+# git merge
+
+当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到main上面去。然后我们接着回到这个分支上继续开发。
+
+这是我们需要进行的具体的步骤
+
+**首先切换到 main 分支**：
+
+```bash
+git checkout main
+```
+
+**将分支的内容合并到 main**：
+
+```bash
+git merge <branch-name>
+```
+
+**推送更新后的 main 分支到远程仓库**（如果有远程仓库的话）：
+
+```bash
+git push origin main
+```
+
+**切换回分支继续开发**：
+
+```bash
+git checkout <branch-name>
+```
+
+### 完整操作示例
+
+```bash
+# 1. 确保当前分支的修改已经提交
+git status
+
+# 2. 切换到 main 分支
+git checkout main
+
+# 3. 合并 backend-development 分支
+git merge backend-development
+
+# 4. 如果有远程仓库，推送更新
+git push origin main
+
+# 5. 切换回 backend-development 继续开发
+git checkout backend-development
+```
+
+# related remote repository
+
+可以使用以下命令查看当前Git仓库关联的远程地址：
+
+```bash
+git remote -v
+```
+
+执行这个命令后，你会看到类似于以下的输出：
+
+```
+origin  https://github.com/username/repository.git (fetch)
+origin  https://github.com/username/repository.git (push)
+```
+
+其中，`origin`是默认的远程名称，后面跟着的就是远程仓库的URL。如果你有多个远程仓库，都会在这里列出。
+
+
+
+# rollback change
+
+如果修改了文件，但是没有进行git add && git commit 例如这面这种状态
+
+```bash
+Plain@Linux-VM:~/Personal_Project/getting-started-todo-app$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   compose.yml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+这种情况下回撤修改非常简单，可以直接使用 git 提示中显示的命令：
+
+```bash
+git restore compose.yml
+```
+
+需要注意的是：
+1. 这个操作会直接丢弃你对 compose.yml 的所有修改
+2. 这个操作无法撤销，所以在执行之前请确认你真的要放弃这些修改
+
+如果你想在回撤之前查看具体修改了什么内容，可以使用：
+```bash
+git diff compose.yml
+```
+
+这样可以看到具体的修改内容，再决定是否要回撤修改。
+
+# `.gitignore` file
 
 当python程序运行的时候，会产生一些临时的文件，存放在本地路径的`__pycache__`文件夹中，但是当我们提交的时候并不希望这些临时文件被提交，这个时候，我们可以写一个`.gitignore`文件来忽略某些特定的文件
 
@@ -224,93 +360,6 @@ Thumbs.db
 __pycache__/
 *.pyc
 ```
-
-# Git pull
-
-好的，我来为您解释如何使用git pull强制覆盖本地未提交的修改。这个操作需要谨慎使用，因为它会丢失您本地的所有未提交更改。以下是步骤：
-
-1. 首先，确保您在正确的分支上：
-   ```
-   git checkout <your-branch>
-   ```
-
-2. 然后，使用以下命令强制覆盖本地更改：
-   ```
-   git fetch --all
-   git reset --hard origin/<your-branch>
-   ```
-
-这里的步骤解释：
-
-- `git fetch --all` 从远程仓库获取所有最新的提交，但不会合并或修改您的本地文件。
-- `git reset --hard origin/<your-branch>` 将您当前分支的本地文件强制重置为远程分支的状态。
-
-请注意，这个操作是不可逆的。它会丢弃所有本地未提交的更改，包括暂存的和未暂存的更改。您的本地分支将与远程分支完全一致。
-
-如果您只想更新某些文件而不是整个分支，可以使用以下命令：
-
-```
-git checkout origin/<your-branch> -- <path/to/file>
-```
-
-这将仅覆盖指定的文件，而不影响其他文件。
-
-最后，我想强调一下，在执行这些操作之前，如果您的本地更改可能有价值，最好先创建一个备份或使用 `git stash` 来保存您的更改。这样，如果您之后发现需要这些更改，还可以恢复它们。
-
-您是否需要我进一步解释这些命令或git的工作原理？
-
-# Git 查看与此仓库管理的远程repository
-
-可以使用以下命令查看当前Git仓库关联的远程地址：
-
-```bash
-git remote -v
-```
-
-执行这个命令后，你会看到类似于以下的输出：
-
-```
-origin  https://github.com/username/repository.git (fetch)
-origin  https://github.com/username/repository.git (push)
-```
-
-其中，`origin`是默认的远程名称，后面跟着的就是远程仓库的URL。如果你有多个远程仓库，都会在这里列出。
-
-
-
-# Git 回撤修改
-
-如果修改了文件，但是没有进行git add && git commit 例如这面这种状态
-
-```bash
-Plain@Linux-VM:~/Personal_Project/getting-started-todo-app$ git status
-On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   compose.yml
-
-no changes added to commit (use "git add" and/or "git commit -a")
-```
-
-这种情况下回撤修改非常简单，可以直接使用 git 提示中显示的命令：
-
-```bash
-git restore compose.yml
-```
-
-需要注意的是：
-1. 这个操作会直接丢弃你对 compose.yml 的所有修改
-2. 这个操作无法撤销，所以在执行之前请确认你真的要放弃这些修改
-
-如果你想在回撤之前查看具体修改了什么内容，可以使用：
-```bash
-git diff compose.yml
-```
-
-这样可以看到具体的修改内容，再决定是否要回撤修改。
 
 # Reference
 
