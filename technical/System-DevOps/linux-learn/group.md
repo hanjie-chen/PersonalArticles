@@ -1,3 +1,7 @@
+# Linux group
+
+
+
 使用 `groups` 命令默认显示当前登录用户所属的所有用户组
 
 for example
@@ -49,7 +53,7 @@ docker:x:993:
 
 
 
-然后使用命令 `sudo usermod -aG docker Plain` 将 Plain 用户添加到 docker 组中，可以再次检查发现
+然后使用命令 `sudo usermod -aG docker <username>` 将用户添加到 docker 组中，例如
 
 ```bash
 Plain@Linux-VM:~/Personal_Project/test-website$ sudo usermod -aG docker Plain
