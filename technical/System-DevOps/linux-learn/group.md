@@ -2,72 +2,91 @@
 
 
 
-使用 `groups` 命令默认显示当前登录用户所属的所有用户组
 
-for example
+
+## `group` command
+
+`groups` 命令默认显示当前登录用户所属的所有用户组 for example
 
 ```bash
-Plain@Linux-VM:~/Personal_Project/test-website$ groups
+$ groups
 Plain adm dialout cdrom floppy sudo audio dip video plugdev netdev lxd
 ```
 
-1. `Plain` - 这是您的主要用户组，通常与用户名相同
-2. `adm` - 系统管理组，可以查看系统日志
-3. `dialout` - 允许访问串行端口设备
-4. `cdrom` - 允许访问光驱设备
-5. `floppy` - 允许访问软盘驱动器
-6. `sudo` - 允许使用 sudo 命令执行管理员权限的操作
-7. `audio` - 允许访问音频设备
-8. `dip` - 允许配置网络接口
-9. `video` - 允许访问视频设备
-10. `plugdev` - 允许访问可移动设备
-11. `netdev` - 允许管理网络设备
-12. `lxd` - 允许使用 LXD 容器管理系统
+`Plain` 这是您的主要用户组，通常与用户名相同
 
-从输出中可以看到，`docker` 组确实不在其中，这就解释了为什么您需要使用 sudo 来运行 docker 命令。要解决这个问题，您需要：
+`adm` 系统管理组，可以查看系统日志
+
+`dialout` 允许访问串行端口设备
+
+`cdrom` 允许访问光驱设备
+
+`floppy` 允许访问软盘驱动器
+
+`sudo` 允许使用 sudo 命令执行管理员权限的操作
+
+`audio` 允许访问音频设备
+
+`dip` 允许配置网络接口
+
+`video` 允许访问视频设备
+
+`plugdev` 允许访问可移动设备
+
+`netdev` 允许管理网络设备
+
+`lxd` 允许使用 LXD 容器管理系统
+
+
+
+# 查看某个特定的 group 是否存在
+
+可以使用 `cat /etc/group | grep <group-name>` 命令，例如，如果想要查看 docker group 是否存在
 
 ```bash
-sudo usermod -aG docker Plain
-```
-
-执行后，重新登录或运行 `newgrp docker`，然后再次运行 `groups` 命令，您应该就能看到 `docker` 组出现在列表中了。
-
-这些组权限是 Linux 系统安全模型的重要组成部分，每个组都赋予用户特定的权限，以控制对系统资源的访问。通过将用户添加到 docker 组，我们允许该用户直接与 Docker 守护进程通信，而不需要 sudo 权限。
-
-# 将当前user添加到docker group中
-
-首先查看docker group是否存在 使用 `cat /etc/group | grep docker` 命令
-
-```bash
-Plain@Linux-VM:~/Personal_Project/test-website$ cat /etc/group | grep docker
+$cat /etc/group | grep docker
 docker:x:993:
 ```
 
 这个输出包含了4个字段，用冒号分隔：
-1. `docker` - 组名
-2. `x` - 组密码占位符（现代系统通常使用影子密码系统，实际密码存储在别处）
-3. `993` - 组ID (GID)
-4. 最后一个空字段 - 组成员列表（当前是空的，说明没有用户被添加到这个组）
+
+`docker` group name
+
+`x` 组密码占位符（现代系统通常使用影子密码系统，实际密码存储在别处）
+
+`993` group ID (GID)
+
+`<empty>` 最后一个空字段是组成员列表（当前是空的，说明没有用户被添加到这个组）
 
 所以这个输出意味着 docker 组确实存在，但是目前没有任何用户被添加到这个组中
 
+# 添加用户到某一个 group
 
-
-然后使用命令 `sudo usermod -aG docker <username>` 将用户添加到 docker 组中，例如
+可以使用命令 `sudo usermod -aG <group-name> <username>` 将用户添加到 group 中，例如将 Plain 用户添加到 docker group 中
 
 ```bash
-Plain@Linux-VM:~/Personal_Project/test-website$ sudo usermod -aG docker Plain
-Plain@Linux-VM:~/Personal_Project/test-website$ cat /etc/group | grep docker
+$ sudo usermod -aG docker Plain
+$ cat /etc/group | grep docker
 docker:x:993:Plain
 ```
 
+`usermod` - 修改用户账户的命令
+
+`-a` 表示 append，即追加，如果不使用 `-a`，用户会从原来所属的其他组中被移除
+
+`-G` 表示要修改的是用户组（Groups）
 
 
-最后为了使其生效，可以重新登陆或者使用命令`newgrp docker`
+
+执行后，重新登录或运行 `newgrp docker`，然后再次运行 `groups` 命令，您应该就能看到 `docker` 组出现在列表中了。
+
+
 
 > [!note]
 >
-> 将用户添加到 docker 组本质上是授予该用户 root 权限，因为他们可以使用 docker 命令来挂载任何目录并修改系统文件。
+> 将用户添加到 docker 组本质上是授予该用户 root 权限，因为用户可以使用 docker 命令来挂载任何目录并修改系统文件。
+>
+> 所以在这之后用户运行 docker 命令就无需添加 sudo
 
 # 关于 `newgrp`
 

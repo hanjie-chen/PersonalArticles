@@ -9,16 +9,13 @@ Category: ToolGuide/GitGuide/GitUsage
 
 ```
 BriefIntroduction: 
-本人总结的git速查指南
+本人总结的git速查指南，一般来说是遇到问题 --> 问Sonnet3.5 --> 解决问题 --> 记录在这里
+虽然有很多其他的 git 资料，但是自从LLM出现之后，我遇到问题一般直接提问LLM，爽的一批
 ```
 
 <!-- split -->
 
 ![cover image](./images/cover_image.png)
-
-# 写在前面/Before we beginning
-
-虽然有很多的Git资料，但是自从LLM出现之后，我遇到问题一般直接提问LLM，爽的一批
 
 # Title: Git使用指南
 
@@ -314,7 +311,7 @@ git config --global core.excludesfile ~/.gitignore
 
 
 
-参考了经典`.gitignore` 方案，来自github[^1]
+参考了经典`.gitignore` 方案，来自 [Some common .gitignore configurations](https://gist.github.com/octocat/9257657)
 
 ```python
 # Compiled source #
@@ -361,7 +358,11 @@ __pycache__/
 *.pyc
 ```
 
-# Reference
+# Furture consider
 
-[^1]: [Some common .gitignore configurations (github.com)](https://gist.github.com/octocat/9257657)
+尝试理解 Git 原理 [自己动手写 Git](https://wyag-zh.hanyujie.xyz/)
+
+
+
+
 

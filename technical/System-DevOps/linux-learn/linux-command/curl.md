@@ -1,12 +1,31 @@
-# curl 命令
+---
+Title: Curl Command
+Author: 陈翰杰
+Instructor: Sonnet 3.5
+CoverImage: ./images/curl-cover-image.png
+RolloutDate: 2024-12-08
+---
 
-command
-
-```bash
-Plain@Linux-VM:~$ curl -i -v https://www.google.com:443
+```
+BriefIntroduction: 
+curl 命令详解
 ```
 
-output
+<!-- split -->
+
+![curl](./images/curl-cover-image.png)
+
+# Before we begin
+
+在当 Azure support enginner 的时候，会遇到 Azure Applicaiton Gateway (APG), Azure Front Door (AFD) 等产品，当然主要是这2个，总是会使用到 curl 命令来测试网站连通性等，于是专门研究了一下 curl 命令，在此记录
+
+# curl 命令
+
+我最常用的方式和参数是 `-i -v` 因为这样子可以看到所有的重要信息 for example
+
+```bash
+curl -i -v https://www.google.com:443
+```
 
 ```bash
 * Trying 209.85.203.104:443...
@@ -52,6 +71,8 @@ HTTP/2 200
 ```
 
 # Output输出分析
+
+## 初始链接
 
 ### 1. 初始连接阶段
 ```bash
@@ -168,7 +189,7 @@ TLS Protocol
 >
 > 在TLS 1.3中，相比早期版本，握手过程被优化，减少了往返次数，提高了性能和安全性。整个过程中的大部分消息都是从服务器发往客户端（IN），客户端主要发送开始和结束的消息（OUT）
 
-### 5. SSL连接信息
+### SSL连接信息
 ```bash
 * SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
 * ALPN, server accepted to use h2
@@ -278,7 +299,7 @@ Subject:
 - 发送GET请求
 - 包含基本的HTTP头信息
 
-### 9. 会话票证和响应
+### 会话票证和响应
 ```bash
 * TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
 * TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):

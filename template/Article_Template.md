@@ -39,8 +39,6 @@ a_{21} & a_{22} \\
 \end{pmatrix}
 ```
 
-
-
 # Part 1
 
 part 1 content
@@ -109,7 +107,7 @@ w_{(n-1)0}^{hidden} & w_{(n-1)1}^{hidden} & \cdots & w_{(n-1)(m-1)}^{hidden}
 - 行内公式：`$...$`
 - 块级公式：````math````
 
-
+不过这个块级公式似乎显示有点小，打算在css中调整一下
 
 
 
