@@ -16,7 +16,7 @@ BriefIntroduction:
 
 ![cover image](./images/cover_image.jpeg)
 
-# 写在前面/Before we beginning
+# 写在前面/Before we beginning/Background
 
 介绍本文的背景和自己的想法，右边为文章目录，左边是同一个 category 目录下的文章 link 
 
