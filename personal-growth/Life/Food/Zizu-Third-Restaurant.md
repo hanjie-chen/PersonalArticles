@@ -55,6 +55,8 @@ BriefIntroduction:
 
 jiuqi 说味道还可以，但是相比于其价格 27 CNY， 还是猪肉油泼面更具性价比
 
+我尝了一下，牛肉都是纯瘦肉，其实有点柴，如果带一点肥肉会更加的好吃一些，猪肉虽然也都是瘦肉，但是就是会比较软一些。猪肉油泼YYDS
+
 <img src="./images/beef-noddles.jpg" alt="beef_noddles" style="zoom:33%;" />
 
 > [!note]
@@ -77,13 +79,19 @@ jiuqi老师尝过之后不推荐：
 
 <img src="./images/rice-menu.jpg" alt="rice menu" style="zoom:50%;" />
 
-购买位置：
+## 鸡排饭
 
 <img src="./images/chicken-cutlet-rice.jpg" alt="rice" style="zoom:33%;" />
 
 目前只推荐鸡排饭（18 CNY），实惠好吃，但是好吃的部分只有刚煎出来的鸡排
 
-其他暂时没有尝试
+## 猪肚鸡
+
+感觉只有鸡肉味道还可以，其他味道一般，30 CNY 性价比甚至不如牛肉油泼面
+
+干锅鸡翅其实味道也不错，感觉这个餐厅的鸡肉品质都挺好的
+
+<img src="./images/pork-stomach-chicken.jpg" alt="猪肚鸡" style="zoom:50%;" />
 
 
 
