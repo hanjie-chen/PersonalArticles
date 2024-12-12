@@ -8,7 +8,7 @@ RolloutDate: 2024-11-14
 
 ```
 BriefIntroduction: 
-这里存放文章简介，原本的想法的类似与论文的摘要功能，我想着要不要把chatGPT3.5接入进来。让她帮我生成文章简介，看看我自己写的文章简介和她写的文章简介哪一个更好。
+flask-sqlalchemy 基础知识
 ```
 
 <!-- split -->
@@ -524,3 +524,6 @@ article.author = Plain
 db.session.commit()
 ```
 
+# Reference
+
+[Flask-SQLAlchemy — Flask-SQLAlchemy Documentation (3.1.x)](https://flask-sqlalchemy.palletsprojects.com/en/latest/)

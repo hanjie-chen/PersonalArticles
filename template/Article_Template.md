@@ -1,5 +1,5 @@
 ---
-Title: XXXX
+Title: Articles Template
 Author: 陈翰杰
 Instructor: chatGPT 3.5
 CoverImage: ./images/cover_image.jpeg
@@ -32,12 +32,16 @@ BriefIntroduction:
 
 还有一些Latex数学公式的支持
 
-```math
-\begin{pmatrix}
-a_{11} & a_{12} \\
-a_{21} & a_{22} \\
-\end{pmatrix}
+引用本仓库其他的已经存在的文章使用基于仓库根目录的绝对路径，例如
+
+[README.md](/PersonalArticles/README.md)
+
+```markdown
+[git 笔记](/PersonalArticles/tools-guide/git-guide/Git使用指南.md)
+C:\Users\Plain\PersonalArticles\README.md
 ```
+
+
 
 # Part 1
 
@@ -119,6 +123,6 @@ w_{(n-1)0}^{hidden} & w_{(n-1)1}^{hidden} & \cdots & w_{(n-1)(m-1)}^{hidden}
   - [x] 子任务1
   - [x] 子任务2
 
-# 参考文献
+# Reference
 
 [^引用1]: chj is good
