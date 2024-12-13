@@ -34,16 +34,17 @@ BriefIntroduction:
 
 引用本仓库其他的已经存在的文章使用基于仓库根目录的绝对路径，例如
 
-[git笔记](/tools-guide/git-guide/Git使用指南.md)
+[git 笔记](tools-guide/git-guide/Git使用指南.md)
 
 ```markdown
-[git 笔记](/PersonalArticles/tools-guide/git-guide/Git使用指南.md)
-C:\Users\Plain\PersonalArticles\README.md
+[git 笔记](/tools-guide/git-guide/Git使用指南.md)
 ```
 
+因为这在github上面也能正确解析 特别说明：以 `/` 开头代表从仓库根目录开始
 
+reference: [兼容obsidian的基于库根目录的绝对路径 · Issue #259 · obgnail/typora_plugin](https://github.com/obgnail/typora_plugin/issues/259)
 
-# Part 1
+# Part1
 
 part 1 content
 
@@ -58,6 +59,8 @@ part 1 content
 
 > [!NOTE]
 > 这是一个普通提示信息
+>
+> test fo folder
 
 > [!TIP]
 > 这是一个提示
@@ -68,7 +71,7 @@ part 1 content
 > [!WARNING]
 > 这是一个警告信息
 
-> [!CAUTION]
+> [!CAUTION] 
 > 这是一个危险警告
 
 # Part 2
@@ -111,7 +114,7 @@ w_{(n-1)0}^{hidden} & w_{(n-1)1}^{hidden} & \cdots & w_{(n-1)(m-1)}^{hidden}
 - 行内公式：`$...$`
 - 块级公式：````math````
 
-不过这个块级公式似乎显示有点小，打算在css中调整一下
+不过这个块级公式似乎显示有点小，打算在css中调整一下 [part1](#Part1)
 
 
 
