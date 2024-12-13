@@ -34,7 +34,7 @@ BriefIntroduction:
 
 引用本仓库其他的已经存在的文章使用基于仓库根目录的绝对路径，例如
 
-[git 笔记](tools-guide/git-guide/Git使用指南.md)
+[git 笔记](/tools-guide/git-guide/Git使用指南.md)
 
 ```markdown
 [git 笔记](/tools-guide/git-guide/Git使用指南.md)
