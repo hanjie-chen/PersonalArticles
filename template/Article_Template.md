@@ -24,6 +24,8 @@ BriefIntroduction:
 
 使用 `写在前面` 还是 `Before we beginning` 取决于整体标题风格，例如如果都是英文标题，那么同样保持英文标题
 
+file:///C:/Users/Plain/PersonalArticles/%E3%80%82%E3%80%81images/cover_image.jpeg?lastModify=1734175016
+
 # Title: XXXX
 
 这里写文章的==正文内容==
@@ -34,7 +36,7 @@ BriefIntroduction:
 
 引用本仓库其他的已经存在的文章使用基于仓库根目录的绝对路径，例如
 
-[git 笔记](/tools-guide/git-guide/Git使用指南.md)
+[git 笔记](tools-guide/git-guide/Git使用指南.md)
 
 ```markdown
 [git 笔记](/tools-guide/git-guide/Git使用指南.md)
@@ -48,7 +50,7 @@ reference: [兼容obsidian的基于库根目录的绝对路径 · Issue #259 · 
 
 part 1 content
 
-> quota other thing, or actually note?
+> quota other thing, or actually note
 
 差异高亮显示
 
