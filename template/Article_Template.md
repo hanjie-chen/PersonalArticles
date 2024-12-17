@@ -24,7 +24,7 @@ BriefIntroduction:
 
 使用 `写在前面` 还是 `Before we beginning` 取决于整体标题风格，例如如果都是英文标题，那么同样保持英文标题
 
-file:///C:/Users/Plain/PersonalArticles/%E3%80%82%E3%80%81images/cover_image.jpeg?lastModify=1734175016
+file:///C:/Users/Plain/PersonalArticles/images/cover_image.jpeg?lastModify=1734341012
 
 # Title: XXXX
 
@@ -36,7 +36,7 @@ file:///C:/Users/Plain/PersonalArticles/%E3%80%82%E3%80%81images/cover_image.jpe
 
 引用本仓库其他的已经存在的文章使用基于仓库根目录的绝对路径，例如
 
-[git 笔记](tools-guide/git-guide/Git使用指南.md)
+[git 笔记](/tools-guide/git-guide/Git使用指南.md)
 
 ```markdown
 [git 笔记](/tools-guide/git-guide/Git使用指南.md)

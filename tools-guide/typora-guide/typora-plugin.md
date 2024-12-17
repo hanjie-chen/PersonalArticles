@@ -25,13 +25,13 @@ PS C:\Users\Plain\PersonalArticles
 └───README.md
 ```
 
-一般来说我引用图片的方式是使用相对路径，比如说我在Article_Template.md中使用`./images/cover_image.jpeg` 来引用图片
+一般来说我引用图片的方式是使用相对路径，比如说我在 Article_Template.md 中使用 `./images/cover_image.jpeg` 来引用图片
 
-但是当我想要引用其他的文章的时候，我想要使用基于基于仓库根目录的绝对路径，比如说我引用Git使用指南这篇文章，则是 `/tools-guide/git-guide/Git使用指南.md` 
+但是当我想要引用其他的文章的时候，我想要使用基于基于仓库根目录的绝对路径，比如说我引用 Git 使用指南这篇文章，则是 `/tools-guide/git-guide/Git使用.md` 
 
-这2个方式在github上面是同时生效的
+这 2 个方式在 github 上面是同时生效的 [test](/tools-guide/git-guide/git-usage.md)
 
-但是我阅读了 [Typora Links](https://support.typora.io/Links) 文章，其中并没有这个格式，只有如下格式
+但是我阅读了 [Typora Links](https://support.typora.io/Links) 文章，其中这个格式含义则实际上是去找了系统根路径，而不是项目根路径，例如在这篇文档提供的示例中
 
 ```markdown
 [Readme1](Readme1.md)
@@ -45,9 +45,20 @@ PS C:\Users\Plain\PersonalArticles
 [Readme4](C:/Develop/Docs/Readme1.md)
 
 [Readme4](file:///User/root/Docs/Readme1.md)
-
 ```
 
 后来我发现了这个 issue: [兼容 obsidian 的基于库根目录的绝对路径 · Issue #259 · obgnail/typora_plugin](https://github.com/obgnail/typora_plugin/issues/259) 似乎存在一个 typora-plugin 的解决方案，于是打开了 typora plugin 的新大陆
 
 [obgnail/typora_plugin: Typora plugin. Feature enhancement tool | Typora 插件，功能增强工具](https://github.com/obgnail/typora_plugin)
+
+于是直接乐不思蜀，抛下这个问题，开始研究 typora plugin 一顿操作狠狠的配置，结果发现大部分我似乎都用不上，不过少部分还是有点意思的
+
+在我配置 plugin 的过程中遇到了一个问题，那就是 vscode 似乎会自动对比 default.toml 文件和 user.toml 文件然后自动删除 user.toml 文件中重复的部分，这浪费我大量的时间，结果也没有找到解决方案，遂放弃
+
+回到正题，我在配置插件的过程中尝试了这个插件，效果让我并不满意，因为这个插件的作用仅仅针对 image 有效，和在 YAML 中添加 `typora-root-url` 的效果是相同
+
+[Images in Typora - Typora Support](https://support.typora.io/Images/#display-images-in-relative-path)
+
+已经提了这个 issue 了：[[Feature\] consider file link start with `/` as absolute path base on repository dir like github · Issue #6194 · typora/typora-issues](https://github.com/typora/typora-issues/issues/6194)
+
+蹲一手吧

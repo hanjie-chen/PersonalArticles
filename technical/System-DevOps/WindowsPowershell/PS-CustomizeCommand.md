@@ -80,15 +80,25 @@ Set-Alias -Name touch -Value Touch-File
 
 Linux like command tree, to instead of the powershell nature `tree`
 
+user `tree -DirectoriesOnly` to show directories
+
 ```powershell
+# Linux-like tree command, added by Plain in 2024-11-15
 function Show-TreeWithFiles {
     param (
         [string]$Path = ".",
         [string]$Indent = "",
-        [bool]$IsLast = $true
+        [bool]$IsLast = $true,
+        [switch]$DirectoriesOnly # 新增参数，使用 switch 类型便于命令行使用
     )
 
-    $items = Get-ChildItem -Path $Path
+    # 根据 DirectoriesOnly 参数决定是否只获取目录
+    $items = if ($DirectoriesOnly) {
+        Get-ChildItem -Path $Path | Where-Object { $_.PSIsContainer }
+    } else {
+        Get-ChildItem -Path $Path
+    }
+    
     $count = $items.Count
     $current = 0
 
@@ -126,7 +136,7 @@ function Show-TreeWithFiles {
             } else {
                 if ($isLastItem) { "$Indent    " } else { "$Indent│   " }
             }
-            Show-TreeWithFiles -Path $item.FullName -Indent $newIndent -IsLast $isLastItem
+            Show-TreeWithFiles -Path $item.FullName -Indent $newIndent -IsLast $isLastItem -DirectoriesOnly:$DirectoriesOnly
         }
     }
 }
