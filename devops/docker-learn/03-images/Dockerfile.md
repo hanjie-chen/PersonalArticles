@@ -254,3 +254,126 @@ docker port <container_id>
   - 配合 `-P` 参数实现自动端口映射
   - 在 Docker Compose 或其他容器编排工具中提供信息
 
+
+
+# `RUN` 指令
+
+
+
+# 下载额外的命令
+
+例如如果我想要让images中自带git, 对于python-slim，需要手动下载
+
+```dockerfile
+RUN apt-get update && \
+    apt-get install -y git && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+```
+
+
+
+###  `apt-get update`
+```bash
+apt-get update
+```
+- **作用**：更新包索引文件
+- **为什么需要**：
+  - 这个命令会从软件源服务器下载最新的包信息
+  - 如果不执行这步，系统可能会使用过时的包索引
+  - 可能导致软件包找不到或安装旧版本
+- **类比**：就像在购物前先更新商品目录，确保知道最新的商品信息
+
+### `apt-get install -y git`
+```bash
+apt-get install -y git
+```
+- **作用**：安装 git 包
+- **参数说明**：
+  - `-y` 标志表示自动回答 "yes" 到所有提示
+  - 在 Dockerfile 中这很重要，因为构建过程是自动的，不能交互式回答问题
+- **为什么需要**：这是实际安装 git 的命令
+
+### `apt-get clean`
+```bash
+apt-get clean
+```
+- **作用**：清理 apt 缓存
+- **为什么需要**：
+  - 删除 `/var/cache/apt/archives/` 下载的 .deb 文件
+  - 这些是安装包的缓存文件，安装完成后就不再需要了
+  - 减小最终镜像的大小
+- **类比**：就像安装完软件后删除安装包
+
+### `rm -rf /var/lib/apt/lists/*`
+```bash
+rm -rf /var/lib/apt/lists/*
+```
+- **作用**：删除 apt 包列表
+- **为什么需要**：
+  - 删除 `apt-get update` 下载的包索引文件
+  - 这些文件在安装完成后不再需要
+  - 进一步减小镜像大小
+- **类比**：就像删除已经用不到的商品目录
+
+### 为什么要组合使用？
+
+1. **Docker 最佳实践**：
+   - Docker 镜像是分层的
+   - 每个 RUN 命令创建一个新层
+   - 把相关命令组合成一个 RUN 可以减少层数
+   ```dockerfile
+   # 不好的做法：每个命令一个层
+   RUN apt-get update
+   RUN apt-get install -y git
+   RUN apt-get clean
+   RUN rm -rf /var/lib/apt/lists/*
+   ```
+
+2. **镜像大小优化**：
+   ```bash
+   # 示例：查看这些文件占用的空间
+   du -sh /var/cache/apt/archives/
+   du -sh /var/lib/apt/lists/
+   ```
+   - 清理这些文件可以显著减小镜像大小
+   - 小的镜像更容易分发和部署
+
+3. **缓存一致性**：
+   - 如果 `update` 和 `install` 在不同的 RUN 命令中
+   - Docker 缓存机制可能导致使用旧的包索引
+   ```dockerfile
+   # 潜在问题的例子
+   RUN apt-get update  # 这层可能被缓存
+   RUN apt-get install -y git  # 使用旧的包索引
+   ```
+
+4. **示例对比**：
+   ```bash
+   # 不清理的镜像大小
+   docker build -t test-no-clean .
+   docker images test-no-clean
+   
+   # 清理后的镜像大小
+   docker build -t test-with-clean .
+   docker images test-with-clean
+   ```
+   清理后的镜像通常会小很多
+
+### 完整的最佳实践
+```dockerfile
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+```
+- 使用 `&&` 确保所有命令成功执行
+- `DEBIAN_FRONTEND=noninteractive` 防止某些包的安装脚本请求用户输入
+- 如果要安装多个包，可以在 git 后面继续添加
+
+这种写法虽然看起来较长，但它确保了：
+1. 包安装的可靠性
+2. 最小的镜像大小
+3. 良好的缓存行为
+4. 符合 Docker 最佳实践

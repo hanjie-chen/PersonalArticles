@@ -24,15 +24,13 @@ BriefIntroduction:
 
 使用 `写在前面` 还是 `Before we beginning` 取决于整体标题风格，例如如果都是英文标题，那么同样保持英文标题
 
-file:///C:/Users/Plain/PersonalArticles/images/cover_image.jpeg?lastModify=1734341012
+# Title: 文章模板
 
-# Title: XXXX
+这里写文章的 ==正文内容==
 
-这里写文章的==正文内容==
+以下为正文内容 [^引用 1] 这个地方可以引用是可以直接跳转的，如果页面足够长的话。
 
-以下为正文内容[^引用1]这个地方可以引用是可以直接跳转的，如果页面足够长的话。
-
-还有一些Latex数学公式的支持
+还有一些 Latex 数学公式的支持
 
 引用本仓库其他的已经存在的文章使用基于仓库根目录的绝对路径，例如
 
@@ -42,9 +40,9 @@ file:///C:/Users/Plain/PersonalArticles/images/cover_image.jpeg?lastModify=17343
 [git 笔记](/tools-guide/git-guide/Git使用指南.md)
 ```
 
-因为这在github上面也能正确解析 特别说明：以 `/` 开头代表从仓库根目录开始
+因为这在 github 上面也能正确解析 特别说明：以 `/` 开头代表从仓库根目录开始
 
-reference: [兼容obsidian的基于库根目录的绝对路径 · Issue #259 · obgnail/typora_plugin](https://github.com/obgnail/typora_plugin/issues/259)
+reference: [兼容 obsidian 的基于库根目录的绝对路径 · Issue #259 · obgnail/typora_plugin](https://github.com/obgnail/typora_plugin/issues/259)
 
 # Part1
 
@@ -114,20 +112,18 @@ w_{(n-1)0}^{hidden} & w_{(n-1)1}^{hidden} & \cdots & w_{(n-1)(m-1)}^{hidden}
 为了获得最佳的跨平台兼容性，打算采用：
 
 - 行内公式：`$...$`
-- 块级公式：````math````
+- 块级公式：```` math ````
 
-不过这个块级公式似乎显示有点小，打算在css中调整一下 [part1](#Part1)
-
-
+不过这个块级公式似乎显示有点小，打算在 css 中调整一下 [part1](#Part1)
 
 # Appendix
 
 附加材料
 
 - [ ] 主任务
-  - [x] 子任务1
-  - [x] 子任务2
+  - [x] 子任务 1
+  - [x] 子任务 2
 
 # Reference
 
-[^引用1]: chj is good
+[^引用 1]: chj is good

@@ -41,7 +41,7 @@
   - 输入 `exit` 命令
   - 或使用 `Ctrl + D` 快捷键
 
-一个类比：想象你在电脑上运行了一个虚拟机，但这个"虚拟机"（容器）非常轻量级，启动速度很快，而且只包含运行应用所需的最基本组件。
+一个类比：想象你在电脑上运行了一个虚拟机，但这个 "虚拟机"（容器）非常轻量级，启动速度很快，而且只包含运行应用所需的最基本组件。
 
 需要注意的是，这个容器在你退出 bash shell 后就会停止运行，除非你特别指定了其他参数（比如 `--rm` 参数会在容器停止后自动删除容器）。
 
@@ -54,8 +54,8 @@ docker run -d -p 8080:80 docker/welcome-to-docker
 这个命令可以拆分成几个部分：
 
 1. `docker run`
-   - 这是基础命令，表示"运行一个容器"
-   - 相当于告诉Docker："我要启动一个新的容器"
+   - 这是基础命令，表示 "运行一个容器"
+   - 相当于告诉 Docker："我要启动一个新的容器"
 
 2. `-d`
    - 代表 "detached" 模式
@@ -65,8 +65,8 @@ docker run -d -p 8080:80 docker/welcome-to-docker
 3. `-p 8080:80`
    - `-p` 表示端口映射（port mapping）
    - `8080:80` 的格式是 `主机端口:容器端口`
-   - 意思是：把容器内的80端口映射到主机的8080端口
-   - 这样你就可以通过访问 `localhost:8080` 来访问容器中运行的web服务
+   - 意思是：把容器内的 80 端口映射到主机的 8080 端口
+   - 这样你就可以通过访问 `localhost:8080` 来访问容器中运行的 web 服务
 
 4. `docker/welcome-to-docker`
    - 这是容器镜像的名称
@@ -84,10 +84,10 @@ docker run -d -p 8080:80 docker/welcome-to-docker
 
 运行这个命令后：
 
-1. Docker会先下载这个镜像（如果本地没有的话）
+1. Docker 会先下载这个镜像（如果本地没有的话）
 2. 然后创建一个新的容器
 3. 在后台运行这个容器
-4. 设置端口映射，让你可以通过 `http://localhost:8080` 访问容器中的web服务
+4. 设置端口映射，让你可以通过 `http://localhost:8080` 访问容器中的 web 服务
 
 这就是为什么文章中说运行这个命令后，可以通过浏览器访问 `http://localhost:8080` 来看到欢迎页面。
 
@@ -105,15 +105,55 @@ docker run -d -p 0.0.0.0:8080:80 docker/welcome-to-docker
 
 2. 如果你想明确指定监听地址，可以使用完整格式：
 
-```bash
+``` bash
 docker run -d -p [host-ip]:[host-port]:[container-port] image-name
 ```
+
+## 运行指定images
+
+目前存在这些images
+
+```bash
+Plain@Linux-VM:~$ docker images
+REPOSITORY                         TAG        IMAGE ID       CREATED         SIZE
+my-website                         latest     3de94fb68dd9   11 days ago     960MB
+<none>                             <none>     d13e3db30839   12 days ago     975MB
+<none>                             <none>     47b85b6b64fe   13 days ago     975MB
+<none>                             <none>     337b7d9e28aa   13 days ago     975MB
+<none>                             <none>     233b14a3e3d7   13 days ago     975MB
+python                             3.9-slim   473b3636d11e   13 days ago     125MB
+python                             latest     3ca4060004b1   13 days ago     1.02GB
+<none>                             <none>     f4d246af4e89   2 weeks ago     182MB
+getting-started-todo-app-client    latest     7a126d24d539   3 weeks ago     1.19GB
+<none>                             <none>     a17cd65912e7   4 weeks ago     1.19GB
+getting-started-todo-app-backend   latest     58ff7bba8548   4 weeks ago     1.17GB
+traefik                            v2.11      8ea66c686b7b   7 weeks ago     173MB
+mysql                              8.0        9f4b39935f20   2 months ago    590MB
+ubuntu                             latest     59ab366372d5   2 months ago    78.1MB
+docker/welcome-to-docker           latest     c1f619b6477e   13 months ago   18.5MB
+phpmyadmin                         latest     e5b700ec0014   17 months ago   559MB
+hello-world                        latest     d2c94e258dcb   19 months ago   13.3kB
+```
+
+例如，要运行指定的Python 3.9-slim镜像，可以通过以下几种方式：
+
+1. 使用镜像ID（最精确的方式）：
+```bash
+docker run 473b3636d11e
+```
+
+2. 使用仓库名+标签（推荐的方式）：
+```bash
+docker run python:3.9-slim
+```
+
+最佳实践是使用仓库名+标签的方式（`python:3.9-slim`），因为这样更加清晰明了，而且镜像ID可能会随着镜像更新而改变。标签则会保持稳定，更容易维护和理解。
 
 # `docker ps` command
 
 要查看正在运行的 Docker 容器，可以使用以下命令：
 
-```bash
+``` bash
 docker ps
 ```
 
@@ -129,7 +169,7 @@ docker ps
 
 如果你想查看所有容器（包括已停止的容器），可以使用：
 
-```bash
+``` bash
 docker ps -a
 ```
 
@@ -152,7 +192,7 @@ docker ps -a
 - 会自动使用当前目录名作为项目名称前缀
 - 如果服务之前没有构建过镜像，会自动构建
 
-```bash
+``` bash
 # 只会启动 getting-started-todo-app 项目中定义的服务
 sudo docker compose up -d
 ```
@@ -163,12 +203,10 @@ sudo docker compose up -d
 - 同时也会删除默认网络
 - 不会影响其他项目的容器
 
-```bash
+``` bash
 # 只会关闭 getting-started-todo-app 项目的容器
 sudo docker compose down
 ```
-
-
 
 ## `docker compose watch`
 
@@ -231,7 +269,7 @@ sudo docker compose down
 
 例如，在你的项目中：
 
-```bash
+``` bash
 # docker compose ps 只会显示 getting-started-todo-app 相关的容器
 sudo docker compose ps
 
@@ -249,8 +287,8 @@ sudo docker ps
 
 **基本用法**
 
-```bash
-docker build -t my-app:1.0 .
+``` bash
+docker build -t my-app: 1.0 .
 # -t 指定镜像名称和标签
 # .  表示使用当前目录作为构建上下文
 ```
@@ -266,10 +304,10 @@ a) **准备构建上下文**
 
 b) **逐行执行 Dockerfile 指令**，每个指令创建一个新的层：
 
-```Dockerfile
+``` Dockerfile
 # 1. 拉取基础镜像
-FROM python:3.9-slim
-# Docker 会从 Docker Hub 下载 python:3.9-slim 镜像
+FROM python: 3.9-slim
+# Docker 会从 Docker Hub 下载 python: 3.9-slim 镜像
 
 # 2. 设置工作目录
 WORKDIR /app
@@ -299,9 +337,9 @@ CMD ["python", "app.py"]
 3. **构建缓存机制**
 
 Docker 使用缓存来优化构建过程：
-```bash
+``` bash
 # 查看构建过程
-Step 1/7 : FROM python:3.9-slim
+Step 1/7 : FROM python: 3.9-slim
  ---> using cache
 Step 2/7 : WORKDIR /app
  ---> using cache
@@ -311,7 +349,7 @@ Step 3/7 : COPY requirements.txt .
 ```
 
 4. **常用的构建命令选项**
-```bash
+``` bash
 # 基本构建
 docker build -t my-app .
 
@@ -322,16 +360,16 @@ docker build -f Dockerfile.dev -t my-app .
 docker build --no-cache -t my-app .
 
 # 指定构建参数
-docker build --build-arg VERSION=1.0 -t my-app .
+docker build --build-arg VERSION = 1.0 -t my-app .
 
 # 多平台构建
-docker build --platform linux/amd64,linux/arm64 -t my-app .
+docker build --platform linux/amd64, linux/arm64 -t my-app .
 ```
 
 5. **构建过程中的注意事项**
 
 a) **构建上下文大小**
-```bash
+``` bash
 # 构建开始时会看到类似信息：
 Sending build context to Docker daemon  42.3MB
 ```
@@ -339,7 +377,7 @@ Sending build context to Docker daemon  42.3MB
 - 使用 `.dockerignore` 排除不需要的文件
 
 b) **层的大小和数量**
-```Dockerfile
+``` Dockerfile
 # 不好的做法
 RUN apt-get update
 RUN apt-get install -y package1
@@ -359,7 +397,7 @@ RUN apt-get update && \
 - 构建上下文中缺少必要文件
 
 7. **查看构建结果**
-```bash
+``` bash
 # 查看生成的镜像
 docker images
 
@@ -382,3 +420,17 @@ docker inspect my-app
 - 使用缓存机制优化构建过程
 - 构建上下文和层的管理很重要
 - 合理的 Dockerfile 结构可以显著提高构建效率
+
+# `docker exec`
+
+如果我们已经存在一个 container 正在运行，而我们想要进入正在运行的 Docker 容器的 bash 则可以使用如下米杠零
+
+``` bash
+docker exec -it <container_id/container_name> bash
+```
+- `-i`: 保持 STDIN 开放
+- `-t`: 分配一个伪终端
+- `bash`: 要执行的命令（在这里是打开 bash shell）
+
+要退出容器，直接输入 `exit` 
+
