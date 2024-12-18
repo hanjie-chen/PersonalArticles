@@ -42,8 +42,6 @@ BriefIntroduction:
 
 因为这在 github 上面也能正确解析 特别说明：以 `/` 开头代表从仓库根目录开始
 
-reference: [兼容 obsidian 的基于库根目录的绝对路径 · Issue #259 · obgnail/typora_plugin](https://github.com/obgnail/typora_plugin/issues/259)
-
 # Part1
 
 part 1 content
@@ -76,8 +74,6 @@ part 1 content
 
 # Part 2
 
-part 2 content
-
 emoji 表情支持 比如
 
 ```emoji
@@ -86,7 +82,7 @@ emoji 表情支持 比如
 
 :peach:
 
-# Math formula support/数学公式支持
+# Part 3: Math formula support
 
 - `$$...$$` 是传统的 LaTeX 分隔符
 - `math...` 是 GitHub Flavored Markdown (GFM) 的特定语法
@@ -114,7 +110,7 @@ w_{(n-1)0}^{hidden} & w_{(n-1)1}^{hidden} & \cdots & w_{(n-1)(m-1)}^{hidden}
 - 行内公式：`$...$`
 - 块级公式：```` math ````
 
-不过这个块级公式似乎显示有点小，打算在 css 中调整一下 [part1](#Part1)
+不过这个块级公式似乎显示有点小，打算在 css 中调整一下
 
 # Appendix
 
