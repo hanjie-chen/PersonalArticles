@@ -17,51 +17,49 @@ BriefIntroduction:
 
 ![cover image](./images/cover_image.png)
 
-# Title: Git使用指南
+# Title: Git 使用指南
 
-当在github上面新建完成一个仓库之后，github会提示你如何进行下一步操作。而我们需要做的部分就是更新仓库，然后推送到github上面。
+当在 github 上面新建完成一个仓库之后，github 会提示你如何进行下一步操作。而我们需要做的部分就是更新仓库，然后推送到 github 上面。
 
-# 3个基础命令
+# 3 个基础命令
 
 ## git add
 
-当然我一般直接使用`git add .`全都提交，这个命令的作用是将修改过的文件添加到暂存区（staging area）。
+当然我一般直接使用 `git add .` 全都提交，这个命令的作用是将修改过的文件添加到暂存区（staging area）。
 
 ## git commit
 
-将暂存区的变更提交到本地仓库，提交（commit）是Git中的一个核心概念，代表了一个项目历史中的一个点。每次提交都会记录下谁在什么时间做了什么更改，并允许你回到这个状态或者比较不同提交之间的差异。`git commit`命令实际上创建了一个快照，它包含了暂存区中所有文件的一个特定状态。
+将暂存区的变更提交到本地仓库，提交（commit）是 Git 中的一个核心概念，代表了一个项目历史中的一个点。每次提交都会记录下谁在什么时间做了什么更改，并允许你回到这个状态或者比较不同提交之间的差异。`git commit` 命令实际上创建了一个快照，它包含了暂存区中所有文件的一个特定状态。
 
-更具体的使用需要`git commit -m "add your specification of this commit"` 这个玩意是必须填的，用来追踪每次提交的目的
+更具体的使用需要 `git commit -m "add your specification of this commit"` 这个玩意是必须填的，用来追踪每次提交的目的
 
 ## git push
 
-推送到github上面同步
+推送到 github 上面同步
 
 ## git add + git commit = ?
 
-`git add`和`git commit`可以合并为`git commit -a -m "your message"`
+`git add` 和 `git commit` 可以合并为 `git commit -a -m "your message"`
 
-不过这个会提交所有的修改，当然对我这种一直都是用`git add .`的人来说，没差了
+不过这个会提交所有的修改，当然对我这种一直都是用 `git add .` 的人来说，没差了
 
 note:
 
-- **对于新文件**: 需要使用`git add`将它们添加到暂存区，因为Git默认只跟踪已经添加到版本控制中的文件。新文件在被跟踪之前，必须先通过`git add`命令添加。
+- **对于新文件**: 需要使用 `git add` 将它们添加到暂存区，因为 Git 默认只跟踪已经添加到版本控制中的文件。新文件在被跟踪之前，必须先通过 `git add` 命令添加。
 
-- **对于已被跟踪的文件**: 如果这些文件只是进行了修改，而没有新文件需要添加，那么可以直接使用`git commit -a -m "message"`来提交这些更改。这个命令会自动将所有已被跟踪文件的修改提交，而不需要先手动`git add`它们。
+- **对于已被跟踪的文件**: 如果这些文件只是进行了修改，而没有新文件需要添加，那么可以直接使用 `git commit -a -m "message"` 来提交这些更改。这个命令会自动将所有已被跟踪文件的修改提交，而不需要先手动 `git add` 它们。
 
-所以，`git add`主要用于将新文件或目录添加到版本控制中，而`git commit -a`则用于提交已经在版本控制中的文件的修改。
+所以，`git add` 主要用于将新文件或目录添加到版本控制中，而 `git commit -a` 则用于提交已经在版本控制中的文件的修改。
 
 另一种方式：
 
-同时执行2个命令：
+同时执行 2 个命令：
 
 ```bash
 git add . && git commit -m "message"
 ```
 
-
-
-# 分支管理checkout
+# 分支管理 checkout
 
 当你想要基于当前的版本开发下一个版本，或者存粹是希望不想要污染现在已经开发好的版本，可以基于现在已有的代码开启一条新的分支，继续开发
 
@@ -71,19 +69,17 @@ git add . && git commit -m "message"
 
 ## 命令详解
 
-1. `checkout`: 这是Git的一个子命令,通常用于切换分支或恢复工作树文件。在这个上下文中,它被用来创建一个新分支并切换到该分支。
-2. `-b`: 这是`checkout`命令的一个选项(option)。
-   - 当与`checkout`一起使用时,`-b`表示"创建一个新分支"。
-   - 如果没有`-b`选项,`checkout`只会切换到一个已存在的分支。
-   - 使用`-b`选项,Git会创建新分支,然后立即切换到这个新创建的分支（如果该分支已经存在,Git会报错）
+1. `checkout`: 这是 Git 的一个子命令, 通常用于切换分支或恢复工作树文件。在这个上下文中, 它被用来创建一个新分支并切换到该分支。
+2. `-b`: 这是 `checkout` 命令的一个选项(option)。
+   - 当与 `checkout` 一起使用时, `-b` 表示 "创建一个新分支"。
+   - 如果没有 `-b` 选项, `checkout` 只会切换到一个已存在的分支。
+   - 使用 `-b` 选项, Git 会创建新分支, 然后立即切换到这个新创建的分支（如果该分支已经存在, Git 会报错）
 
-然后可以使用命令`git branch` 查看所有分支以及当前分支
+然后可以使用命令 `git branch` 查看所有分支以及当前分支
 
 ## 切换分支
 
-使用命令`git checkout main`切换回到main分支
-
-
+使用命令 `git checkout main` 切换回到 main 分支
 
 ## 删除分支
 
@@ -158,7 +154,7 @@ git branch -a   # 查看所有分支（本地和远程）
 
 # Git pull
 
-好的，我来为您解释如何使用git pull强制覆盖本地未提交的修改。这个操作需要谨慎使用，因为它会丢失您本地的所有未提交更改。以下是步骤：
+如何使用 git pull 强制覆盖本地的修改
 
 1. 首先，确保您在正确的分支上：
    ```
@@ -178,21 +174,85 @@ git branch -a   # 查看所有分支（本地和远程）
 
 请注意，这个操作是不可逆的。它会丢弃所有本地未提交的更改，包括暂存的和未暂存的更改。您的本地分支将与远程分支完全一致。
 
-如果您只想更新某些文件而不是整个分支，可以使用以下命令：
+# git fetch
+
+## `git fetch` vs `git pull`
+
+`git fetch`: 
+
+- 只从远程仓库下载最新内容到本地
+- 不会自动合并到你的工作分支
+- 更新 `origin/main` 的引用
+
+`git pull`:
+
+- 相当于 `git fetch` + `git merge`
+- 不仅下载最新内容，还会尝试自动合并到你的当前分支
+- 如果有冲突可能会失败
+
+所以，如果你之前用过 `git pull` 但是失败了（比如你展示的错误），那么还是需要先执行 `git fetch`。因为 `git pull` 失败的话，可能没有更新本地的 `origin/main` 引用。
+
+# git reset
+
+如果你想要删除本地的所有修改，仅仅接受来自 remote repository 的最新情况，可以使用 git reset 强制删除所有你在本地的修改。比如说你 git clone 了一个 repository, 并且做了一些实验性的修改，并且 git commit 了，然后又不想要这些修改，想要把本地的 repository 变成最新的 github reposotory 上面的状态
+
+可以使用如下的命令
+
+```bash
+git fetch origin  # 确保获取最新的远程状态
+git reset --hard origin/main  # 重置到远程状态
+```
+
+`git fetch origin`
+
+从远程仓库获取最新的代码和分支信息（仅下载），不会自动合并到本地分支
+
+`git reset --hard origin/main`
+
+- `origin/main` 指向远程仓库 main 分支的最新位置
+- 将本地当前分支强制重置到远程 main 分支的状态，包括：清除工作区的修改，清除暂存区的修改，清除本地的提交记录
+
+## git file status
+
+为了理解这些命令的作用，需要先了解了一下git 文件状态，在 Git 中，文件的状态可以分为三个阶段：
 
 ```
-git checkout origin/<your-branch> -- <path/to/file>
+Working Directory 	  Staging Area 	 local repository
+   (edit file) ------> (git add) ----> (git commit)
 ```
 
-这将仅覆盖指定的文件，而不影响其他文件。
 
-最后，我想强调一下，在执行这些操作之前，如果您的本地更改可能有价值，最好先创建一个备份或使用 `git stash` 来保存您的更改。这样，如果您之后发现需要这些更改，还可以恢复它们。
 
-您是否需要我进一步解释这些命令或git的工作原理？
+## `git reset` basic
+
+### reset to last commit
+
+`git reset --hard HEAD` 只能清除工作区和暂存区的修改
+
+`HEAD` 指向当前分支的最新提交
+
+`--hard` 表示同时重置工作区和暂存区
+
+### reset to remote branch
+
+`git reset --hard origin/main` 可以清除Working Directory, Staging Area & local repository 的修改
+
+### in a picture
+
+```
+Working Directory 	  Staging Area 	 local repository     remote repository
+   (edit file) ------> (git add) ----> (git commit) -------> (git push)    
+|_________________|________________|
+        git reset --hard HEAD
+|_________________|________________|___________________|
+                git reset --hard origin/main               
+```
+
+
 
 # git merge
 
-当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到main上面去。然后我们接着回到这个分支上继续开发。
+当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。然后我们接着回到这个分支上继续开发。
 
 这是我们需要进行的具体的步骤
 
@@ -239,9 +299,9 @@ git push origin main
 git checkout backend-development
 ```
 
-# related remote repository
+# `git remote`
 
-可以使用以下命令查看当前Git仓库关联的远程地址：
+可以使用以下命令查看当前 Git 仓库关联的远程地址：
 
 ```bash
 git remote -v
@@ -254,13 +314,11 @@ origin  https://github.com/username/repository.git (fetch)
 origin  https://github.com/username/repository.git (push)
 ```
 
-其中，`origin`是默认的远程名称，后面跟着的就是远程仓库的URL。如果你有多个远程仓库，都会在这里列出。
-
-
+其中，`origin` 是默认的远程名称，后面跟着的就是远程仓库的 URL。如果你有多个远程仓库，都会在这里列出。
 
 # rollback change
 
-如果修改了文件，但是没有进行git add && git commit 例如这面这种状态
+如果修改了文件，但是没有进行 git add && git commit 例如这面这种状态
 
 ```bash
 Plain@Linux-VM:~/Personal_Project/getting-started-todo-app$ git status
@@ -294,24 +352,20 @@ git diff compose.yml
 
 # `.gitignore` file
 
-当python程序运行的时候，会产生一些临时的文件，存放在本地路径的`__pycache__`文件夹中，但是当我们提交的时候并不希望这些临时文件被提交，这个时候，我们可以写一个`.gitignore`文件来忽略某些特定的文件
-
-
+当 python 程序运行的时候，会产生一些临时的文件，存放在本地路径的 `__pycache__` 文件夹中，但是当我们提交的时候并不希望这些临时文件被提交，这个时候，我们可以写一个 `.gitignore` 文件来忽略某些特定的文件
 
 ## Global ignore
 
-为了方便，我一般使用全局的，这样子就不用每个repository都配置过去了，只需要进入`~`(user home directory)
+为了方便，我一般使用全局的，这样子就不用每个 repository 都配置过去了，只需要进入 `~`(user home directory)
 
-然后创建一个`.gitignore`文件，并且配置git使用这个全局文件
+然后创建一个 `.gitignore` 文件，并且配置 git 使用这个全局文件
 
 ```shell
 cd ~
 git config --global core.excludesfile ~/.gitignore
 ```
 
-
-
-参考了经典`.gitignore` 方案，来自 [Some common .gitignore configurations](https://gist.github.com/octocat/9257657)
+参考了经典 `.gitignore` 方案，来自 [Some common .gitignore configurations](https://gist.github.com/octocat/9257657)
 
 ```python
 # Compiled source #
