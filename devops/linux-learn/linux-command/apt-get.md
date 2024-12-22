@@ -1,9 +1,5 @@
 # `apt` 命令详解
 
-
-
-# Basic concepts
-
 apt (advanced package tool) 是 Debian 及其衍生版本（如 Ubuntu）的包管理系统。
 
 ## `apt-get` VS `apt`

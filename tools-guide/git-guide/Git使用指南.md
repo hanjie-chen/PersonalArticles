@@ -1,10 +1,9 @@
 ---
-Title: Git使用指南
+Title: Git速查指南
 Author: 陈翰杰
 Instructor: GPT-4o, Sonnet3.5
 CoverImage: ./images/cover_image.png
 RolloutDate: 2024-08-26
-Category: ToolGuide/GitGuide/GitUsage
 ---
 
 ```
@@ -17,7 +16,7 @@ BriefIntroduction:
 
 ![cover image](./images/cover_image.png)
 
-# Title: Git 使用指南
+# Title: Git 速查指南
 
 当在 github 上面新建完成一个仓库之后，github 会提示你如何进行下一步操作。而我们需要做的部分就是更新仓库，然后推送到 github 上面。
 
