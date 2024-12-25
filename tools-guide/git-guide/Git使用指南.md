@@ -58,7 +58,7 @@ note:
 git add . && git commit -m "message"
 ```
 
-# 分支管理 checkout
+# 分支管理
 
 当你想要基于当前的版本开发下一个版本，或者存粹是希望不想要污染现在已经开发好的版本，可以基于现在已有的代码开启一条新的分支，继续开发
 
@@ -80,59 +80,57 @@ git add . && git commit -m "message"
 
 使用命令 `git checkout main` 切换回到 main 分支
 
-## 删除分支
+## delete branch
 
-非常好的问题！在 Git 中删除分支是一个常见的操作，特别是当某个功能开发完成并合并到主分支后。以下是删除 Git 分支的几种方法：
+在 Git 中删除分支是一个常见的操作，特别是当某个功能开发完成并合并到主分支后。以下是删除 Git 分支的几种方法：
 
-1. 删除本地分支：
+### delete local branch
 
-   使用 `-d` 选项（小写的 d）可以安全地删除已经合并到当前分支的分支：
+使用 `-d` 选项（小写的 d）可以安全地删除已经合并到当前分支的分支：
 
-   ```
-   git branch -d <branch-name>
-   ```
+```
+git branch -d <branch-name>
+```
 
-   例如：`git branch -d checkend-development`
+例如：`git branch -d checkend-development`
 
-   如果分支还没有被合并，Git 会给出警告并阻止删除。
+如果分支还没有被合并，Git 会给出警告并阻止删除。
 
-2. 强制删除本地分支：
+强制删除本地分支：
 
-   如果你确定要删除一个未合并的分支，可以使用 `-D` 选项（大写的 D）强制删除：
+如果你确定要删除一个未合并的分支，可以使用 `-D` 选项（大写的 D）强制删除：
 
-   ```
-   git branch -D <branch-name>
-   ```
+```
+git branch -D <branch-name>
+```
 
-   例如：`git branch -D checkend-development`
+例如：`git branch -D checkend-development`
 
-   请谨慎使用此选项，因为它会无条件地删除分支，即使该分支包含未合并的更改。
+请谨慎使用此选项，因为它会无条件地删除分支，即使该分支包含未合并的更改。
 
-3. 删除远程分支：
 
-   如果你想删除远程仓库中的分支，可以使用以下命令：
 
-   ```
-   git push origin --delete <branch-name>
-   ```
+### delete remote branch
 
-   或者使用这个较短的语法：
+如果你想删除远程仓库中的分支，可以使用以下命令：
 
-   ```
-   git push origin :分支名称
-   ```
+```
+git push origin --delete <branch-name>
+```
 
-   例如：`git push origin --delete checkend-development`
+例如 `git push origin --delete dependabot/pip/jinja2-3.1.5`
 
-4. 删除所有已合并的本地分支：
 
-   如果你想一次性删除所有已经合并到当前分支的本地分支，可以使用这个命令：
 
-   ```
-   git branch --merged | grep -v "\*" | xargs -n 1 git branch -d
-   ```
+删除所有已合并的本地分支：
 
-   这个命令会列出所有已合并的分支，排除当前分支（带星号的），然后删除它们。
+如果你想一次性删除所有已经合并到当前分支的本地分支，可以使用这个命令：
+
+```
+git branch --merged | grep -v "\*" | xargs -n 1 git branch -d
+```
+
+这个命令会列出所有已合并的分支，排除当前分支（带星号的），然后删除它们。
 
 注意事项：
 
@@ -151,27 +149,7 @@ git branch -a   # 查看所有分支（本地和远程）
 
 这样可以确保你删除的是正确的分支。如果你有任何其他关于 Git 分支管理的问题，欢迎继续询问！
 
-# Git pull
 
-如何使用 git pull 强制覆盖本地的修改
-
-1. 首先，确保您在正确的分支上：
-   ```
-   git checkout <your-branch>
-   ```
-
-2. 然后，使用以下命令强制覆盖本地更改：
-   ```
-   git fetch --all
-   git reset --hard origin/<your-branch>
-   ```
-
-这里的步骤解释：
-
-- `git fetch --all` 从远程仓库获取所有最新的提交，但不会合并或修改您的本地文件。
-- `git reset --hard origin/<your-branch>` 将您当前分支的本地文件强制重置为远程分支的状态。
-
-请注意，这个操作是不可逆的。它会丢弃所有本地未提交的更改，包括暂存的和未暂存的更改。您的本地分支将与远程分支完全一致。
 
 # git fetch
 
@@ -191,7 +169,7 @@ git branch -a   # 查看所有分支（本地和远程）
 
 所以，如果你之前用过 `git pull` 但是失败了（比如你展示的错误），那么还是需要先执行 `git fetch`。因为 `git pull` 失败的话，可能没有更新本地的 `origin/main` 引用。
 
-# git reset
+# 删除本地修改 `git reset`
 
 如果你想要删除本地的所有修改，仅仅接受来自 remote repository 的最新情况，可以使用 git reset 强制删除所有你在本地的修改。比如说你 git clone 了一个 repository, 并且做了一些实验性的修改，并且 git commit 了，然后又不想要这些修改，想要把本地的 repository 变成最新的 github reposotory 上面的状态
 
@@ -249,7 +227,7 @@ Working Directory 	  Staging Area 	 local repository     remote repository
 
 
 
-# git merge
+# 合并分支 `git merge`
 
 当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。然后我们接着回到这个分支上继续开发。
 
