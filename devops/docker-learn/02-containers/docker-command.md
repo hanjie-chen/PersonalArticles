@@ -1,55 +1,99 @@
-# `docker run` command
+# docker command
 
-`docker run -i -t ubuntu /bin/bash` 命令详解
+我们可以使用 `docker run` 命令来将一个 image 启动为一个 container
+
+例如 `docker run -i -t ubuntu /bin/sh` 命令
 
 这个命令是用来启动一个 Ubuntu 容器的，让我们逐个部分来分析：
-
-`docker run`：
-
-- 这是基础命令，用于创建并启动一个新的容器
-- 如果本地没有所需的镜像，Docker 会自动从 Docker Hub 下载
 
 `-i`（interactive）：
 
 - 保持标准输入（STDIN）开启
-- 允许你与容器进行交互
-- 如果不加这个参数，你将无法向容器输入命令
+- 允许你与容器进行交互，如果不加这个参数，你将无法向容器输入命令
 
 `-t`（terminal）：
 
 - 分配一个伪终端（pseudo-TTY）
-- 提供一个交互式的终端界面
-- 让你可以像使用普通的命令行终端一样使用容器
+- 提供一个交互式的终端界面，让你可以像使用普通的命令行终端一样使用容器
 
 `ubuntu`：
 
 - 这是要使用的 Docker 镜像的名称
-- 在这里指的是官方的 Ubuntu 操作系统镜像
 - 如果本地没有这个镜像，Docker 会从 Docker Hub 自动下载最新版本
 
 `/bin/bash`：
 
 - 这是容器启动后要执行的命令
-- bash 是一个命令行解释器（shell）
 - 这将在容器内启动一个 bash shell，让你可以在容器内执行命令
 
-实际效果：
+运行这个命令后，会进入到一个 Ubuntu 容器的命令行界面，可以像使用普通的 Ubuntu 系统一样，在容器内执行各种 Linux 命令，要退出容器，输入 `exit` 命令即可
 
-- 运行这个命令后，你会进入到一个 Ubuntu 容器的命令行界面
-- 你可以像使用普通的 Ubuntu 系统一样，在容器内执行各种 Linux 命令
-- 要退出容器，你可以：
-  - 输入 `exit` 命令
-  - 或使用 `Ctrl + D` 快捷键
+当我们使用 exit 退出 container 之后，容器会停止运行，但是实际上这个 contianer 依然存在，在容器中做的所有更改都还保留在这个已停止的容器中
 
-一个类比：想象你在电脑上运行了一个虚拟机，但这个 "虚拟机"（容器）非常轻量级，启动速度很快，而且只包含运行应用所需的最基本组件。
+当我们使用 `docker ps` 命令的时候，仅仅会显示正在运行的container
 
-需要注意的是，这个容器在你退出 bash shell 后就会停止运行，除非你特别指定了其他参数（比如 `--rm` 参数会在容器停止后自动删除容器）。
+![docker-ps](./images/docker-ps.png)
+
+而当我们使用 `docker ps -a` 命令查看所有正在运行的和关闭的container 
+
+![docker ps -a](./images/docker-ps-a.png)
+
+只有使用 `docker rm` 命令才会真正删除 container
+
+```shell
+# 使用容器ID删除
+docker rm 922fa75a265a
+
+# 或使用容器名称删除
+docker rm thirsty_hodgkin
+
+# 删除所有已停止的容器
+docker container prune
+
+# 强制删除容器（包括正在运行的容器）
+docker rm -f 容器ID/名称
+```
 
 
 
-## 运行指定images
+如果想要重新启动之前停止的 container，可以使用 `docker start` 命令
 
-目前存在这些images
+```shell
+# 使用容器ID启动
+docker start 922fa75a265a
+
+# 或使用容器名称启动
+docker start thirsty_hodgkin
+```
+
+> [!note]
+>
+> 关于 Docker 自动命名
+>
+> 虽然我们没有手动指定 container 的名字，但是在 `docker ps` 命令中可以看到每一个 container 都有 NAMES
+>
+> 这是docker的自动命名机制，Docker会自动为容器生成一个名称，这个自动生成的名称由两部分组成：
+>
+> 1. 一个形容词（adjective）
+> 2. 一个著名科学家/黑客的姓氏（surname）
+>
+> e.g.
+> - `thirsty_hodgkin`（渴望的_霍奇金）
+> - `musing_gauss`（沉思的_高斯）
+> - `serene_bose`（平静的_玻色）
+>
+> 如果想要指定容器名称，可以使用 `--name` 参数
+>
+> ```bash
+> docker run --name my-alpine -it alpine:3.19 /bin/sh
+> ```
+>
+
+
+
+如果想要运行一个特定的 image, 比如要运行 Python 3.9-slim 镜像，我们可以这么做
+
+首先使用 `docker images` 查看所有的 image
 
 ```bash
 Plain@Linux-VM:~$ docker images
@@ -73,43 +117,14 @@ phpmyadmin                         latest     e5b700ec0014   17 months ago   559
 hello-world                        latest     d2c94e258dcb   19 months ago   13.3kB
 ```
 
-例如，要运行指定的Python 3.9-slim镜像，可以通过以下几种方式：
+这里我们可以看到 REPOSITORY, TAG, IMAGE ID 这三个关键的鉴别信息，所以我们有2种方式来指定某个images
 
-1. 使用镜像ID（最精确的方式）：
-```bash
-docker run 473b3636d11e
-```
+1. 使用仓库名+标签（推荐的方式）：`docker run <REPOSITORY:TAG>` e.g. `docker run python:3.9-slim`
+2. 使用镜像 ID（最精确的方式）：`docker run <IMAGE ID>` e.g. `docker run 473b3636d11e `
 
-2. 使用仓库名+标签（推荐的方式）：
-```bash
-docker run python:3.9-slim
-```
+一般来说我们使用第一种 `REPOSITORY:TAG` 的方式，因为这样更加清晰明了，而且镜像 ID 可能会随着镜像更新而改变。标签则会保持稳定，更容易维护和理解。
 
-最佳实践是使用仓库名+标签的方式（`python:3.9-slim`），因为这样更加清晰明了，而且镜像ID可能会随着镜像更新而改变。标签则会保持稳定，更容易维护和理解。
-
-# `docker ps` command
-
-要查看正在运行的 Docker 容器，可以使用以下命令：
-
-``` bash
-docker ps
-```
-
-这个命令会显示所有正在运行的容器，包括以下信息：
-
-- CONTAINER ID：容器的唯一标识符
-- IMAGE：容器使用的镜像
-- COMMAND：容器启动时运行的命令
-- CREATED：容器的创建时间
-- STATUS：容器的当前状态
-- PORTS：容器映射的端口
-- NAMES：容器的名称
-
-如果你想查看所有容器（包括已停止的容器），可以使用：
-
-``` bash
-docker ps -a
-```
+ 
 
 # `docker compose` command
 

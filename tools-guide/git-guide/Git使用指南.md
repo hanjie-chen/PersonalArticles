@@ -293,6 +293,38 @@ origin  https://github.com/username/repository.git (push)
 
 其中，`origin` 是默认的远程名称，后面跟着的就是远程仓库的 URL。如果你有多个远程仓库，都会在这里列出。
 
+# `git clone` 下载远程仓库
+
+如果我们想要下载某个 remote repository 我们可以使用 `git clone` 命令，e.g.
+
+```shell
+git clone https://github.com/hanjie-chen/PersonalArticles.git
+```
+
+但是这样子就会造成一个问题，那就是这个remote repository下载到本地会使用remote repository的名称，建立一个文件夹，把repository放到里面
+
+```shell
+~ # git clone https://github.com/hanjie-chen/PersonalArticles.git
+Cloning into 'PersonalArticles'...
+remote: Enumerating objects: 1329, done.
+remote: Counting objects: 100% (478/478), done.
+remote: Compressing objects: 100% (357/357), done.
+remote: Total 1329 (delta 166), reused 401 (delta 101), pack-reused 851 (from 1)
+Receiving objects: 100% (1329/1329), 110.04 MiB | 39.59 MiB/s, done.
+Resolving deltas: 100% (416/416), done.
+~ # ls
+PersonalArticles
+```
+
+如果我们想要指定这个文件夹名称，我们可以直接在 `git clone` 命令末尾加上文件夹路径 e.g.
+
+```bash
+git clone https://github.com/hanjie-chen/PersonalArticles.git ./articles-data
+```
+> [!note]
+>
+> 目标目录必须是空的，这样操作之后，git仓库的所有内容（包括.git文件夹）都会直接存放在指定目录下
+
 # rollback change
 
 如果修改了文件，但是没有进行 git add && git commit 例如这面这种状态
