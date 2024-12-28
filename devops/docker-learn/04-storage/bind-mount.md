@@ -1,4 +1,8 @@
-# 绑定挂载（Bind Mount）详解
+# Bind Mount
+
+绑定挂载（Bind Mount）可以直接将主机的文件或目录挂载到容器中，可以在任何位置存储，适合开发环境
+
+e.g.
 
 ```yaml
 services:
@@ -7,30 +11,14 @@ services:
       - ./themes:/var/www/html/wp-content/themes  # 绑定挂载
 ```
 
-这行代码是一个绑定挂载（Bind Mount），它的格式是：`[主机路径]:[容器路径]`
+语法格式为 `[host-path]:[container-path]`
 
-- **`./themes`**: 表示主机（你的电脑）上的路径
-  - `.` 表示当前目录（docker-compose.yml 所在的目录）
-  - `./themes` 就是当前目录下的 themes 文件夹
+`./themes`: 表示主机（你的电脑）上的路径
 
-- **`/var/www/html/wp-content/themes`**: 容器内的路径
+- `.` 表示当前目录（docker-compose.yml 所在的目录）
+- `./themes` 就是当前目录下的 themes 文件夹
 
-## 绑定挂载的常见用例
+`/var/www/html/wp-content/themes`: 容器内的路径
 
-### 1. 开发环境
-```yaml
-services:
-  node-app:
-    volumes:
-      - ./src:/app/src  # 源代码目录
-      - ./package.json:/app/package.json  # 项目配置文件
-```
 
-### 2. 配置文件
-```yaml
-services:
-  nginx:
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf  # 配置文件
-      - ./html:/usr/share/nginx/html        # 静态文件
-```
+

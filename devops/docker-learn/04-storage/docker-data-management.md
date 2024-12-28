@@ -8,10 +8,6 @@
 
 **Bind Mounts（绑定挂载）**
 
-- 直接将主机的文件或目录挂载到容器中
-- 可以在任何位置存储
-- 适合开发环境
-
 **tmpfs mounts**
 
 - 临时文件系统，数据存在内存中
@@ -90,19 +86,7 @@ docker-compose down
 docker-compose down -v
 ```
 
-### 4. Volume vs Bind Mount 的选择
 
-#### Volume（适合生产环境）:
-```yaml
-volumes:
-  - articles-data:/app/articles-data  # 命名卷
-```
-
-#### Bind Mount（适合开发环境）:
-```yaml
-volumes:
-  - /home/Plain/Personal_Project/articles-data-test:/app/articles-data  # 绑定挂载
-```
 
 ### 5. 完整的开发环境配置
 
@@ -134,42 +118,3 @@ services:
 docker-compose -f docker-compose.dev.yml up -d
 ```
 
-### 6. 文件结构
-
-```
-project/
-├── Dockerfile
-├── docker-compose.yml          # 生产环境配置
-├── docker-compose.dev.yml      # 开发环境配置
-├── config.py
-├── app.py
-├── requirements.txt
-└── ...
-```
-
-### 主要优点
-
-1. **数据持久化**
-   - Volume 数据持久保存
-   - 容器删除后数据不会丢失
-
-2. **环境变量配置**
-   - 通过环境变量控制配置
-   - 便于在不同环境间切换
-
-3. **开发便利性**
-   - 开发环境使用 bind mount
-   - 方便本地开发和调试
-
-4. **生产环境适用**
-   - 生产环境使用 volume
-   - 更好的性能和安全性
-
-### 建议
-
-1. 开发环境使用 bind mount（直接挂载本地目录）
-2. 生产环境使用 volume（Docker 管理的持久化存储）
-3. 使用环境变量管理配置
-4. 使用 docker-compose 管理服务
-
-这样设置可以让你在开发时方便地修改代码和数据，同时为生产环境提供更好的数据管理方案。需要注意的是，在切换环境时要确保数据的同步和备份。
