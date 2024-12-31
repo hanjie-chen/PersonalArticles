@@ -143,7 +143,18 @@ COPY --from=builder /build/dist ./dist
 
 
 
+# `COPY` 指令
 
+e.g.
+
+```dockerfile
+COPY logrotate.conf /etc/logrotate.d/personal-website
+```
+
+`/etc/logrotate.d/personal-website` 这里的 `personal-website` 是**目标文件名**，不是目录
+
+- 这条命令的意思是：将 `logrotate.conf` 文件复制到 `/etc/logrotate.d/` 目录下，并重命名为 `personal-website`
+- 这是 logrotate 的标准配置方式，每个应用程序的轮转配置都是 `/etc/logrotate.d/` 目录下的一个文件
 
 # `EXPOSE` 指令
 

@@ -1,4 +1,8 @@
-tree 目录如何只显示第一级目录？
+# tree command
+
+
+
+## tree 只显示第一级目录
 
 要让 `tree` 命令只显示第一级目录，可以使用 `-L` 参数（Level的缩写）来指定要显示的目录层级深度。
 
@@ -7,17 +11,45 @@ tree 目录如何只显示第一级目录？
 tree -L 1
 ```
 
-例如，如果你执行这个命令，输出可能看起来像这样：
+e.g.
 ```
+Plain@Linux-VM:~/Personal_Project/test-website$ tree -L 1
 .
-├── Documents
-├── Downloads
-├── Music
-├── Pictures
-└── Videos
+├── Readme.md
+├── articles-data
+├── compose.yml
+└── web-app
 
-5 directories
+2 directories, 2 files
 ```
+
+```
+Plain@Linux-VM:~/Personal_Project/test-website$ tree -L 2
+.
+├── Readme.md
+├── articles-data
+│   ├── Dockerfile
+│   ├── init.sh
+│   ├── logrotate.conf
+│   └── update-articles.sh
+├── compose.yml
+└── web-app
+    ├── Dockerfile
+    ├── app.py
+    ├── config.py
+    ├── import_articles_scripts.py
+    ├── markdown_render_scripts.py
+    ├── models.py
+    ├── rendered_articles
+    ├── requirements.in
+    ├── requirements.txt
+    ├── static
+    └── templates
+
+5 directories, 14 files
+```
+
+
 
 这样就只会显示当前目录下的第一层目录，而不会显示更深层次的子目录内容。
 
@@ -25,3 +57,6 @@ tree -L 1
 - `tree -L 1 -d`：只显示目录（不显示文件）
 - `tree -L 1 -a`：显示所有文件，包括隐藏文件
 - `tree -L 1 -h`：显示文件和目录的大小
+
+
+
