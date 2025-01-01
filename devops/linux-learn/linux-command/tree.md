@@ -58,5 +58,52 @@ Plain@Linux-VM:~/Personal_Project/test-website$ tree -L 2
 - `tree -L 1 -a`：显示所有文件，包括隐藏文件
 - `tree -L 1 -h`：显示文件和目录的大小
 
+```
+Plain@Linux-VM:~/Personal_Project/test-website$ tree -L 2 -a
+.
+├── .devcontainer
+│   └── devcontainer.json
+├── .git
+│   ├── COMMIT_EDITMSG
+│   ├── FETCH_HEAD
+│   ├── HEAD
+│   ├── ORIG_HEAD
+│   ├── branches
+│   ├── config
+│   ├── description
+│   ├── hooks
+│   ├── index
+│   ├── info
+│   ├── logs
+│   ├── objects
+│   ├── packed-refs
+│   └── refs
+├── .gitignore
+├── Readme.md
+├── articles-data
+│   ├── Dockerfile
+│   ├── init.sh
+│   ├── logrotate.conf
+│   └── update-articles.sh
+├── compose.yml
+└── web-app
+    ├── .dockerignore
+    ├── Dockerfile
+    ├── __pycache__
+    ├── app.py
+    ├── config.py
+    ├── import_articles_scripts.py
+    ├── instance
+    ├── markdown_render_scripts.py
+    ├── models.py
+    ├── rendered_articles
+    ├── requirements.in
+    ├── requirements.txt
+    ├── static
+    └── templates
+
+15 directories, 25 files
+```
+
 
 
