@@ -2,7 +2,7 @@
 Title: Windows Extra Software & Software Settings
 Author: 陈翰杰
 Instructor: chatGPT3.5, GPT4
-CoverImage: waiting
+CoverImage: ./images/vertical-tab.png
 StartDate: 2023-09-30
 Category: windows使用指南
 ---
@@ -14,7 +14,7 @@ BriefIntroduction:
 
 <!-- split -->
 
-![cover-image](./waiting)
+![cover-image](./images/vertical-tab.png)
 
 # 写在前面
 

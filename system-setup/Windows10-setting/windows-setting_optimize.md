@@ -2,7 +2,7 @@
 Title: Windows System Settings
 Author: 陈翰杰
 Instructor: chatGPT3.5, GPT4
-CoverImage:
+CoverImage: ./images/setting.png
 StartDate: 2023-09-30
 Category: windows使用指南
 ---
@@ -14,7 +14,7 @@ BriefIntroduction:
 
 <!-- split -->
 
-![cover-image](./waitting)
+![cover-image](./images/setting.png)
 
 # windows 10 setting
 
