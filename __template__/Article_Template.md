@@ -3,7 +3,7 @@ Title: Articles Template
 Author: 陈翰杰
 Instructor: chatGPT 3.5
 CoverImage: ./images/cover_image.jpeg
-RolloutDate: 2023-XX-XX
+RolloutDate: 2023-01-01
 ---
 
 ```

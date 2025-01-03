@@ -217,23 +217,7 @@ services:
    - 配置极其简单（如只需要端口映射）
    - 一次性运行的容器
 
-## 最佳实践
 
-即使是单容器，我个人还是更倾向于使用 compose.yml，原因是：
-
-1. **可维护性**
-   - 配置清晰明了
-   - 易于修改和维护
-
-2. **一致性**
-   - 保持项目结构的一致性
-   - 便于团队协作
-
-3. **可扩展性**
-   - 未来添加服务更容易
-   - 不需要重新学习新的工具
-
-总结：虽然对于单容器来说使用 compose.yml 可能看起来有点"大材小用"，但从长远来看，使用 compose.yml 管理容器配置是一个更好的选择。它提供了更好的可维护性和扩展性，特别是当你的项目逐渐变得复杂时。
 
 # `compose.yml` 语法详解
 
@@ -241,3 +225,51 @@ services:
 根据最新的 docker compose 规范 [Version and name top-level elements | Docker Docs](https://docs.docker.com/reference/compose-file/version-and-name/)
 
 Compose 不再使用此字段来选择验证模式， 而是默认使用最新的模式来解析文件，如果使用此字段会收到警告消息
+
+
+
+## `develop`
+
+compose.yml 中 `develop` 部分，是 Docker Compose 的开发模式特性，它可以：
+
+- 实时监控代码变化
+- 自动同步文件
+- 根据需要重启容器
+
+### watch 配置详解
+
+```yaml
+develop:
+  watch:
+    - path: ./web-app     # 本地源代码路径
+      target: /app        # 容器内的目标路径
+      action: sync+restart # 发生变化时的动作
+```
+
+#### action 类型：
+1. `sync`: 仅同步文件变化，用于静态文件、数据文件
+2. `sync+restart`: 同步文件并重启容器，用于需要重启才能生效的应用
+3. `rebuild`: 重新构建容器，用于需要重新构建的情况
+
+### 启动开发模式：
+
+```bash
+# 使用开发模式启动
+docker compose watch
+
+# 或者使用 -d 在后台运行
+docker compose watch -d
+```
+
+### igonre file
+
+```yaml
+develop:
+  watch:
+    - path: ./src
+      target: /app/src
+      ignore:
+        - node_modules/
+        - *.test.js
+```
+使用 ignore 排除不需要监控的文件

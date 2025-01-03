@@ -1,21 +1,6 @@
 # `.dockerignore`
 
-.dockerignore 文件的主要作用是在构建 Docker 镜像时，告诉 Docker 引擎哪些文件和目录应该被忽略，不要被复制到镜像中。这与 .gitignore 文件的概念类似。
-
-主要优点和作用：
-
-1. **提高构建效率**
-   - 减少构建上下文的大小
-   - 加快镜像构建速度
-   - 减少不必要的缓存失效
-
-2. **减小镜像体积**
-   - 排除不需要的文件和目录
-   - 避免将敏感信息打包进镜像
-
-3. **增加安全性**
-   - 防止敏感文件（如 .env、密钥文件等）被意外包含
-   - 避免将开发环境的文件打包到生产环境
+.dockerignore 文件的主要作用是在构建 Docker 镜像时，告诉 Docker 引擎哪些文件和目录应该被忽略，不要被复制到镜像中。类似于`.gitignore`
 
 常见的 .dockerignore 配置示例：
 
@@ -90,3 +75,27 @@ temp
    - 在构建前检查构建上下文大小
 
 使用 .dockerignore 文件可以让你的 Docker 镜像构建过程更加高效、安全，并且生成的镜像更加精简。建议在所有 Docker 项目中都使用这个文件来管理构建上下文。
+
+# `.dockerignore` 作用域
+
+`.dockerignore` 文件的作用域规则如下：
+
+1. `.dockerignore` 文件**只对同目录下的 Dockerfile 生效**。它不会自动对子目录中的 Dockerfile 生效。
+
+2. 在构建 Docker 镜像时，Docker 会在 Dockerfile 所在的目录中查找 `.dockerignore` 文件，并使用它来确定哪些文件应该被排除在构建上下文之外。
+
+e.g.
+
+```
+.
+├── articles-data/
+│   ├── .dockerignore  # 针对 articles-data/Dockerfile
+│   └── Dockerfile
+└── web-app/
+    ├── .dockerignore  # 针对 web-app/Dockerfile
+    └── Dockerfile
+```
+
+# `.dockerignore` 生效时机
+
+影响Dockerfile 中的COPY命令和ADD命令

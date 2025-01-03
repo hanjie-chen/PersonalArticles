@@ -148,12 +148,6 @@ json代码如下
 
 具体看参考视频[^4]
 
-# VScode 使用指南
-
-尽头折腾了一天，发现登录了自己的github 账号的VScode变得非常难用，可能是因为之前的设置太过愚蠢导致的，终于让我找到一个完全删除VScode及其插件的文章，然后尝试了一边，真的有效啊——2024-09-25
-
-[彻底卸载VSCode_如何彻底删除vscode-CSDN博客](https://blog.csdn.net/qq_29339467/article/details/104074758)
-
 # Visio
 
 下载和激活：[Microsoft Visio 专业版 2019_visio 2019-CSDN博客](https://blog.csdn.net/milkhq/article/details/105714076)

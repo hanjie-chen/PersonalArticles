@@ -58,6 +58,10 @@ Plain@Linux-VM:~/Personal_Project/test-website$ tree -L 2
 - `tree -L 1 -a`：显示所有文件，包括隐藏文件
 - `tree -L 1 -h`：显示文件和目录的大小
 
+## `tree -L <layer> -a`
+
+显示所有的文件和目录，包括隐藏的文件
+
 ```
 Plain@Linux-VM:~/Personal_Project/test-website$ tree -L 2 -a
 .
