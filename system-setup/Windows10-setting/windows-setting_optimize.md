@@ -3,8 +3,7 @@ Title: Windows System Settings
 Author: 陈翰杰
 Instructor: chatGPT3.5, GPT4
 CoverImage: ./images/setting.png
-StartDate: 2023-09-30
-Category: windows使用指南
+RolloutDate: 2023-09-30
 ---
 
 ```
