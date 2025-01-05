@@ -62,23 +62,87 @@ git add . && git commit -m "message"
 
 当你想要基于当前的版本开发下一个版本，或者存粹是希望不想要污染现在已经开发好的版本，可以基于现在已有的代码开启一条新的分支，继续开发
 
-比如说我现在以及把前端开发好了，想要开发后端，可以创建一条新的分支，并且切换到这个分支。例如
+比如说我现在以及把前端开发好了，想要开发后端，可以创建一条新的分支，并且切换到这个分支。可以使用命令
 
-`git checkout -b checkend-development`
+```shell
+git checkout -b <branch-name>
+```
 
-## 命令详解
+e.g.
 
-1. `checkout`: 这是 Git 的一个子命令, 通常用于切换分支或恢复工作树文件。在这个上下文中, 它被用来创建一个新分支并切换到该分支。
-2. `-b`: 这是 `checkout` 命令的一个选项(option)。
-   - 当与 `checkout` 一起使用时, `-b` 表示 "创建一个新分支"。
-   - 如果没有 `-b` 选项, `checkout` 只会切换到一个已存在的分支。
-   - 使用 `-b` 选项, Git 会创建新分支, 然后立即切换到这个新创建的分支（如果该分支已经存在, Git 会报错）
+```shell
+git checkout -b backend-development
+```
 
-然后可以使用命令 `git branch` 查看所有分支以及当前分支
+## `git check` 命令详解
 
-## 切换分支
+`git checkout` 这是 Git 的一个子命令, 通常用于切换分支
 
-使用命令 `git checkout main` 切换回到 main 分支
+### `git checkout <branch-name>`
+
+这个命令会首先查找名为 `branch-name` 的本地分支,如果找到了,就切换到这个分支。
+
+如果没有找到本地分支,它会查找名为 `branch-name` 的远程分支,如果找到了,就创建一个同名的本地分支并建立跟踪关系,然后切换到这个新的本地分支。
+
+e.g.
+
+```shell
+➜ git branch
+* main
+➜ git branch -r
+  origin/HEAD -> origin/main
+  origin/backend-development
+  origin/main
+➜ git checkout backend-development
+Switched to a new branch 'backend-development'
+branch 'backend-development' set up to track 'origin/backend-development'.
+```
+
+### `git checkout -b <branch-name>`
+
+创建新分支, 然后立即切换到这个新创建的分支（如果该分支已经存在, Git 会报错）
+
+这个命令实际上是 `git branch branch-name` 和 `git checkout branch-name` 的简写。
+
+新创建的分支会基于当前所在的分支。例如,如果你当前在 `main` 分支,那么新分支 `branch-name` 就会基于 `main` 分支创建。
+
+> [!note]
+>
+> 当你使用 `git clone` 命令克隆一个远程仓库时,Git 会将远程仓库的所有数据都复制到你的本地机器上,包括所有的分支和提交历史。这意味着,在克隆完成后,你的本地仓库将包含与远程仓库完全相同的数据
+>
+> 然而,虽然所有的分支都被克隆到了本地,但 Git 默认只会 "检出(checkout)" 远程仓库的默认分支(通常是 `main` 或 `master`)。"检出" 的意思是,Git 会将这个分支的文件放到你的工作目录中,让你可以直接在这些文件上工作
+>
+> 所以,当你在克隆后运行 `git branch` 命令时,你只会看到 `main` 分支,因为这是唯一被 "检出" 的分支。但是,如果你运行 `git branch -r`,你会看到所有的远程分支,因为它们都已经被克隆到本地了
+
+## `git branch` 命令详解
+
+`git branch` 查看本地分支
+
+```shell
+➜ git branch
+* main
+```
+
+`git branch -r` 查看远程分支
+
+```shell
+➜ git branch -r
+  origin/HEAD -> origin/main
+  origin/backend-development
+  origin/main
+```
+
+`git branch -a` 查看所有分支（本地和远程）
+
+```shell
+➜ git branch -a
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/backend-development
+  remotes/origin/main
+```
+
+
 
 ## delete branch
 
@@ -138,16 +202,6 @@ git branch --merged | grep -v "\*" | xargs -n 1 git branch -d
 - 删除分支是不可逆的操作，请确保你真的不再需要这个分支了。
 - 如果分支包含未推送或未合并的更改，Git 会警告你。
 - 删除远程分支需要你有适当的权限。
-
-最后，一个好习惯是在删除分支之前，先检查一下分支列表：
-
-```
-git branch      # 查看本地分支
-git branch -r   # 查看远程分支
-git branch -a   # 查看所有分支（本地和远程）
-```
-
-这样可以确保你删除的是正确的分支。如果你有任何其他关于 Git 分支管理的问题，欢迎继续询问！
 
 
 
