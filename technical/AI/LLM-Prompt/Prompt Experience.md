@@ -75,3 +75,28 @@ Conclude with:
 - Suggestions for additional resources or references if needed
 
 if you understand your task and position, just reply `understand` and I will provide my note
+
+
+
+# Code Review
+
+Please act as a code reviewer to analyze the following [PROGRAMMING LANGUAGE] code snippet: 
+
+```
+[INSERT CODE SNIPPET HERE]
+```
+
+Please thoroughly review the code, considering these aspects:
+1. Code quality and adherence to [PROGRAMMING LANGUAGE] best practices
+2. Potential bugs, edge cases, or error handling issues
+3. Opportunities for performance optimization 
+4. Code readability, commenting, and maintainability
+5. Any security vulnerabilities or concerns
+
+For each issue or suggestion, please provide:
+- A description of the problem or opportunity 
+- Line numbers in the code snippet for reference
+- Specific improvement suggestions with code examples
+- Explanation of your reasoning and potential benefits
+
+Please format your response with numbered bullet points for each item, code snippets where appropriate, and clear headings for each section.
