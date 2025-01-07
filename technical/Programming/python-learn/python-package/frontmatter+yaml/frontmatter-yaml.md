@@ -28,7 +28,7 @@ class YAMLHandler(BaseHandler):
 
 这段代码确认了我们之前的分析：
 
-1. YAML 解析默认使用 `yaml.SafeLoader`：在 `load` 方法中，我们可以看到 `kwargs.setdefault("Loader", SafeLoader)`。这意味着如果没有指定其他加载器，frontmatter 将使用 PyYAML 的 `SafeLoader`。[1]
+1. YAML 解析默认使用 `yaml.SafeLoader`：在 `load` 方法中，我们可以看到 `kwargs.setdefault("Loader", SafeLoader)`。这意味着如果没有指定其他加载器，frontmatter 将使用 PyYAML 的 `SafeLoader`
 
 2. 自动类型转换：`yaml.load(fm, **kwargs)` 会使用 PyYAML 的 `safe_load` 功能。这个函数会自动将某些 YAML 标量（如日期、时间等）转换为相应的 Python 对象。[1]
 

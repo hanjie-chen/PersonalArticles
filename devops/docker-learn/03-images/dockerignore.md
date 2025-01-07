@@ -78,8 +78,6 @@ temp
 
 # `.dockerignore` 作用域
 
-`.dockerignore` 文件的作用域规则如下：
-
 1. `.dockerignore` 文件**只对同目录下的 Dockerfile 生效**。它不会自动对子目录中的 Dockerfile 生效。
 
 2. 在构建 Docker 镜像时，Docker 会在 Dockerfile 所在的目录中查找 `.dockerignore` 文件，并使用它来确定哪些文件应该被排除在构建上下文之外。
