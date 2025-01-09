@@ -20,39 +20,40 @@ BriefIntroduction:
 
 当在 github 上面新建完成一个仓库之后，github 会提示你如何进行下一步操作。而我们需要做的部分就是更新仓库，然后推送到 github 上面。
 
-# 3 个基础命令
+# Basic Command
 
-## git add
+## `git add`
 
 当然我一般直接使用 `git add .` 全都提交，这个命令的作用是将修改过的文件添加到暂存区（staging area）。
 
-## git commit
+## `git commit`
 
-将暂存区的变更提交到本地仓库，提交（commit）是 Git 中的一个核心概念，代表了一个项目历史中的一个点。每次提交都会记录下谁在什么时间做了什么更改，并允许你回到这个状态或者比较不同提交之间的差异。`git commit` 命令实际上创建了一个快照，它包含了暂存区中所有文件的一个特定状态。
+```shell
+git commit -m "add your specification of this commit"
+```
 
-更具体的使用需要 `git commit -m "add your specification of this commit"` 这个玩意是必须填的，用来追踪每次提交的目的
+完整的 `git commit` 命令，必须要填写这次提交的信息
 
-## git push
+每次提交都会记录下谁在什么时间做了什么更改，并允许你回到这个状态或者比较不同提交之间的差异。`git commit` 命令实际上创建了一个快照，它包含了暂存区中所有文件的一个特定状态。
+
+配置提交者的名字和email
+
+```shell
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+
+
+## `git push`
 
 推送到 github 上面同步
 
-## git add + git commit = ?
+## `git add + git commit`
 
-`git add` 和 `git commit` 可以合并为 `git commit -a -m "your message"`
+对于已被跟踪的文件: 如果这些文件只是进行了修改，而没有新文件需要添加，那么可以直接使用 `git commit -a -m "message"` 来提交这些更改。这个命令会自动将所有已被跟踪文件的修改提交，而不需要先手动 `git add` 它们。
 
-不过这个会提交所有的修改，当然对我这种一直都是用 `git add .` 的人来说，没差了
-
-note:
-
-- **对于新文件**: 需要使用 `git add` 将它们添加到暂存区，因为 Git 默认只跟踪已经添加到版本控制中的文件。新文件在被跟踪之前，必须先通过 `git add` 命令添加。
-
-- **对于已被跟踪的文件**: 如果这些文件只是进行了修改，而没有新文件需要添加，那么可以直接使用 `git commit -a -m "message"` 来提交这些更改。这个命令会自动将所有已被跟踪文件的修改提交，而不需要先手动 `git add` 它们。
-
-所以，`git add` 主要用于将新文件或目录添加到版本控制中，而 `git commit -a` 则用于提交已经在版本控制中的文件的修改。
-
-另一种方式：
-
-同时执行 2 个命令：
+对于新文件: 需要使用 `git add` 将它们添加到暂存区，因为 Git 默认只跟踪已经添加到版本控制中的文件。新文件在被跟踪之前，必须先通过 `git add` 命令添加。这种情况我们可以使用下面的命令
 
 ```bash
 git add . && git commit -m "message"
