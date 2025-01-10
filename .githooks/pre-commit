@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+import subprocess
+
+def get_staged_files():
+    """获取暂存区中的文件列表"""
+    result = subprocess.run(['git', 'diff', '--cached', '--name-only'], stdout=subprocess.PIPE, text=True)
+    files = result.stdout.strip().split('\n')
+    return files
+
+def rename_image_extensions(files):
+    """将大写图片后缀名转换为小写"""
+    image_extensions = ['.PNG', '.JPG', '.JPEG', '.GIF', '.BMP', '.TIFF', '.SVG']
+    renamed = False
+
+    for file in files:
+        if not os.path.isfile(file):
+            continue
+        _, ext = os.path.splitext(file)
+        if ext.upper() in image_extensions and ext != ext.lower():
+            new_file = file[:-len(ext)] + ext.lower()
+            os.rename(file, new_file)
+            # 更新暂存区的文件
+            subprocess.run(['git', 'add', new_file])
+            subprocess.run(['git', 'rm', '--cached', file])
+            renamed = True
+            print(f"rename file: {file} -> {new_file}")
+
+    return renamed
+
+def main():
+    files = get_staged_files()
+    if not files or files == ['']:
+        sys.exit(0)
+
+    renamed = rename_image_extensions(files)
+
+    if renamed:
+        print("image extension name lowercased, staging area updated")
+        print("please confirm change, and run git commit again to commit")
+        sys.exit(1)  # 终止提交，让用户检查更改
+    else:
+        sys.exit(0)  # 正常结束，允许提交
+
+if __name__ == '__main__':
+    main()

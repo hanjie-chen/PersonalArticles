@@ -36,14 +36,12 @@ git commit -m "add your specification of this commit"
 
 每次提交都会记录下谁在什么时间做了什么更改，并允许你回到这个状态或者比较不同提交之间的差异。`git commit` 命令实际上创建了一个快照，它包含了暂存区中所有文件的一个特定状态。
 
-配置提交者的名字和email
+配置提交者的名字和 email
 
 ```shell
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
 ```
-
-
 
 ## `git push`
 
@@ -58,6 +56,10 @@ git config --global user.email "your.email@example.com"
 ```bash
 git add . && git commit -m "message"
 ```
+
+## `git status`
+
+可以查看目前仓库的状态
 
 # 分支管理
 
@@ -81,9 +83,9 @@ git checkout -b backend-development
 
 ### `git checkout <branch-name>`
 
-这个命令会首先查找名为 `branch-name` 的本地分支,如果找到了,就切换到这个分支。
+这个命令会首先查找名为 `branch-name` 的本地分支, 如果找到了, 就切换到这个分支。
 
-如果没有找到本地分支,它会查找名为 `branch-name` 的远程分支,如果找到了,就创建一个同名的本地分支并建立跟踪关系,然后切换到这个新的本地分支。
+如果没有找到本地分支, 它会查找名为 `branch-name` 的远程分支, 如果找到了, 就创建一个同名的本地分支并建立跟踪关系, 然后切换到这个新的本地分支。
 
 e.g.
 
@@ -105,15 +107,15 @@ branch 'backend-development' set up to track 'origin/backend-development'.
 
 这个命令实际上是 `git branch branch-name` 和 `git checkout branch-name` 的简写。
 
-新创建的分支会基于当前所在的分支。例如,如果你当前在 `main` 分支,那么新分支 `branch-name` 就会基于 `main` 分支创建。
+新创建的分支会基于当前所在的分支。例如, 如果你当前在 `main` 分支, 那么新分支 `branch-name` 就会基于 `main` 分支创建。
 
 > [!note]
 >
-> 当你使用 `git clone` 命令克隆一个远程仓库时,Git 会将远程仓库的所有数据都复制到你的本地机器上,包括所有的分支和提交历史。这意味着,在克隆完成后,你的本地仓库将包含与远程仓库完全相同的数据
+> 当你使用 `git clone` 命令克隆一个远程仓库时, Git 会将远程仓库的所有数据都复制到你的本地机器上, 包括所有的分支和提交历史。这意味着, 在克隆完成后, 你的本地仓库将包含与远程仓库完全相同的数据
 >
-> 然而,虽然所有的分支都被克隆到了本地,但 Git 默认只会 "检出(checkout)" 远程仓库的默认分支(通常是 `main` 或 `master`)。"检出" 的意思是,Git 会将这个分支的文件放到你的工作目录中,让你可以直接在这些文件上工作
+> 然而, 虽然所有的分支都被克隆到了本地, 但 Git 默认只会 "检出(checkout)" 远程仓库的默认分支(通常是 `main` 或 `master`)。"检出" 的意思是, Git 会将这个分支的文件放到你的工作目录中, 让你可以直接在这些文件上工作
 >
-> 所以,当你在克隆后运行 `git branch` 命令时,你只会看到 `main` 分支,因为这是唯一被 "检出" 的分支。但是,如果你运行 `git branch -r`,你会看到所有的远程分支,因为它们都已经被克隆到本地了
+> 所以, 当你在克隆后运行 `git branch` 命令时, 你只会看到 `main` 分支, 因为这是唯一被 "检出" 的分支。但是, 如果你运行 `git branch -r`, 你会看到所有的远程分支, 因为它们都已经被克隆到本地了
 
 ## `git branch` 命令详解
 
@@ -143,8 +145,6 @@ branch 'backend-development' set up to track 'origin/backend-development'.
   remotes/origin/main
 ```
 
-
-
 ## delete branch
 
 在 Git 中删除分支是一个常见的操作，特别是当某个功能开发完成并合并到主分支后。以下是删除 Git 分支的几种方法：
@@ -173,8 +173,6 @@ git branch -D <branch-name>
 
 请谨慎使用此选项，因为它会无条件地删除分支，即使该分支包含未合并的更改。
 
-
-
 ### delete remote branch
 
 如果你想删除远程仓库中的分支，可以使用以下命令：
@@ -184,8 +182,6 @@ git push origin --delete <branch-name>
 ```
 
 例如 `git push origin --delete dependabot/pip/jinja2-3.1.5`
-
-
 
 删除所有已合并的本地分支：
 
@@ -203,8 +199,6 @@ git branch --merged | grep -v "\*" | xargs -n 1 git branch -d
 - 删除分支是不可逆的操作，请确保你真的不再需要这个分支了。
 - 如果分支包含未推送或未合并的更改，Git 会警告你。
 - 删除远程分支需要你有适当的权限。
-
-
 
 # git fetch
 
@@ -246,14 +240,12 @@ git reset --hard origin/main  # 重置到远程状态
 
 ## git file status
 
-为了理解这些命令的作用，需要先了解了一下git 文件状态，在 Git 中，文件的状态可以分为三个阶段：
+为了理解这些命令的作用，需要先了解了一下 git 文件状态，在 Git 中，文件的状态可以分为三个阶段：
 
 ```
 Working Directory 	  Staging Area 	 local repository
    (edit file) ------> (git add) ----> (git commit)
 ```
-
-
 
 ## `git reset` basic
 
@@ -267,7 +259,7 @@ Working Directory 	  Staging Area 	 local repository
 
 ### reset to remote branch
 
-`git reset --hard origin/main` 可以清除Working Directory, Staging Area & local repository 的修改
+`git reset --hard origin/main` 可以清除 Working Directory, Staging Area & local repository 的修改
 
 ### in a picture
 
@@ -279,8 +271,6 @@ Working Directory 	  Staging Area 	 local repository     remote repository
 |_________________|________________|___________________|
                 git reset --hard origin/main               
 ```
-
-
 
 # 合并分支 `git merge`
 
@@ -356,7 +346,7 @@ origin  https://github.com/username/repository.git (push)
 git clone https://github.com/hanjie-chen/PersonalArticles.git
 ```
 
-但是这样子就会造成一个问题，那就是这个remote repository下载到本地会使用remote repository的名称，建立一个文件夹，把repository放到里面
+但是这样子就会造成一个问题，那就是这个 remote repository 下载到本地会使用 remote repository 的名称，建立一个文件夹，把 repository 放到里面
 
 ```shell
 ~ # git clone https://github.com/hanjie-chen/PersonalArticles.git
@@ -378,7 +368,7 @@ git clone https://github.com/hanjie-chen/PersonalArticles.git ./articles-data
 ```
 > [!note]
 >
-> 目标目录必须是空的，这样操作之后，git仓库的所有内容（包括.git文件夹）都会直接存放在指定目录下
+> 目标目录必须是空的，这样操作之后，git 仓库的所有内容（包括.git 文件夹）都会直接存放在指定目录下
 
 # rollback change
 
@@ -475,6 +465,57 @@ Thumbs.db
 __pycache__/
 *.pyc
 ```
+
+# Git between different OS
+
+在 windows 操作系统中，大小写不敏感，也就是说对于文件 `apg-multi-waf.md` 和 `apg-multi-waf.MD` 会被认为是同一个文件
+
+但是在 Linux, 则是大小写敏感的，我个人也倾向于大小写敏感的，虽然无法修改整个 windows 操作系统为大小写敏感，但是对于 windows git, 我们可以设置
+
+首先我们使用使用下面的命令查看目前仓库是否为大小写敏感
+
+```powershell
+PS C:\Users\Plain\PersonalArticles> git config core.ignorecase
+true
+```
+
+如果为 true 那么就意味着大小写不敏感，需要设置为 false
+
+```powershell
+PS C:\Users\Plain\PersonalArticles> git config core.ignorecase false
+PS C:\Users\Plain\PersonalArticles> git config core.ignorecase
+false
+```
+
+然后就可以准确识别了
+
+```powershell
+PS C:\Users\Plain\PersonalArticles\azure> ls
+
+    Directory: C:\Users\Plain\PersonalArticles\azure
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---            1/9/2025  1:04 AM           1108 apg-multi-waf.md
+
+PS C:\Users\Plain\PersonalArticles\azure> mv .\apg-multi-waf.md .\apg-multi-waf.MD
+PS C:\Users\Plain\PersonalArticles\azure> git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        deleted:    apg-multi-waf.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        apg-multi-waf.MD
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+
 
 # Furture consider
 
