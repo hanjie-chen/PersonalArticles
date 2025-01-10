@@ -30,7 +30,7 @@ enable case sensitive [Windows only]
 git config core.ignorecase false
 ```
 
-configure git hooks path
+configure git hooks path [python3 require]
 
 ```shell
 git config core.hooksPath .githooks

@@ -27,7 +27,7 @@ Git Hooks 分为两类：
 >
 > **注意**：如果您使用的是托管的 Git 平台（如 GitHub、GitLab 等），通常无法自定义服务器端钩子。但这些平台提供了 Webhooks、CI/CD 集成等功能，可以达到类似的目的。
 
-# `./git/hooks` dir
+## `./git/hooks` dir
 
 Git Hooks 存储在每个仓库的 `.git/hooks` 目录中。默认情况下，这个目录包含一些示例脚本，以 `.sample` 结尾
 
@@ -86,4 +86,143 @@ git commit -m "Add git hooks"
 ```
 
 这样一来，其他开发者在克隆仓库后，也会获得钩子脚本。
+
+## check image upper case extension
+
+我们使用 `pre-commit` 钩子，在 `git commit` 命令之前自动执行脚本，使用 python 因为在我的windows 和 Linux 环境中都存在python 环境
+
+pre-commit
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+import subprocess
+
+def get_staged_files():
+    """获取暂存区中的文件列表"""
+    result = subprocess.run(['git', 'diff', '--cached', '--name-only'], stdout=subprocess.PIPE, text=True)
+    files = result.stdout.strip().split('\n')
+    return files
+
+def rename_image_extensions(files):
+    """将大写图片后缀名转换为小写"""
+    image_extensions = ['.PNG', '.JPG', '.JPEG', '.GIF', '.BMP', '.TIFF', '.SVG']
+    renamed = False
+
+    for file in files:
+        if not os.path.isfile(file):
+            continue
+        _, ext = os.path.splitext(file)
+        if ext.upper() in image_extensions and ext != ext.lower():
+            new_file = file[:-len(ext)] + ext.lower()
+            os.rename(file, new_file)
+            # 更新暂存区的文件
+            subprocess.run(['git', 'add', new_file])
+            subprocess.run(['git', 'rm', '--cached', file])
+            renamed = True
+            print(f"rename file: {file} -> {new_file}")
+
+    return renamed
+
+def main():
+    files = get_staged_files()
+    if not files or files == ['']:
+        sys.exit(0)
+
+    renamed = rename_image_extensions(files)
+
+    if renamed:
+        print("image extension name lowercased, staging area updated")
+        print("please confirm change, and run git commit again to commit")
+        sys.exit(1)  # 终止提交，让用户检查更改
+    else:
+        sys.exit(0)  # 正常结束，允许提交
+
+if __name__ == '__main__':
+    main()
+```
+
+test
+
+```powershell
+PS C:\Users\Plain\PersonalArticles> touch test.PNG
+Created new file: test.PNG
+PS C:\Users\Plain\PersonalArticles> ls
+
+    Directory: C:\Users\Plain\PersonalArticles
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----            1/8/2025  2:33 AM                __template__
+d----            1/9/2025  6:59 AM                .githooks
+d----            1/9/2025  3:46 AM                azure
+d----            1/8/2025  2:33 AM                devops
+d----            1/8/2025  2:33 AM                personal-growth
+d----            1/8/2025  2:33 AM                system-setup
+d----            1/8/2025  2:33 AM                technical
+d----            1/8/2025  2:33 AM                tools-guide
+-a---           1/10/2025  2:26 AM           1189 README.md
+-a---           1/10/2025  2:27 AM              0 test.PNG
+
+PS C:\Users\Plain\PersonalArticles> git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        test.PNG
+
+no changes added to commit (use "git add" and/or "git commit -a")
+PS C:\Users\Plain\PersonalArticles> git add .
+PS C:\Users\Plain\PersonalArticles> git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   README.md
+        new file:   test.PNG
+
+PS C:\Users\Plain\PersonalArticles> git commit -m "add test.PNG fiel to test pre-commit"
+rm 'test.PNG'
+rename file: test.PNG -> test.png
+image extension name lowercased, staging area updated
+please confirm change, and run git commit again to commit
+PS C:\Users\Plain\PersonalArticles> git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   README.md
+        new file:   test.png
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   tools-guide/git-guide/git-hooks.md
+
+PS C:\Users\Plain\PersonalArticles> git commit -m "add test image"
+[main 50b252f] add test image
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ create mode 100644 test.png
+PS C:\Users\Plain\PersonalArticles> git push
+Enumerating objects: 6, done.
+Counting objects: 100% (6/6), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 399 bytes | 199.00 KiB/s, done.
+Total 4 (delta 2), reused 1 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To github.com:hanjie-chen/PersonalArticles.git
+   d29a98c..50b252f  main -> main
+```
 
