@@ -24,13 +24,13 @@
 
 # Repository config
 
-大小写敏感 [Windows only]
+enable case sensitive [Windows only]
 
 ```shell
 git config core.ignorecase false
 ```
 
-git hooks 路径
+configure git hooks path
 
 ```shell
 git config core.hooksPath .githooks
