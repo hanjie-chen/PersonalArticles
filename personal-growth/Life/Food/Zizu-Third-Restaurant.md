@@ -1,8 +1,7 @@
 ---
 Title: 紫竹第三餐厅必坑指南
 Author: 陈翰杰, jiuqi-liu
-Instructor: 
-CoverImage: ./images/cover_image.jpg
+CoverImage: ./images/third-restaurant.jpg
 RolloutDate: 2024-11-14
 ---
 
@@ -13,7 +12,7 @@ BriefIntroduction:
 
 <!-- split -->
 
-
+![third restaurant](./images/third-restaurant.jpg)
 
 # 紫竹第三餐厅必坑指南
 
@@ -121,7 +120,7 @@ jiuqi老师尝过之后不推荐：
 
 ## 牛肉干锅
 
-有时候好吃，有时候不好吃吗，取决于配菜，有时候是蒜苔（我不喜欢），有时候是土豆洋葱青红椒，味道还可以的
+味道一般，好吃程度取决于配菜，有时候是蒜苔（我不喜欢），有时候是土豆洋葱青红椒，味道还可以的
 
 <img src="./images/dry-pot-beef.jpg" alt="beef" style="zoom:50%;" />
 
@@ -147,7 +146,7 @@ jiuqi老师尝过之后不推荐：
 
 ## 羊肉砂锅
 
-羊肉砂锅羊膻味太重，根本无法下嘴
+羊肉砂锅羊膻味太重，根本无法下嘴，千万不要吃
 
 <img src="./images/lamb-clay-pot.jpg" alt="lamp" style="zoom:30%;" />
 

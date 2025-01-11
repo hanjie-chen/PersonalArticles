@@ -8,7 +8,8 @@ RolloutDate: 2023-01-01
 
 ```
 BriefIntroduction: 
-
+git hooks 检查图片文件后缀名，并且将其转换为小写
+因为我的web site running 在一个 Linux 上面所以，实际上是大小写敏感的，但是我经常在 windows 上面编辑 makrdown，但是windows 是大小写不敏感的，所以会存在windows上面可以显示的图片，导致我的web site没有显示404 not found
 ```
 
 <!-- split -->
@@ -102,9 +103,11 @@ git commit -m "Add git hooks"
 
 这样一来，其他开发者在克隆仓库后，也会获得钩子脚本。
 
-## check image upper case extension
+# check image upper case extension
 
-我们使用 `pre-commit` 钩子，在 `git commit` 命令之前自动执行脚本，使用 python 因为在我的windows 和 Linux 环境中都存在python 环境
+我们使用 `pre-commit` 钩子，在 `git commit` 命令之前自动执行脚本，使用 python 因为在我的 windows 和 Linux 环境中都存在 python 环境
+
+主要功能：提交代码之前，自动将暂存区（staging area）中所有扩展名包含大写字母的图片文件的扩展名转换为小写。
 
 pre-commit
 
@@ -241,3 +244,113 @@ To github.com:hanjie-chen/PersonalArticles.git
    d29a98c..50b252f  main -> main
 ```
 
+result
+
+![pre-commit success](./images/pre-commit-test.png)
+
+## 代码详解
+
+### 文件头部：
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+```
+
+- 第一行 `#!/usr/bin/env python3` 是一个 Shebang，用于指定脚本的解释器为 `python3`。当在 Unix/Linux 系统中直接执行该脚本时，系统会使用指定的解释器来运行脚本。
+- 第二行 `# -*- coding: utf-8 -*-` 指定了脚本文件的编码方式为 UTF-8，这对于正确处理包含非 ASCII 字符的字符串非常重要。
+
+### 导入必要的模块：
+
+```python
+import os
+import sys
+import subprocess
+```
+
+- `os` 模块提供了与操作系统进行交互的功能，如文件和目录的操作。
+- `sys` 模块提供了与 Python 解释器进行交互的功能，如退出程序、获取命令行参数等。
+- `subprocess` 模块允许我们启动新进程，连接它们的输入/输出/错误管道，并获取返回值。
+
+### 获取暂存区中的文件列表：
+
+```python
+def get_staged_files():
+    """获取暂存区中的文件列表"""
+    result = subprocess.run(['git', 'diff', '--cached', '--name-only'], stdout=subprocess.PIPE, text=True)
+    files = result.stdout.strip().split('\n')
+    return files
+```
+
+- 使用 `subprocess.run` 执行 Git 命令 `git diff --cached --name-only` ，获取暂存区中已更改的文件列表。
+  - `stdout=subprocess.PIPE` 表示将子进程的标准输出捕获到 `result.stdout` 中。
+  - `text=True` 表示以字符串形式处理输出数据。
+- 将输出结果按行分割，得到文件列表 `files`。
+
+### 将大写图片扩展名转换为小写：
+
+```python
+def rename_image_extensions(files):
+    """将大写图片后缀名转换为小写"""
+    image_extensions = ['.PNG', '.JPG', '.JPEG', '.GIF', '.BMP', '.TIFF', '.SVG']
+    renamed = False
+
+    for file in files:
+        if not os.path.isfile(file):
+            continue
+        _, ext = os.path.splitext(file)
+        if ext.upper() in image_extensions and ext != ext.lower():
+            new_file = file[:-len(ext)] + ext.lower()
+            os.rename(file, new_file)
+            # 更新暂存区的文件
+            subprocess.run(['git', 'add', new_file])
+            subprocess.run(['git', 'rm', '--cached', file])
+            renamed = True
+            print(f"rename file: {file} -> {new_file}")
+
+    return renamed
+```
+
+- 定义了一个包含大写图片扩展名的列表 `image_extensions`。
+- 遍历暂存区的文件列表：
+  - 使用 `os.path.isfile(file)` 判断文件是否存在于工作区。
+  - 使用 `os.path.splitext(file)` 分离文件名和扩展名。
+  - 判断条件：
+    - `ext.upper() in image_extensions`：文件的扩展名（转换为大写）是否在图片扩展名列表中。
+    - `ext != ext.lower()`：扩展名是否包含大写字母。
+  - 如果满足条件：
+    - 使用 `ext.lower()` 将扩展名转换为小写，生成新的文件名 `new_file`。
+    - 使用 `os.rename(file, new_file)` 重命名文件。
+    - 更新 Git 暂存区：
+      - `git add new_file`：将新文件添加到暂存区。
+      - `git rm --cached file`：将旧文件从暂存区移除（仅移除索引，不删除工作区的文件）。
+    - 设置 `renamed = True`，表示有文件被重命名。
+    - 输出重命名信息。
+
+### 主函数入口：
+
+```python
+def main():
+    files = get_staged_files()
+    if not files or files == ['']:
+        sys.exit(0)
+
+    renamed = rename_image_extensions(files)
+
+    if renamed:
+        print("image extension name lowercased, staging area updated")
+        print("please confirm change, and run git commit again to commit")
+        sys.exit(1)  # 终止提交，让用户检查更改
+    else:
+        sys.exit(0)  # 正常结束，允许提交
+
+if __name__ == '__main__':
+    main()
+```
+
+- 调用 `get_staged_files()` 获取暂存区中的文件列表。
+- 如果暂存区没有文件，程序正常退出（允许提交继续进行）。
+- 调用 `rename_image_extensions(files)` 对文件进行处理。
+- 根据 `rename` 的值决定下一步操作：
+  - 如果有文件被重命名，输出提示信息，终止提交（`sys.exit(1)`），让用户确认更改并重新提交。
+  - 如果没有文件被重命名，程序正常退出（`sys.exit(0)`），允许提交继续进行。
