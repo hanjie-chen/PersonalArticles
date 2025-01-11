@@ -1,5 +1,5 @@
 ---
-Title: Git速查指南
+Title: Git 命令速查指南
 Author: 陈翰杰
 Instructor: GPT-4o, Sonnet3.5
 CoverImage: ./images/cover_image.png
@@ -61,7 +61,7 @@ git add . && git commit -m "message"
 
 可以查看目前仓库的状态
 
-# 分支管理
+# git branch manage
 
 当你想要基于当前的版本开发下一个版本，或者存粹是希望不想要污染现在已经开发好的版本，可以基于现在已有的代码开启一条新的分支，继续开发
 
@@ -200,9 +200,9 @@ git branch --merged | grep -v "\*" | xargs -n 1 git branch -d
 - 如果分支包含未推送或未合并的更改，Git 会警告你。
 - 删除远程分支需要你有适当的权限。
 
-# git fetch
+# `git fetch`
 
-## `git fetch` vs `git pull`
+`git fetch` vs `git pull`
 
 `git fetch`: 
 
@@ -218,9 +218,9 @@ git branch --merged | grep -v "\*" | xargs -n 1 git branch -d
 
 所以，如果你之前用过 `git pull` 但是失败了（比如你展示的错误），那么还是需要先执行 `git fetch`。因为 `git pull` 失败的话，可能没有更新本地的 `origin/main` 引用。
 
-# 删除本地修改 `git reset`
+# `git reset`
 
-如果你想要删除本地的所有修改，仅仅接受来自 remote repository 的最新情况，可以使用 git reset 强制删除所有你在本地的修改。比如说你 git clone 了一个 repository, 并且做了一些实验性的修改，并且 git commit 了，然后又不想要这些修改，想要把本地的 repository 变成最新的 github reposotory 上面的状态
+如果你想要删除本地的所有修改，仅仅接受来自 remote repository 的最新情况，可以使用 git reset 强制删除所有你在本地的修改。比如说你 git clone 了一个 repository, 并且做了一些实验性的修改，并且 git commit 了，然后又不想要这些修改，想要把本地的 repository 变成 github reposotory 上面的状态
 
 可以使用如下的命令
 
@@ -272,7 +272,7 @@ Working Directory 	  Staging Area 	 local repository     remote repository
                 git reset --hard origin/main               
 ```
 
-# 合并分支 `git merge`
+# `git merge`
 
 当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。然后我们接着回到这个分支上继续开发。
 
@@ -338,7 +338,7 @@ origin  https://github.com/username/repository.git (push)
 
 其中，`origin` 是默认的远程名称，后面跟着的就是远程仓库的 URL。如果你有多个远程仓库，都会在这里列出。
 
-# `git clone` 下载远程仓库
+# `git clone`
 
 如果我们想要下载某个 remote repository 我们可以使用 `git clone` 命令，e.g.
 
@@ -370,7 +370,7 @@ git clone https://github.com/hanjie-chen/PersonalArticles.git ./articles-data
 >
 > 目标目录必须是空的，这样操作之后，git 仓库的所有内容（包括.git 文件夹）都会直接存放在指定目录下
 
-# rollback change
+# `git resotre`
 
 如果修改了文件，但是没有进行 git add && git commit 例如这面这种状态
 
@@ -466,7 +466,7 @@ __pycache__/
 *.pyc
 ```
 
-# Git between different OS
+# case sensitivity
 
 在 windows 操作系统中，大小写不敏感，也就是说对于文件 `apg-multi-waf.md` 和 `apg-multi-waf.MD` 会被认为是同一个文件
 

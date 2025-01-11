@@ -1,3 +1,18 @@
+---
+Title: Git Hooks 使用指南
+Author: 陈翰杰
+Instructor: o1-preview
+CoverImage: ./images/cover_image.jpeg
+RolloutDate: 2023-01-01
+---
+
+```
+BriefIntroduction: 
+
+```
+
+<!-- split -->
+
 # Before we begin
 
 如果遇到这样子一个问题，在 windows 环境中，我们有一个 git repository，其中包含图片，这些图片的后缀名称包含大写和小写，比如说 `.PNG, .png` 
