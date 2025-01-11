@@ -2,8 +2,8 @@
 Title: Git Hooks 使用指南
 Author: 陈翰杰
 Instructor: o1-preview
-CoverImage: ./images/cover_image.jpeg
-RolloutDate: 2023-01-01
+CoverImage: ./images/pre-commit-test.png
+RolloutDate: 2025-01-11
 ---
 
 ```
@@ -13,6 +13,8 @@ git hooks 检查图片文件后缀名，并且将其转换为小写
 ```
 
 <!-- split -->
+
+![cover](./images/pre-commit-test.png)
 
 # Before we begin
 
