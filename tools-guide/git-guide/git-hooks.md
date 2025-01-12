@@ -259,8 +259,21 @@ result
 # -*- coding: utf-8 -*-
 ```
 
-- 第一行 `#!/usr/bin/env python3` 是一个 Shebang，用于指定脚本的解释器为 `python3`。当在 Unix/Linux 系统中直接执行该脚本时，系统会使用指定的解释器来运行脚本。
-- 第二行 `# -*- coding: utf-8 -*-` 指定了脚本文件的编码方式为 UTF-8，这对于正确处理包含非 ASCII 字符的字符串非常重要。
+第一行 `#!/usr/bin/env python3` 是一个 Shebang，用于指定脚本的解释器为 `python3`。当在 Unix/Linux 系统中直接执行该脚本时，系统会使用指定的解释器来运行脚本。
+
+> [!note]
+>
+> 特别注意，系统必须有 python3 的环境变量，而不是 python 的环境变量，下面的情况就无法运行该脚本
+>
+> ```shell
+> ➜ articles git:(main) ✗ python3 --version
+> ➜ articles git:(main) ✗ python --version
+> Python 3.11.4
+> ```
+>
+> 会报错，而且没有任何的错误提示
+
+第二行 `# -*- coding: utf-8 -*-` 指定了脚本文件的编码方式为 UTF-8，这对于正确处理包含非 ASCII 字符的字符串非常重要。
 
 ### 导入必要的模块：
 

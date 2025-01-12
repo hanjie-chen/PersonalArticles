@@ -35,3 +35,10 @@ configure git hooks path [python3 environment require]
 ```shell
 git config core.hooksPath .githooks
 ```
+
+> 必须可以在命令行中可以运行 python3 –version 命令，而且输出不为空 e.g.
+>
+> ```shell
+> PS C:\Users\Plain\PersonalArticles> python3 --version
+> Python 3.12.8
+> ```
