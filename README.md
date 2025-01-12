@@ -35,4 +35,3 @@ configure git hooks path [python3 environment require]
 ```shell
 git config core.hooksPath .githooks
 ```
-
