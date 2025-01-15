@@ -49,10 +49,6 @@ services:
     environment:
       - ARTICLES_DIRECTORY=/articles-data
       - FLASK_APP=app.py
-    develop:
-      watch:
-        - path: ./web-app
-          action: restart
 
   articles-sync:
     container_name: articles-sync
@@ -70,8 +66,9 @@ services:
     develop:
       watch:
         - path: ./articles-sync
-          ignore: ./articles-sync/logs
-          action: restart
+          ignore:
+            - logs/**
+          action: rebuild
 
 volumes:
   articles_data:
@@ -104,7 +101,7 @@ Compose 不再使用此字段来选择验证模式， 而是默认使用最新�
 
 这个时候我们可以使用 `develop: watch` 字段
 
-grammer
+## grammer
 
 ```yaml
 develp:
@@ -116,24 +113,80 @@ develp:
         - ignore-path/
 ```
 
-- `watch`
-  - 所有的路径都是基于项目路径
-  - `.dockerignore` rules 会自动生效，除此之外 `.git` 文件夹会自动忽略
-  
-- `action`
-  
-  - `sync` 将 project path 路径中变化复制到 container target 路径中
-  - `rebuild` 重建一个新的 images 并且替换掉原来的 container
-  - `sync+restart` 复制+重启
-  
-  action 只能为这3个值，而不能随意拆分组合，例如不能使用单独的 `restart` 
-  
-- `path, target`
+### `watch`
 
-  - `path` 主机项目路径
-  - `target` container 路径
+- 除了 ignore 之外的所有的路径都是基于项目路径
+- `.dockerignore` rules 会自动生效，除此之外 `.git` 文件夹会自动忽略
 
-  如果没有指定 target, 那么`sync` 动作将默认把主机上的 `path` 路径同步到容器内的相同路径
+### `action`
+
+- `sync` 将 project path 路径中变化复制到 container target 路径中
+- `rebuild` 重建一个新的 images 并且替换掉原来的 container
+- `sync+restart` 复制+重启
+
+action 只能为这 3 个值，而不能随意拆分组合，例如不能使用单独的 `restart` 
+
+### `path` and  `target`
+
+- `path` 主机项目路径
+- `target` container 路径
+
+如果没有指定 target, 那么 `sync` 动作将默认把主机上的 `path` 路径同步到容器内的相同路径
+
+### `ignore`
+
+必须是一个 数组（列表），即使只有一个元素
+
+```yaml
+ignore:
+  - logs/
+```
+
+wrong config
+
+```yaml
+ignore: logs/
+```
+
+`ignore` 参数的路径是相对于 `path` 参数的，例如我的项目中
+
+```shell
+website
+├── Readme.md
+├── articles-sync
+│   ├── Dockerfile
+│   ├── ...
+│   ├── logs
+├── compose.yml
+└── web-app
+    ├── Dockerfile
+    ├── ...
+    ├── ...
+    └── templates
+```
+
+想要忽略 website/articles-sync/logs 目录下的所有文件，那么在 yaml 中就是
+
+```yaml
+services:
+  ...
+
+  articles-sync:
+    ...
+    develop:
+      watch:
+        - path: ./articles-sync
+          ignore:
+            - logs/**
+          action: rebuild
+
+volumes:
+  articles_data:
+```
+
+其实关于 ignore realtive path 这个部分 docker compose watch 文档几乎没有解释，所以我创建了一个 PR 来说的更清楚的一些
+
+PR: [Update file-watch.md: add ignore attribute path by hanjie-chen · Pull Request #21820 · docker/docs](https://github.com/docker/docs/pull/21820)
 
 ## `compose watch` VS. `bind mounts`
 
@@ -145,7 +198,7 @@ develp:
 
 ## start watch
 
-我们可以使用下面的命令启用watch模式
+我们可以使用下面的命令启用 watch 模式
 
 ```shell
 docker compose up --watch
@@ -157,4 +210,4 @@ docker compose up --watch
 docker compose watch
 ```
 
-不过这个命令会比第一个命令少一些log
+不过这个命令会比第一个命令少一些 log
