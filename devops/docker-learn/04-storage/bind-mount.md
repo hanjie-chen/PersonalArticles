@@ -1,26 +1,46 @@
 # Bind Mount
 
-绑定挂载（Bind Mount）可以直接将主机的文件或目录挂载到容器中，可以在任何位置存储，适合开发环境
+**Bind Mount** 是 Docker 中的一种卷类型，它将主机文件系统中的一个目录或文件挂载到容器内的一个目录或文件。这意味着容器内指定路径下的内容与主机上的内容是 **同步的和共享的**。
+
+**双向同步**：绑定挂载是 **双向的**，即主机和容器对该路径的更改都会相互反映。
+
+- **主机到容器**：当您在主机上修改了挂载的目录或文件，这些更改会立即反映在容器内对应的路径上。
+- **容器到主机**：同样地，当您的容器内的应用程序对挂载的目录或文件进行了更改，这些更改也会立即反映在主机上的对应路径上。
+
+绑定挂载实际上是让主机和容器共享同一个文件系统位置。无论是主机还是容器，对该位置的操作都是对同一文件系统的操作。
 
 e.g.
 
 ```yaml
 services:
-  wordpress:
+  web-app:
+    ...
     volumes:
-      - ./themes:/var/www/html/wp-content/themes  # 绑定挂载
+      - articles_data:/articles-data:ro
+      # bind mount used to develop env, need to delete when product env
+      - ./web-app:/app
+    ...
+
+  articles-sync:
+    ...
+    volumes:
+      - articles_data:/articles-data:rw
+      # bind mount conainer logs folder, used to devlop env
+      - ./articles-sync/logs:/var/log/personal-website
+    ...
+
+volumes:
+  articles_data:
 ```
 
-语法格式为 `[host-path]:[container-path]`
+在 `compose.yml` 中，绑定挂载的语法是 `host_path:container_path[:permission_options]`
 
-`./themes`: 表示主机（你的电脑）上的路径
+`permission_option`
 
-- `.` 表示当前目录（docker-compose.yml 所在的目录）
-- `./themes` 就是当前目录下的 themes 文件夹
+- `:ro` 容器内挂载的路径将被设置为只读。容器内的应用程序无法对其进行写操作。
+- `:rw` 容器内挂载的路径可以读写。容器内的应用程序可以对其进行读写操作。`rw` 是默认选项，可以省略。
 
-`/var/www/html/wp-content/themes`: 容器内的路径
-
-# bind mount VS Docerfile `COPY` command
+# bind mount VS. Docerfile `COPY` command
 
 ```yaml
 services:

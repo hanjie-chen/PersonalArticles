@@ -133,6 +133,8 @@ develp:
   - `path` 主机项目路径
   - `target` container 路径
 
+  如果没有指定 target, 那么`sync` 动作将默认把主机上的 `path` 路径同步到容器内的相同路径
+
 ## `compose watch` VS. `bind mounts`
 
 我们可以使用 bind mount 来将一个 主机目录共享到 container 目录中去
@@ -155,4 +157,4 @@ docker compose up --watch
 docker compose watch
 ```
 
-不过这个命令会比第一个m'l
+不过这个命令会比第一个命令少一些log
