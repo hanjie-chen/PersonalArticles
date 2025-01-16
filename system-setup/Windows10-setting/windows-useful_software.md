@@ -40,7 +40,6 @@ BriefIntroduction:
 | Steam                        | 娱乐神器                                                     |
 | Windows terminal             | windows端优秀的终端工具，结合oh-my-posh以获得最佳体验        |
 | Fliqlo                       | 桌面屏幕保护程序                                             |
-| Monica                       | chatGPT集成工具，个人为付费用用户，使用起来比较方便。免费的可以使用[poe](poe.com)使用体验也不错 |
 | Mircosoft Todo List          | 设置每日任务                                                 |
 | Koodo Reader                 | windows开源阅读软件                                          |
 
@@ -112,7 +111,7 @@ BriefIntroduction:
 mklink "F:\anaconda3\python3.exe" "F:\anaconda3\python.exe"
 ```
 
-
+个人感觉这个而已经没有什么用了，自从使用了docker之后
 
 ## Windows Terminal优化
 

@@ -1,3 +1,20 @@
+---
+Title: docker compose.ymal 语法速查
+Author: 陈翰杰
+Instructor: o1-preview
+CoverImage: ./images/cover-image.png
+RolloutDate: 2025-01-16
+---
+
+```
+BriefIntroduction: 
+docker compose.ymal 语法详解
+```
+
+<!-- split -->
+
+![docker compose](./images/cover-image.png)
+
 # `compose.yml` 语法详解
 
 project
