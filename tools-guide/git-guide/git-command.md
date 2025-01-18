@@ -47,6 +47,14 @@ git config --global user.email "your.email@example.com"
 
 推送到 github 上面同步
 
+## `git pull`
+
+和git push对应的命令，就是 git pull, 这个命令从github remote repository上面拉取最新的仓库情况同步到本地仓库。
+
+比如说我在多台机器上面同时进行开发，在Azure VM上面，在本地机器上面，在Macbook Pro笔记本上面进行开发，如果在一台机器上git push了最新的情况，其他机器就需要git pull以保持最新的情况
+
+需要注意的是，在Git中,每个分支都有自己独立的提交历史。当你在一个分支上执行`git pull`命令时,只会更新当前所在的分支,其他分支不会受到影响。因此,如果你想让每个分支都保持最新状态,需要在每个分支上分别执行`git pull`命令。
+
 ## `git add + git commit`
 
 对于已被跟踪的文件: 如果这些文件只是进行了修改，而没有新文件需要添加，那么可以直接使用 `git commit -a -m "message"` 来提交这些更改。这个命令会自动将所有已被跟踪文件的修改提交，而不需要先手动 `git add` 它们。
