@@ -302,7 +302,7 @@ git push origin main
 git checkout <branch-name>
 ```
 
-### 完整操作示例
+### example
 
 ```bash
 # 1. 确保当前分支的修改已经提交
