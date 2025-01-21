@@ -82,6 +82,8 @@ emoji 表情支持 比如
 
 :peach:
 
+markdown emoji 大全 [Complete list of github markdown emoji markup](https://gist.github.com/rxaviers/7360908)
+
 # Part 3: Math formula support
 
 - `$$...$$` 是传统的 LaTeX 分隔符
