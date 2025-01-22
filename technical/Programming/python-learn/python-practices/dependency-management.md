@@ -1,3 +1,9 @@
+# Requirement.txt
+
+为了使得我们的python项目的存在可移植性，我们往往需要将我们使用了那些python包都列出来，甚至有时候我们需要将自己使用了python包的那个版本都要写清楚，防止只有我的环境可以运行的情况
+
+## freeze
+
 如果使用这个命令生成 requirements.txt
 
 ```bash
@@ -32,7 +38,7 @@ pip freeze > requirements.txt
 
 
 
-
+## pip-tools
 
 基于我的分析，我建议采用以下方法来生成有效的 requirements.txt：
 

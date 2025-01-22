@@ -71,7 +71,7 @@ docker start thirsty_hodgkin
 
 
 
-如果想要运行一个特定的 image, 比如要运行 Python 3.9-slim 镜像，我们可以这么做
+如果想要从已经存在的 images 中运行一个指定的 image, 比如要运行 Python 3.9-slim 镜像，我们可以这么做
 
 首先使用 `docker images` 查看所有的 image
 
@@ -109,7 +109,7 @@ hello-world                        latest     d2c94e258dcb   19 months ago   13.
 如果我们已经存在一个 container 正在运行，而我们想要进入正在运行的 Docker 容器的 bash 则可以使用如下命令
 
 ``` bash
-docker exec -it <container_id/container_name> bash
+docker exec -it <container_id/container_name> /bin/sh
 ```
 - `-i`: 保持 STDIN 开放
 - `-t`: 分配一个伪终端
