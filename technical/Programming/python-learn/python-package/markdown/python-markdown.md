@@ -72,15 +72,15 @@ html = markdown.markdown(text, extensions=[extra.makeExtension(), codehilite.mak
 | Extension         | Entry Point | Dot Notation | my usage           |
 | ----------------- | ----------- | ------------ | ------------------ |
 | Admonition        |             |              | :x:                |
-| CodeHilite        |             |              | :heavy_check_mark: |
+| CodeHilite        | codehilite  |              | :heavy_check_mark: |
 | Legacy Attributes |             |              | :x:                |
 | Legacy EM         |             |              | :x:                |
-| Meta-Data         |             |              | :x:                |
-| New-Line-to-Break |             |              | :x:                |
+| Meta-Data         | meta        |              | :x:                |
+| New-Line-to-Break | nl2br       |              | :x:                |
 | Sane Lists        | sane_lists  |              | :heavy_check_mark: |
-| SmartyPants       |             |              | :x:                |
-| Table of Contents |             |              | :x:                |
-| WikiLinks         |             |              | :x:                |
+| SmartyPants       | smarty      |              | :x:                |
+| Table of Contents | toc         |              | :x:                |
+| WikiLinks         | wikilinks   |              | :x:                |
 
 对于 Admonition 我一般使用 github markdown style 语法代替
 
