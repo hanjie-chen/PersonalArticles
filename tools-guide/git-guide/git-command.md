@@ -18,7 +18,9 @@ BriefIntroduction:
 
 # Title: Git 速查指南
 
-当在 github 上面新建完成一个仓库之后，github 会提示你如何进行下一步操作。而我们需要做的部分就是更新仓库，然后推送到 github 上面。
+当在 github 上面新建完成一个仓库之后，github 会提示你如何进行下一步操作。而我们需要做的部分就是根据仓库给出的提示，然后推送到 github 上面。
+
+![new repo](./images/new-repo.png)
 
 # Basic Command
 
