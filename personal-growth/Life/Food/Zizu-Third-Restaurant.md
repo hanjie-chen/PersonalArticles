@@ -156,3 +156,6 @@ jiuqi老师尝过之后不推荐：
 
 <img src="./images/windows-food.jpg" alt="windows-food" style="zoom:50%;" />
 
+炸小鸡腿，特别好吃，特别的入味，特别的新鲜，绝了
+
+<img src="./images/fry-drumsticks.jpg" alt="fry chicken drumsticks" style="zoom:50%;" />

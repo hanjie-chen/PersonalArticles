@@ -55,13 +55,25 @@ terraform 需要 azurerm provider 才能和 Azure 交互，使用 `terraform ini
 比如说在 `provider.tf` 中
 
 ```yaml
-# 声明使用 Azure Provider
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~>3.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~>3.0"
+    }
+  }
+}
+
 provider "azurerm" {
   features {}
 }
 ```
 
-
+参考 [Quickstart: Create an Azure resource group using Terraform | Microsoft Learn](https://learn.microsoft.com/en-us/azure/developer/terraform/create-resource-group?tabs=azure-cli)
 
 
 
