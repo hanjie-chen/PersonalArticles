@@ -17,7 +17,7 @@ resource "azurerm_resource_group" "main" {
 }
 ```
 
-这里，`"azurerm_resource_group"` 是资源类型，表示你要创建一个 Azure 的资源组。而 `"main"` 是 **本地资源名称**（Local Name），在 Terraform 的文档和语法中，这部分被称为 资源名称 或 逻辑名称。作用：
+这里，`"azurerm_resource_group"` 是资源类型，表示你要创建一个 Azure 的资源组。而 `"main"` 是 本地资源名称（Local Name），在 Terraform 的文档和语法中，这部分被称为 资源名称 或 逻辑名称。作用：
 
 - **标识资源实例：** 这个名称用于在 Terraform 配置中唯一标识这个资源实例，便于在其他地方引用。例如：
 

@@ -38,3 +38,5 @@
 关于 vm 的镜像问题，也得去问一下 [Find and use marketplace purchase plan information using the CLI - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage)
 
 似乎也没有看懂
+
+使用命令 `az vm image list --output table` 可以看到部分选择最多的 image, 如果想看
