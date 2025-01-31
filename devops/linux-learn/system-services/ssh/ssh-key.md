@@ -1,28 +1,5 @@
 # SSH 配置和使用笔记
 
-## SSH 配置文件
-
-SSH 配置文件通常位于用户主目录的 `.ssh` 文件夹中，文件名为 `config`。for example
-
-```
-Host github.com
-  IdentityFile ~/.ssh/github_key
-
-Host *
-  AddKeysToAgent yes
-```
-
-- `Host github.com`: 指定针对特定主机（这里是github.com）的设置。
-- `IdentityFile`: 指定连接到该主机时使用的SSH密钥文件。
-- `Host *`: 应用于所有主机的通用设置。
-- `AddKeysToAgent yes`: 当密钥首次被使用时，自动将其添加到SSH agent。
-
-### SSH配置文件的其他选项
-
-- `Hostname`: 指定要连接的实际主机名或IP地址。
-- `User`: 指定登录用户名。
-- `Port`: 指定SSH连接端口。
-
 ## SSH Agent
 
 SSH Agent 用于存储解密后的私钥，使得用户不需要每次使用密钥时都输入密码短语。
