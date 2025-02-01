@@ -1,6 +1,4 @@
-要判断 Ubuntu Server 是否开启了防火墙,可以使用以下几种方法:
-
-#### 1. 使用 ufw 命令查看防火墙状态
+#### 可以使用 ufw 命令查看 Ubuntu Server 防火墙状态
 
 Ubuntu 默认安装了 ufw (Uncomplicated Firewall) 防火墙。可以使用以下命令查看 ufw 防火墙的状态:
 
@@ -13,9 +11,8 @@ sudo ufw status
 e.g.
 
 ```shell
-Plain@Singapore-Linux-VM:/etc/ssh$ sudo ufw status
+Plain@Singapore-Linux-VM:~$ sudo ufw status
 Status: inactive
 ```
-
 
 
