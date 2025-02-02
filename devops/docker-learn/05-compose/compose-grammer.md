@@ -227,4 +227,11 @@ docker compose up --watch
 docker compose watch
 ```
 
-不过这个命令会比第一个命令少一些 log
+不过这条命令只输出文件监视相关的信息，不包含容器运行时的详细日志
+
+注意这些第一个命令的输出的本质其实还是 docker log, 所以当你意外的断开ssh 连接之后，可以使用下面的实时查看 docker log 的命令达到类似的效果
+
+```shell
+docker compose logs -f
+```
+
