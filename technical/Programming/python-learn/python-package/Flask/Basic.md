@@ -62,7 +62,7 @@ flask --app hello run
 
 # or
 
-python -m flask --app hello run
+5 python -m flask --app hello run
 ```
 
 > [!note]
