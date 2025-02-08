@@ -69,9 +69,9 @@ RUN pip install -r requirements.txt  # 安装项目依赖
 ## **EXPOSE**：声明端口
 
 ```Dockerfile
-EXPOSE 5000  # 声明容器将使用的端口
+EXPOSE 5000  # 声明 contianer 中将使用的端口
 ```
-- 这只是声明，实际运行时还需要通过 -p 参数映射端口
+仅仅作为声明，实际运行时还需要通过 -p 参数映射端口
 
 ## **CMD**：容器启动命令
 
@@ -158,18 +158,11 @@ COPY logrotate.conf /etc/logrotate.d/personal-website
 
 # `EXPOSE` 指令
 
-**EXPOSE 的作用**
+`EXPOSE` 指令实际上只是一个文档性质的声明，告诉其他人这个容器使用什么端口，实际并不会开放任何端口
 
-- `EXPOSE` 指令实际上只是一个文档性质的声明，告诉使用者这个容器内的应用程序会使用哪些端口
-- 它 **不会** 实际开放任何端口
-- 可以理解为它是一种 "元数据"，一种使用说明
+要使端口实际可访问，需要配合 `docker run -p` 或者在 `compose.yml` 中指定 `ports`
 
-**重要说明**
-
-- `EXPOSE` 并不会使端口在主机上可访问
-- 要使端口实际可访问，在运行容器时还需要使用 `-p` 或 `-P` 参数
-
-**实际例子**
+e.g.
 
 ```Dockerfile
 # Dockerfile
@@ -180,91 +173,17 @@ EXPOSE 5000
 CMD ["python", "app.py"]
 ```
 
-运行容器的不同方式：
+`docker run -p`
 
 ```bash
-# 方式1：不映射端口
+# 不映射端口
 docker run my-app
 # 结果：容器内的应用运行在5000端口，但从主机无法访问
 
-# 方式2：明确映射端口（常用）
+# 明确映射端口（常用）
 docker run -p 8080:5000 my-app
 # 结果：可以通过主机的8080端口访问容器的5000端口
-
-# 方式3：使用-P自动映射
-docker run -P my-app
-# 结果：Docker会自动将EXPOSE的端口映射到主机的随机高位端口
 ```
-
-4. **多端口示例**
-```Dockerfile
-# 可以EXPOSE多个端口
-EXPOSE 5000 80 443
-```
-
-5. **实际应用场景**
-
-假设你有一个 Flask 应用：
-```python
-from flask import Flask
-app = Flask(__name__)
-
-@app.route('/')
-def hello():
-    return "Hello, World!"
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-```
-
-对应的 Dockerfile：
-```Dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-EXPOSE 5000
-CMD ["python", "app.py"]
-```
-
-运行方式：
-```bash
-# 将容器的5000端口映射到主机的8080端口
-docker run -p 8080:5000 my-flask-app
-
-# 现在可以通过以下地址访问：
-# http://localhost:8080
-```
-
-6. **端口映射的不同方式**
-```bash
-# 映射到特定端口
-docker run -p 8080:5000 my-app  # 主机8080映射到容器5000
-
-# 映射到特定接口的特定端口
-docker run -p 127.0.0.1:8080:5000 my-app  # 只允许本地访问
-
-# 映射到随机端口
-docker run -P my-app  # 自动映射 EXPOSE 的端口到随机端口
-```
-
-7. **查看端口映射**
-``` bash
-# 查看容器的端口映射情况
-docker ps
-# 或
-docker port <container_id>
-```
-
-总结：
-- `EXPOSE` 是声明性的，告诉用户这个容器需要使用哪些端口
-- 实际的端口映射需要在 `docker run` 时通过 `-p` 或 `-P` 参数完成
-- 容器内的应用可以使用任何端口，不一定要是 `EXPOSE` 声明的端口
-- `EXPOSE` 主要用于：
-  - 文档目的（告诉其他人这个容器使用什么端口）
-  - 配合 `-P` 参数实现自动端口映射
-  - 在 Docker Compose 或其他容器编排工具中提供信息
 
 # `RUN` 指令
 

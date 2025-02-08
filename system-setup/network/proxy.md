@@ -543,16 +543,12 @@ curl --proxy http://127.0.0.1:8080 https://www.google.com
 
 - 在 PowerShell 中：
 
-  powershell
-
-  
-
   ```powershell
   $env:http_proxy = "http://127.0.0.1:8080"
   $env:https_proxy = "http://127.0.0.1:8080"
   curl https://www.google.com
   ```
-
+  
   > 注意：环境变量只在当前会话生效，如果你关掉终端还要重复设置。也可以在“系统环境变量”中永久添加。
 
 ### **方法 C**：使用 Proxifier 或类似工具
@@ -560,16 +556,7 @@ curl --proxy http://127.0.0.1:8080 https://www.google.com
 - **Proxifier**, **Proxycap** 等第三方代理管理软件，可以把所有 TCP/UDP 流量（或指定进程的流量）自动转发到代理，而无需每个程序都支持系统代理或环境变量。
 - 如果你想让几乎所有命令行工具、GUI 程序都强制走 Hysteria，可以考虑这类工具。
 
-------
 
-## 3. 关于 Bilibili 出现验证码页面
-
-从你的 `curl https://www.bilibili.com:443` 输出可见是一个验证码/风控页，这说明：
-
-- 你确实已走上了代理（或直接访问）成功抵达 Bilibili，但可能 Bilibili 检测到该 IP（或你的访问方式）存在风险，需要你输入验证码验证。
-- 这是 Bilibili 的常规防刷或安全策略，和 Hysteria 或系统代理不存在直接冲突。
-
-------
 
 ### **结论**
 

@@ -235,3 +235,18 @@ docker compose watch
 docker compose logs -f
 ```
 
+# `ports`
+
+docker documents: [Services top-level elements | Docker Docs](https://docs.docker.com/reference/compose-file/services/#ports)
+
+我们可能想要将 contianer 中进程暴露给 host machine 但是，这个时候我们就需要使用到 `ports` 字段
+
+grammer
+
+```yaml
+ports:
+  - "8080:5000"  # "<host-machine port>":"<container port>"
+```
+
+
+

@@ -86,30 +86,7 @@ body {
 }
 ```
 
-# css variable
-
-`:root` 是一个特殊的CSS伪类，它匹配文档的根元素（在HTML中就是`<html>`元素）。我们通常在这里定义全局CSS变量：
-
-```css
-:root {
-    --primary-color: #3b82f6;    /* 以--开头定义变量 */
-    --text-color: #DBDCE2;
-    --spacing-unit: 8px;
-    --max-width: 1200px;
-}
-```
-
-通过使用 `var()` 函数来引用这些变量：
-```css
-.my-element {
-    color: var(--text-color);
-    margin: var(--spacing-unit);
-    /* var()还可以提供后备值（fallback value） */
-    background-color: var(--bg-color, #ffffff);  /* 如果--bg-color未定义，将使用#ffffff */
-}
-```
-
-变量作用域：
+# css 优先级
 
 CSS优先级规则：CSS遵循"后来居上"的原则，相同优先级的样式，后面的会覆盖前面的
 
@@ -125,54 +102,6 @@ CSS优先级规则：CSS遵循"后来居上"的原则，相同优先级的样式
 
 .other-element {
     color: var(--color);  /* 蓝色，使用全局变量 */
-}
-```
-
-修改变量
-
-```css
-/* 可以通过媒体查询改变变量值 */
-:root {
-    --sidebar-width: 300px;
-}
-
-@media screen and (max-width: 768px) {
-    :root {
-        --sidebar-width: 200px;
-    }
-}
-```
-
-**JavaScript交互**
-
-```javascript
-// 获取CSS变量值
-getComputedStyle(document.documentElement)
-    .getPropertyValue('--primary-color');
-
-// 设置CSS变量值
-document.documentElement.style
-    .setProperty('--primary-color', '#ff0000');
-```
-
-实际应用示例 - 主题切换
-
-```css
-/* 浅色主题 */
-:root {
-    --bg-color: #ffffff;
-    --text-color: #333333;
-}
-
-/* 深色主题 */
-:root[data-theme="dark"] {
-    --bg-color: #1a1a1a;
-    --text-color: #ffffff;
-}
-
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
 }
 ```
 
@@ -259,17 +188,7 @@ height: 2px;
 - `height: 2px` 定义下划线的粗细
 - 当鼠标悬停时，宽度会变化到 100%
 
-### 4. 下划线样式
-```css
-background-color: var(--accent-color);
-```
-- 使用 CSS 变量定义颜色
-- `--accent-color` 需要在其他地方定义，如：
-```css
-:root {
-    --accent-color: #007bff;  /* 示例：蓝色 */
-}
-```
+
 
 ### 5. 动画设置
 ```css

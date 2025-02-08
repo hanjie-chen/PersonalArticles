@@ -1,7 +1,7 @@
 ---
 Title: Python Makrdown 使用指南
 Author: 陈翰杰
-Instructor:
+Instructor: o1
 CoverImage:
 RolloutDate:
 ---
@@ -38,6 +38,14 @@ markdown.markdown(text, extensions=['extra', 'meta', MyExtensionClass()])
 ### text
 
 raw makrdown string 这个参数需要 [unicode string](ersonalArticles/technical/Programming/python-learn/python-language/Python_Basic/unicode.md)
+
+### extensions
+
+可以使用official extensions, third party extensions 和 自己写的extensions
+
+> [!note]
+>
+> 
 
 # official extensions
 
@@ -117,6 +125,10 @@ WikiLink 有用，但是我的 Typora 不支持， 所以实际上也没用
 # Third party extension
 
 
+
+# Self-defined extension
+
+除了官方和第三方的 extension, 我们还可以自己写 extesion
 
 # Reference
 
