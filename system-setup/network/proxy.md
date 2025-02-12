@@ -1,4 +1,4 @@
-reference: [安装 - Hysteria 2](https://v2.hysteria.network/zh/docs/getting-started/Installation/)
+*reference*: [安装 - Hysteria 2](https://v2.hysteria.network/zh/docs/getting-started/Installation/)
 
 [搭建自己的代理服务器 | 桶装幺蛾子](https://hi.bug-barrel.top/posts/4f6adc86c6/)
 
