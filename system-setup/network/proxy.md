@@ -88,20 +88,12 @@ auth:
   ss -tlnp
   ```
   
-  只会列出
-
-   
-
-  TCP
-
-   
-
-  监听端口（
+  只会列出 TCP 监听端口（
 
   ```
   -t
   ```
-  
+
    
 
   代表 TCP）。因此你在列表里找不到 443 端口很正常。
@@ -161,22 +153,12 @@ SOCKS5 server listening {"addr": "127.0.0.1:1080"}
 
 ### 3. 手动设置代理 (HTTP)
 
-如果你想使用 **HTTP 代理** 方式，即将所有 TCP 流量通过 HTTP Proxy 转发，可以在 **手动代理设置** 里进行：
+如果你想使用 HTTP 代理 方式，即将所有 TCP 流量通过 HTTP Proxy 转发，可以在 手动代理设置 里进行：
 
-1. 在 **“使用代理服务器 (Use a proxy server)”** 处点击**“开 (On)”**
-2. **服务器 (Address)** 填写： `127.0.0.1`
-3. **端口 (Port)** 填写： `8080`
-4. 点击 **“保存 (Save)”** 确认。
-
-> **提示**：这样做之后，系统会将大部分 TCP HTTP/HTTPS 请求自动指向此代理端口。但对于某些不兼容 HTTP 代理协议的程序，可能会无法正确识别。
-
-
-
-
-
-下面帮你分析为什么 **浏览器** 在开启系统代理后能正常访问 Google，而在 **Windows 终端** 下使用 `curl` 却无法通过代理访问：
-
-
+1. 在 “使用代理服务器 (Use a proxy server)” 处点击“开 (On)”
+2. 服务器 (Address) 填写： `127.0.0.1`
+3. 端口 (Port) 填写： `8080`
+4. 点击 “保存 (Save)” 确认。
 
 ## Windows “系统代理” 并不一定对所有程序生效
 
@@ -184,94 +166,101 @@ SOCKS5 server listening {"addr": "127.0.0.1:1080"}
 - **然而**，像 `curl` 这样的命令行工具，往往**并不**默认读取 Windows GUI 层的系统代理设置；它更常使用环境变量 `HTTP_PROXY` / `HTTPS_PROXY`，或者`--proxy` 命令行参数。
 - 结果就是，浏览器能正常走代理访问 Google，但 `curl` 并没有自动套用代理设置，依旧在 **直接访问** Google （所以被 GFW 或网络屏蔽，导致超时无法连接）。
 
-------
-
-## 2. 解决方案
-
-### **方法 A**：在 `curl` 命令行中添加 `--proxy`
-
-让 `curl` 强制走代理，可以加上：
-
-javascript
 
 
 
-```javascript
-curl --proxy http://127.0.0.1:8080 https://www.google.com
-```
-
-> 如果你启用的 **SOCKS5** 代理，则使用：
->
-> javascript
->
-> 
->
-> ```javascript
-> curl --socks5 127.0.0.1:1080 https://www.google.com
-> ```
-
-### **方法 B**：设置环境变量 `http_proxy`、`https_proxy`
-
-- 在 Windows
-
-   
-
-  ```
-  cmd
-  ```
-
-   
-
-  中可执行：
-
-  javascript
-
-  
-
-  ```javascript
-  set http_proxy=http://127.0.0.1:8080
-  set https_proxy=http://127.0.0.1:8080
-  ```
-
-  然后
-
-   
-
-  ```
-  curl https://www.google.com
-  ```
-
-   
-
-  就会自动依赖这些变量去走代理。
-
-- 在 PowerShell 中：
-
-  ```powershell
-  $env:http_proxy = "http://127.0.0.1:8080"
-  $env:https_proxy = "http://127.0.0.1:8080"
-  curl https://www.google.com
-  ```
-  
-  > 注意：环境变量只在当前会话生效，如果你关掉终端还要重复设置。也可以在“系统环境变量”中永久添加。
-
-### **方法 C**：使用 Proxifier 或类似工具
-
-- **Proxifier**, **Proxycap** 等第三方代理管理软件，可以把所有 TCP/UDP 流量（或指定进程的流量）自动转发到代理，而无需每个程序都支持系统代理或环境变量。
-- 如果你想让几乎所有命令行工具、GUI 程序都强制走 Hysteria，可以考虑这类工具。
-
-
-
-### **结论**
-
-1. **浏览器能访问**，是因为它自动遵循了你在 Windows 系统代理中设置的 `127.0.0.1:8080`。
-2. **`curl` 无法访问**，是因为它并**没有**自动使用系统代理，需要手动指定。
-3. **解决办法**：在 `curl` 中显式加 `--proxy http://127.0.0.1:8080`，或设置 `http_proxy/https_proxy` 环境变量。
-
-这样，你就在终端里也能通过 Hysteria 代理成功访问外网（包括 Google）。如果还有疑问，欢迎再来交流！
 
 
 
 # 某些软件 proxy 设置
 
 steam 可以设置代理，但是需要进入大屏幕状态，才能在设置中看到网络设置
+
+
+
+# Ubuntu Linux 全局代理
+
+通过在 Ubuntu 上安装并配置 **redsocks**，再利用 **iptables** 将所有出站的 TCP 流量重定向到 redsocks 监听的端口，由 redsocks 将它们转发到目标代理服务器（HTTP 或 SOCKS5）。这种方式能较好地实现“本机全部流量”走代理，但要谨慎设置白名单，避免把 SSH 等重要流量也一并重定向
+
+下面给出一个基于当前 Hysteria2 客户端（提供 SOCKS5 代理在 127.0.0.1:1080）的示例配置，帮助你通过 redsocks + iptables 将全局的 TCP 流量重定向到 Hysteria2 的代理接口，从而实现全局代理。
+
+## 安装 redsocks
+
+如果尚未安装，请执行以下命令更新软件仓库并安装 redsocks：
+
+```bash
+sudo apt-get update
+sudo apt-get install redsocks
+```
+
+
+
+## 配置 redsocks
+
+编辑 `/etc/redsocks.conf` 文件（如果文件不存在，可创建一个），内容示例如下：
+
+```cpp
+base {
+    log_debug = off;
+    log_info = on;
+    daemon = on;             # 以守护进程方式运行
+    redirector = iptables;   # 使用 iptables 重定向流量
+}
+
+redsocks {
+    local_ip = 127.0.0.1;      # redsocks 本地监听地址
+    local_port = 12345;        # redsocks 监听的端口（可以自定义，如 12345）
+    ip = 127.0.0.1;            # Hysteria2 客户端的代理地址（SOCKS5）
+    port = 1080;               # Hysteria2 提供的 SOCKS5 代理端口
+    type = socks5;             # 使用 socks5 协议
+    // login = "your_username";   # 如代理需要认证，则开启并填写
+    // password = "your_password";
+}
+```
+
+保存好文件后，你可以先用调试模式启动测试，再使用守护进程模式运行：
+
+bash
+
+
+
+```bash
+sudo redsocks -c /etc/redsocks.conf -p /var/run/redsocks.pid
+```
+
+------
+
+#### 3. 配置 iptables 规则
+
+下面的 iptables 规则将所有出站的 TCP 流量（除去局域网、回环地址等）重定向到 redsocks 本地监听端口（本例中为 12345）：
+
+
+
+
+
+```bash
+# 新建 redsocks 链
+sudo iptables -t nat -N REDSOCKS
+
+# 排除局部地址，防止重定向本地连接（包括 SSH、内网通信等）
+sudo iptables -t nat -A REDSOCKS -d 0.0.0.0/8 -j RETURN
+sudo iptables -t nat -A REDSOCKS -d 10.0.0.0/8 -j RETURN
+sudo iptables -t nat -A REDSOCKS -d 127.0.0.0/8 -j RETURN
+sudo iptables -t nat -A REDSOCKS -d 169.254.0.0/16 -j RETURN
+sudo iptables -t nat -A REDSOCKS -d 172.16.0.0/12 -j RETURN
+sudo iptables -t nat -A REDSOCKS -d 192.168.0.0/16 -j RETURN
+sudo iptables -t nat -A REDSOCKS -d 224.0.0.0/4 -j RETURN
+sudo iptables -t nat -A REDSOCKS -d 240.0.0.0/4 -j RETURN
+
+# 将所有经过的 TCP 流量重定向到 redsocks 的 12345 端口
+sudo iptables -t nat -A REDSOCKS -p tcp -j REDIRECT --to-ports 12345
+
+# 对本机的 OUTPUT 链中所有 TCP 流量应用重定向规则
+sudo iptables -t nat -A OUTPUT -p tcp -j REDSOCKS
+```
+
+
+
+## 结果
+
+失败，对于普通的 tcp 流量正常，但是对于 https 流量则存在问题，TLS 握手会失败

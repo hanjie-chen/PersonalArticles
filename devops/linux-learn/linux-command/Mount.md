@@ -96,15 +96,11 @@ sudo mount --bind /source /destination
 
 # Practice
 
-目的：Linux server 实时访问 Windows 文件
+使用 mount 命令实现 Linux host 命令行实时访问 Windows host 文件夹
 
-方法：在 Linux 和 Windows 之间共享文件
-
-> ![note]
+> [!note]
 >
-> 这里的linux server 和Windows在网络可以互通，而且网络环境稳定
-
-## 实现步骤
+> 这里的linux host 和 windows host 在网络可以互通，而且网络环境稳定
 
 首先在 Windows 10 上：
 

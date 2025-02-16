@@ -40,3 +40,8 @@ Host company-server
   IdentityFile ~/.ssh/work_key    # 公司服务器密钥
 ```
 
+
+
+> [!important]
+>
+> 注意 ssh config 不支持直接配置密码
