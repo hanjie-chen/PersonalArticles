@@ -1,8 +1,8 @@
+
+
 对于某些想要自定义的情况，我们需要写自己的插件。这篇文档讲了如何写自己的插件： [Extension API — Python-Markdown 3.7 documentation](https://python-markdown.github.io/extensions/api/)
 
 例如，想要实现 GFM admonition 的话，可以参考这个 [dahlia/markdown-gfm-admonition: An extension of Python Markdown that enables the admonition syntax of GFM](https://github.com/dahlia/markdown-gfm-admonition)
-
-
 
 e.g.
 

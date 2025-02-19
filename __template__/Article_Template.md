@@ -78,9 +78,15 @@ emoji 表情支持 比如
 
 ```emoji
 :peach:
+:x:
+:heavy_check_mark:
 ```
 
 :peach:
+
+:x:
+
+:heavy_check_mark:
 
 markdown emoji 大全 [Complete list of github markdown emoji markup](https://gist.github.com/rxaviers/7360908)
 
@@ -112,7 +118,21 @@ w_{(n-1)0}^{hidden} & w_{(n-1)1}^{hidden} & \cdots & w_{(n-1)(m-1)}^{hidden}
 - 行内公式：`$...$`
 - 块级公式：```` math ````
 
-不过这个块级公式似乎显示有点小，打算在 css 中调整一下
+不过这个块级公式似乎显示有点小，打算在 Typora css 中调整一下
+$$
+\begin{bmatrix}
+Bias^{hidden}_{1\times m}\\
+Weights^{hidden}_{n\times m}
+\end{bmatrix}_{(n+1)\times m}=
+\begin{bmatrix}
+b_0^{hidden} & b_1^{hidden} & \cdots & b_{m-1}^{hidden} \\
+w_{00}^{hidden} & w_{01}^{hidden} & \cdots & w_{0(m-1)}^{hidden} \\
+w_{10}^{hidden} & w_{11}^{hidden} & \cdots & w_{1(m-1)}^{hidden} \\
+\vdots & \vdots & \ddots & \vdots \\
+w_{(n-1)0}^{hidden} & w_{(n-1)1}^{hidden} & \cdots & w_{(n-1)(m-1)}^{hidden}
+\end{bmatrix}_{(n+1)\times m}
+$$
+
 
 # Appendix
 

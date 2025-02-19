@@ -27,36 +27,7 @@ B. Python-Markdown2
 - 性能相对较低
 - 文档更新不够及时
 
-## 复杂语法支持对比
 
-Python-Markdown:
-```python
-# 数学公式支持
-from markdown.extensions.math import MathExtension
-# 表格支持
-from markdown.extensions.tables import TableExtension
-# 代码块支持
-from markdown.extensions.fenced_code import FencedCodeExtension
-
-md = markdown.Markdown(extensions=[
-    'markdown.extensions.math',
-    'markdown.extensions.tables',
-    'markdown.extensions.fenced_code',
-    'markdown.extensions.codehilite'
-])
-```
-
-Python-Markdown2:
-```python
-import markdown2
-
-# 使用extras参数启用扩展功能
-markdown2.markdown(text, extras=[
-    "fenced-code-blocks",
-    "tables",
-    "code-friendly"
-])
-```
 
 ## Flask集成建议
 
@@ -204,12 +175,3 @@ def blog_post(post_id):
         app.logger.error(f"Error rendering post {post_id}: {str(e)}")
         return "Error rendering post", 500
 ```
-
-这个实现包含了：
-- 性能优化（缓存）
-- 安全性处理（bleach）
-- 错误处理
-- 文件路径安全检查
-- 日志记录
-
-总的来说，Python-Markdown是您的项目最佳选择，它能够满足您当前的所有需求，并为未来的扩展提供良好的支持。建议从基础配置开始，随着需求的增长逐步添加更多功能。
