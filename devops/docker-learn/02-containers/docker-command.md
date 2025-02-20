@@ -1,4 +1,4 @@
-# docker command
+# run image
 
 我们可以使用 `docker run` 命令来将一个 image 启动为一个 container
 
@@ -105,6 +105,8 @@ hello-world                        latest     d2c94e258dcb   19 months ago   13.
 一般来说我们使用第一种 `REPOSITORY:TAG` 的方式，因为这样更加清晰明了，而且镜像 ID 可能会随着镜像更新而改变。标签则会保持稳定，更容易维护和理解。
 
  
+
+# interact running container
 
 如果我们已经存在一个 container 正在运行，而我们想要进入正在运行的 Docker 容器的 bash 则可以使用如下命令
 
