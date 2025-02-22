@@ -84,6 +84,28 @@ from custom_md_extensions._gfm_admonition_extension import Gfm_Admonition_Extens
 
 # 关于隐藏模块名称
 
-你的理解基本没错。加上下划线（例如将文件名改为 **_gfm_admonition_extension.py**）是一种约定俗成的做法，用来表示该模块是私有的，不推荐直接导入使用。大多数 IDE（包括 VSCode）在自动补全时会优先展示公开的 API（也就是 **init**.py 中导出的名称），从而减少干扰。
+会出现一个问题，那就是会同时显示 class 名称和模块名称
 
 ![module name](./images/module-name.png)
+
+这样子容易造成混淆，解决方案是：
+
+加上下划线（例如将文件名改为 **_gfm_admonition_extension.py**）是一种约定俗成的做法，用来表示该模块是私有的，不推荐直接导入使用。大多数 IDE（包括 VSCode）在自动补全时会优先展示公开的 API（也就是 **init**.py 中导出的名称），从而减少干扰。
+
+## 模块名称
+
+Python 中，每个 `.py` 文件都会被视为一个模块，而模块的默认名称就是该文件的名称（去掉 `.py` 后缀）。例如，文件 `gfm_admonition_extension.py` 的模块名称就是 `gfm_admonition_extension`。
+
+不过需要注意以下几点：
+
+- 包中的模块命名：如果模块位于一个包中，那么完整的模块名称通常会包括包名。例如，如果包名为 `custom_md_extensions`，则模块的完整名称是 `custom_md_extensions.gfm_admonition_extension`。这意味着在导入时可以用绝对导入的方式：
+
+  ```python
+  from custom_md_extensions.gfm_admonition_extension import Gfm_Admonition_Extension
+  ```
+
+- init.py 的特殊性：包中的 `__init__.py` 文件并不直接以 `__init__` 作为模块名称，而是用来初始化包本身。换句话说，包的名称就等于文件夹名称，`__init__.py` 中的内容会直接构成包的命名空间。
+
+- 命名约定：如果你希望某些模块仅用于包的内部实现，而不希望用户直接引用，可以在文件名前加下划线（例如 `_gfm_admonition_extension.py`）。这是一种约定俗成的做法，表明该模块是私有的，同时大多数 IDE（如 VSCode）在自动补全时会优先展示公开的接口。
+
+总的来说，模块名称默认确实就是包里对应的文件名（去掉 `.py`），但在实际使用中你需要考虑包的层次结构以及如何更好地隐藏内部实现。
