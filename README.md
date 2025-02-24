@@ -6,7 +6,11 @@
 
 # file organize
 
-然后再说一说文件组织形式，其中 assets 文件夹是我存放各种 resource 的地方，比如说 images 资源或者其他的一些配置文件等
+然后再说一说文件组织形式
+
+一般来说都是 `.md` 文章目录下配置一个 `images` 文件夹用于存放图片
+
+少数几个会有 `assets` 文件夹，其中包含 `images` `config` 等各种 resource
 
 # Special directory
 
