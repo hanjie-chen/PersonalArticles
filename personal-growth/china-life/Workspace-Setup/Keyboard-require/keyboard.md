@@ -53,3 +53,11 @@ BriefIntroduction:
 F12保留为浏览器打开develper tool
 
 考虑音乐的previous, next, pause
+
+
+
+# 修改键盘映射工具
+
+使用 SharpKeys 进行永久修改
+
+官方 GitHub：https://github.com/randyrants/sharpkeys
