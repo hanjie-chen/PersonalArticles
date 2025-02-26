@@ -47,7 +47,24 @@ git config --global user.email "your.email@example.com"
 
 ## `git push`
 
-推送到 github 上面同步
+将本地内容推送到 github 上面同步
+
+
+
+### new branch push
+
+如果是新建了一个分支（远程仓库上也没有这个分支），并且是第一次推送这个分支到远程仓库，需要带上参数
+
+```shell
+git push -u origin <branch_name>
+```
+
+这种情况下如果不带参数直接 git push 那么通常会失败，这是因为 Git 不知道你要怎么处理远程分支：
+
+- 本地分支刚刚创建，没有对应的远程同名分支
+- Git 不清楚应将此本地分支关联到哪个远程分支
+
+之后的推送，就可以简单地用 `git push` 就行。
 
 ## `git pull`
 
@@ -55,7 +72,7 @@ git config --global user.email "your.email@example.com"
 
 比如说我在多台机器上面同时进行开发，在Azure VM上面，在本地机器上面，在Macbook Pro笔记本上面进行开发，如果在一台机器上git push了最新的情况，其他机器就需要git pull以保持最新的情况
 
-需要注意的是，在Git中,每个分支都有自己独立的提交历史。当你在一个分支上执行`git pull`命令时,只会更新当前所在的分支,其他分支不会受到影响。因此,如果你想让每个分支都保持最新状态,需要在每个分支上分别执行`git pull`命令。
+需要注意的是，在Git中,每个分支都有自己独立的提交历史。当你在一个分支上执行 `git pull` 命令时,只会更新当前所在的分支,其他分支不会受到影响。因此,如果你想让每个分支都保持最新状态,需要在每个分支上分别执行 `git pull` 命令。
 
 ## `git add + git commit`
 
@@ -81,13 +98,11 @@ git add . && git commit -m "message"
 git checkout -b <branch-name>
 ```
 
-e.g.
+或者，你已经做了一大堆修改了，但是意识到你需要对这些修改新开一个分支，幸运的是你还没有对修改进行 `git add` 这个时候同样也可以使用这个命令，而这些未提交的修改跟随工作目录一起切换到新分支
 
-```shell
-git checkout -b backend-development
-```
 
-## `git check` 命令详解
+
+## `git checkout` 命令详解
 
 `git checkout` 这是 Git 的一个子命令, 通常用于切换分支
 

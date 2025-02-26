@@ -1,3 +1,5 @@
+# VM OS disk setting
+
 当我们使用 terraform 创建一台 vm 的时候，会发现 `os_disk` block 是必须要选择的，实际上对对应的就是 Azure portal 创建 virutal machine 界面的 disk 部分
 
 ![vm disk](./images/vm-disk.png)
@@ -6,11 +8,21 @@
 
 这个 os_disk block 存在2个必选项 `caching` `storage_account_type`
 
-# caching
+## caching
 
-其中`caching`对应这篇vm的文章，但是我没有看明白，得去问下 vm 组的人 [Virtual machine and disk performance - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-performance)
+关于 `caching` 在 Azure portal 上面指的是 Host caching
 
-# storage account type
+![caching](./images/caching.jpeg)
+
+似乎在创建 Azure VM 的时候系统盘无法指定，但是data disk可以指定
+
+![create-vm-disk-caching](./images/create-vm-disk-caching.jpeg)
+
+应该和这篇文档有关 [Azure premium storage: Design for high performance - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/premium-storage-performance#disk-caching)
+
+关于Azure VM Disk的具体内容可以查看这篇[文档](../native/virtual-machine/virtual-machine.md)
+
+## storage account type
 
 而关于 `stroage_account_type` 部分实际上就是 OS disk type
 
@@ -29,7 +41,7 @@
 - **Linux 虚拟机：** 30 GB
 - **Windows 虚拟机：** 127 GB
 
-但是实际上感觉也够用了对于 Linux 的话
+但是实际上感觉默认的也够用了对于 Linux 和 Windows 的话
 
 
 
@@ -40,3 +52,15 @@
 似乎也没有看懂
 
 使用命令 `az vm image list --output table` 可以看到部分选择最多的 image, 如果想看
+
+
+
+# VM size
+
+可以看这篇[文档](../native/virtual-machine/virtual-machine.md)
+
+
+
+# Windows virtual machine
+
+[azurerm_windows_virtual_machine | Resources | hashicorp/azurerm | Terraform | Terraform Registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine)
