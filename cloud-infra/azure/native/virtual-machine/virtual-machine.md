@@ -91,7 +91,7 @@ VM 本地资源：
 
 [Dsv3 size series - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/general-purpose/dsv3-series?tabs=sizestoragelocal#sizes-in-series)
 
-![ms document](./images/local-storage-ms-document.jpeg)
+<img src="./images/local-storage-ms-document.jpeg" alt="ms document" style="zoom:75%;" />
 
 或者直接进入 virtual machine 确认，以 windows vm 为例
 
@@ -111,44 +111,18 @@ Blob 存储：
 
 [Azure premium storage: Design for high performance - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/premium-storage-performance#disk-caching) 在这个文档中倒是详细讲了每一个选项
 
-### 5. 你的配置里有哪些存储？
-以你的例子为例：
-```hcl
-os_disk {
-  caching              = "ReadWrite"
-  storage_account_type = "StandardSSD_LRS"
-}
-```
-- **StandardSSD_LRS**：这是一个托管磁盘，背后是 Blob 存储中的一个 VHD 文件，类型是标准 SSD（比 HDD 快，但比 Premium SSD 便宜）。
-- **内存**：由 `vm_size` 决定，用于运行 VM 和缓存。
-- **本地 SSD**：如果你的 `vm_size` 包含临时磁盘（比如 D 系列），缓存可能会用它；否则只用内存。
+一句话总结3者的区别
 
-你没看到 Blob 存储，是因为它是托管磁盘的一部分，Azure 自动管理了。
+**ReadOnly**：缓存只加速读，不管写。
 
----
+**ReadWrite**：缓存加速读和写。
 
-### 6. 为什么用 Blob 存储，而不是直接用本地 SSD？
-你可能会想：既然有 SSD，为什么不直接把数据存在 VM 本地 SSD 上？原因如下：
-- **持久性**：本地 SSD 是临时的，VM 关机或迁移到其他主机时数据会丢失。Blob 存储提供持久化，即使 VM 销毁，磁盘数据依然保留。
-- **灵活性**：Blob 存储支持快照、备份和跨区域复制，适合云环境。
-- **可扩展性**：Blob 存储是分布式系统，可以动态扩展，而本地 SSD 受限于物理硬件。
+**None**：不用缓存，慢但稳。
 
-在 Azure 中，本地 SSD（如果有）通常只用作临时存储（比如 `temp disk`）或缓存，而持久化数据必须依赖 Blob 存储。
-
----
-
-### 7. 澄清你的疑惑
-你说“SSD 似乎没有额外的 Blob 存储”，其实 SSD 和 Blob 存储不是对立的：
-- **SSD** 是指磁盘的性能级别（Standard SSD 或 Premium SSD），决定了读写速度和 IOPS。
-- **Blob 存储** 是数据的实际存储位置，SSD 的性能是通过 Blob 存储的底层硬件实现的。
-
-在你的配置中，`StandardSSD_LRS` 是一个托管磁盘，它的物理实现依赖 Blob 存储，但 Azure 通过优化（比如更快的存储硬件和网络）让它表现得像一个 SSD。
-
----
-
-### 总结
-- 你的 VM 磁盘（`StandardSSD_LRS`）实际上存储在 Azure Blob 存储中，表现为一个 VHD 文件。
-- 你没显式定义 Blob 存储，是因为用的是托管磁盘，Azure 自动处理了。
-- 缓存（`caching`）利用 VM 本地资源（内存或 SSD）加速对 Blob 存储的访问，优化性能。
-
-希望这解释清楚了 Blob 存储的角色！如果还有其他疑问，比如想确认你的 `vm_size` 是否有本地 SSD，或者如何优化配置，随时问我吧！
+> [!note]
+>
+> os disk 不支持 none
+>
+> [Azure premium storage: Design for high performance - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/premium-storage-performance#disk-caching)
+>
+> > Currently, **None** is only supported on data disks. It isn't supported on OS disks. If you set **None** on an OS disk, it overrides this setting internally and sets it to **ReadOnly**.

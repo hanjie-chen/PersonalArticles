@@ -1,3 +1,20 @@
+---
+Title: Terraform Azure VM 创建指南
+Author: 陈翰杰
+Instructor: grok3, chatGPt-4o
+CoverImage: ./images/cover-image.png
+RolloutDate: 2025-02-27
+---
+
+```
+BriefIntroduction: 
+这里讲了使用 terraform 创建 Azure virutal machine的一些细节
+```
+
+<!-- split -->
+
+![cover image](./images/cover-image.png)
+
 # VM OS disk setting
 
 当我们使用 terraform 创建一台 vm 的时候，会发现 `os_disk` block 是必须要选择的，实际上对对应的就是 Azure portal 创建 virutal machine 界面的 disk 部分
@@ -14,13 +31,17 @@
 
 ![caching](./images/caching.jpeg)
 
-似乎在创建 Azure VM 的时候系统盘无法指定，但是data disk可以指定
+在 Portal 创建 Azure VM 的时候系统盘无法指定，但是 data disk可以指定
 
 ![create-vm-disk-caching](./images/create-vm-disk-caching.jpeg)
 
-应该和这篇文档有关 [Azure premium storage: Design for high performance - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/premium-storage-performance#disk-caching)
-
 关于Azure VM Disk的具体内容可以查看这篇[文档](../native/virtual-machine/virtual-machine.md)
+
+用一句话总结3个option的区别：
+
+- **ReadOnly**：缓存只加速读，不管写。
+- **ReadWrite**：缓存加速读和写，但有风险。
+- **None**：不用缓存，慢但稳。
 
 ## storage account type
 
@@ -47,13 +68,65 @@
 
 # Vm image
 
-关于 vm 的镜像问题，也得去问一下 [Find and use marketplace purchase plan information using the CLI - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage)
+在 Azure terraform 中 image 的确认由4个属性构成
 
-似乎也没有看懂
+```
+source_image_reference {
+    publisher = "Canonical"
+    offer = "ubuntu-24_04-lts"
+    sku = "server"
+    version = "latest"
+ }
+```
 
-使用命令 `az vm image list --output table` 可以看到部分选择最多的 image, 如果想看
+为了得到这里4个属性，可以使用命令 `az vm image list --output table` 可以看到部分选择最多的 image
 
+[Find and use marketplace purchase plan information using the CLI - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage)
 
+![image list](./images/image-list-less.png)
+
+如果想看全部的 image 的话需要加上 `--all` 参数
+
+```shell
+az vm image list --all
+```
+
+但是这个命令会运行很久很久，这个时间根本就不是正常人可以等的
+
+可以去到这个 [Azure VM Image List](https://az-vm-image.info/) 上面查看所有的 image 本质上还是去运行这个命令，但是它会快上很多
+
+有一个反向的方法，可以从已经创建的 Azure VM 中提取到这些信息
+
+使用 az 命令
+
+```
+az vm show --resource-group <rg-name> --name <VM-name> --query "storageProfile.imageReference"
+```
+
+output like
+
+```
+{
+    "communityGalleryImageId": null,
+    "exactVersion": "19045.4529.240607",
+    "id": null,
+    "offer": "Windows-10",
+    "publisher": "MicrosoftWindowsDesktop",
+    "sharedGalleryImageId": null,
+    "sku": "win10-22h2-pro-g2",
+    "version": "latest"
+  }
+```
+
+可以从中提取到这些信息
+
+## MarketPlace
+
+可以到到 Azure marketplace 稍微可以看到一些信息，比如说 publisher ID, product ID 这 2 个小大写可能对不上
+
+![marketplace image info](./images/marketplace-image.png)
+
+不过可以将某些关键字放在 [Azure VM Image List](https://az-vm-image.info/) 网站进行搜索，在结合一下 grok3
 
 # VM size
 
