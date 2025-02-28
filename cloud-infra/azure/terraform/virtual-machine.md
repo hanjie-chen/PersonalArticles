@@ -128,6 +128,16 @@ output like
 
 不过可以将某些关键字放在 [Azure VM Image List](https://az-vm-image.info/) 网站进行搜索，在结合一下 grok3
 
+## Arm template
+
+我们不必把这个 vm 真正的创建出来，仅仅设定到 review 界面，就可以看到右下角存在 `Downlaod a template for automation` 点击进入
+
+![arm-template](./images/arm-template.png)
+
+来到这个界面，直接 ctrl + F 查找 `imagereference` 就能看到
+
+![arm tempalte image reference](./images/arm-image-reference.png)
+
 # VM size
 
 可以看这篇[文档](../native/virtual-machine/virtual-machine.md)
@@ -137,3 +147,14 @@ output like
 # Windows virtual machine
 
 [azurerm_windows_virtual_machine | Resources | hashicorp/azurerm | Terraform | Terraform Registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine)
+
+关于 widnows vm 还有一个需要注意的地方，那就是 `compute_name` 如果你不主动设定，那么就会默认使用 `name` 中提供的值
+
+> [`computer_name`](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine#computer_name-1) - (Optional) Specifies the Hostname which should be used for this Virtual Machine. If unspecified this defaults to the value for the `name` field. If the value of the `name` field is not a valid `computer_name`, then you must specify `computer_name`. Changing this forces a new resource to be created.
+
+但是由于 Windows 对计算机名称（NetBIOS 名称）有 15 字符的限制，这是 Windows 操作系统的历史遗留规范（源于 NetBIOS 和早期 Windows 网络协议）所以，如果你不配置 `compute_name` 并且你的 `name` 超过了15个字符，那么就会存在如下报错
+
+```shell
+│ Error: unable to assume default computer name "computer_name" can be at most 15 characters, got 20. Please adjust the "name", or specify an explicit "computer_name"
+```
+
