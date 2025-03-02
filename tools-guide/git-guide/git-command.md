@@ -170,9 +170,62 @@ branch 'backend-development' set up to track 'origin/backend-development'.
   remotes/origin/main
 ```
 
+## merge branch - `git merge`
+
+当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。然后我们接着回到这个分支上继续开发。
+
+这是我们需要进行的具体的步骤
+
+首先切换到 main 分支：
+
+```bash
+git checkout main
+```
+
+将分支的内容合并到 main：
+
+```bash
+git merge <branch-name> -m "merge message"
+```
+
+推送更新后的 main 分支到远程仓库（如果有远程仓库的话）：
+
+```bash
+git push origin main
+```
+
+切换回分支继续开发：
+
+```bash
+git checkout <branch-name>
+```
+
+### example
+
+```bash
+# 1. 确保当前分支的修改已经提交
+git status
+
+# 2. 切换到 main 分支
+git checkout main
+
+# 3. 合并 backend-development 分支
+git merge backend-development -m "feature xxx successed apply"
+
+# 4. 如果有远程仓库，推送更新
+git push origin main
+
+# 5. 切换回 backend-development 继续开发
+git checkout backend-development
+```
+
+
+
 ## delete branch
 
-在 Git 中删除分支是一个常见的操作，特别是当某个功能开发完成并合并到主分支后。以下是删除 Git 分支的几种方法：
+当某个分支完成开发并合并到 main 分支后，为了保持仓库的整洁，我们可以选择将其删除
+
+以下是删除 Git 分支的方法：
 
 ### delete local branch
 
@@ -194,36 +247,29 @@ git branch -d <branch-name>
 git branch -D <branch-name>
 ```
 
-例如：`git branch -D checkend-development`
 
-请谨慎使用此选项，因为它会无条件地删除分支，即使该分支包含未合并的更改。
 
 ### delete remote branch
 
 如果你想删除远程仓库中的分支，可以使用以下命令：
 
-```
+```bash
 git push origin --delete <branch-name>
 ```
 
-例如 `git push origin --delete dependabot/pip/jinja2-3.1.5`
+或者使用这种替代语法：
 
-删除所有已合并的本地分支：
-
-如果你想一次性删除所有已经合并到当前分支的本地分支，可以使用这个命令：
-
-```
-git branch --merged | grep -v "\*" | xargs -n 1 git branch -d
+```bash
+git push origin :<branch-name>
 ```
 
-这个命令会列出所有已合并的分支，排除当前分支（带星号的），然后删除它们。
 
-注意事项：
 
-- 在删除分支之前，请确保你已经切换到其他分支（通常是主分支）。
-- 删除分支是不可逆的操作，请确保你真的不再需要这个分支了。
-- 如果分支包含未推送或未合并的更改，Git 会警告你。
-- 删除远程分支需要你有适当的权限。
+> [!note]
+>
+> 在删除分支之前，请确保你已经切换到其他分支（通常是主分支）
+
+
 
 # `git fetch`
 
@@ -295,55 +341,6 @@ Working Directory 	  Staging Area 	 local repository     remote repository
         git reset --hard HEAD
 |_________________|________________|___________________|
                 git reset --hard origin/main               
-```
-
-# `git merge`
-
-当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。然后我们接着回到这个分支上继续开发。
-
-这是我们需要进行的具体的步骤
-
-**首先切换到 main 分支**：
-
-```bash
-git checkout main
-```
-
-**将分支的内容合并到 main**：
-
-```bash
-git merge <branch-name>
-```
-
-**推送更新后的 main 分支到远程仓库**（如果有远程仓库的话）：
-
-```bash
-git push origin main
-```
-
-**切换回分支继续开发**：
-
-```bash
-git checkout <branch-name>
-```
-
-### example
-
-```bash
-# 1. 确保当前分支的修改已经提交
-git status
-
-# 2. 切换到 main 分支
-git checkout main
-
-# 3. 合并 backend-development 分支
-git merge backend-development
-
-# 4. 如果有远程仓库，推送更新
-git push origin main
-
-# 5. 切换回 backend-development 继续开发
-git checkout backend-development
 ```
 
 # `git remote`
