@@ -37,7 +37,7 @@ BriefIntroduction:
 
 找到windows最下面的任务栏，右键点击。取消显示你不想要的内容。我一般为下面这个样子
 
-<img src="E:\Personal_Article\Windows10-setting\images\TaskBar.png" alt="image-20231004011419683" style="zoom:75%;" />
+<img src=".\images\TaskBar.png" alt="image-20231004011419683" style="zoom:75%;" />
 
 点击搜索(H)，我选择隐藏搜索图标（因为没什么用，我经常使用win+space来使用搜索的功能），点击资讯和兴趣(N)，我选择关闭. 点击最下面的任务栏设置(T)
 

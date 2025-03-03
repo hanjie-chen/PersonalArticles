@@ -36,7 +36,7 @@ BriefIntroduction:
 | Typora                       | markdown语法写作神器 我从免费的0.7版本开始使用 一路成为付费用户 |
 | YACReader                    | 本地漫画查看神器 还可以创建本地漫画资料库                    |
 | Visual Studio code (VS code) | 轻量级代码编辑器 无论是windows还是macos都非常的好用          |
-| Anaconda 3                   | Python管理神器                                               |
+| ~~Anaconda 3~~               | ~~Python管理神器~~ 感觉仅仅是 python 3就可以代替了，没必要上 ananconda |
 | Steam                        | 娱乐神器                                                     |
 | Windows terminal             | windows端优秀的终端工具，结合oh-my-posh以获得最佳体验        |
 | Fliqlo                       | 桌面屏幕保护程序                                             |
