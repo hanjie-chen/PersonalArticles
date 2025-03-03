@@ -6,7 +6,7 @@
 
 
 
-## 生成 ssh key
+## generate ssh key
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "note" -f ~/.ssh/<key-filename>
@@ -45,7 +45,20 @@ The key's randomart image is:
 +----[SHA256]-----+
 ```
 
-
+> [!note]
+>
+> 如果在 windows powershell 环境中，这个命令会让你输入2次 passphrase 之后会失败并且报错
+>
+> ```powershell
+> Generating public/private rsa key pair.
+> Enter passphrase (empty for no passphrase):
+> Enter same passphrase again:
+> Saving key "~/.ssh/github-ssh-key" failed: No such file or directory
+> ```
+>
+> 这是因为在某些版本的 powershell 中 `~` 符号没有被 PowerShell 解析后再传递给命令
+>
+> 例如  [Powershell does not expand '~' for external programs · Issue #20031 · PowerShell/PowerShell](https://github.com/PowerShell/PowerShell/issues/20031)
 
 ## 添加ssh key
 

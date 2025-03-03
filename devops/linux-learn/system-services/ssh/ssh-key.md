@@ -17,27 +17,6 @@ ssh-add ~/.ssh/your_key_file
    ```
 2. 在SSH配置文件中设置（如1.2中的示例）。
 
-## SSH Agent 持久化
-
-### macOS
-- macOS默认启用SSH Agent持久化。
-- 检查方法：
-  ```
-  launchctl list | grep ssh-agent
-  ```
-
-### Linux
-- 通常不默认启用持久化。
-- 检查SSH Agent是否运行：
-  ```
-  echo $SSH_AGENT_PID
-  ```
-- 持久化通常需要通过桌面环境或启动脚本配置。
-
-### Windows
-- Git for Windows通常在启动时自动运行ssh-agent。
-- WSL可能需要手动配置自动启动。
-
 ## 测试SSH配置
 
 使用如下命令测试与github的连接
@@ -46,31 +25,7 @@ ssh-add ~/.ssh/your_key_file
 ssh -T git@github.com
 ```
 
-## 进阶主题
 
-### 多个GitHub账户的配置
-如果需要在同一台机器上使用多个GitHub账户，可以使用类似以下的配置：
-```
-Host github-personal
-  HostName github.com
-  User git
-  IdentityFile ~/.ssh/personal_github_key
-
-Host github-work
-  HostName github.com
-  User git
-  IdentityFile ~/.ssh/work_github_key
-```
-
-### SSH Agent转发
-允许在远程服务器上使用本地SSH密钥：
-```
-Host example-server
-  HostName example.com
-  ForwardAgent yes
-```
-
-注意：启用Agent转发可能带来安全风险，使用时需谨慎。
 
 # Linux 启动ssh-agent
 
