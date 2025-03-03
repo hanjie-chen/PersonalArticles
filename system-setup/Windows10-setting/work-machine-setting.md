@@ -32,7 +32,7 @@ winget install Git.Git
 
 > [!note]
 >
-> 如果使用 cmd 安装完成之后，使用 git 命令显示没有找到，那么新开一个 cmd 或者 powershell 一般就能看到
+> 如果使用 cmd 安装完成之后，使用 `git --version` 命令显示没有找到，那么新开一个 cmd 或者 powershell 一般就能看到
 
 ## python3 安装方法
 

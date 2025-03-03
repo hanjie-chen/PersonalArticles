@@ -21,7 +21,7 @@ Host Azure-Linux-VM
 
 我们需要运行 `ssh Azure-Linux-VM` 即可
 
-在vscode 的 remote-ssh 插件中使用 `Remote-SSH: Open SSH Configuration File...` 同样编辑的就是这个文件
+在 vscode 的 remote-ssh 插件中使用 `Remote-SSH: Open SSH Configuration File...` 同样编辑的就是这个文件
 
 
 
@@ -45,3 +45,19 @@ Host company-server
 > [!important]
 >
 > 注意 ssh config 不支持直接配置密码
+
+# git config
+
+当我们使用 ssh-keygen 生成一个用于和  github 验证的 ssh key 的时候（并且已经把 public key 上传到 github ssh key zhogn），如果我们的起的名字是 customerized 的，那么当我们使用命令 
+
+```bash
+ssh -T git@github.com
+```
+
+就会发现失败
+
+```
+PS C:\Users\Plain\articles> ssh -T git@github.com
+git@github.com: Permission denied (publickey).
+```
+

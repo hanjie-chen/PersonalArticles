@@ -1,29 +1,42 @@
-# SSH 配置和使用笔记
+# SSH Agent
 
-## SSH Agent
+SSH Agent 用于存储解密后的私钥（在内存中缓存已解密的私钥），使得只需要只输入一次 passparsh，就可以在会话期间重复使用
 
-SSH Agent 用于存储解密后的私钥，使得用户不需要每次使用密钥时都输入密码短语。
 
-手动添加密钥的命令：
+
+## 是否需要 SSH Agent？
+
+**如果您的私钥没有密码保护**:
+
+- 不需要 SSH Agent，SSH 可以直接读取私钥文件
+
+**如果您的私钥有密码保护**（推荐的安全做法）:
+
+- 没有 SSH Agent：每次使用 SSH 连接时都需要输入密码
+- 有 SSH Agent：只需在添加密钥到 Agent 时输入一次密码
+
+# windows ssh-agent setting
+
+查看 SSH Agnet 服务
+
+```powershell
+# 检查服务状态
+Get-Service ssh-agent
+
+# 如果需要，设置为自动启动
+Set-Service -Name ssh-agent -StartupType Automatic
+
+# 启动服务
+Start-Service ssh-agent
 ```
-ssh-add ~/.ssh/your_key_file
+
+添加 ssh key 到 ssh agnet
+
+```powershell
+ssh-add C:\Users\<username>\.ssh\github-ssh-key
 ```
 
-如何自动添加密钥：
 
-1. 在shell启动文件中添加：
-   ```
-   ssh-add ~/.ssh/github_key 2>/dev/null
-   ```
-2. 在SSH配置文件中设置（如1.2中的示例）。
-
-## 测试SSH配置
-
-使用如下命令测试与github的连接
-
-```
-ssh -T git@github.com
-```
 
 
 

@@ -49,8 +49,6 @@ git config --global user.email "your.email@example.com"
 
 将本地内容推送到 github 上面同步
 
-
-
 ### new branch push
 
 如果是新建了一个分支（远程仓库上也没有这个分支），并且是第一次推送这个分支到远程仓库，需要带上参数
@@ -391,6 +389,24 @@ git clone https://github.com/hanjie-chen/PersonalArticles.git ./articles-data
 > [!note]
 >
 > 目标目录必须是空的，这样操作之后，git 仓库的所有内容（包括.git 文件夹）都会直接存放在指定目录下
+
+## `https://` VS. `git@`
+
+存在2中  git clone 的方式， 一种是使用 https, 另一种是使用 git
+
+例如
+
+```bash
+git clone https://github.com/hanjie-chen/PersonalArticles.git
+git clone git@github.com:hanjie-chen/PersonalArticles.git
+```
+
+这 2 种方式的不同在于认证方式的不同，对于
+
+- https: 当你需要 git push的时候，会打开一个界面，需要浏览器登录
+- git: 本质上是 ssh, 需要你在github 和 本地配置好 ssh key, config
+
+一般来说我么选择第二种，也就是配置 ssh-key, 使用 git 的方式
 
 # `git resotre`
 
