@@ -99,7 +99,7 @@ ssh-add C:\Users\<username>\.ssh\<ssh-key-name>
 ssh-add -l
 ```
 
-
+是否需要在 git bash 中添加 ssh-agent 呢？
 
 # download github repository
 
