@@ -103,9 +103,7 @@ BriefIntroduction:
 
 注意，anaconda3 只会帮你注册一个python的环境变量，而不会注册python3环境变量
 
-相比于直接安装python 3, 会同时帮助注册python, python3环境变量
-
-可以在CMD（Administrator）创建一个符号链接来达到类似的效果
+可以在CMD（Administrator）创建一个符号链接来达到类似的效果，注意 Powershell 中无法使用下面的 `mklink` 命令
 
 ```cmd
 mklink "F:\anaconda3\python3.exe" "F:\anaconda3\python.exe"

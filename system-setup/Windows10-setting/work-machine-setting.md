@@ -74,6 +74,27 @@ Python 3.9  Python.Python.3.9  3.9.13    winget
 winget install --id Python.Python.3.12 -e
 ```
 
+### python3 command
+
+此时，只有使用 `python` 命令，可以生效，而 `python3` 命令则是会跳转到 MS store, 让你下载一个新的python 3
+
+这是因为虽然winget 将python 路径添加到 path 中了，但是其中并没有一个可执行文件叫做 `python3` 所以，环境变量其实也不认识什么 python3
+
+为此解决方案是，在 Python 安装目录下手动创建一个符号链接，让 `python3.exe` 指向 `python.exe`
+
+```powershell
+New-Item -ItemType SymbolicLink -Path "<python-path>\python3.exe" -Target "<python-path>\python.exe"
+```
+
+可以使用如下的命令拿到 `<python-path>`
+
+```shell
+PS C:\Users\Plain\articles> pip --version
+pip 24.3.1 from C:\Users\Plain\AppData\Local\Programs\Python\Python312\Lib\site-packages\pip (python 3.12)
+```
+
+其中 `<python-path>` 就是 `C:\Users\Plain\AppData\Local\Programs\Python\Python312`
+
 ## windows terminal 下载方法
 
 首先使用命令
