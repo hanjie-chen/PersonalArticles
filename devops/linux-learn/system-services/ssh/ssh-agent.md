@@ -26,10 +26,9 @@ Get-Service ssh-agent
 Start-Service ssh-agent
 ```
 
-
+如果需要，设置为自动启动
 
 ```powershell
-# 如果需要，设置为自动启动
 Set-Service -Name ssh-agent -StartupType Automatic
 ```
 
