@@ -10,11 +10,14 @@
 2. markdown 笔记软件，例如 typora 或者其他
 3. vscode 及其插件
 4. windows terminal
-5. python 3
-6. git 版本控制
-7. 简体中文输入法（microsoft 自带）
+5. powershell 7
+6. python 3
+7. git 版本控制
+8. 简体中文输入法（microsoft 自带）
 
+custom setting
 
+powershell customerized command and profile
 
 ## git安装方法
 

@@ -1,31 +1,66 @@
----
-Title: Personal Windows PS Command
-Author: 陈翰杰
-Instructor: Sonnet 3.5
-CoverImage: ./images/cover_image.webp
-RolloutDate: 2024-09-19
-Category: windows/windows command/windows powershell
----
 
-```
-BriefIntroduction: 
-personal windows powershell command, for my convinence
-```
+# 基础系统文件
+$PSStyle.FileInfo.Directory = "`e[34;1m"     # 蓝色加粗 - 目录
+$PSStyle.FileInfo.SymbolicLink = "`e[36;1m"  # 青色加粗 - 符号链接
+$PSStyle.FileInfo.Executable = "`e[32;1m"    # 绿色加粗 - 可执行文件
 
-<!-- split -->
+# 文件扩展名颜色配置
+$colors = @{
+    # 文本和文档
+    ".txt" = "`e[33m"      # 黄色 - 普通文本
+    ".md" = "`e[33m"       # 黄色 - Markdown
+    ".log" = "`e[31m"      # 红色 - 日志文件
+    ".pdf" = "`e[31;1m"    # 红色加粗 - PDF文档
+    ".doc" = "`e[31;1m"    # 红色加粗 - Word文档
+    ".docx" = "`e[31;1m"   # 红色加粗 - Word文档
+    
+    # 代码文件
+    ".py" = "`e[36m"       # 青色 - Python
+    ".ps1" = "`e[36m"      # 青色 - PowerShell
+    ".sh" = "`e[32m"       # 绿色 - Shell脚本
+    ".cpp" = "`e[32m"      # 绿色 - C++
+    ".c" = "`e[32m"        # 绿色 - C
+    ".h" = "`e[32m"        # 绿色 - 头文件
+    ".java" = "`e[31m"     # 红色 - Java
+    ".js" = "`e[33m"       # 黄色 - JavaScript
+    ".css" = "`e[36m"      # 青色 - CSS
+    ".html" = "`e[33m"     # 黄色 - HTML
+    ".ipynb" = "`e[36m"    # 青色 - Jupyter Notebook
+    
+    # 配置文件
+    ".json" = "`e[32m"     # 绿色 - JSON
+    ".yml" = "`e[32m"      # 绿色 - YAML
+    ".yaml" = "`e[32m"     # 绿色 - YAML
+    ".xml" = "`e[32m"      # 绿色 - XML
+    ".ini" = "`e[32m"      # 绿色 - INI配置
+    ".conf" = "`e[32m"     # 绿色 - 配置文件
+    
+    # 图片文件
+    ".jpg" = "`e[32;1m"    # 绿色加粗 - 图片
+    ".jpeg" = "`e[32;1m"   # 绿色加粗 - 图片
+    ".png" = "`e[32;1m"    # 绿色加粗 - 图片
+    ".gif" = "`e[32;1m"    # 绿色加粗 - 图片
+    ".bmp" = "`e[32;1m"    # 绿色加粗 - 图片
+    ".webp" = "`e[32;1m"   # 绿色加粗 - 图片
+    
+    # 压缩文件
+    ".zip" = "`e[31m"      # 红色 - 压缩文件
+    ".tar" = "`e[31m"      # 红色 - 压缩文件
+    ".gz" = "`e[31m"       # 红色 - 压缩文件
+    ".7z" = "`e[31m"       # 红色 - 压缩文件
+    ".rar" = "`e[31m"      # 红色 - 压缩文件
+    
+    # 系统和库文件
+    ".dll" = "`e[32m"      # 绿色 - 动态链接库
+    ".sys" = "`e[32m"      # 绿色 - 系统文件
+    ".msi" = "`e[32m"      # 绿色 - 安装包
+}
+# apply it to color
+foreach ($extension in $colors.Keys) {
+    $PSStyle.FileInfo.Extension[$extension] = $colors[$extension]
+}
 
-![cover](./images/cover_image.webp)
-
-# How to use these customize commands
-
-add this command in the powershell `$PROFILE` and then `. $PROFILR` to reload the file, youcan use these commands
-
-# Command `open`
-
-it will open a file with maximized windows, but if it open a folder, it use default size.
-
-```powershell
-# Custom aliases created by Plain 2024-09-19
+# Custom aliases add by Plain 2024-09-19
 function Open-Smart {
     param (
         [Parameter(Mandatory=$true)]
@@ -45,14 +80,8 @@ function Open-Smart {
 
 # Set alias 'open' for the custom function
 Set-Alias -Name open -Value Open-Smart
-```
 
-# Command `touch`
-
-it will like Linux comamnd `touch` if there no file, it will created one, if have file, it will renew the timestamp
-
-```powershell
-# custom command created by Plain 2024-09-23
+# custom command add by Plain 2024-09-23
 function Touch-File {
     param(
         [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
@@ -74,16 +103,8 @@ function Touch-File {
 }
 
 Set-Alias -Name touch -Value Touch-File
-```
 
-# Command `tree`
-
-Linux like command tree, to instead of the powershell nature `tree`
-
-user `tree -DirectoriesOnly` to show directories
-
-```powershell
-# Linux-like tree command, created by Plain in 2024-11-15
+# Linux-like tree command, added by Plain in 2024-11-15
 function Show-TreeWithFiles {
     param (
         [string]$Path = ".",
@@ -143,5 +164,3 @@ function Show-TreeWithFiles {
 
 # 创建别名，使用 -Force 参数覆盖原有的 tree 命令
 Set-Alias -Name tree -Value Show-TreeWithFiles -Force
-```
-

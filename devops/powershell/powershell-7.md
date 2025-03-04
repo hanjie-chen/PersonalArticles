@@ -2,9 +2,33 @@
 
 下载参考这篇文章[快速提高生产力——Power Shell也能命令提示并自动补全_安装最新的powershell,了解新功能和改进-CSDN博客](https://blog.csdn.net/m0_63230155/article/details/134685660)
 
-首先powershell 7的启动速度比windows powershell快上不少
+简单来说就是
 
-安装完毕之后会存在几个问题，逐一解决
+首先查看当前使用的 powershell 版本
+
+```powershell
+$PSVersionTable.PSVersion
+```
+
+接着使用 winget 搜索最新版本的 powershell
+
+```powershell
+PS C:\Users\Plain> winget search Microsoft.PowerShell
+Name               Id                           Version Source
+---------------------------------------------------------------
+PowerShell         Microsoft.PowerShell         7.5.0.0 winget
+PowerShell Preview Microsoft.PowerShell.Preview 7.6.0.3 winget
+```
+
+使用下面的命令安装稳定版本
+
+```powershell
+winget install --id Microsoft.Powershell --source winget
+```
+
+# windows terminal setting
+
+如果使用 windows terminal, 可以将 powershell 7 设置为默认启动项
 
 # 加载Python 环境
 
@@ -14,9 +38,11 @@
 
 # 颜色加载问题
 
-当第一次使用powershell 7的时候，文件夹会有蓝色的背景颜色，有人已经提过了github issue: https://github.com/PowerShell/PowerShell/issues/18550
+当第一次使用 powershell 7 的时候，文件夹会有蓝色的背景颜色，有人已经提过了github issue: https://github.com/PowerShell/PowerShell/issues/18550
 
-解决方案是自定义颜色在`$PROFILE`中
+![powershell 7 blue folder background](./images/ps7-folder-blue-bg.png)
+
+解决方案是自定义颜色在 `$PROFILE` 中
 
 ```powershell
 # 基础系统文件
