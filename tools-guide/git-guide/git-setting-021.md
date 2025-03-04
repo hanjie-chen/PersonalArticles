@@ -99,7 +99,7 @@ ssh-add C:\Users\<username>\.ssh\<ssh-key-name>
 ssh-add -l
 ```
 
-是否需要在 git bash 中添加 ssh-agent 呢？
+是否需要在 git bash 中添加 ssh-agent 呢？我尝试了似乎在 git bash 中 add ssh agent 然后在 git bash 中 git push没问题
 
 # download github repository
 
