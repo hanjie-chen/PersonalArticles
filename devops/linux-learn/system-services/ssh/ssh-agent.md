@@ -33,6 +33,12 @@ Start-Service ssh-agent
 ssh-add C:\Users\<username>\.ssh\github-ssh-key
 ```
 
+查看已经添加的 ssh key
+
+```powershell
+ssh-add -l
+```
+
 
 
 # linux ssh-agent setting
