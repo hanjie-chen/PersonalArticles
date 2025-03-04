@@ -17,14 +17,20 @@ SSH Agent 用于存储解密后的私钥（在内存中缓存已解密的私钥�
 查看 ssh agent 服务
 
 ```powershell
-# 检查服务状态
 Get-Service ssh-agent
+```
 
+启动服务
+
+```powershell
+Start-Service ssh-agent
+```
+
+
+
+```powershell
 # 如果需要，设置为自动启动
 Set-Service -Name ssh-agent -StartupType Automatic
-
-# 启动服务
-Start-Service ssh-agent
 ```
 
 添加 ssh key 到 ssh agnet
