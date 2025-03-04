@@ -72,6 +72,35 @@ Host github.com
 
 
 
+# ssh agent
+
+如果配置我们对 ssh key 配置了 passphrase 那么，最好将其加入到 ssh agent 中，这样子我们只需要输入一遍 passphrase即可，后面ssh agent 会帮我们加载密钥
+
+```powershell
+# 检查服务状态
+Get-Service ssh-agent
+
+# 如果需要，设置为自动启动
+Set-Service -Name ssh-agent -StartupType Automatic
+
+# 启动服务
+Start-Service ssh-agent
+```
+
+添加 ssh key 到 ssh agent
+
+```powershell
+ssh-add C:\Users\<username>\.ssh\<ssh-key-name>
+```
+
+查看已经添加的 ssh key
+
+```powershell
+ssh-add -l
+```
+
+
+
 # download github repository
 
 这是，我们就可以使用 git clone 下载 github repository 了
