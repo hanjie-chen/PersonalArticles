@@ -40,7 +40,7 @@ ssh-add C:\Users\<username>\.ssh\github-ssh-key
 
 
 
-# Linux 启动ssh-agent
+# linux ssh-agent setting
 
 要启动 ssh-agent 并实现持久化，你可以按照以下步骤操作：
 
