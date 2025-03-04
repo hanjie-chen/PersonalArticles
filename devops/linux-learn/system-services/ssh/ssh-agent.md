@@ -19,7 +19,7 @@ SSH Agent 用于存储解密后的私钥（在内存中缓存已解密的私钥�
 
 # windows ssh-agent setting
 
-查看 SSH Agnet 服务
+查看 ssh agent 服务
 
 ```powershell
 # 检查服务状态
@@ -37,8 +37,6 @@ Start-Service ssh-agent
 ```powershell
 ssh-add C:\Users\<username>\.ssh\github-ssh-key
 ```
-
-
 
 
 
