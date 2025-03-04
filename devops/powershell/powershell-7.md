@@ -34,7 +34,7 @@ winget install --id Microsoft.Powershell --source winget
 
 如果使用anaconda 3创建的python环境，还需要使用命令`conda init powershell`来激活一些设定，否则anaconda 3的某些路径无法正确的载入Powershell 7的环境变量中，可以使用`echo $env:PATH` 来查看powershell 7的环境变量。可以拿来和正常的windows powershell进行对比。
 
-或许某些conda命令可以运行，比如说`conda env list`，当然最重要的是能否运行激活python环境的命令`conda activate xxx`如果不行的话，那么就按照以上的步骤进行
+或许某些conda命令可以运行，比如说 `conda env list`，当然最重要的是能否运行激活python环境的命令`conda activate xxx`如果不行的话，那么就按照以上的步骤进行
 
 # 颜色加载问题
 
