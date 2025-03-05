@@ -1,16 +1,52 @@
 # Docker Basic
 
-学习路径：
+docker 的 安装 [Install | Docker Docs](https://docs.docker.com/engine/install/)
 
-1. 重点学习Docker Engine的使用——docker 命令的使用
-3. 理解Docker的核心概念（容器、镜像、网络、存储等）
-4. 学习Docker Compose、Dockerfile的编写等
+以 Ubuntu Linux 为例 [Ubuntu | Docker Docs](https://docs.docker.com/engine/install/ubuntu/)
 
-以 [docker/getting-started-todo-app: Sample application to get started with Docker](https://github.com/docker/getting-started-todo-app) 为例
+删除存在冲突的 packages
+
+```shell
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+```
+
+设置 docker apt repository
+
+```shell
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+
+下载最新版本
+
+```bash
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+验证 docker 是否下载成功
+
+```bash
+sudo docker --version
+```
 
 > [!note]
 >
-> Docker Engine是核心技术组件，包含CLI、API和运行时；Docker Desktop则是其图形界面封装，提供可视化管理工具，主要用于开发环境。生产环境通常直接使用Engine。
+> 这时，你还是需要 `sudo` 权限来运行 docker, 从而可能会遇到一些问题（例如 vscode plugin: devcontainer）
+>
+> [Post-installation steps | Docker Docs](https://docs.docker.com/engine/install/linux-postinstall/) 文档讲了如何不加 `sudo` 就可以使用 docker 命令
+>
+> 简单来说，就是在 Linux 系统中，Docker 守护进程默认绑定到一个 Unix socket，该 socket 归属于 root 用户和 docker 组。因此，要在不使用 sudo 的情况下运行 docker 命令，需要将用户添加到 docker 组。
 
 # Docker Architecture
 

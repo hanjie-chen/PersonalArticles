@@ -60,7 +60,7 @@ The key's randomart image is:
 >
 > 例如  [Powershell does not expand '~' for external programs · Issue #20031 · PowerShell/PowerShell](https://github.com/PowerShell/PowerShell/issues/20031)
 
-## 添加ssh key
+## add ssh key to remote server
 
 既然已经生成了 ssh key, 我们就需要将 public key 添加到 remote server中去
 
@@ -87,7 +87,9 @@ Now try logging into the machine, with:   "ssh -p <ssh-port> 'Plain@<remote-serv
 and check to make sure that only the key(s) you wanted were added.
 ```
 
-
+> [!note]
+>
+> 在 windows powershell 环境下无法使用 `ssh-copy-id` 命令，此时可以打开 git bash 去运行这个命令
 
 ## 使用 ssh key 登录
 
@@ -109,30 +111,3 @@ Host remote-server
 ```
 
 然后只要 `ssh remote-server` 即可自动使用该密钥。
-
-
-
-## `ssh-copy-id` 不可用？
-
-如果你使用 windows powershell, 大概率找不到这个命令，这个时候，我们需要手动将 public key 复制到远程服务器上面
-
-打开并且复制本地公钥内容(`ssh-rsa AAAA... Singapore Linux VM` 包括开头的 `ssh-rsa` 到最后的注释部分）
-
-SSH 登录到远程服务器（使用密码验证）此时会提示你输入远程主机密码。
-
-将复制的公钥追加到服务器上的authorized_keys，在远程服务器上，执行：
-
-```javascript
-cd ~/.ssh
-echo "这里粘贴你的公钥整行内容" >> authorized_keys
-```
-
-确保多行公钥之间使用回车分隔即可。
-
-验证是否可用，在本地退出服务器 (`exit` 或 `Ctrl+D`) 后，重新使用公钥登录：
-
-```javascript
-ssh -i .\Singapore_Linux_VM_SSH_Key Plain@104.215.254.81
-```
-
-如果一切配置正确且没有私钥加密口令，那么应当无需再输入服务器密码即可登录。

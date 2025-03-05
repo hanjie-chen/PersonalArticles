@@ -34,6 +34,8 @@ ssh-keygen -t rsa -b 4096 -C "note" -f <key-filename>
 > [!note]
 >
 > 这里使用 cd 命令提前进入 `~/.ssh` 目录，因为有些 powershell 在使用 ssh-keygen 命令的时候不会识别 `~`
+>
+> 同样的，linux 也是 `~/.ssh` 目录
 
 然后将 `<key-filename>.pub` 文件中的内容复制到 github 账号 settings 中的 `SSH and GPG keys` 中，记得起一个可以用于辨识这台 windows machine 的名字
 
@@ -67,7 +69,6 @@ Host github.com
   HostName github.com
   User git
   IdentityFile C:/Users/<username>/.ssh/github-ssh-key
-  IdentitiesOnly yes
 ```
 
 
