@@ -99,9 +99,41 @@ ssh-add C:\Users\<username>\.ssh\<ssh-key-name>
 ssh-add -l
 ```
 
-是否需要在 git bash 中添加 ssh-agent 呢？我尝试了似乎在 git bash 中 add ssh agent 然后在 git bash 中 git push没问题
+如果发现 ssh agent 无法生效，`git push` 命令还是需要输入 passphrase，大概率 git 使用了自己的 ssh， 而不是 windows 的 OpenSSH
 
-会不会是因为环境变量的问题？
+使用下面的命令指定 git 使用 windows 的 ssh
+
+```powershell
+git config --global core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe"
+```
+
+ssh 的具体 path 可由下面的命令找到
+
+```powershell
+where.exe ssh
+```
+
+## 如何判断 git for windows 使用哪个 ssh
+
+首先我们使用下面的命令确认 ssh key 是否已经添加到 ssh-agent 中
+
+```powershell
+ssh-add -l
+4096 SHA256:5OgwZW02N8uozjVqgRhE0Hh0XVlf56HwVoLbCAcDNFU Singapore Windows VM Github SSH key (RSA)
+```
+
+如果得到这样子的输出，那么就说明已经成功添加
+
+使用 `ssh -T git@github.com` 命令，测试与 github 的链接，如果没有让你输入 passphrase 那么，你的 ssh 已经成功的使用了 ssh-agent 中的 key
+
+但是 `git push` 命令还是需要输入 passphrase, 打开 git bash, 使用下面的命令，查看 ssh 的默认 path
+
+```shell
+$ which ssh
+/usr/bin/ssh
+```
+
+就会发现，实际上 git 调用了目录下 `/usr/bin/ssh` 而不是widnows 系统的 s
 
 # download github repository
 
