@@ -37,3 +37,15 @@
 
 terrafrom 高亮和补全插件
 
+
+
+# Python
+
+python 语法高亮
+
+
+
+# Docker
+
+查看正在运行的 conta
+

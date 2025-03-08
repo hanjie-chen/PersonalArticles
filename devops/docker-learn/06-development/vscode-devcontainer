@@ -34,6 +34,8 @@ sudo usermod -aG docker <username>
 exit
 ```
 
+记得最后需要重新登陆（重启终端）使其生效
+
 关于 Linux group 更详细的内容请看 [Linux gourp 详解](../../linux-learn/user-management/group.md)
 
 # Dev Container 配置详解

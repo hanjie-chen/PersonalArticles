@@ -5,7 +5,7 @@
 可以使用命令 `terraform --version` 来验证是否下载完成
 
 ```shell
-Plain@Linux-VM:~/Personal_Project/azure-vm-terraform$ terraform --version
+$ terraform --version
 Terraform v1.10.5
 on linux_amd64
 ```
