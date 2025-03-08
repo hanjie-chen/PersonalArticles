@@ -33,6 +33,22 @@
 
 
 
+## remote server vscode windows scale up
+
+当我们连接到 remote server 的时候，往往发现窗口太小，需要使用 `ctrl +` 命令来将窗口放大一些，但是每次都需要手动放缩过于麻烦，所以我们可以将其写入 setting 中
+
+在通过 Remote SSH 连接到远程服务器后，再次按下 `Ctrl + Shift + P`，输入 `Preferences: Open Remote Settings (JSON)`![remote settings](./images/remote-settings.png)
+
+然后在打开的远程设置文件中添加设置：
+
+```json
+"window.zoomLevel": 1
+```
+
+这里的数字 `1` 代表了你使用 `Ctrl +` 快捷键调整后的缩放级别，你可以根据需要调整为 `0.5`、`1`、`2` 等你觉得适合的数值
+
+
+
 # HashiCorp Terraform
 
 terrafrom 高亮和补全插件

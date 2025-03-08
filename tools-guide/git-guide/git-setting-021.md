@@ -153,3 +153,46 @@ git clone git@github.com:hanjie-chen/PersonalArticles.git
 > 但是如果是 `git clone https://github.com/...` 则无需 ssh 验证，但是当你 git push 的时候，会弹出一个方框让你进行 github 账号登录和验证
 
 如果之前不小心 git clone https 的，可以使用 `git remote set-url origin` 命令重置为 ssh url
+
+
+
+# config git global settings
+
+做好了以上的这些还不够，不过这个时候你修改了 git reposotury 并且 git commit 就会发现
+
+```shell
+(base) Plain@Singapore-Linux-VM:~/projects/website$ git commit -a -m "comment the print debug part"
+[backend-development 3becf5b] comment the print debug part
+ Committer: Ubuntu <Plain@Singapore-Linux-VM.pzt3xnjh0akubiunuoujeoe0if.ix.internal.cloudapp.net>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+```
+
+你的用户名和 email 还没有设置，使用下面的命令设置
+
+```shell
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+然后使用下面的命令重置这次 commit
+
+```shell
+git commit --amend --reset-author
+```
+
+
+
+
+
