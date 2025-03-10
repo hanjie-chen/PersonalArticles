@@ -140,7 +140,7 @@ branch 'backend-development' set up to track 'origin/backend-development'.
 >
 > 所以, 当你在克隆后运行 `git branch` 命令时, 你只会看到 `main` 分支, 因为这是唯一被 "检出" 的分支。但是, 如果你运行 `git branch -r`, 你会看到所有的远程分支, 因为它们都已经被克隆到本地了
 
-## `git branch` 命令详解
+## check branch - `git branch`
 
 `git branch` 查看本地分支
 
