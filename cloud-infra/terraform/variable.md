@@ -67,7 +67,7 @@ resource "azurerm_resource_group" "main" {
 2. **在运行 Terraform 命令时，通过命令行参数传递密码。**
 
    ```bash
-terraform apply -var "admin_password=YourSecurePassword123!"
+   terraform apply -var "admin_password=YourSecurePassword123!"
    ```
 
 
@@ -78,7 +78,7 @@ terraform apply -var "admin_password=YourSecurePassword123!"
 1. **创建 `terraform.tfvars` 文件：**
 
    ```cpp
-admin_password = "YourSecurePassword123!"
+admin_password = "YourSecurePassword"
    ```
 
 2. **在 `.gitignore` 文件中，添加 `terraform.tfvars`：**
@@ -158,3 +158,4 @@ export TF_VAR_admin_password="YourSecurePassword123!"
 3. **在提示时，输入密码。**
 
 注意： 这种方法在某些 Terraform 版本中可能会提示输入，具体取决于 Terraform 版本和设置。
+
