@@ -1,6 +1,6 @@
 # Docker Volume 
 
-Docker volume实际上是一个独立于容器的存储空间，它的生命周期独立于容器。可以把它理解为一个"共享文件夹"。
+Docker volume 实际上是一个独立于容器的存储空间，它的生命周期独立于容器。可以把它理解为一个"共享文件夹"。
 
 在 compose.yml 我们可以这样子定义和使用 volume
 
@@ -119,7 +119,7 @@ docker exec -it articles-data ls /articles-data
 3. **构建和启动 web-app 容器**：
    - volume 被以只读方式挂载到 `/articles-data`
 
-### 
+
 
 1. **Volume 挂载时机**：
    - Volume 挂载发生在容器启动时

@@ -1,99 +1,27 @@
 ---
-Title: docker compose.ymal 语法速查
+Title: docker compose.ymal services block 语法速查
 Author: 陈翰杰
-Instructor: o1-preview
+Instructor: o1-preview, grok3
 CoverImage: ./images/cover-image.png
 RolloutDate: 2025-01-16
 ---
 
 ```
 BriefIntroduction: 
-docker compose.ymal 语法详解
+docker compose.ymal top level services block 语法速查
 ```
 
 <!-- split -->
 
 ![docker compose](./images/cover-image.png)
 
-# `compose.yml` 语法详解
-
-project
-
-```shell
-Plain@Linux-VM:~/Personal_Project/test-website$ tree -L 2
-.
-├── Readme.md
-├── articles-sync
-│   ├── Dockerfile
-│   ├── init.sh
-│   ├── logrotate.conf
-│   ├── logs
-│   └── update-articles.sh
-├── compose.yml
-└── web-app
-    ├── Dockerfile
-    ├── __pycache__
-    ├── app.py
-    ├── config.py
-    ├── import_articles_scripts.py
-    ├── instance
-    ├── markdown_render_scripts.py
-    ├── models.py
-    ├── rendered-articles
-    ├── requirements.in
-    ├── requirements.txt
-    ├── static
-    └── templates
-
-8 directories, 14 files
-```
-
-compose.yaml
-
-```yaml
-services:
-  web-app:
-    container_name: web-app
-    build:
-      context: ./web-app
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    volumes:
-      - articles_data:/articles-data:ro
-      # bind mount used to develop env, need to delete when product env
-      - ./web-app:/app
-    environment:
-      - ARTICLES_DIRECTORY=/articles-data
-      - FLASK_APP=app.py
-
-  articles-sync:
-    container_name: articles-sync
-    build:
-      context: ./articles-sync
-      dockerfile: Dockerfile
-    volumes:
-      - articles_data:/articles-data:rw
-      # bind mount conainer logs folder, used to devlop env
-      - ./articles-sync/logs:/var/log/personal-website
-    environment:
-      - GITHUB_REPO=https://github.com/hanjie-chen/PersonalArticles.git
-      - REPO_BRANCH=main
-      - LOG_DIR=/var/log/personal-website
-    develop:
-      watch:
-        - path: ./articles-sync
-          ignore:
-            - logs/**
-          action: rebuild
-
-volumes:
-  articles_data:
-```
-
-# `services`
+# `compose.yml` –> services 语法详解
 
 [Services top-level elements | Docker Docs](https://docs.docker.com/reference/compose-file/services/)
+
+
+
+# `container name`
 
 ```
 # 指定 contianer name
@@ -248,5 +176,58 @@ ports:
   - "8080:5000"  # "<host-machine port>":"<container port>"
 ```
 
+# `image` & `build`
 
+build: [Compose Build Specification | Docker Docs](https://docs.docker.com/reference/compose-file/build/)
+
+## build
+
+用于指定如何构建 image
+
+```yaml
+build:
+  context: ./articles-sync
+  dockerfile: Dockerfile
+```
+
+- `context`: 上下文的位置
+
+- `dockerfile`: Dockerfile 的位置，如果默认的名称 `Dockerfile` 这个字段也可以忽略，可以将整体内容省略为
+
+  ```yaml
+  build: ./articles-sync
+  ```
+
+默认情况下，Docker Compose 会为构建的镜像自动命名，格式为 `<porject-name>_<service-name>`（项目名通常是当前目录名）
+
+如果需要自定义镜像名称，可以结合 image 字段
+
+```yaml
+build: ./articles-sync
+image: articles-sync1.0
+```
+
+> [!tip]
+>
+> 虽然字段顺序不影响功能，但为了代码的可读性和一致性，我们通常将 build 写在 image 之前：因为逻辑上，先构建（build）然后命名（image）更符合直觉。
+
+## image
+
+用于指定一个已经存在的镜像（可以是本地构建的，也可以是从远程镜像仓库拉取的）。Docker Compose 会直接使用这个镜像来启动容器，而不会去构建新的镜像。
+
+```yaml
+image: nginx
+```
+
+# `depends_on`
+
+`depends_on` 用于定义服务之间的依赖关系，可以控制服务的启动顺序
+
+如果服务 A 的 depends_on 中指定了服务 B，那么 Docker Compose 会确保服务 B 先启动，然后再启动服务 A。
+
+```yaml
+nginx:
+  depends_on:
+    - web
+```
 
