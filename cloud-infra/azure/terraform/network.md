@@ -4,13 +4,9 @@
 
 
 
-
-
-
-
 # NSG rule
 
-reference: [azurerm_network_security_group | Resources | hashicorp/azurerm | Terraform | Terraform Registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_group)
+reference: [azurerm_network_security_rule | Resources | hashicorp/azurerm | Terraform | Terraform Registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule)
 
 for example
 

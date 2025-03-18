@@ -1,6 +1,6 @@
 # Docker Volume 
 
-Docker volume 实际上是一个独立于容器的存储空间，它的生命周期独立于容器。可以把它理解为一个"共享文件夹"。
+Docker volume 实际上是一个独立于 container 的存储空间，它的生命周期独立于 container 可以把它理解为一个"共享文件夹"。
 
 在 compose.yml 我们可以这样子定义和使用 volume
 
@@ -15,37 +15,24 @@ services:
       - articles_data:/articles-data
 
 volumes:
-  articles_data:  # 声明volume
+  articles_data:
 ```
 
 这个配置的含义是：
-1. `volumes: articles_data:` 声明了一个名为 `articles_data` 的volume
-2. 这个volume被挂载到：
-   - articles-data容器的 `/articles-data` 目录
-   - web容器的 `/articles-data` 目录
 
-### 3. 工作原理图解
-
-```plaintext
-┌─────────────────────────────────────┐
-│    Docker Host 			          │
-│                                     │
-│  ┌────────────────┐                 │
-│  │  Docker Volume │                 │
-│  │ (articles_data)│                 │
-│  └───────┬────────┘                 │
-│          │                          │
-│    ┌─────▼─────┐      ┌──────────┐  │
-│    │/articles- │      │/articles-│  │
-│    │   data    │      │   data   │  │
-│    │           │      │          │  │
-│    │articles-  │      │  web-app │  │
-│    │data   	 │      │      	   │  │
-│    └───────────┘      └──────────┘  │
-└─────────────────────────────────────┘
+```yml
+volumes:
+  articles_data:
 ```
 
+声明了一个名为 `articles_data` 的volume
 
+
+
+这个volume被挂载到：
+
+- articles-data容器的 `/articles-data` 目录
+- web容器的 `/articles-data` 目录
 
 这个volume实际存储在：
 
