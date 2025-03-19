@@ -9,7 +9,7 @@
   Swap usage:   0%
 ```
 
-毕竟我用的是 Azure 默认的 Linux 30GB 的空间然后使用命令查了一下，结果发现是docker 占用了很多的存储
+毕竟我用的是 Azure 默认的 Linux 30GB 的空间然后使用命令查了一下，结果发现是 docker 占用了很多的存储
 
 ```shell
 Plain@Linux-VM:~/Personal_Project$ sudo du -sh /* 2>/dev/null | sort -hr
