@@ -32,7 +32,7 @@ services:
     volumes:
       - articles_data:/articles-data  # [volume name]:[容器内挂载路径]
     
-  articles-data:
+  articles-sync:
     volumes:
       - articles_data:/articles-data
 
@@ -44,6 +44,10 @@ volumes:
 
 - articles-data 容器的 `/articles-data` 目录
 - web-app 容器的 `/articles-data` 目录
+
+> [!note]
+>
+> `[volume name]:[容器内挂载路径]` 默认容器对挂载的路径具有读写权限（rw），除非明确指定为只读（ro）
 
 这个volume实际存储在：
 
