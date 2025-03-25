@@ -1,159 +1,252 @@
-### 快速解决方案：使用 Azure App Services (Web App for Containers)
-为了快速解决停机时间问题，让网站尽快正常运行，我建议你**首先使用 Azure App Services (Web App for Containers)**。这个方案能让你在最短时间内实现零停机部署，同时管理简单，非常适合快速上线。
+# deploy
 
-#### 实施步骤
-1. **创建 Azure App Service**：
-   - 为你的 `web-app`（前端服务）和 `articles-sync`（文章同步服务）分别创建两个 Web App for Containers。
-   - 将你的 Docker 镜像推送到 Azure Container Registry (ACR)，然后在 App Service 的容器设置中配置这些镜像。
+## Azure App Services (Web App for Containers)
 
-2. **替换 Docker Volume**：
-   - 使用 Azure Blob Storage 存储文章数据，替代原来的 Docker Volume。
-   - 修改 `articles-sync` 的逻辑，将 GitHub 上的文章同步到 Blob Storage。
-   - 修改 `web-app` 的逻辑，从 Blob Storage 中读取文章数据。
+app services + azure container registry + azure blob storage + app services deploy slot
 
-3. **配置网络**：
-   - 使用 App Service 提供的默认域名（自带 HTTPS），暂时省去 nginx。
-   - 在 Azure Front Door (AFD) 中将 origin 配置为 App Service 的 URL。
+## 进阶方案
+进阶方案 1：配置 CI/CD Pipeline
 
-4. **实现零停机部署**：
-   - 在 `web-app` 的 App Service 中启用部署槽位（staging 和 production）。
-   - 推送新代码时，先部署到 staging 槽位，测试通过后切换到 production 槽位。
+配置 GitHub Actions：
 
-#### 为什么选择这个方案作为快速解决方案？
-- **快速实现**：Azure App Services 是一个开箱即用的 PaaS 服务，减少了配置和管理的工作量。
-- **零停机部署**：通过部署槽位，你可以无缝切换新版本，避免服务中断。
-- **学习价值**：你将掌握 Azure 的 PaaS 服务使用方法，这在企业环境中非常常见。
+- 在你的代码仓库中添加 GitHub Actions 工作流文件。
+- 配置工作流，自动构建 Docker 镜像并推送到 ACR。
+- 设置自动部署到 Azure App Services。
 
-这个方案能让你迅速上线网站，同时为后续的进阶学习打下基础。
+#### 进阶方案 2：docker swarm
 
----
-
-### 学习目的的进阶方案
-在快速解决方案的基础上，你可以逐步尝试以下进阶方案，深入学习不同的技术栈。以下是推荐的方案、实施步骤、学习价值以及建议的尝试顺序。
-
-#### 进阶方案 1：配置 CI/CD Pipeline
-**目标**：学习自动化构建、测试和部署流程，提高效率和可靠性。
-
-##### 实施步骤
-1. **配置 GitHub Actions**：
-   - 在你的代码仓库中添加 GitHub Actions 工作流文件。
-   - 配置工作流，自动构建 Docker 镜像并推送到 ACR。
-   - 设置自动部署到 Azure App Services。
-
-2. **扩展可能性**：
-   - 添加自动化测试（比如单元测试或集成测试）到 CI/CD 流程。
-   - 探索与 Azure DevOps 的集成，作为替代方案。
-
-##### 学习价值
-- 掌握 CI/CD 管道的配置和管理。
-- 学习自动化测试和部署的最佳实践。
-- 理解如何减少手动操作，提升部署效率。
-
-##### 为什么选择这个方案？
-CI/CD 是现代软件开发的核心技能，掌握它将显著提升你的职业竞争力，尤其是在跳槽时展示自动化能力。
-
-#### 进阶方案 2：Azure Kubernetes Service (AKS)
-**目标**：学习容器编排和高可用性架构，为未来更复杂的项目做准备。
-
-##### 实施步骤
-1. **创建 AKS 集群**：
-   - 在 Azure 上创建一个 AKS 集群。
-   - 将你的三个容器（nginx、web-app、articles-sync）部署到 AKS，使用 Kubernetes 的 Deployment 和 Service 资源。
-
-2. **配置滚动更新**：
-   - 在 Deployment 配置中启用滚动更新策略。
-   - 更新代码时，逐步替换容器实例，确保服务不中断。
-
-3. **网络配置**：
-   - 使用 Kubernetes 的 Ingress 控制器替代 nginx，或者继续使用 nginx 作为反向代理。
-   - 将 AKS 的服务地址添加到 AFD 的 origin 中。
-
-##### 学习价值
-- 理解 Kubernetes 的基本概念（如 Pod、Deployment、Service、Ingress）。
-- 掌握容器编排和高可用性架构。
-- 学习服务发现和负载均衡的实现。
-
-##### 为什么选择这个方案？
-Kubernetes 是当前最流行的容器编排平台，广泛应用于云原生开发。掌握它将为你在分布式系统和微服务领域打下坚实基础。
-
-#### 进阶方案 3：手动实现滚动更新
-**目标**：深入理解容器管理和部署策略，探索底层技术细节。
-
-##### 实施步骤
-1. **在虚拟机 (VM) 上运行多个容器实例**：
-   - 在 Azure 上创建一个 VM，使用 Docker Compose 或手动启动多个 `web-app` 容器实例。
-   - 配置 nginx 作为反向代理，将流量分发到这些容器。
-
-2. **手动滚动更新**：
-   - 更新代码时，逐个停止旧容器并启动新容器，确保始终有实例在运行。
-   - 监控流量分发，确保服务不中断。
-
-3. **网络配置**：
-   - 将 VM 的公网 IP 或域名添加到 AFD 的 origin 中。
-
-##### 学习价值
-- 深入理解容器管理和负载均衡的底层原理。
-- 掌握手动部署的挑战和解决方案。
-- 为理解自动化工具（如 Kubernetes）的工作机制奠定基础。
-
-##### 为什么选择这个方案？
-通过手动操作，你能更直观地理解容器部署的细节，这对深入学习自动化工具和架构设计非常有帮助。
-
----
-
-### 推荐的尝试顺序
-基于你的学习目标和快速解决问题的需求，我建议按照以下顺序尝试这些方案：
-
-1. **Azure App Services (Web App for Containers)**：
-   - **理由**：快速上线网站，解决停机问题，同时学习 PaaS 服务的基础知识。
-   - **时间点**：立即实施，作为起点。
-
-2. **CI/CD Pipeline**：
-   - **理由**：在 App Services 基础上加入自动化部署，提升效率，并学习现代开发流程。
-   - **时间点**：网站运行稳定后，下一阶段实施。
-
-3. **Azure Kubernetes Service (AKS)**：
-   - **理由**：深入学习容器编排和高可用性架构，为复杂项目做准备。
-   - **时间点**：掌握 CI/CD 后，逐步迁移到 AKS。
-
-4. **手动实现滚动更新**：
-   - **理由**：巩固对底层技术的理解，强化学习成果。
-   - **时间点**：作为最后阶段，探索手动管理的极限。
-
-这个顺序从简单到复杂，从快速实现到深入学习，逐步构建你的技术能力。
-
----
+#### 进阶方案 3：Azure Kubernetes Service (AKS)
 
 ### 利用 AFD 的多 origin 功能
 Azure Front Door (AFD) 支持多个 origin 和 origin group，你可以利用这个功能同时运行不同部署方案，进行负载均衡和性能比较。
 
-#### 实施步骤
-1. **配置多个 origin**：
-   - 将 Azure App Services、AKS 和 VM 上的容器分别配置为不同的 origin。
-   - 在 AFD 中创建一个 origin group，将这些 origin 添加进去。
 
-2. **设置负载均衡策略**：
-   - 配置轮询（round-robin）或基于延迟的路由，将流量分配到不同 origin。
-   - 设置健康探测，确保流量只路由到健康的 origin。
 
-3. **测试和学习**：
-   - 通过调整流量分配比例，测试不同方案的性能和可靠性。
-   - 观察每个方案在高负载或故障场景下的表现。
+# nginx document root
 
-#### 学习价值
-- 理解负载均衡和 failover 机制。
-- 比较不同部署方案的优缺点。
-- 掌握 AFD 的高级功能，提升架构设计能力。
+### 调整 `web-app` 中获取 HTML 的逻辑
+
+#### 当前问题
+在你的 `app.py` 中，`view_article` 路由直接读取 HTML 文件的内容并将其作为字符串传递给模板：
+
+```python
+html_path = f"{Rendered_Articles}{os.sep}{category_path}{os.sep}{article_id}.html"
+with open(html_path, 'r', encoding='utf-8') as f:
+    article_content = f.read()
+return render_template('article_details.html', article=article, article_content=article_content)
+```
+
+现在 Nginx 接管了静态文件服务，我们需要改为生成指向 Nginx 的 URL，让前端通过 URL 加载内容。
+
+#### 解决方案
+1. **修改 `view_article` 路由**
+   不再直接读取文件，而是生成静态文件的 URL：
+
+   ```python
+   @app.route("/Articles/<int:article_id>")
+   def view_article(article_id):
+       article = db.session.execute(
+           db.select(Article_Meta_Data)
+           .where(Article_Meta_Data.id == article_id)
+       ).scalar()
+   
+       if not article:
+           abort(404)
+       
+       # 转换 category 中的 / 为 - 以匹配文件系统路径
+       category_path = article.category.replace(os.sep, '-')
+       
+       # 生成 Nginx 静态文件的 URL
+       static_url = f"/rendered-articles/{category_path}/{article_id}.html"
+       
+       return render_template('article_details.html', 
+                              article=article,
+                              static_url=static_url)
+   ```
+
+   这里，`static_url` 是指向 Nginx 服务的相对路径，例如 `/rendered-articles/PythonLearn-PythonPackage-Flask/1.html`。
+
+2. **修改模板 (`article_details.html`)**
+   有两种方式在前端加载静态内容：
+
+   **方式 1：使用 iframe**
+   ```html
+   <!-- article_details.html -->
+   {% extends "base.html" %}
+   
+   {% block content %}
+       <h1>{{ article.title }}</h1>
+       <iframe src="{{ static_url }}" width="100%" height="600px" frameborder="0"></iframe>
+   {% endblock %}
+   ```
+
+   **方式 2：使用 JavaScript 动态加载**
+   ```html
+   <!-- article_details.html -->
+   {% extends "base.html" %}
+   
+   {% block content %}
+       <h1>{{ article.title }}</h1>
+       <div id="article-content"></div>
+       <script>
+           fetch('{{ static_url }}')
+               .then(response => response.text())
+               .then(data => {
+                   document.getElementById('article-content').innerHTML = data;
+               })
+               .catch(error => console.error('Error loading article:', error));
+       </script>
+   {% endblock %}
+   ```
+
+   - **iframe** 简单直接，适合完整显示 HTML。
+   - **JavaScript** 更灵活，可以进一步处理内容（例如提取部分 HTML），但需要额外的错误处理。
+
+#### 选择建议
+- 如果你的 HTML 文件是独立的完整页面，推荐使用 **iframe**。
+- 如果需要将 HTML 内容嵌入到现有页面布局中，推荐使用 **JavaScript**。
+
+---
+
+### 问题 3：配置开发环境和生产环境的差异
+
+#### 需求分析
+- **开发环境**：你希望将 `rendered_articles` 挂载到 `/app/rendered-articles`，方便在主机上查看和修改文件，同时可能继续使用 Flask 的静态服务进行调试。
+- **生产环境**：将 `rendered_articles` 交给 Nginx 提供服务，不需要挂载到 `/app/rendered-articles`，直接使用 `/rendered-articles`。
+
+#### 解决方案：使用环境变量统一管理
+我们可以通过环境变量 `ENV` 来控制 `compose.yaml` 和 `app.py` 的行为。
+
+1. **修改 `compose.yaml`**
+   使用条件挂载和环境变量来区分开发和生产环境：
+
+   ```yaml
+   services:
+     web-app:
+       container_name: web-app
+       build:
+         context: ./web-app
+         dockerfile: Dockerfile
+       volumes:
+         - articles_data:/articles-data:ro
+         # 开发环境挂载本地代码，生产环境不挂载
+         - ${ENV:-dev} == "dev" ? ./web-app:/app : /app
+         # 统一挂载 rendered_articles，但路径固定
+         - rendered_articles:/rendered-articles
+       environment:
+         - ARTICLES_DIRECTORY=/articles-data
+         - RENDERED_DIRECTORY=/rendered-articles
+         - FLASK_APP=app.py
+         - ENV=${ENV:-dev}
+   
+     articles-sync:
+       container_name: articles-sync
+       build:
+         context: ./articles-sync
+         dockerfile: Dockerfile
+       volumes:
+         - articles_data:/articles-data:rw
+         # 开发环境挂载日志，生产环境不挂载
+         - ${ENV:-dev} == "dev" ? ./articles-sync/logs:/var/log/personal-website : /var/log/personal-website
+       environment:
+         - GITHUB_REPO=https://github.com/hanjie-chen/PersonalArticles.git
+         - REPO_BRANCH=main
+         - LOG_DIR=/var/log/personal-website
+   
+     nginx:
+       image: nginx:alpine
+       container_name: nginx
+       ports:
+         - "80:80"
+       volumes:
+         - ./nginx/conf.d:/etc/nginx/conf.d
+         - ./nginx/logs:/var/log/nginx
+         - rendered_articles:/usr/share/nginx/html/rendered-articles
+       depends_on:
+         - web-app
+   
+   volumes:
+     articles_data:
+     rendered_articles:
+   ```
+
+   - `${ENV:-dev}` 表示如果未设置 `ENV`，默认值为 `dev`。
+   - 在开发环境中，运行 `docker-compose up` 默认使用开发配置。
+   - 在生产环境中，设置 `ENV=prod`（例如 `ENV=prod docker-compose up`），切换到生产配置。
+
+2. **调整 `web-app` 的逻辑**
+   在开发环境中，你可能仍想使用 Flask 提供静态文件以便调试。我们可以通过 `ENV` 环境变量动态注册静态路由：
+
+   ```python
+   import os
+   from flask import Flask, render_template, abort, send_from_directory
+   from models import db, Article_Meta_Data
+   from import_articles_scripts import import_articles
+   from config import Articles_Directory, Rendered_Articles
+   
+   app = Flask(__name__)
+   app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///project.db'
+   app.config['RENDERED_ARTICLES_FOLDER'] = Rendered_Articles
+   db.init_app(app)
+   
+   # 根据环境变量决定是否注册静态文件夹
+   if os.getenv('ENV', 'dev') == 'dev':
+       app.add_url_rule('/rendered-articles/<path:filename>',
+                        endpoint='rendered-articles',
+                        view_func=lambda filename: send_from_directory(app.config['RENDERED_ARTICLES_FOLDER'], filename))
+   
+   with app.app_context():
+       db.drop_all()
+       db.create_all()
+       import_articles(Articles_Directory, db)
+   
+   @app.route("/Articles/<int:article_id>")
+   def view_article(article_id):
+       article = db.session.execute(
+           db.select(Article_Meta_Data)
+           .where(Article_Meta_Data.id == article_id)
+       ).scalar()
+   
+       if not article:
+           abort(404)
+       
+       category_path = article.category.replace(os.sep, '-')
+       static_url = f"/rendered-articles/{category_path}/{article_id}.html"
+       
+       return render_template('article_details.html', 
+                              article=article,
+                              static_url=static_url)
+   ```
+
+   - 在 `ENV=dev` 时，Flask 会注册 `/rendered-articles/` 路由，方便调试。
+   - 在 `ENV=prod` 时，不注册此路由，Nginx 完全接管静态文件服务。
+
+3. **开发与生产环境的运行方式**
+   - **开发环境**：直接运行 `docker-compose up`，默认 `ENV=dev`。
+   - **生产环境**：运行 `ENV=prod docker-compose up`，切换到生产模式。
+
+#### 最佳实践
+- **统一配置文件**：通过环境变量在一套 `compose.yaml` 中管理开发和生产环境，避免维护两套配置文件。
+- **调试便利性**：开发环境中保留 Flask 的静态服务，生产环境中利用 Nginx 的高性能。
+- **安全性**：生产环境中移除不必要的挂载（如 `./web-app:/app`），减少攻击面。
+
+---
+
+### 完整实现后的效果
+- **开发环境**：
+  - `rendered_articles` 挂载到 `/rendered-articles`，你可以在主机上访问 `./web-app/rendered-articles` 查看文件。
+  - Flask 可通过 `/rendered-articles/` 提供静态文件，方便调试。
+  - Nginx 也能提供这些文件，但主要用于测试反向代理。
+- **生产环境**：
+  - `rendered_articles` 仅挂载到 `/rendered-articles` 和 Nginx 的 `/usr/share/nginx/html/rendered-articles`。
+  - Nginx 高效提供静态文件，Flask 只生成 URL。
 
 ---
 
 ### 总结
-- **快速解决问题**：使用 **Azure App Services (Web App for Containers)**，实现零停机部署并快速上线网站。
-- **学习目的的进阶方案**：
-  1. **CI/CD Pipeline**：自动化部署流程，提升效率。
-  2. **Azure Kubernetes Service (AKS)**：学习容器编排和高可用性架构。
-  3. **手动滚动更新**：深入理解底层技术。
-- **推荐顺序**：App Services → CI/CD → AKS → 手动滚动更新。
-- **利用 AFD**：通过多 origin 功能同时运行多种方案，测试和比较不同架构。
+通过以上步骤，你成功将 `rendered-articles` 整合到 Nginx 容器中，并解决了开发与生产环境的差异问题：
+1. Nginx 通过 volume 挂载和配置文件提供静态服务。
+2. `web-app` 修改为生成静态 URL，前端通过 iframe 或 JavaScript 加载内容。
+3. 使用环境变量 `ENV` 统一管理配置，确保开发调试方便，生产性能优化。
 
-通过这个分阶段的计划，你不仅能快速解决当前问题，还能系统性地学习 PaaS、CI/CD、容器编排和底层部署技术，为未来跳槽积累丰富的经验和技能。如果你有任何疑问或需要更详细的指导，欢迎随时提问！
+希望这个方案能满足你的需求！如果有其他问题，欢迎继续讨论。
