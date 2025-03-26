@@ -5,4 +5,3 @@
 以 namecheap 为例，讲解如何将 DNS 托管到 cloudflare 上面
 
 主要根据这篇文章即可： [How to set up DNS records for your domain in a Cloudflare account - Hosting - Namecheap.com](https://www.namecheap.com/support/knowledgebase/article.aspx/9607/2210/how-to-set-up-dns-records-for-your-domain-in-a-cloudflare-account/)
-
