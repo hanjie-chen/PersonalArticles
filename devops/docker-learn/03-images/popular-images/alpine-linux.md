@@ -162,3 +162,19 @@ bash
 
 补充说明：
 - 如果您的应用不特别需要 bash，建议直接使用 sh，这样可以保持镜像的轻量级特性
+
+# alpine in other image
+
+许多官方镜像基于 Alpine Linux 构建，以提供轻量化的运行环境。
+
+例如
+
+`nginx:alpine` image
+
+镜像名称：`nginx:alpine` 是 Docker Hub 上 Nginx 官方镜像的一个变体（tag）。
+
+- `nginx`：表示这是 Nginx Web 服务器的镜像。
+- `:alpine`：指定使用 Alpine Linux 作为基础操作系统，
+
+
+
