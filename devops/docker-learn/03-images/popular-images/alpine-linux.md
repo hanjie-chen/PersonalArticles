@@ -56,36 +56,6 @@
    - 启动更快
    - 适合容器化应用
 
-### 如果你想使用 Debian 基础镜像：
-
-```dockerfile
-# 使用 Debian
-FROM debian:11-slim
-
-# 安装 git 和 cron
-RUN apt-get update && \
-    apt-get install -y \
-    git \
-    cron \
-    && rm -rf /var/lib/apt/lists/*
-```
-
-### 不同基础镜像的命令对比：
-
-```dockerfile
-# Alpine
-RUN apk add --no-cache git dcron
-
-# Debian/Ubuntu
-RUN apt-get update && \
-    apt-get install -y git cron && \
-    rm -rf /var/lib/apt/lists/*
-
-# CentOS
-RUN yum install -y git cronie && \
-    yum clean all
-```
-
 ### 选择建议：
 
 1. **使用 Alpine 的场景**：

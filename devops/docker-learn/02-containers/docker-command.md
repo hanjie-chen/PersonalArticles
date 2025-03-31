@@ -116,4 +116,11 @@ hello-world                        latest     d2c94e258dcb   19 months ago   13.
 
 一般来说我们使用第一种 `REPOSITORY:TAG` 的方式，因为这样更加清晰明了，而且镜像 ID 可能会随着镜像更新而改变。标签则会保持稳定，更容易维护和理解。
 
- 
+ 在这里我们可以发现一些奇怪的的 image, 比如说
+
+```
+REPOSITORY                         TAG        IMAGE ID       CREATED         SIZE
+<none>                             <none>     f4d246af4e89   2 weeks ago     182MB
+```
+
+其 `REPOSITORY` 和 `TAG` 都是空的，这些通常被称为 "**dangling** images"（悬空镜像）。它们之所以出现，主要是由于 Docker 的镜像管理机制和构建或操作镜像时的某些行为导致的。更详细的内容可以看 docker images

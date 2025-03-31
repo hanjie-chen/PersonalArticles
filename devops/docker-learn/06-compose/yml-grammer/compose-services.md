@@ -231,3 +231,47 @@ nginx:
     - web
 ```
 
+# `healthcheck`
+
+`healthcheck` 是 `docker-compose.yml` 中用于定义容器健康检查的字段，它可以让 Docker 定期检查容器内部的运行状况，并根据检查结果决定该容器的健康状态。这对于确保服务可用性、负载均衡以及容器编排（如 Docker Swarm）至关重要。
+
+- **自动检测应用是否正常运行**
+   例如，一个 Flask 应用可能已经崩溃，但进程仍在运行，默认情况下 Docker 不会发现这个问题，而 `healthcheck` 可以主动检查。
+- **确保依赖的服务可用**
+   比如，`web-app` 依赖 `articles-sync`，可以在 `web-app` 的 `depends_on` 配置中使用 `condition: service_healthy` 让其等待 `articles-sync` 进入健康状态后再启动。
+- **在 Swarm 或 Compose 中实现更智能的容器管理**
+   当服务不健康时，Swarm 可能会重新调度容器。
+
+## **如何配置**
+
+`healthcheck` 主要由以下几个参数组成：
+
+- **`test`**：指定执行的健康检查命令，通常是 shell 命令或 `CMD` 形式。
+- **`interval`**：检查时间间隔（默认 `30s`）。
+- **`timeout`**：健康检查命令的超时时间（默认 `30s`）。
+- **`retries`**：失败多少次后认为不健康（默认 `3`）。
+- **`start_period`**：容器启动后在这个时间段内不会触发健康检查，适用于启动较慢的应用。
+
+## **示例**
+
+### **1. 检查 Flask 应用是否正常运行**
+
+```yaml
+services:
+  web-app:
+    image: my-flask-app
+    ports:
+      - "5000:5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+```
+
+- `test`: 使用 `curl` 访问 `http://localhost:5000/health`，如果 HTTP 请求失败则视为不健康。
+- `interval: 30s`: 每 30 秒检查一次。
+- `timeout: 10s`: 超过 10 秒没有响应就算失败。
+- `retries: 3`: 连续 3 次失败后，容器被标记为 `unhealthy`。
+- `start_period: 10s`: 容器启动后，前 10 秒内不会进行健康检查，给 Flask 预留启动时间。

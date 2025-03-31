@@ -22,9 +22,7 @@ modsecurity-crs image 的 tag 组成是
 
 
 
-## `CRS version`
-
-格式为
+### `CRS version`
 
 ```
 <major>.<minor>.<patch>
@@ -37,9 +35,7 @@ modsecurity-crs image 的 tag 组成是
 *   `4`: 指向 `4.x.x` 大版本系列中的最新构建。更新更频繁，可能包括小版本升级。
 *   `none`: 只想
 
-## `web server`
-
-格式为
+### `web server`
 
 ```
 <web server>-<os>
@@ -49,12 +45,20 @@ modsecurity-crs image 的 tag 组成是
 
 如果添加了 `-alpine` 则说明使用了 alpine linux 构建，如果不加那么使用默认的 debian 构建
 
-## `date`
-
-格式为
+### `date`
 
 ```
-YYYYMMDDHHMM
+<YYYY>-<MM>-<DD>-<HH>-<MM>
 ```
 
 例如 `202503230103`
+
+## health check
+
+在 [coreruleset/modsecurity-crs-docker: Official ModSecurity Docker + Core Rule Set (CRS) images](https://github.com/coreruleset/modsecurity-crs-docker) 上面提到，这个 image 存在一个 healthcheck
+
+> We add healthchecks to the images, so that containers return HTTP status code 200 from the `/healthz` endpoint. When a container has a healthcheck specified, it has a *health status* in addition to its normal status. This status is initially `starting`. Whenever a health check passes, it becomes `healthy` (whatever state it was previously in). After a certain number of consecutive failures, it becomes `unhealthy`. See https://docs.docker.com/engine/reference/builder/#healthcheck for more information.
+
+# OWASP CRS
+
+[CRS Documentation](https://coreruleset.org/docs/) OWASP CRS 文档，有空仔细看看
