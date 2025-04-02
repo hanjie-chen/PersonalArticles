@@ -123,4 +123,4 @@ REPOSITORY                         TAG        IMAGE ID       CREATED         SIZ
 <none>                             <none>     f4d246af4e89   2 weeks ago     182MB
 ```
 
-其 `REPOSITORY` 和 `TAG` 都是空的，这些通常被称为 "**dangling** images"（悬空镜像）。它们之所以出现，主要是由于 Docker 的镜像管理机制和构建或操作镜像时的某些行为导致的。更详细的内容可以看 docker images
+其 `REPOSITORY` 和 `TAG` 都是空的，这些通常被称为 "**dangling** images"（悬空镜像）。它们之所以出现，主要是由于 Docker 的镜像管理机制和构建或操作镜像时的某些行为导致的。更详细的内容可以看 docker images 部分的笔记
