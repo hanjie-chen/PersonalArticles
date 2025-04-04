@@ -64,37 +64,104 @@ Rolling Tags 是动态的标签，会随着新的版本发布而更新，指向�
 
 Stable Tags 和 Rolling Tags 是一种常见的 Docker 镜像标签管理方式，但并不是所有 Docker 镜像都必须同时支持这两种标签。这取决于镜像维护者的设计和策略。
 
-## down image
+# download image - `docker pull`
 
 下载 Docker 镜像的基本命令是：
 
 ```bash
-docker pull [镜像名称]:[标签]
+docker pull <image-name>
 ```
 
-一些使用示例：
+e.g.
 
-1. 下载最新版本的镜像（默认 tag 为 latest）：
-```bash
-docker pull ubuntu
+```shell
+$ docker images
+REPOSITORY              TAG       IMAGE ID       CREATED       SIZE
+website-web-app         latest    2db53ba692a3   9 days ago    177MB
+website-articles-sync   latest    448d2ca47dfe   3 weeks ago   18.8MB
+nginx                   alpine    1ff4bb4faebc   7 weeks ago   47.9MB
+
+$ docker pull owasp/modsecurity:nginx-alpine
+nginx-alpine: Pulling from owasp/modsecurity
+213ec9aee27d: Pull complete
+864534705ce1: Pull complete
+fe2c9e7418f8: Pull complete
+f08ef11b2dfc: Pull complete
+36f0053ae033: Pull complete
+e47e25891bf2: Pull complete
+4c031bee5bcb: Pull complete
+fef8f2051ac1: Pull complete
+8584876a8ff9: Pull complete
+8a170b411969: Pull complete
+98a3c898933f: Pull complete
+fcd0b9f1a321: Pull complete
+6faa179269b4: Pull complete
+15f7e4ed297d: Pull complete
+33e3004d1266: Pull complete
+b1d509b219c0: Pull complete
+e4ccc158aa70: Pull complete
+43d5536979ce: Pull complete
+864dd6527889: Pull complete
+6927f3372eae: Pull complete
+c8a5877ffbaf: Pull complete
+4f4fb700ef54: Pull complete
+Digest: sha256:c9c6652f254743f85c0249d59fd31b6e31c46676ae3baeef312cf056eba600b3
+Status: Downloaded newer image for owasp/modsecurity:nginx-alpine
+docker.io/owasp/modsecurity:nginx-alpine
+
+$ docker images
+REPOSITORY              TAG            IMAGE ID       CREATED       SIZE
+website-web-app         latest         2db53ba692a3   9 days ago    177MB
+website-articles-sync   latest         448d2ca47dfe   3 weeks ago   18.8MB
+nginx                   alpine         1ff4bb4faebc   7 weeks ago   47.9MB
+owasp/modsecurity       nginx-alpine   89bf1ae1b8fa   2 years ago   73.8MB
 ```
 
-2. 下载指定版本的镜像：
-```bash
-docker pull ubuntu:20.04
+## 多行哈希值？
+
+在 `docker pull` 命令中我们可以看到多行的类似于哈希值一样的东西，它们其实是镜像层 (Image Layers) 的 ID
+
+Docker 镜像不是一个单一的大文件，而是由多个只读层（Layers）叠加组成的。每一层都代表了 Dockerfile 中的一条指令（如 `RUN`, `COPY`, `ADD` 等）或者基础镜像的一层。
+
+那些类似 `213ec9aee27d` 的字符串是每一层的（短）内容哈希 ID (Layer ID or Digest)。Docker 通过这些 ID 来唯一识别每一层。
+
+每一行 `xxxx: Pull complete` 表示 Docker 客户端已经成功地从镜像仓库（Registry）下载了对应 ID 的那一层文件。
+
+这样子有什么好处？
+*   **缓存和复用：** 如果你本地已经有了某个镜像层（可能来自另一个镜像），Docker 就不会重新下载它，你会看到 `Already exists` 而不是 `Pull complete`。这大大加快了镜像拉取和构建的速度，也节省了磁盘空间。
+*   **增量更新：** 当镜像更新时，通常只需要下载发生变化的层。
+
+
+
+## Digest hash
+
+Digest  是整个镜像清单的内容哈希值，通常使用 SHA256 算法计算（所以前缀是 `sha256:`）。
+
+镜像的 `REPOSITORY:TAG` (如 `owasp/modsecurity:nginx-alpine`) 是可以改变的。同一个 `tag` (比如 `latest` 或 `nginx-alpine`) 可能在不同时间指向不同的镜像版本。但是，`Digest` 是根据镜像内容（具体来说是镜像清单，它引用了所有层和配置）计算出来的，只要镜像内容不变，`Digest` 就不会变。它提供了一种绝对精确、不可变的方式来引用一个特定的镜像版本。
+
+你可以使用 `docker pull owasp/modsecurity@sha256:c9c6...` 来拉取这个精确版本的镜像，即使 `nginx-alpine` 标签后来被更新指向了别的镜像。
+
+
+
+## docker.io
+
+当你使用 `docker pull` 或 `docker run` 等命令，并且只提供了 `repository/image:tag`（如 `owasp/modsecurity:nginx-alpine`）或者只提供了 `image:tag`（对于官方镜像，如 `nginx:alpine`），Docker 客户端会默认去 `docker.io` (Docker Hub) 查找这个镜像。
+
+所以，`docker pull owasp/modsecurity:nginx-alpine` 和 `docker pull docker.io/owasp/modsecurity:nginx-alpine` 是等效的。
+
+命令执行完成后，Docker 会显示镜像的完整规范名称，其中就包括了默认的仓库主机名 `docker.io`
+
+如果你想从其他私有或公共仓库拉取镜像，你就需要在镜像名称前加上仓库的主机名 e.g.
+
+```shell
+docker pull myregistry.example.com/myimage:latest
 ```
 
-3. 从特定仓库下载镜像：
-```bash
-docker pull registry.example.com/ubuntu:20.04
-```
 
-一些常用的参数：
-- `-a` 或 `--all-tags`：下载仓库中的所有标签
-- `--disable-content-trust`：跳过镜像验证
-- `--platform`：指定平台，如 linux/amd64, linux/arm64 等
 
-下载完成后，你可以使用 `docker images` 命令查看已下载的镜像列表。
+
+
+
 
 # `docker images` command
 

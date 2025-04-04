@@ -30,7 +30,7 @@ Docker volume 实际上是一个独立于 container 的存储空间，它的生�
 services:
   web-app:
     volumes:
-      - articles_data:/articles-data  # [volume name]:[容器内挂载路径]
+      - articles_data:/articles-data  # [volume name]:[container path]
     
   articles-sync:
     volumes:
@@ -47,7 +47,9 @@ volumes:
 
 > [!note]
 >
-> `[volume name]:[容器内挂载路径]` 默认容器对挂载的路径具有读写权限（rw），除非明确指定为只读（ro）
+> `[volume name]:[container path]` 默认容器对挂载的路径具有读写权限（rw），除非明确指定为只读（ro）
+>
+> 这里的 `rw` 指的是：容器内部的进程对这个 volume 具有读写权限。
 
 这个volume实际存储在：
 

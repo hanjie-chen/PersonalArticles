@@ -1,3 +1,5 @@
+`chmod` 命令的全称是 change mode, 用于更改文件或目录的权限（Permissions）
+
 # 使用 `chmod` 给 `.sh` 脚本添加执行权限 
 
 使用如下命令

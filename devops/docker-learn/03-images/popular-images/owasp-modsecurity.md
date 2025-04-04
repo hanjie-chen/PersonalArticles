@@ -124,3 +124,52 @@ CRS Specific 环境变量是专门用于配置 OWASP Core Rule Set (CRS) 的环�
 `ALLOWED_METHODS` 指定允许的 HTTP 方法。默认值 `GET` `HEAD` `POST` `OPTIONS`
 
 `MAX_FILE_SIZE` 限制上传文件的大小。默认值 `unlimited`
+
+# Config file
+
+ModSecurity 是独立于 Nginx 的模块，它的配置方式与 Nginx 的 `default.conf` 有所不同。以下是配置 ModSecurity 的两种主要方法：
+
+#### **方法 1：通过环境变量**
+在 `compose.yml` 中，你已经使用了环境变量 `MODSEC_AUDIT_LOG` 来指定日志路径。OWASP ModSecurity CRS 镜像支持许多环境变量，可以用来调整 ModSecurity 和 CRS 的行为。这些变量在容器启动时会被入口脚本读取并应用。常用变量包括：
+- `MODSEC_RULE_ENGINE=on`：启用 ModSecurity 规则引擎（默认启用）。
+- `BLOCKING_PARANOIA=1`：设置 CRS 的拦截偏执级别（1-4，值越高越严格）。
+- `DETECTION_PARANOIA=1`：设置检测偏执级别。
+- `ALLOWED_METHODS=GET POST`：限制允许的 HTTP 方法。
+
+**示例**：
+```yaml
+environment:
+  - MODSEC_AUDIT_LOG=/var/log/nginx/modsec-audit.log
+  - BLOCKING_PARANOIA=1
+  - DETECTION_PARANOIA=1
+  - ALLOWED_METHODS=GET POST
+```
+
+#### **方法 2：挂载自定义配置文件**
+如果你需要更细粒度的控制，可以挂载 ModSecurity 的配置文件或规则集到容器中：
+- **主配置文件**：通常位于 `/etc/modsecurity.d/modsecurity.conf`。
+- **CRS 规则集**：位于 `/etc/modsecurity.d/owasp-crs/`。
+
+**示例**：
+在本地创建 `modsecurity.conf` 或自定义规则，然后在 `compose.yml` 中挂载：
+```yaml
+volumes:
+  - ./modsecurity/modsecurity.conf:/etc/modsecurity.d/modsecurity.conf
+  - ./modsecurity/crs-rules:/etc/modsecurity.d/owasp-crs/rules
+```
+
+#### **是否可以在 `default.conf` 中配置 ModSecurity？**
+- **直接配置**：不行，你不能直接在 `default.conf` 中编写 ModSecurity 的规则或详细配置。ModSecurity 的规则和设置需要通过它自己的配置文件或环境变量来实现。
+- **间接控制**：在 Nginx 的配置文件中，可以通过 `modsecurity` 指令启用或禁用 ModSecurity，并指定规则文件。例如：
+  ```nginx
+  location / {
+      modsecurity on;
+      modsecurity_rules_file /etc/modsecurity.d/modsecurity.conf;
+      proxy_pass http://webapp;
+  }
+  ```
+  但在 `owasp/modsecurity-crs:nginx-alpine` 镜像中，ModSecurity 默认已经启用，规则文件也预配置好，因此通常无需在 `default.conf` 中添加这些指令。
+
+**建议**：
+- 如果只是简单调整（如日志路径、拦截级别），使用环境变量即可。
+- 如果需要自定义规则或复杂配置，挂载自定义配置文件。
