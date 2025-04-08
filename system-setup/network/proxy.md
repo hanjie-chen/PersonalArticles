@@ -10,6 +10,8 @@
 
 nekoray github [MatsuriDayo/nekoray: Qt based cross-platform GUI proxy configuration manager (backend: sing-box)](https://github.com/MatsuriDayo/nekoray)
 
+nekoray 已经停止维护了 - 2025-04-08
+
 # Client 配置
 
 
