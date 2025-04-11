@@ -35,52 +35,50 @@ EXPOSE 5000
 CMD ["python", "app.py"]
 ```
 
-## **FROM**：指定基础镜像
+***
 
 ```Dockerfile
 FROM python:3.9-slim  # 使用官方精简版 Python 镜像
 ```
+指定基础镜像
+
 - `python:3.9-slim` 比完整版的 `python:3.9` 体积小，但包含运行 Python 所需的所有组件
 - 也可以使用 `python:3.9-alpine` 更小，但可能会有一些兼容性问题
-
-## WORKDIR：设置工作目录
 
 ```Dockerfile
 WORKDIR /app  # 后续的指令都将在 /app 目录下执行
 ```
-如果目录不存在，Docker 会自动创建该目录，而且是 root
+设置工作目录
 
-## **COPY**：复制文件
+如果目录不存在，Docker 会自动创建该目录，而且是 root 身份yun'xing
 
 ```Dockerfile
 COPY requirements.txt .  # 复制 requirements.txt 到当前工作目录
 COPY . .               # 复制所有项目文件到当前工作目录
 ```
+复制文件
+
 - 第一个路径是主机上的源路径
 - 第二个路径是容器中的目标路径
-
-## **RUN**：执行命令
 
 ```Dockerfile
 RUN pip install -r requirements.txt  # 安装项目依赖
 ```
-- 在构建镜像时执行的命令
-
-## **EXPOSE**：声明端口
+在构建镜像时执行的命令
 
 ```Dockerfile
 EXPOSE 5000  # 声明 contianer 中将使用的端口
 ```
-仅仅作为声明，实际运行时还需要通过 -p 参数映射端口
-
-## **CMD**：容器启动命令
+仅仅作为声明，实际运行时还需要通过其他方式，比如说 docker -p 参数映射端口
 
 ```Dockerfile
 CMD ["python", "app.py"]  # 容器启动时执行的命令
 ```
+容器启动命令
+
 使用数组形式可以更好地处理参数
 
-让我详细解释一下 `WORKDIR` 的作用和使用场景：
+
 
 # `WORKDIR` 指令
 
@@ -114,13 +112,39 @@ WORKDIR /articles-data
 
 # `COPY` 指令
 
-将 host 文件复制到 contianer 中 e.g.
+```dockerfile
+COPY [--param] <host source file/dir> <container destination file/dir>
+```
+
+### example 1
+
+将 host 文件复制到 contianer 中
 
 ```dockerfile
 COPY logrotate.conf /etc/logrotate.d/personal-website
 ```
 
 它会将 `logrotate.conf` 文件复制到 `/etc/logrotate.d/` 目录下，并重命名为 `personal-website`
+
+### example 2
+
+```dockerfile
+COPY --chown=<user>:<group> <src> <dest>
+```
+
+例如，将多个 host 文件复制到一个 container 目录中，并且修改这些文件的拥有者
+
+```dockerfile
+COPY --chown=appuser:appgroup update-articles.sh init.sh /usr/local/bin/
+```
+
+将2个shell脚本复制到 contianer `/usr/local/bin` 目录下，同时把这 2 个文件所有者设置为 appuser:appgroup
+
+> [!note]
+>
+> 这仅仅改变这里2个存在于 contianer 目录中的文件的所有者，不会改变 container 目录的所有者（目录所有者还是原来的 root）
+>
+> 因为 COPY 指令无法被 USER 指令影响，所以如果不指定的话，默认这些文件的拥有者是 root
 
 
 
@@ -187,7 +211,41 @@ CMD ["World"]
 
 
 
-# build 指令和运行时指令
+# `USER` 指令
+
+### grammer
+
+```dockerfile
+USER <username>[:<usergroup>]
+# 或
+USER <UID>[:<GID>]
+```
+
+### 它指定：
+
+- 从这一行之后，Dockerfile 中：
+  - 构建阶段的某些指令（如 `RUN`）将以该用户身份执行
+  - 所有运行阶段的指令（如 `CMD`、`ENTRYPOINT`）默认以该用户身份执行
+- 设置容器运行时的默认用户（镜像启动时默认以谁来运行）
+
+### 不受 `USER` 影响的指令：
+
+- `COPY`
+- `ADD`
+
+它们始终由构建系统（通常是 root）来执行
+
+### 类比理解
+
+构建镜像就像是在盖房子，Docker 是施工队
+
+- `RUN` 是你在房子里干活，比如装家具，谁来干？取决于你让谁进来干（`USER`）
+- `COPY` / `ADD` 是送材料（文件）进工地，这一定是快递员（系统 root）送的
+- `CMD` / `ENTRYPOINT` 是住进去以后谁来使用房子——默认就是 `USER` 指定的那个人
+
+
+
+# 构建阶段指令和运行阶段指令
 
 Dockerfile 中不同的指令生效的实践也不同，比如说
 

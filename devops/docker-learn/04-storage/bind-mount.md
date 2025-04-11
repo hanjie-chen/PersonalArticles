@@ -44,11 +44,17 @@ rm: cannot remove 'articles-sync.log 2>&1': Permission denied
 
 如果在 contianer 中是 root user (UID 0 GID 0) 运行的进程创建或者修改了 bind mount 的文件，那么在 host 上的文件同样显示为 UID 0 GID 0
 
+> [!note]
+>
+> Docker 默认情况下会将容器内用户的 **UID (User ID)** 和 **GID (Group ID)** 直接映射到宿主机上**相同**的 UID 和 GID。
+
 ## how to fix this
 
 我们当然可以简单的使用 `sudo rm` 命令来删除这个文件，但是作为 best practice 我们最好不要使用 root user 去运行 container processes
 
 而是使用创建一个 non-root user 并且使用这个 user 来运行 process [Dockerfile best practice](./03-images/dockerfile/best-practice.md)
+
+并且这个用户的 UID/GID 最好能**匹配**你宿主机上的用户的 UID/GID。
 
 # bind mount 生效时机
 

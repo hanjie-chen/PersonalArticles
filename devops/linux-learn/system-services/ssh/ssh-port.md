@@ -150,9 +150,9 @@ sudo systemctl start ssh
 
 # 被忽略的 `sshd-config` 文件
 
-当开启了 **systemd** 的 socket-based activation 功能时，systemd 会在 **22** 端口上先进行绑定和监听。
+当开启了 systemd 的 socket-based activation 功能时，systemd 会在 **22** 端口上先进行绑定和监听。
 
-这样一来，**sshd** 在启动时就会直接“继承”这个已经打开好的套接字，完全不需要也不会去执行“bind(Port 10499)”的操作。
+这样一来，sshd 在启动时就会直接“继承”这个已经打开好的套接字，完全不需要也不会去执行“bind(Port 10499)”的操作。
 
 因此，即使你在 `sshd_config` 中配置了 `Port 10499`，对于绑定端口的部分，它其实被 systemd“绕过”了，`sshd` 并不会去检查 `sshd_config` 里写的端口，而是被动地接受 systemd 分配的 22 端口的套接字。
 
