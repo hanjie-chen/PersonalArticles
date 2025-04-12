@@ -72,7 +72,7 @@ auth:
 
 
 
-## 1. Hysteria 使用 QUIC 协议，端口是 UDP
+## Hysteria 使用 QUIC 协议，端口是 UDP
 
 - 日志里已经显示：
 
@@ -84,25 +84,16 @@ auth:
   
 - 你所执行的命令：
 
-  
-
   ```javascript
   ss -tlnp
   ```
   
-  只会列出 TCP 监听端口（
+  只会列出 TCP 监听端口（ `-t` 代表 TCP）。因此你在列表里找不到 443 端口很正常。
+  
 
-  ```
-  -t
-  ```
 
-   
 
-  代表 TCP）。因此你在列表里找不到 443 端口很正常。
-
-------
-
-## 2. 如何查看 UDP 端口监听
+## 如何查看 UDP 端口监听
 
 改用：
 
@@ -177,92 +168,3 @@ SOCKS5 server listening {"addr": "127.0.0.1:1080"}
 # 某些软件 proxy 设置
 
 steam 可以设置代理，但是需要进入大屏幕状态，才能在设置中看到网络设置
-
-
-
-# Ubuntu Linux 全局代理
-
-通过在 Ubuntu 上安装并配置 **redsocks**，再利用 **iptables** 将所有出站的 TCP 流量重定向到 redsocks 监听的端口，由 redsocks 将它们转发到目标代理服务器（HTTP 或 SOCKS5）。这种方式能较好地实现“本机全部流量”走代理，但要谨慎设置白名单，避免把 SSH 等重要流量也一并重定向
-
-下面给出一个基于当前 Hysteria2 客户端（提供 SOCKS5 代理在 127.0.0.1:1080）的示例配置，帮助你通过 redsocks + iptables 将全局的 TCP 流量重定向到 Hysteria2 的代理接口，从而实现全局代理。
-
-## 安装 redsocks
-
-如果尚未安装，请执行以下命令更新软件仓库并安装 redsocks：
-
-```bash
-sudo apt-get update
-sudo apt-get install redsocks
-```
-
-
-
-## 配置 redsocks
-
-编辑 `/etc/redsocks.conf` 文件（如果文件不存在，可创建一个），内容示例如下：
-
-```cpp
-base {
-    log_debug = off;
-    log_info = on;
-    daemon = on;             # 以守护进程方式运行
-    redirector = iptables;   # 使用 iptables 重定向流量
-}
-
-redsocks {
-    local_ip = 127.0.0.1;      # redsocks 本地监听地址
-    local_port = 12345;        # redsocks 监听的端口（可以自定义，如 12345）
-    ip = 127.0.0.1;            # Hysteria2 客户端的代理地址（SOCKS5）
-    port = 1080;               # Hysteria2 提供的 SOCKS5 代理端口
-    type = socks5;             # 使用 socks5 协议
-    // login = "your_username";   # 如代理需要认证，则开启并填写
-    // password = "your_password";
-}
-```
-
-保存好文件后，你可以先用调试模式启动测试，再使用守护进程模式运行：
-
-bash
-
-
-
-```bash
-sudo redsocks -c /etc/redsocks.conf -p /var/run/redsocks.pid
-```
-
-------
-
-#### 3. 配置 iptables 规则
-
-下面的 iptables 规则将所有出站的 TCP 流量（除去局域网、回环地址等）重定向到 redsocks 本地监听端口（本例中为 12345）：
-
-
-
-
-
-```bash
-# 新建 redsocks 链
-sudo iptables -t nat -N REDSOCKS
-
-# 排除局部地址，防止重定向本地连接（包括 SSH、内网通信等）
-sudo iptables -t nat -A REDSOCKS -d 0.0.0.0/8 -j RETURN
-sudo iptables -t nat -A REDSOCKS -d 10.0.0.0/8 -j RETURN
-sudo iptables -t nat -A REDSOCKS -d 127.0.0.0/8 -j RETURN
-sudo iptables -t nat -A REDSOCKS -d 169.254.0.0/16 -j RETURN
-sudo iptables -t nat -A REDSOCKS -d 172.16.0.0/12 -j RETURN
-sudo iptables -t nat -A REDSOCKS -d 192.168.0.0/16 -j RETURN
-sudo iptables -t nat -A REDSOCKS -d 224.0.0.0/4 -j RETURN
-sudo iptables -t nat -A REDSOCKS -d 240.0.0.0/4 -j RETURN
-
-# 将所有经过的 TCP 流量重定向到 redsocks 的 12345 端口
-sudo iptables -t nat -A REDSOCKS -p tcp -j REDIRECT --to-ports 12345
-
-# 对本机的 OUTPUT 链中所有 TCP 流量应用重定向规则
-sudo iptables -t nat -A OUTPUT -p tcp -j REDSOCKS
-```
-
-
-
-## 结果
-
-失败，对于普通的 tcp 流量正常，但是对于 https 流量则存在问题，TLS 握手会失败

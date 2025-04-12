@@ -40,17 +40,12 @@ CMD ["python", "app.py"]
 ```Dockerfile
 FROM python:3.9-slim  # 使用官方精简版 Python 镜像
 ```
-指定基础镜像
-
-- `python:3.9-slim` 比完整版的 `python:3.9` 体积小，但包含运行 Python 所需的所有组件
-- 也可以使用 `python:3.9-alpine` 更小，但可能会有一些兼容性问题
+指定基础镜像 `python:3.9-slim` 比完整版的 `python:3.9` 体积小，但包含运行 Python 所需的所有组件
 
 ```Dockerfile
 WORKDIR /app  # 后续的指令都将在 /app 目录下执行
 ```
-设置工作目录
-
-如果目录不存在，Docker 会自动创建该目录，而且是 root 身份yun'xing
+设置工作目录，如果目录不存在，Docker 会自动创建该目录，而且是 root 身份创建
 
 ```Dockerfile
 COPY requirements.txt .  # 复制 requirements.txt 到当前工作目录
@@ -74,9 +69,7 @@ EXPOSE 5000  # 声明 contianer 中将使用的端口
 ```Dockerfile
 CMD ["python", "app.py"]  # 容器启动时执行的命令
 ```
-容器启动命令
-
-使用数组形式可以更好地处理参数
+容器启动命令，使用数组形式可以更好地处理参数
 
 
 
@@ -85,6 +78,8 @@ CMD ["python", "app.py"]  # 容器启动时执行的命令
 `WORKDIR` 用于为后续的 Dockerfile 指令（如 RUN、CMD、ENTRYPOINT、COPY 和 ADD）设置工作目录，相当于 `cd` 命令的效果，容器启动时的默认目录
 
 如果目标目录不存在，会自动创建该目录，而且使用 `root` 用户创建这个目录，无论 `USER` 指令是否已经切换到 non-root user
+
+## best practice
 
 而依据最小权限规则，我们往往不能让 root user 去运行这个 container，所以最好不要依靠 `WORKDIR` 来创建目录，而是提前创建好目录并且给予权限或者修改目录所有者 e.g.
 
