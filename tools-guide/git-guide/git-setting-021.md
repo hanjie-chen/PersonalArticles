@@ -148,9 +148,9 @@ git clone git@github.com:hanjie-chen/PersonalArticles.git
 
 > [!note]
 >
-> 只有在 `ssh -T git@githu.com` 命令验证成功之后才能 `git clone git@github.com:....` 类型的仓库，因为实际上他也是进行 ssh 验证的。
+> 只有在 `ssh -T git@githu.com` 命令验证成功之后才能 `git clone git@github.com:user-name/repo-name.git` 类型的仓库，因为实际上他也是进行 ssh 验证的。
 >
-> 但是如果是 `git clone https://github.com/...` 则无需 ssh 验证，但是当你 git push 的时候，会弹出一个方框让你进行 github 账号登录和验证
+> 但是如果是 `git clone https://github.com/user-name/repo-name.git` 则无需 ssh 验证，但是当你 git push 的时候，会弹出一个方框让你进行 github 账号登录和验证
 
 如果之前不小心 git clone https 的，可以使用 `git remote set-url origin` 命令重置为 ssh url
 

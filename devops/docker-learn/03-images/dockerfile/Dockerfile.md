@@ -103,8 +103,6 @@ WORKDIR /articles-data
 
 
 
-
-
 # `COPY` 指令
 
 ```dockerfile
@@ -154,12 +152,6 @@ COPY --chown=appuser:appgroup update-articles.sh init.sh /usr/local/bin/
 # `RUN` 指令
 
 用于在构建镜像时执行命令，并将执行结果保存到镜像的下一层。例如，可以用 `RUN` 安装软件包、复制文件、修改权限等。
-
-## best practice
-
-run 指令最佳实践：用于实现分层构建，充分利用 cache 
-
-
 
 # `ENTRYPOINT` 指令
 

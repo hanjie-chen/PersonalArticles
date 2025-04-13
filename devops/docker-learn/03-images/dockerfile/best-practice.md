@@ -6,7 +6,7 @@
 
 # Run Container Processes as Non-Root
 
-有时候我们会遇到这样子的问题，那就是 contianer 中的使用 root user 运行的 process 读写了一些文件，而这些文件是 bind mount 到 host 中，导致 host 中的 user 无法操作这些文件。
+有时候我们会遇到这样子的问题，那就是 contianer 中的使用 root user 运行的 process 读写了一些文件，而这些文件是 bind mount 到 host 中，导致 host 中的 nonuser 无法操作这些文件。
 
 而如果我们不在 Dockerfile 中专门的指定某个 user 来运行 process 的话，默认情况下，Docker 容器中的进程是以 `root` 用户运行的，这可能会带来安全风险。
 

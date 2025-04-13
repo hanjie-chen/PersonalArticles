@@ -63,5 +63,5 @@ python 语法高亮
 
 # Docker
 
-查看正在运行的 conta
+查看正在运行的 container
 

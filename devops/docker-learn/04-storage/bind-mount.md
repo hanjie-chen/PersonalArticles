@@ -30,9 +30,9 @@ services:
 
 # files permission in bind mount
 
-我们有时候会遇到这样子的问题，那就是当我们使用 bind mount 将本机的一个目录挂载到 container 中，然后由这个 container 来写这个目录的文件。
+我们有时候会遇到这样子的问题，那就是当我们使用 bind mount 将 host machine 的一个空目录挂载到 container 中，然后由这个 container 来创建和修改这个目录下的文件。
 
-当我们想要删除这个文件的时候，却发现会报错：
+当我们想要在 host machine 上删除这个文件的时候，却发现会报错：
 
 ```shell
 $ rm 'articles-sync.log 2>&1'
@@ -40,21 +40,27 @@ rm: remove write-protected regular file 'articles-sync.log 2>&1'? y
 rm: cannot remove 'articles-sync.log 2>&1': Permission denied
 ```
 
-这是因为对于 bind mount 的来说，容器内文件的所有权（用户 ID - UID 和 组 ID - GID）决定了 host 上对应文件的所有权。
+这是因为对于此情况下 container 内的进程（无论是 root 还是普通用户）在这个目录下创建文件时，文件的拥有者和权限由创建文件的进程决定。
 
-如果在 contianer 中是 root user (UID 0 GID 0) 运行的进程创建或者修改了 bind mount 的文件，那么在 host 上的文件同样显示为 UID 0 GID 0
+而当这个进程是以 root user 运行的时候，容器内文件的所有权就是 root, host machine 上面则会同样显示为所有权是 root
+
+所以 host machine 上面的 non-root user 无法删除这个文件
 
 > [!note]
 >
-> Docker 默认情况下会将容器内用户的 **UID (User ID)** 和 **GID (Group ID)** 直接映射到宿主机上**相同**的 UID 和 GID。
+> Docker 默认情况下会将容器内用户的 UID (User ID) 和 GID (Group ID) 直接映射到宿主机上相同的 UID 和 GID。
 
-## how to fix this
+我们当然可以简单的使用 `sudo rm` 命令来删除这个文件，但是作为 best practice 我们最好使用 non-root user 去运行 container process: [Dockerfile best practice](./03-images/dockerfile/best-practice.md)
 
-我们当然可以简单的使用 `sudo rm` 命令来删除这个文件，但是作为 best practice 我们最好不要使用 root user 去运行 container processes
+并且这个用户的 UID/GID 最好能匹配你宿主机上的用户的 UID/GID。
 
-而是使用创建一个 non-root user 并且使用这个 user 来运行 process [Dockerfile best practice](./03-images/dockerfile/best-practice.md)
+## another situation
 
-并且这个用户的 UID/GID 最好能**匹配**你宿主机上的用户的 UID/GID。
+如果 host machine 上面的目录不为空，里面存在文件，并且 container 中的进程需要修改这些文件。
+
+如果这些文件是由 host machine 上的 root 用户创建的，而容器内的 non-root user（UID:1000）尝试写入这些文件，会因为权限不足而失败。
+
+如果是 host machine non-root user 创建（比如说 UID:1000），那么对于权限 644（rw-r--r--），container 中的 UID:1000 的 non-root user 有读写权限，因此可以修改。
 
 # bind mount 生效时机
 
@@ -96,13 +102,13 @@ RUN pip install -r requirements.txt
 
 - Dockerfile 中的 `COPY` 和 `RUN` 指令会在镜像构建时执行, 将 requirements.txt 复制到镜像中并安装依赖。
 - 当容器启动时, compose.yml 中定义的卷挂载(`./web-app:/app`)会将宿主机的 `./web-app` 目录挂载到容器的 `/app` 目录。
-- 卷挂载会覆盖镜像中的 `/app` 目录,
+- 卷挂载会覆盖镜像中的 `/app` 目录
 
-也就是说 COPY 指令会先执行，所以 `COPY requirements.txt` 和 `RUN pip install` 仍然是必要的, 因为它们保证了依赖的正确安装。即使后续的卷挂载覆盖了 `/app` 目录, 也不会影响容器的运行。
+也就是说 COPY 指令会先执行，将 `requirement.txt` 复制到 images 中去，然后当这个 image 运行起来，变成 container 的时候，bind mount 才会生效，将 host machine 中的 `./web-app` 目录覆盖 container 中的 `/app` 目录
 
 # bind mount 本质
 
-当使用bind mount将主机上的一个路径挂载到容器中的一个路径时,容器中该路径原有的文件会被隐藏 ,但并不会被删除或覆盖。具体而言:
+当使用 bind mount 将主机上的一个路径挂载到容器中的一个路径时,容器中该路径原有的文件会被隐藏 ,但并不会被删除或覆盖。具体而言:
 
 假设容器中的路径 `/container/path` 下原本有如下文件:
 
