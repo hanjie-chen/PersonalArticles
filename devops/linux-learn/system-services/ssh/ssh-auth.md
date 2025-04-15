@@ -4,9 +4,7 @@
 
 但是这样子可能会遇到一些安全问题，比如说一台有 public ip 的 server 可能会遇到，密码爆破攻击这样子，为了安全考虑，我们可以使用 ssh key 验证
 
-
-
-## generate ssh key
+# generate ssh key
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "note" -f ~/.ssh/<key-filename>
@@ -60,7 +58,7 @@ The key's randomart image is:
 >
 > 例如  [Powershell does not expand '~' for external programs · Issue #20031 · PowerShell/PowerShell](https://github.com/PowerShell/PowerShell/issues/20031)
 
-## add ssh key to remote server
+# add ssh key to remote server
 
 既然已经生成了 ssh key, 我们就需要将 public key 添加到 remote server中去
 
@@ -90,6 +88,12 @@ and check to make sure that only the key(s) you wanted were added.
 > [!note]
 >
 > 在 windows powershell 环境下无法使用 `ssh-copy-id` 命令，此时可以打开 git bash 去运行这个命令
+
+## azure vm
+
+如果用的是 azure linux vm 可以在 azure portal 中添加 ssh public key
+
+![azure ssh key add](./images/azure-ssh-key-add.png)
 
 ## 使用 ssh key 登录
 
