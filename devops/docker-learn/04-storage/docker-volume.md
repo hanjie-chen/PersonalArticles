@@ -19,8 +19,8 @@ BriefIntroduction:
 
 Docker volume 实际上是一个独立于 container 的存储空间，它的生命周期独立于 container 也就是说
 
-- Volume数据在容器重启后仍然存在
-- 删除容器不会删除volume
+- Volume 数据在容器重启后仍然存在
+- 删除容器不会删除 volume
 
 可以把它理解为一个"共享文件夹"。
 
@@ -148,10 +148,16 @@ Docker 先挂载 Volume，然后才执行 `CMD` 或 `ENTRYPOINT`
 
 
 
-# next action
+## next action
 
 似乎找不到对应的 docker document 来支持我的论点
 
 找到一个 [stackflow 帖子](https://stackoverflow.com/questions/69308389/docker-is-volume-mounted-before-running-cmd) 但是在回答的对应文档里面还真没有找到 https://github.com/opencontainers/runtime-spec/blob/master/config.md#createruntime-hooks
 
 如果存在文档说明 container environment 中包含 filesystem，并且存在文档说明 `CMD/ENTRYPOINT` 指令必须要在 container environment 设置好之后才可以执行，同样也可以证明这一点
+
+
+
+# Docker volume VS. bind mount
+
+和 bind mount 一样，当 docker volume 挂载上去的路径会被覆盖。而且甚至权限管理都和其类似，bind mount 由宿主机的文件系统决定，而 docker volume 由卷的初始创建者和后续操作决定

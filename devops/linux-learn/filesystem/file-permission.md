@@ -3,7 +3,7 @@
 查看Linux 文件权限的常用命令，一般来说是 `ls -l` e.g.
 
 ```shell
-Plain@Linux-VM:~/Personal_Project/test-website/articles-sync/logs$ ls -l
+$ ls -l
 total 12
 -rw-r--r-- 1 root root 1561 Jan 17 01:17  articles-sync.log
 -rw-r--r-- 1 root root  743 Jan 17 01:17 'articles-sync.log 2>&1'

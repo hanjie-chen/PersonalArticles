@@ -1,6 +1,6 @@
 # Bind Mount
 
-Bind Mount 是 Docker 中的一种卷类型，它将 host filesystem 中的一个目录或文件挂载到 container 内的一个目录或文件。这意味着container 内指定路径下的内容与 host 的内容是同步的和共享的。
+Bind Mount 是 Docker 中的一种卷类型，它将 host machine 中的一个目录或文件挂载到 container 内的一个目录或文件。这意味着container 内指定路径下的内容与 host 的内容是同步的和共享的。
 
 绑定挂载实际上是让主机和容器共享同一个文件系统位置。无论是主机还是容器，对该位置的操作都是对同一文件系统的操作。
 
@@ -54,13 +54,25 @@ rm: cannot remove 'articles-sync.log 2>&1': Permission denied
 
 并且这个用户的 UID/GID 最好能匹配你宿主机上的用户的 UID/GID。
 
-## another situation
+## another situation: 
 
 如果 host machine 上面的目录不为空，里面存在文件，并且 container 中的进程需要修改这些文件。
 
 如果这些文件是由 host machine 上的 root 用户创建的，而容器内的 non-root user（UID:1000）尝试写入这些文件，会因为权限不足而失败。
 
 如果是 host machine non-root user 创建（比如说 UID:1000），那么对于权限 644（rw-r--r--），container 中的 UID:1000 的 non-root user 有读写权限，因此可以修改。
+
+## another situation: no such a dir
+
+当我们再 `compose.yml` 中配置完 bind mount 将一个 host machine 的路径映射到 container 中，如果 host machine 没有这个路径，那么会发生什么呢？
+
+答：Docker 会自动在宿主机上创建该路径（包括必要的父目录），而且是由运行 Docker 守护进程（Docker Daemon）的用户创建的，通常是 root 用户
+
+> [!note]
+>
+> Docker 守护进程（dockerd）通常以 root 用户身份运行（除非你特意配置了非 root 模式，如 rootless Docker）
+
+
 
 # bind mount 生效时机
 
@@ -108,7 +120,21 @@ RUN pip install -r requirements.txt
 
 # bind mount 本质
 
-当使用 bind mount 将主机上的一个路径挂载到容器中的一个路径时,容器中该路径原有的文件会被隐藏 ,但并不会被删除或覆盖。具体而言:
+Bind mount 会将宿主机上的“一切”（包括目录、文件、权限等）覆盖或带入到容器中
+
+这意味着将宿主机指定的路径（包括其文件、子目录及其权限）完全“映射”到容器内的目标路径，覆盖容器内该路径的原有内容。容器内的进程访问该路径时，实际上操作的是宿主机的文件系统，权限检查也基于宿主机的文件权限。
+
+> [!tip]
+>
+> 这意味着如果 container 中原有的 dir1(owned by root user)，然后 bind mount 了 host machine 上面的一个 dir2(owned by non-root user, UID:1000) 那么如果 container 中同样也是使用 non-root user(UID:1000) 去运行的，就可以成功访问到这个 dir
+>
+> 但是实际上如果解除了这个 bind mount, 反而就会出现权限问题 
+
+## what about the source file in container?
+
+那么原来在 container 中的这个路径怎么办呢？
+
+它们（容器中该路径原有的文件）会被隐藏 ,但并不会被删除或修改。
 
 假设容器中的路径 `/container/path` 下原本有如下文件:
 
