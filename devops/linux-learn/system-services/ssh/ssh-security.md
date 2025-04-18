@@ -62,7 +62,7 @@ grep "Failed password" /var/log/auth.log | tail -n 50
 使用下面的命令检查是否存在陌生用户
 
 ```
-$ cat /etc/passwd | grep "/home"
+cat /etc/passwd | grep "/home"
 ```
 
 如果你是 azure linux vm 并且看到类似于下面的 user

@@ -223,3 +223,49 @@ nginx                   alpine    1ff4bb4faebc   7 weeks ago   47.9MB
 - **使用具体的标签**：在构建镜像时，避免总是用 `latest`，可以用版本号或其他有意义的标签，例如 `website-web-app:v1.0`。
 - **定期清理**：养成定期运行 `docker image prune` 的习惯。
 - **检查构建过程**：如果使用多阶段构建，确保只保留最终需要的镜像。
+
+
+
+# 删除
+
+要删除某个 Docker 镜像，可以使用以下命令：
+
+```bash
+docker rmi <image_name_or_id>
+```
+
+### 示例：
+
+```bash
+docker rmi my-image:latest
+```
+
+或者使用镜像的 ID：
+
+```bash
+docker rmi 123abc456def
+```
+
+------
+
+### 注意事项：
+
+1. **镜像正在被容器使用时无法删除**
+    如果该镜像正被某个容器使用（即使容器已停止），你会看到类似以下错误：
+
+   ```
+   Error response from daemon: conflict: unable to remove repository reference ...
+   ```
+
+   你需要先删除对应的容器，或使用 `-f` 强制删除镜像：
+
+   ```bash
+   docker rmi -f <image_name_or_id>
+   ```
+
+2. **列出所有镜像**
+    查看你本地的镜像列表，可以使用：
+
+   ```bash
+   docker images
+   ```

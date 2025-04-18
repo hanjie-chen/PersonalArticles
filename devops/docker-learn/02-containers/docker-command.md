@@ -60,6 +60,20 @@ docker exec -it <container_id/container_name> /bin/sh
 - `-t`: 分配一个伪终端
 - `bash`: 要执行的命令（在这里是打开 bash shell）
 
+## stop container
+
+如果想要关闭一个正在 running 的 container 可以使用 `docker stop <container name/id>`
+
+可选参数：
+
+```bash
+docker stop -t 3 <container_name>
+```
+
+这里的 `-t 3` 表示：等待 3 秒后强制停止（默认是 10 秒）
+
+如果想要立即停止则是 `-t 0`
+
 ## restart container
 
 如果想要重新启动之前停止的 container，可以使用 `docker start` 命令
