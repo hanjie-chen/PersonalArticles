@@ -22,3 +22,39 @@ docker compose up --build
 
 
 
+
+
+## rebuild pointed service image
+
+如果我们遇到这样子一个问题：
+
+仅仅改动了某个 service 的 dockerfile，而且仅仅需要重建这个 service 的 image, 我们应该怎么办呢？
+
+也就是如何只重建这个镜像，而不是 `docker compose build --no-cache` 重建所有？
+
+我们可以使用
+
+```bash
+docker compose build --no-cache <服务名>
+```
+
+比如你的 `docker-compose.yml` 文件里有如下服务：
+
+```yaml
+services:
+  articles-sync:
+    build:
+      context: .
+      dockerfile: Dockerfile
+  web-app:
+    image: my-web-app
+    ...
+```
+
+那么你只需要重建 `articles-sync`：
+
+```bash
+docker compose build --no-cache articles-sync
+```
+
+这个命令只会对指定服务重建镜像，并不会影响其他服务。

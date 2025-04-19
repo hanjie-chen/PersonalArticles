@@ -9,14 +9,6 @@ chmod +x script.sh
 ```
 
 或者使用数字模式：
-```bash
-chmod 755 script.sh
-```
-- 755 表示：
-  - 所有者(owner)有读(4)、写(2)、执行(1)权限：4+2+1=7
-  - 用户组(group)有读(4)和执行(1)权限：4+0+1=5
-  - 其他用户(others)有读(4)和执行(1)权限：4+0+1=5
-
 2. **查看文件当前权限**
 
 使用 `ls -l` 命令可以查看文件的当前权限：
@@ -147,3 +139,124 @@ RUN mkdir -p /var/log/personal-website
 3. 没有特殊的权限要求
 
 但是，明确设置权限是一个好习惯，特别是在编写可能被他人使用或部署到不同环境的 Dockerfile 时。这样可以确保容器在任何环境下都能正确运行，不会因为默认权限的差异而出现问题。
+
+
+
+# `chmod u+s`
+
+`chmod u+s` 是一个非常有用但容易让人误解的命令，它涉及到 Linux 中的 Setuid（Set User ID）权限位。我们来一步一步拆解：
+
+- `u`：表示“user”，也就是文件的拥有者
+- `+s`：表示设置 Setuid 位（Set User ID bit）
+
+所以 `chmod u+s` 的意思就是：给这个文件设置 Setuid 权限位，使得无论谁执行这个程序，它都会以“文件拥有者”的身份运行
+
+
+
+## for example
+
+```bash
+ls -l /usr/bin/passwd
+```
+
+你可能会看到像这样：
+
+```bash
+-rwsr-xr-x 1 root root 54256 Apr 18  2020 /usr/bin/passwd
+```
+
+注意前面的 `rws` 中的 `s`！
+
+为什么 `/usr/bin/passwd` 有 `s`？
+
+这个命令允许普通用户修改自己的密码，但密码是保存在 `/etc/shadow` 中的，而这个文件只有 root 才能写入。
+
+为了让普通用户也能改密码，`passwd` 这个程序就设置了 `Setuid`，这样当你执行它时，它实际上是以 `root` 的身份在运行。
+
+
+
+## 如何给一个程序设置 `Setuid`：
+
+```bash
+sudo chmod u+s my_program
+```
+
+设置后再看权限：
+
+```bash
+ls -l my_program
+```
+
+可能变成这样：
+
+```bash
+-rwsr-xr-x 1 user user 12345 Apr 19 10:00 my_program
+s` 出现在原来的 `x` 位置，说明启用了 `Setuid
+```
+
+
+
+> [!note]
+>
+> 设置 `u+s` 会让程序拥有文件所有者的权限，所以这非常敏感。如果你给一个有 bug 的程序设置了 `u+s`，黑客可能会利用它提升权限。
+>
+> 只有在 必须需要 并且 程序是安全可信的 情况下，才建议用 `chmod u+s`
+
+# `chmod o+x`
+
+- `o`：代表「others」（即：不是文件所有者，也不在所属用户组的人）
+- `+x`：为目标增加「可执行（execute）」权限
+
+所以：
+
+```bash
+chmod o+x /usr/bin/crontab
+```
+
+表示允许所有其他用户也可以执行 `crontab` 这个程序
+
+
+
+## for example
+
+原始权限（你当时的情况）：
+
+```bash
+ls -l /usr/bin/crontab
+-rwsr-x---    1 root     wheel        18328 May 30  2024 /usr/bin/crontab
+```
+
+权限解释：
+
+| 类型            | 权限 | 谁可以干啥？ |
+| --------------- | ---- | ------------ |
+| 所有者 (root)   | rwx  | 可读写执行   |
+| 所属组 (wheel)  | r-x  | 可读执行     |
+| 其他人 (others) | ---  | 什么都不能做 |
+
+你切换到 `appuser` 执行 `crontab`，属于「others」，权限是 `---`，就会出现 **Permission denied**
+
+使用 `chmod o+x` 后，权限变成：
+
+```bash
+ls -l /usr/bin/crontab
+-rwsr-x--x    1 root     wheel        18328 May 30  2024 /usr/bin/crontab
+```
+
+others 现在有 `x` 权限，也就是：
+
+你虽然不是 root，也不在 wheel 组，但是你有权「执行」这个程序，因为这个程序本身有 `u+s`（Setuid），所以执行时它是以 root 身份运行的
+
+总结为什么有效：
+
+| 操作        | 目的                           |
+| ----------- | ------------------------------ |
+| `chmod u+s` | 让程序「以文件拥有者身份运行」 |
+| `chmod o+x` | 让「其他人能执行它」           |
+
+两个配合使用，才能实现：别人可以执行我写的程序，并且这个程序以我的身份运行
+
+> [!note]
+>
+> - 如果程序还依赖别的资源（比如读写某些 root-only 文件），也要确保这些文件有合理权限
+> - 对脚本（.sh 文件）设置 `u+s` 是无效的，Linux 出于安全考虑禁止脚本启用 Setuid（你需要用 C 程序来绕过）
