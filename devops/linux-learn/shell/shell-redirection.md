@@ -2,7 +2,7 @@
 
 ## redirect append operator
 
-在 shell 中，`>>` 被称为**重定向追加符号 (redirection append operator)**。它的作用是将命令的输出追加到一个文件中。具体来说:
+在 shell 中，`>>` 被称为重定向追加符号 (redirection append operator)。它的作用是将命令的输出追加到一个文件中。具体来说:
 
 - 如果该文件不存在，则创建该文件
 - 如果该文件已存在，则将命令的输出追加到文件的末尾，而不是覆盖文件原有的内容
