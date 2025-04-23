@@ -1,3 +1,18 @@
+---
+Title:
+Author: 陈翰杰
+Instructor: grok3
+CoverImage: 
+RolloutDate: 
+---
+
+```
+BriefIntroduction: 
+
+```
+
+<!-- split -->
+
 # Modele design
 
 
@@ -8,7 +23,7 @@ terraform 存在这样子一个问题，那就是每个模块应该如何区分�
 
 是按照一个完成的产品来区分，还是按照配置的性质来区分呢？以下面的这个项目为例（分别创建 1 台 linux vm 和 1 台 windows vm）
 
-```
+```shell
 $ ls -l
 total 120
 -rw-rw-r-- 1 Plain Plain   987 Mar 27 03:05 README.md
@@ -122,56 +137,12 @@ total 120
 - **内容**：
   - 定义虚拟网络（VNet）等共享资源。
   - 输出 VNet ID 等信息。
-- **代码示例**：
-  ```hcl
-  # modules/network/network-general.tf
-  resource "azurerm_virtual_network" "vnet" {
-    name                = var.vnet_name
-    address_space       = ["10.0.0.0/16"]
-    location            = var.location
-    resource_group_name = var.resource_group_name
-  }
-  
-  # modules/network/outputs.tf
-  output "vnet_id" {
-    value = azurerm_virtual_network.vnet.id
-  }
-  
-  # modules/network/variables.tf
-  variable "vnet_name" {}
-  variable "location" {}
-  variable "resource_group_name" {}
-  ```
 
 #### 2. linux-vm module
 - **文件**：`modules/linux-vm/compute-linux-vm.tf`、`modules/linux-vm/network-linux.tf`、`modules/linux-vm/variables.tf`
 - **内容**：
   - 定义 Linux VM、专属子网、网络接口等。
   - 使用 `network module` 的输出（如 VNet ID）。
-- **代码示例**：
-  ```hcl
-  # modules/linux-vm/network-linux.tf
-  resource "azurerm_subnet" "linux_subnet" {
-    name                 = "linux-subnet"
-    resource_group_name  = var.resource_group_name
-    virtual_network_name = var.vnet_name
-    address_prefixes     = ["10.0.1.0/24"]
-  }
-  
-  # modules/linux-vm/compute-linux-vm.tf
-  resource "azurerm_linux_virtual_machine" "linux_vm" {
-    name                = "linux-vm"
-    resource_group_name = var.resource_group_name
-    location            = var.location
-    size                = "Standard_DS1_v2"
-    # 关联子网等
-  }
-  
-  # modules/linux-vm/variables.tf
-  variable "vnet_name" {}
-  variable "resource_group_name" {}
-  variable "location" {}
-  ```
 
 #### 3. windows-vm module
 - **类似 linux-vm module**，包含 `compute-windows-vm.tf` 和 `network-windows.tf`。
@@ -208,15 +179,6 @@ total 120
 - **全局变量**：放在根目录的 `variables-general.tf` 中，定义通用的变量（如资源组名称、位置）。
 - **模块变量**：每个模块有自己的 `variables.tf`，定义模块特定的输入参数。
 - **传递变量**：在 `main.tf` 中调用模块时，将全局变量传递给模块。
-
----
-
-### 总结
-- **推荐方式**：混合模式，创建 `network module`（通用网络资源） + `linux-vm module` 和 `windows-vm module`（各自完整的功能）。
-- **原因**：既能复用共享资源（如 VNet），又能灵活管理 Linux 和 Windows VM 的专属配置。
-- **下一步**：你可以开始整理代码，将 `network-general.tf` 放入 `network module`，将 `compute-linux-vm.tf` 和 `network-linux.tf` 整合成 `linux-vm module`，以此类推。
-
-如果你在实施过程中有具体问题，欢迎随时告诉我！希望这个建议对你有帮助。
 
 
 
