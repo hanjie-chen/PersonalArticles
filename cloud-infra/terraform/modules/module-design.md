@@ -184,8 +184,8 @@ total 120
 
 # continue
 
-https://grok.com/share/bGVnYWN5_089b6ed3-5582-4ec8-84b2-cb288cc47226
+[Terraform Module 学习计划 - Grok](https://grok.com/chat/94ec7da9-2796-4e3c-aebb-38efe6a56e5c)
 
-https://chatgpt.com/share/6806673f-8f60-800a-8978-f1761a0f629d
+[Terraform模块化学习计划](https://chatgpt.com/c/68086cdd-398c-800a-87e8-dce59c80dea5)
 
 https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221BjVwSHeBEixqLT9kIHpFB0jI8K2oh8pG%22%5D,%22action%22:%22open%22,%22userId%22:%22110375984325177043287%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing
