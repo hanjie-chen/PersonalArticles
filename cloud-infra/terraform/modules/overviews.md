@@ -95,3 +95,54 @@ module "linux_vm" {
 
 
 
+
+
+# 在模块内使用从 `main.tf` 传递进来的参数
+
+在 `main.tf` 中，通过以下方式向 `network` 模块传递了 `resource_group_name` 和 `resource_region` 参数：
+
+```hcl
+module "network" {
+  source              = "./modules/network"
+  resource_group_name = var.resource_group_name
+  resource_region     = var.resource_region
+}
+```
+
+为了在 `network` 模块内部使用这些参数，你需要在模块的 `variables.tf` 文件中定义对应的输入变量，然后在资源定义中使用这些变量。
+
+#### for example
+在 `modules/network/variables.tf` 中添加变量定义，修改后的 `variables.tf` 如下：
+
+```hcl
+variable "resource_group_name" {
+  description = "Name of the resource group"
+  type        = string
+}
+
+variable "resource_region" {
+  description = "Azure region"
+  type        = string
+}
+```
+
+在模块的资源定义中直接使用这些变量
+
+```hcl
+# create resource group
+resource "azurerm_resource_group" "main" {
+  name     = var.resource_group_name
+  location = var.resource_region  # 改为 var.location，与 main.tf 保持一致
+}
+
+# create virtual network
+resource "azurerm_virtual_network" "main" {
+  name                = var.vnet_name
+  address_space       = var.vnet_address_space
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+}
+```
+
+
+

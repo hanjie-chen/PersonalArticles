@@ -110,3 +110,92 @@ module "linux_vm" {
 ------
 
 如果你愿意，我可以帮你写一个完整的输出链条示例（比如从 network module 输出 subnet_id，然后传给 linux-vm module 创建 NIC），这样你可以更直观理解 output 的作用。你要试试看吗？
+
+
+
+
+
+````
+好的，我正在修改 network modules 部分，我继续提问，那就是关于最外层的一些变量如何传递给 modules 中呢？
+比如说这是我目前最外层的 varialbes-general.tf:
+
+```
+# general varialbes
+
+variable "subscription_id" {
+  description = "Azure subscription id"
+  type = string
+  sensitive = true
+}
+
+variable "resource_region" {
+  description = "Azure resource location: Singapore"
+  default     = "southeastasia"
+}
+
+variable "resource_group_name" {
+  description = "resource group name"
+  default     = "Singapore-RG"
+}
+
+```
+然后这是我目前的 modules/network 下面存在2个文件：
+(base) Plain@Singapore-Linux-VM:~/projects/azure-vm-terraform/modules/network$ ls
+network-general.tf  variables.tf
+
+分别是：network-general.tf:
+```
+# network.tf
+
+# create resource group
+resource "azurerm_resource_group" "main" {
+  name     = var.resource_group_name
+  location = var.resource_region
+}
+
+# create virtual network
+resource "azurerm_virtual_network" "main" {
+  name          = var.vnet_name
+  address_space = var.vnet_address_space
+  # inherit location, name from resource group
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+}
+```
+varialbes.tf:
+```
+# network setting
+variable "vnet_name" {
+  description = "virtual network name"
+  default     = "Singapore-Vnet"
+}
+
+variable "vnet_address_space" {
+  description = "virtual network address space"
+  default     = ["10.0.0.0/16"]
+}
+```
+但是在 network-general.tf 中我需要传递最外层的 varialbes-general.tf 中的resource group 相关的信息，我应该怎么办呢？
+这是我最外层的 varialbes-general.tf:
+```
+# general varialbes
+
+variable "subscription_id" {
+  description = "Azure subscription id"
+  type = string
+  sensitive = true
+}
+
+variable "resource_region" {
+  description = "Azure resource location: Singapore"
+  default     = "southeastasia"
+}
+
+variable "resource_group_name" {
+  description = "resource group name"
+  default     = "Singapore-RG"
+}
+```
+还有一个问题就是为什么将 network-general.tf 重命名位 main.tf 呢？你可以说说为什么这个是 best practice 吗？
+````
+
