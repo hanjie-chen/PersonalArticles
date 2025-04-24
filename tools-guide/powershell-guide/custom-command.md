@@ -1,10 +1,9 @@
 ---
 Title: Personal Windows PS Command
 Author: 陈翰杰
-Instructor: Sonnet 3.5
+Instructor: Sonnet 3.5, chatgpt-4o
 CoverImage: ./images/cover_image.webp
 RolloutDate: 2024-09-19
-Category: windows/windows command/windows powershell
 ---
 
 ```
@@ -80,16 +79,20 @@ Set-Alias -Name touch -Value Touch-File
 
 Linux like command tree, to instead of the powershell nature `tree`
 
-user `tree -DirectoriesOnly` to show directories
+use `tree -DirectoriesOnly` to show directories
+
+use `tree -Ignore "images", "image"` to ignore some folder
 
 ```powershell
-# Linux-like tree command, created by Plain in 2024-11-15
+# Linux-like tree command, added by Plain in 2024-11-15
+# modified in 2025-04-24, add Ingore parameter
 function Show-TreeWithFiles {
     param (
         [string]$Path = ".",
         [string]$Indent = "",
         [bool]$IsLast = $true,
-        [switch]$DirectoriesOnly # 新增参数，使用 switch 类型便于命令行使用
+        [switch]$DirectoriesOnly, # 新增参数，使用 switch 类型便于命令行使用
+        [string[]]$Ignore  # 新增 Ignore 参数
     )
 
     # 根据 DirectoriesOnly 参数决定是否只获取目录
@@ -97,6 +100,10 @@ function Show-TreeWithFiles {
         Get-ChildItem -Path $Path | Where-Object { $_.PSIsContainer }
     } else {
         Get-ChildItem -Path $Path
+    }
+    # 如果指定 Ignore，过滤掉匹配的文件夹
+    if ($Ignore) {
+        $items = $items | Where-Object { $Ignore -notcontains $_.Name }
     }
     
     $count = $items.Count
@@ -136,12 +143,36 @@ function Show-TreeWithFiles {
             } else {
                 if ($isLastItem) { "$Indent    " } else { "$Indent│   " }
             }
-            Show-TreeWithFiles -Path $item.FullName -Indent $newIndent -IsLast $isLastItem -DirectoriesOnly:$DirectoriesOnly
+            Show-TreeWithFiles -Path $item.FullName -Indent $newIndent -IsLast $isLastItem -DirectoriesOnly:$DirectoriesOnly -Ignore:$Ignore
         }
     }
 }
 
 # 创建别名，使用 -Force 参数覆盖原有的 tree 命令
 Set-Alias -Name tree -Value Show-TreeWithFiles -Force
+```
+
+the color for the tree result
+
+```powershell
+# add by Plain in 2024-10-05
+$PSStyle.FileInfo.Directory = "`e[34;1m"  # bule bold for directory
+$PSStyle.FileInfo.SymbolicLink = "`e[36;1m" 
+$PSStyle.FileInfo.Executable = "`e[32;1m"  # green boldfor exe file
+
+# seeting color for differnet file
+$colors = @{
+    ".txt" = "`e[33m"  # yellow
+    ".log" = "`e[31m"  # red
+    ".ps1" = "`e[36m"  
+    ".exe" = "`e[32m"  # green
+    ".json" = "`e[35m"  
+    ".yml" = "`e[35m"  
+    ".md" = "`e[33m"   # yellow
+}
+# apply it to color
+foreach ($extension in $colors.Keys) {
+    $PSStyle.FileInfo.Extension[$extension] = $colors[$extension]
+}
 ```
 
