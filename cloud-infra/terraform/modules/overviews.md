@@ -4,27 +4,35 @@ Terraform Module 是 Terraform 中用来组织和管理基础设施代码的一�
 
 类似于编程语言中的函数，只需要定义一次，用时只需要调用和传递参数即可
 
-## module consistent
 
-一个 Terraform 模块通常是一个文件夹，里面包含几个关键文件：
+
+## module example
+
+一个 Terraform module 通常是一个文件夹，里面包含几个关键文件：
 - **`main.tf`**：定义模块里的资源，比如虚拟机、数据库等。
 - **`variables.tf`**：定义模块需要的输入变量（比如虚拟机名称、大小等）。
 - **`outputs.tf`**：定义模块的输出值（比如虚拟机的 IP 地址、ID 等）。
 - （可选）**`README.md`**：写一些说明，告诉别人这个模块是干嘛用的。
 
 ### 一个简单的例子
-假设你要创建一个模块来部署一台 Linux 虚拟机 (VM)。模块的文件夹结构可能是这样：
+假设你要创建一个模块来部署一台 Linux VM。模块的文件夹结构可能是这样：
 ```
 linux-vm-module/
-├── main.tf
+├── compute.tf
 ├── variables.tf
-└── outputs.tf
+├── outputs.tf
+└── network.tf
 ```
 
-#### **variables.tf**（定义变量）
-#### **main.tf**（资源定义）
-#### **outputs.tf**（输出值）
-这个模块的功能是：根据你给的名称、大小和网络接口 ID，创建一台 Linux VM，并返回它的 ID 和 IP 地址。
+variables.tf: 定义变量
+
+compute.tf: linux vm 定义
+
+network.tf: linux vm 网络相关设置（nic, nsg, subnet 等）
+
+outputs.tf: 输出值
+
+
 
 
 
@@ -32,10 +40,12 @@ linux-vm-module/
 
 使用模块分三步：创建模块、调用模块、使用输出。下面我一步步说明。
 
-### 创建模块
+创建模块
+
 就像上面例子中那样，写好 `main.tf`、`variables.tf` 和 `outputs.tf`，放在一个文件夹里（比如 `linux-vm-module`）。
 
-### 在主配置中调用模块
+在主配置中调用模块
+
 假设你的主 Terraform 文件是 `main.tf`，你可以在里面调用这个模块：
 
 ```hcl
@@ -49,9 +59,9 @@ module "linux_vm" {
 ```
 
 - **`source`**：告诉 Terraform 去哪里找模块。这里是本地路径 `./linux-vm-module`。
-- **输入变量**：通过 `vm_name`、`vm_size` 等把值传给模块。
+- 输入变量：通过 `vm_name`、`vm_size` 等把值传给模块。
 
-运行 `terraform init` 会下载模块（如果是本地模块就不需要下载），然后 `terraform apply` 就会创建资源。
+
 
 ### 使用模块的输出
 模块可以输出一些值，你可以在主配置或其他模块里用这些输出。比如：
@@ -97,7 +107,7 @@ module "linux_vm" {
 
 
 
-# 在模块内使用从 `main.tf` 传递进来的参数
+# 在模块内使用从 root 目录 `main.tf` 传递进来的参数
 
 在 `main.tf` 中，通过以下方式向 `network` 模块传递了 `resource_group_name` 和 `resource_region` 参数：
 

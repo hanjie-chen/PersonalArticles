@@ -15,50 +15,51 @@ BriefIntroduction:
 
 # Modele design
 
-
+当我们打算写 terraform 模块的时候，往往会遇到这样子的问题：每个模块应该如何区分和设计？
 
 ## background
 
-terraform 存在这样子一个问题，那就是每个模块应该如何区分呢？
+当我们打算写 terraform 模块的时候，往往会遇到这样子的问题：每个模块应该如何区分和设计？
 
-是按照一个完成的产品来区分，还是按照配置的性质来区分呢？以下面的这个项目为例（分别创建 1 台 linux vm 和 1 台 windows vm）
+以下面的这个没有模块化的 terraform 项目为例（在 Azure 上分别创建 1 台 linux vm 和 1 台 windows vm）
 
 ```shell
-$ ls -l
-total 120
--rw-rw-r-- 1 Plain Plain   987 Mar 27 03:05 README.md
--rw-rw-r-- 1 Plain Plain   724 Mar  9 13:56 compute-linux-vm.tf
--rw-rw-r-- 1 Plain Plain   895 Mar  9 13:56 compute-windows-vm.tf
--rw-rw-r-- 1 Plain Plain   463 Mar  5 06:51 network-general.tf
--rw-rw-r-- 1 Plain Plain  3477 Apr 12 11:55 network-linux.tf
--rw-rw-r-- 1 Plain Plain  2245 Mar  5 06:51 network-windows.tf
--rw-rw-r-- 1 Plain Plain   966 Mar  5 06:51 outputs.tf
--rw-rw-r-- 1 Plain Plain   217 Mar  5 06:51 providers.tf
--rw-rw-r-- 1 Plain Plain   580 Mar  5 06:51 variables-general.tf
--rw-rw-r-- 1 Plain Plain   925 Mar  5 06:51 variables-linux.tf
--rw-rw-r-- 1 Plain Plain   972 Mar  5 06:51 variables-windows.tf
+$ tree
+.
+├── README.md
+├── compute-linux-vm.tf
+├── compute-windows-vm.tf
+├── network-general.tf
+├── network-linux.tf
+├── network-windows.tf
+├── outputs.tf
+├── providers.tf
+├── variables-general.tf
+├── variables-linux.tf
+└── variables-windows.tf
 ```
-是应该把和 compute, network, varialbes 相关的都整理位一个 modules, 比如说 compute module, network module, varialbe module.
+是应该把和 compute, network 相关的都整理位一个 modules, 比如说 compute module, network module
 
-还是说按照 compute-linux-vm.tf + network-linux.tf + varialbes-linux.tf 作为一个完成的 module 呢？
+还是说按照 compute-linux-vm.tf + network-linux.tf + varialbes-linux.tf = linux-vm module 作为一个完成的 module 呢？
 
-这涉及到 Terraform 模块划分的核心问题：到底是按照资源类型（如 compute、network、variables）来划分模块，还是按照功能完整性（如 Linux VM 或 Windows VM 的完整配置）来划分模块。
+这涉及到 Terraform 模块划分的核心问题：到底是按照资源类型（如 compute、network）来划分模块，还是按照功能完整性（如 Linux VM 或 Windows VM 的完整配置）来划分模块。
 
 针对这个项目，接下来分析这两种方式的优缺点，并给出建议。
 
 ## 项目结构分析
 
-先来看一下项目目录：
+先来看一下项目相关文件：
 ```
--rw-rw-r-- 1 Plain Plain   724 Mar  9 13:56 compute-linux-vm.tf
--rw-rw-r-- 1 Plain Plain   895 Mar  9 13:56 compute-windows-vm.tf
--rw-rw-r-- 1 Plain Plain   463 Mar  5 06:51 network-general.tf
--rw-rw-r-- 1 Plain Plain  3477 Apr 12 11:55 network-linux.tf
--rw-rw-r-- 1 Plain Plain  2245 Mar  5 06:51 network-windows.tf
--rw-rw-r-- 1 Plain Plain   580 Mar  5 06:51 variables-general.tf
--rw-rw-r-- 1 Plain Plain   925 Mar  5 06:51 variables-linux.tf
--rw-rw-r-- 1 Plain Plain   972 Mar  5 06:51 variables-windows.tf
-...
+.
+├── compute-linux-vm.tf
+├── compute-windows-vm.tf
+├── network-general.tf
+├── network-linux.tf
+├── network-windows.tf
+├── variables-general.tf
+├── variables-linux.tf
+├── variables-windows.tf
+└── ...
 ```
 有 **Linux VM** 和 **Windows VM** 相关的计算资源（`compute-linux-vm.tf` 和 `compute-windows-vm.tf`）。
 
@@ -72,9 +73,8 @@ total 120
 
 ## 方式 1：按资源类型划分
 这种方式是将所有相似的资源整理成一个模块，例如：
-- **compute module**：包含 `compute-linux-vm.tf` 和 `compute-windows-vm.tf`。
-- **network module**：包含 `network-general.tf`、`network-linux.tf` 和 `network-windows.tf`。
-- **variable module**：实际上 Terraform 中变量通常不单独作为一个模块，而是每个模块有自己的 `variables.tf` 文件。
+- **compute module**：主要包含 `compute-linux-vm.tf` 和 `compute-windows-vm.tf`。
+- **network module**：主要包含 `network-general.tf`、`network-linux.tf` 和 `network-windows.tf`。
 
 #### 优点
 - **复用性强**：如果多个地方需要类似的计算或网络资源，可以直接调用同一个模块。例如，一个通用的 `network module` 可以被不同的 VM 使用。
@@ -108,7 +108,8 @@ total 120
 
 
 ## 混合模式的建议
-从你的文件结构来看：
+从项目的文件来看：
+
 - `network-general.tf` 包含共享的网络资源（如 VNet）
 - `network-linux.tf` 和 `network-windows.tf` 表示 Linux 和 Windows VM 有各自专属的网络配置（如 subnet, nsg）
 - 计算资源（`compute-linux-vm.tf` 和 `compute-windows-vm.tf`）和变量（`variables-linux.tf` 和 `variables-windows.tf`）也是按功能分开。
@@ -126,66 +127,3 @@ total 120
 - **复用性**：通用的网络资源（如 VNet）放在 `network module` 中，避免重复定义。
 - **灵活性**：Linux 和 Windows VM 的专属配置各自独立，适应不同的需求。
 - **符合你的项目结构**：你的文件已经按功能分开（Linux vs Windows），混合模式可以直接利用这一点。
-
-
-
-## 具体实现
-以下是模块划分的具体建议：
-
-#### 1. network module
-- **文件**：`modules/network/network-general.tf`、`modules/network/variables.tf`、`modules/network/outputs.tf`
-- **内容**：
-  - 定义虚拟网络（VNet）等共享资源。
-  - 输出 VNet ID 等信息。
-
-#### 2. linux-vm module
-- **文件**：`modules/linux-vm/compute-linux-vm.tf`、`modules/linux-vm/network-linux.tf`、`modules/linux-vm/variables.tf`
-- **内容**：
-  - 定义 Linux VM、专属子网、网络接口等。
-  - 使用 `network module` 的输出（如 VNet ID）。
-
-#### 3. windows-vm module
-- **类似 linux-vm module**，包含 `compute-windows-vm.tf` 和 `network-windows.tf`。
-
-#### 4. 主配置文件（main.tf）
-- 调用这些模块：
-  ```hcl
-  module "network" {
-    source              = "./modules/network"
-    vnet_name          = "my-vnet"
-    location           = "eastus"
-    resource_group_name = "my-resource-group"
-  }
-  
-  module "linux_vm" {
-    source              = "./modules/linux-vm"
-    vnet_name          = module.network.vnet_name
-    resource_group_name = "my-resource-group"
-    location           = "eastus"
-  }
-  
-  module "windows_vm" {
-    source              = "./modules/windows-vm"
-    vnet_name          = module.network.vnet_name
-    resource_group_name = "my-resource-group"
-    location           = "eastus"
-  }
-  ```
-
----
-
-### 关于变量（variables）
-你提到 “variable module”，但在 Terraform 中，变量通常不单独作为一个模块。建议：
-- **全局变量**：放在根目录的 `variables-general.tf` 中，定义通用的变量（如资源组名称、位置）。
-- **模块变量**：每个模块有自己的 `variables.tf`，定义模块特定的输入参数。
-- **传递变量**：在 `main.tf` 中调用模块时，将全局变量传递给模块。
-
-
-
-# continue
-
-[Terraform Module 学习计划 - Grok](https://grok.com/chat/94ec7da9-2796-4e3c-aebb-38efe6a56e5c)
-
-[Terraform模块化学习计划](https://chatgpt.com/c/68086cdd-398c-800a-87e8-dce59c80dea5)
-
-https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221BjVwSHeBEixqLT9kIHpFB0jI8K2oh8pG%22%5D,%22action%22:%22open%22,%22userId%22:%22110375984325177043287%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing
