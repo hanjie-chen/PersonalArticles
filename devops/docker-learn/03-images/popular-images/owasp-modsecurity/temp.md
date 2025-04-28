@@ -5,12 +5,18 @@ nginx-modsecurity  | /docker-entrypoint.d/20-envsubst-on-templates.sh: line 53: 
 nginx-modsecurity exited with code 1
 ```
 
-或者如果 bind mount 了整个
+或者如果 bind mount 了整个 `/etc/nginx/conf.d` 目录的话
 
 ```shell
 nginx-modsecurity  | /docker-entrypoint.d/20-envsubst-on-templates.sh: line 53: can't create /etc/nginx/conf.d/logging.conf: Permission denied
 nginx-modsecurity exited with code 1
 ```
+
+直接就不行了，得去看一下关于这部分脚本的原理和启动内容
+
+[coreruleset/modsecurity-crs-docker: Official ModSecurity Docker + Core Rule Set (CRS) images](https://github.com/coreruleset/modsecurity-crs-docker)
+
+
 
 
 
