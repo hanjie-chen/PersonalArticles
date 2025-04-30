@@ -21,8 +21,7 @@ FROM alpine:3.19
 ARG USER_ID=1000
 ARG GROUP_ID=1000
 
-# install git and dcron
-RUN apk add --no-cache git dcron logrotate shadow # Add shadow for groupadd/useradd
+...
 
 # Create a group and user with specific IDs (match your host user if possible)
 RUN addgroup -g ${GROUP_ID} -S appgroup && \
@@ -42,8 +41,8 @@ WORKDIR /articles-data
 
 # copy the scripts, provide the permission
 COPY --chown=appuser:appgroup update-articles.sh init.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/update-articles.sh && \
-    chmod +x /usr/local/bin/init.sh
+
+...
 
 # --- CRITICAL PART ---
 # Switch to the non-root user BEFORE running the entrypoint/cmd
