@@ -68,9 +68,13 @@ modsecurity-crs-docker$ tree -L 2
 10 directories, 13 files
 ```
 
-让我们先 focus on `nginx/` 这个目录（因为我目前用的就是 nginx-alpine）
 
-首先发现存在 2 个 dockerfile: `Dockerfile`, `Dockerfile-alpine` 分别用于构建基于 nginx 和 nginx-alpine 的 image
+
+
+
+## nginx part
+
+让我们先 focus on `nginx/` 这个目录（因为我目前用的就是 nginx-alpine）
 
 ```shell
 /modsecurity-crs-docker/nginx$ tree -L 1
@@ -83,17 +87,9 @@ modsecurity-crs-docker$ tree -L 2
 3 directories, 2 files
 ```
 
-需要注意的是和普通的 nginx 不一样
+首先发现存在 2 个 dockerfile: `Dockerfile`, `Dockerfile-alpine` 分别用于构建基于 nginx 和 nginx-alpine 的 image (使用 [docker buildx + bake](../../dockerfile/docker-bake-and-context-image.md) 进行构建)
 
-一般来说对于普通的 nginx contianer, 比如说 nginx-alpine, 我们一般直接把本地的 conf 文件复制或者挂载到  `/etc/nginx/conf.d/default.conf` 路径中
-
-
-
-
-
-# nginx in  modsecurity
-
-首先我们来看到 modsecurity-crs-docker 的 nginx 目录下
+接着我们来看到 modsecurity-crs-docker 的 nginx 目录下的 2 个特别目录
 
 ```shell
 /modsecurity-crs-docker/nginx$ tree -L 2
@@ -117,41 +113,32 @@ modsecurity-crs-docker$ tree -L 2
 6 directories, 10 files
 ```
 
-好的，我们来结合 README 和这个目录结构，逐一解释 `nginx` 目录下第一层的文件和目录：
-
-## `Dockerfile`
-
-用于构建标准版（非 Alpine Nginx） `owasp/modsecurity-crs:nginx` 镜像的 Dockerfile。
-
-## `Dockerfile-alpine`
-
-用于构建 Alpine Linux 版 `owasp/modsecurity-crs:nginx-alpine` 镜像的 Dockerfile
-
 ## `docker-entrypoint.d` 
 
-这个目录包含一系列 Shell 脚本，这些脚本会在容器启动时，在 Nginx 主进程运行之前，由主入口点脚本 (`docker-entrypoint.sh`，虽然它不直接在这个目录下，但会调用这里的脚本) 按**数字顺序**依次执行。
+这个目录包含一系列 Shell 脚本，这些脚本会在容器启动时，在 Nginx 主进程运行之前，由主入口点脚本 (`docker-entrypoint.sh`，虽然它不直接在这个目录下，但会调用这里的脚本) 按数字顺序依次执行。
 
 依据 (README 和之前的错误日志): 之前的错误日志明确显示了这些脚本（如 `01-check-low-port.sh`, `10-generate-certificate.sh`）的执行过程。README 提到了基于环境变量的配置生成，这个目录下的脚本（特别是像 `91-update-resolver.sh`, `92-update-real_ip.sh` 等，以及那个未列出但实际存在的 `20-envsubst-on-templates.sh`）负责实现这一功能。`0-move-writables.sh` 可能与 README 中提到的 "Read-only Root Filesystem" 变体有关，用于在只读文件系统中处理需要写入的目录。
-
-*   **简述**: 容器启动时的**初始化脚本**目录。负责检查环境、生成临时配置（如自签名证书）、根据环境变量修改配置模板、设置权限等预备工作。
-
-
 
 
 
 ## `templates`
 
-*   **作用**: 这个目录存放着 Nginx（以及可能相关的 ModSecurity）配置文件的**模板**。
-*   **依据 (README 和之前的讨论)**: README 中明确提到：
-    
-    > *"What happens if I want to make changes in a different file, like `/etc/nginx/conf.d/default.conf`? You mount your local file, e.g. `nginx/default.conf` as the new template: `/etc/nginx/templates/conf.d/default.conf.template`."*
-    > 这直接说明了这个目录的用途。入口点脚本（特别是 `20-envsubst-on-templates.sh`）会读取这个目录下的文件（通常是 `.template` 文件，但也可能是普通 `.conf` 文件被当作模板处理），使用环境变量替换其中的占位符（例如 `${PORT}`, `${BACKEND}` 等），然后将处理后的**最终配置文件**输出到容器内实际生效的配置路径（如 `/etc/nginx/nginx.conf`, `/etc/nginx/conf.d/`, `/etc/nginx/modsecurity.d/`）。
-*   **包含**:
-    *   `nginx.conf.template`: 主 Nginx 配置文件 (`nginx.conf`) 的模板。
-    *   `conf.d` (子目录): 存放将被放置在 `/etc/nginx/conf.d/` 目录下的配置文件的模板（例如 `default.conf.template`）。这里通常定义 `server` 块。
-    *   `modsecurity.d` (子目录): 存放 ModSecurity 相关配置的模板。
-    *   `includes` (子目录): 可能包含一些被其他配置文件 `include` 的通用配置片段模板（如 SSL 配置、安全头部等）。
-*   **简述**: Nginx 配置文件的**蓝本/模板**存放地。容器启动时会基于这些模板和环境变量生成最终的配置文件。
+这个目录存放着 Nginx（以及可能相关的 ModSecurity）配置文件的模板。
+
+README 中明确提到：
+
+> What happens if I want to make changes in a different file, like `/etc/nginx/conf.d/default.conf`? You mount your local file, e.g. `nginx/default.conf` as the new template: `/etc/nginx/templates/conf.d/default.conf.template`.
+
+这直接说明了这个目录的用途。入口点脚本（特别是 `20-envsubst-on-templates.sh`）会读取这个目录下的文件（通常是 `.template` 文件，但也可能是普通 `.conf` 文件被当作模板处理），使用环境变量替换其中的占位符（例如 `${PORT}`, `${BACKEND}` 等），然后将处理后的**最终配置文件**输出到容器内实际生效的配置路径（如 `/etc/nginx/nginx.conf`, `/etc/nginx/conf.d/`, `/etc/nginx/modsecurity.d/`）。
+
+包含:
+
+*   `nginx.conf.template`: 主 Nginx 配置文件 (`nginx.conf`) 的模板。
+*   `conf.d` (子目录): 存放将被放置在 `/etc/nginx/conf.d/` 目录下的配置文件的模板（例如 `default.conf.template`）。这里通常定义 `server` 块。
+*   `modsecurity.d` (子目录): 存放 ModSecurity 相关配置的模板。
+*   `includes` (子目录): 可能包含一些被其他配置文件 `include` 的通用配置片段模板（如 SSL 配置、安全头部等）。
+
+* **简述**: Nginx 配置文件的**蓝本/模板**存放地。容器启动时会基于这些模板和环境变量生成最终的配置文件。
 
 总的来说，`nginx` 目录包含了构建和运行 Nginx + ModSecurity 容器所需的核心文件：两个不同基础系统（标准版和 Alpine 版）的 `Dockerfile`，用于启动时初始化的 `docker-entrypoint.d` 脚本，以及用于动态生成配置的 `templates` 目录。
 
