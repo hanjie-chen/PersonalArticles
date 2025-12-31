@@ -103,6 +103,16 @@ win键打开开始菜单，选择设置图标，右键设置个性化，可以�
 
 参考这个链接
 
+# 开机启动项
+
+再这个路径中
+
+```
+C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
+```
+
+可以放置 windows 10 开机启动程序，可以自己写一些程序，并且创建快捷方式放到这里
+
 # Reference
 
 [^Bilibili]: [电脑到手后你应该立刻修改的设置！_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1am4y1R7pi/?spm_id_from=333.880.my_history.page.click&vd_source=617c4a2b4e326fc6b6269aada0d25986)

@@ -102,7 +102,7 @@ git checkout -b <branch-name>
 
 ## `git checkout` 命令详解
 
-`git checkout` 这是 Git 的一个子命令, 通常用于切换分支
+`git checkout` 常用于切换分支
 
 ### `git checkout <branch-name>`
 

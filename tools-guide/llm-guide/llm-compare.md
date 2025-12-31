@@ -1,5 +1,5 @@
 在这个网站中可以看到 llm 的排名
 
-[Chatbot Arena (formerly LMSYS): Free AI Chat to Compare & Test Best AI Chatbots](https://lmarena.ai/)
+[Overview Leaderboard | LMArena](https://lmarena.ai/leaderboard)
 
 ![image](./images/llm-compare.png)
