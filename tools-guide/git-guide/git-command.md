@@ -22,7 +22,7 @@ BriefIntroduction:
 
 ![new repo](./images/new-repo.png)
 
-# Basic Command
+# Basic Commands
 
 ## `git add`
 
@@ -38,39 +38,54 @@ git commit -m "add your specification of this commit"
 
 每次提交都会记录下谁在什么时间做了什么更改，并允许你回到这个状态或者比较不同提交之间的差异。`git commit` 命令实际上创建了一个快照，它包含了暂存区中所有文件的一个特定状态。
 
-配置提交者的名字和 email
-
-```shell
-git config --global user.name "Your Name"
-git config --global user.email "your.email@example.com"
-```
-
 ## `git push`
 
 将本地内容推送到 github 上面同步
 
 ### new branch push
 
-如果是新建了一个分支（远程仓库上也没有这个分支），并且是第一次推送这个分支到远程仓库，需要带上参数
+如果是本地新建的一个分支（即远程仓库上没有这个分支），并且是第一次推送这个分支到远程仓库，需要带上参数 `-u`
 
 ```shell
 git push -u origin <branch_name>
 ```
 
-这种情况下如果不带参数直接 git push 那么通常会失败，这是因为 Git 不知道你要怎么处理远程分支：
+这个命令会同时完成两件事：
 
-- 本地分支刚刚创建，没有对应的远程同名分支
-- Git 不清楚应将此本地分支关联到哪个远程分支
+1. 在远程创建分支：在远程仓库（如 GitHub）上创建一个同名的新分支，并将代码上传。
+2. 建立关联（Upstream）：将本地分支与远程分支绑定
 
-之后的推送，就可以简单地用 `git push` 就行。
+参数 `-u` 的含义
+
+如果不带 `-u` 参数（仅使用 `git push origin <branch_name>` ），虽然也能在远程创建分支，但不会建立默认关联。这意味着以后的推送无法直接使用简短的 `git push`，Git 会因为不知道要把本地分支推送到远程的哪个分支而报错。
+
+### error message
+
+有时候当我们使用 `git push` 命令的时候会遇到如下的报错
+
+```shell
+➜ git push
+To github.com:hanjie-chen/Test-Website.git
+ ! [rejected]        backend-development -> backend-development (fetch first)
+error: failed to push some refs to 'github.com:hanjie-chen/Test-Website.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+```
+
+这意味着，github remote repository 上的内容已经更新了，而本地的内容还有没有更新，所以需要进行 `git pull` 从 remote 端拿取最近的内容
 
 ## `git pull`
 
-和git push对应的命令，就是 git pull, 这个命令从github remote repository上面拉取最新的仓库情况同步到本地仓库。
+和 `git push` 对应的命令，就是 `git pull`, 这个命令从 github remote repository上面拉取最新的仓库情况同步到本地仓库。
 
-比如说我在多台机器上面同时进行开发，在Azure VM上面，在本地机器上面，在Macbook Pro笔记本上面进行开发，如果在一台机器上git push了最新的情况，其他机器就需要git pull以保持最新的情况
+比如说我在多台机器上面同时开发一个项目，在 Azure VM 上，在 local machien(windows 10) 上，在 Macbook Pro 笔记本上，如果在一台机器上 `git push` 了最新的情况，其他机器就需要 `git pull` 以保持最新的情况
 
 需要注意的是，在Git中,每个分支都有自己独立的提交历史。当你在一个分支上执行 `git pull` 命令时,只会更新当前所在的分支,其他分支不会受到影响。因此,如果你想让每个分支都保持最新状态,需要在每个分支上分别执行 `git pull` 命令。
+
+
 
 ## `git add + git commit`
 
