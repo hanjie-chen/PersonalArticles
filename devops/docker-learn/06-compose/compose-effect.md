@@ -1,14 +1,14 @@
 你提出了一个非常好的问题。让我们深入探讨一下 compose.yml 中的卷挂载和 Dockerfile 中的 CMD 指令的执行顺序。首先, 我们需要明确 Docker 镜像构建和容器运行的区别:
 
-- **Docker 镜像构建**: 这个过程发生在 `docker build` 或 `docker-compose build` 命令执行时。Dockerfile 中的指令(如 `FROM`, `COPY`, `RUN` 等)会被顺序执行, 每个指令都会创建一个新的镜像层。
-- **容器运行**: 这个过程发生在 `docker run` 或 `docker-compose up` 命令执行时。它基于已构建的镜像创建并启动一个容器。compose.yml 中的配置(如卷挂载, 环境变量等)会在容器启动时生效。
+- Docker 镜像构建: 这个过程发生在 `docker build` 或 `docker-compose build` 命令执行时。Dockerfile 中的指令(如 `FROM`, `COPY`, `RUN` 等)会被顺序执行, 每个指令都会创建一个新的镜像层。
+- 容器运行: 这个过程发生在 `docker run` 或 `docker-compose up` 命令执行时。它基于已构建的镜像创建并启动一个容器。compose.yml 中的配置(如卷挂载, 环境变量等)会在容器启动时生效。
 
 现在, 让我们看看卷挂载和 CMD 指令的执行顺序:
 
 1. Dockerfile 中的 `CMD` 指令会在镜像构建的最后一步执行, 它指定了容器启动时默认执行的命令。
 2. 当你运行 `docker-compose up` 时, Docker Compose 会先基于 Dockerfile 构建镜像(如果镜像不存在), 然后启动容器。
 3. 在容器启动的过程中, Docker Compose 会根据 compose.yml 中的配置进行一些操作, 例如创建网络, 挂载卷等。
-4. **卷挂载会在容器文件系统创建之后, CMD 指令执行之前生效**。
+4. 卷挂载会在容器文件系统创建之后, CMD 指令执行之前生效。
 5. 最后, CMD 指令指定的命令会在容器中执行, 容器开始运行。
 
 所以, compose.yml 中的卷挂载确实发生在 CMD 指令执行之前。这意味着:

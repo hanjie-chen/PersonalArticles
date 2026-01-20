@@ -1,6 +1,6 @@
 # `.dockerignore`
 
-.dockerignore 文件的主要作用是在构建 Docker 镜像时，告诉 Docker 引擎哪些文件和目录应该被忽略，不要被复制到镜像中。类似于`.gitignore`
+.dockerignore 文件的主要作用是在构建 Docker 镜像时，告诉 Docker 引擎哪些文件和目录应该被忽略，不要被复制到镜像中。类似于 `.gitignore`
 
 常见的 .dockerignore 配置示例：
 

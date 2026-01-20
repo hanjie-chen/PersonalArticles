@@ -22,13 +22,13 @@ exec /usr/local/bin/init.sh: no such file or directory
 
 问题原因：
 
-这个错误通常是由于脚本文件使用了 **Windows 风格的换行符（CRLF）**，而不是 **Unix/Linux 风格的换行符（LF）**。当脚本文件在 Unix/Linux 系统（如 Alpine Linux）中执行时，如果存在 Windows 的回车符（`\r`），shebang 行 `#!/bin/sh` 会被错误解析为 `#!/bin/sh\r`。系统会尝试寻找解释器 `/bin/sh\r`，但这个路径不存在，因此会报 "no such file or directory" 的错误。
+这个错误通常是由于脚本文件使用了 Windows 风格的换行符（CRLF），而不是 Unix/Linux 风格的换行符（LF）。当脚本文件在 Unix/Linux 系统（如 Alpine Linux）中执行时，如果存在 Windows 的回车符（`\r`），shebang 行 `#!/bin/sh` 会被错误解析为 `#!/bin/sh\r`。系统会尝试寻找解释器 `/bin/sh\r`，但这个路径不存在，因此会报 "no such file or directory" 的错误。
 
 解决方法：
 
 您需要将所有脚本文件的换行符转换为 Unix/Linux 风格的换行符（LF）。以下是具体步骤：
 
-1. **检查脚本文件的换行符：**
+1. 检查脚本文件的换行符：
 
    Visual Studio Code (VSCode)：
    - 打开 `init.sh` 文件。
@@ -38,7 +38,7 @@ exec /usr/local/bin/init.sh: no such file or directory
 
    
 
-2. **重新构建 Docker 镜像：**
+2. 重新构建 Docker 镜像：
 
    由于您的 Docker 镜像是在构建时复制了这些脚本文件，您需要在更改文件后重新构建镜像：
 
@@ -78,6 +78,6 @@ exec /usr/local/bin/init.sh: no such file or directory
 
 这样，当您检出代码时，Git 会自动将 `.sh` 文件的换行符设置为 LF。
 
-- **在编辑器中设置默认换行符：**配置您的文本编辑器，使其默认使用 Unix/Linux 换行符（LF）创建新文件。
+- 在编辑器中设置默认换行符：配置您的文本编辑器，使其默认使用 Unix/Linux 换行符（LF）创建新文件。
 
 总结："no such file or directory" 错误在这种情况下通常不是指文件不存在，而是由于脚本中的换行符导致 shebang 行被错误解析。通过将脚本文件的换行符转换为 Unix/Linux 格式（LF），并重新构建 Docker 镜像，可以解决此问题。如果您还有其他问题或需要进一步的帮助，请随时告诉我。

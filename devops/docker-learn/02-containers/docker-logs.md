@@ -1,6 +1,6 @@
 # Docker logs
 
-`docker logs` 默认是可以查看 `docker-compose up` 输出的内容的，只要你知道相关容器的名字或 ID。
+`docker logs` 可以查看 `docker-compose up` 输出的内容，但是需要知道容器的名字或 ID。
 
 
 
