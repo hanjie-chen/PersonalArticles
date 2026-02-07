@@ -60,7 +60,7 @@ ssh -T github.com
 ssh -i C:\Users\<username>\.ssh\github-ssh-key -T git@github.com
 ```
 
-反而会成功，因为 ssh 这时才知道使用什么 key 去和 github 进行验证
+才会成功，因为 ssh 这时才知道使用什么 key 去和 github 进行验证
 
 我们可以在 `~/.ssh` 目录下创建 config 文件，告诉 ssh 选择哪个 key
 

@@ -1198,7 +1198,7 @@ exist_check = db.session.execute(
 ).scalar()
 ```
 
-> ! [note]
+> [!note]
 >
 > 关于 `and_()` 和 `or_()` 的用法参考下面这个例子
 >

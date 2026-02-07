@@ -32,7 +32,7 @@ hint: See PEP 668 for the detailed specification.
 
 ### 系统 Python 是什么？
 
-- **系统 Python** 是由操作系统（如 Ubuntu、Debian 等）预装的 Python 解释器，通常位于 /usr/bin/python3 或类似的路径。
+- 系统 Python 是由操作系统（如 Ubuntu、Debian 等）预装的 Python 解释器，通常位于 /usr/bin/python3 或类似的路径。
 - 它被操作系统用来运行一些核心功能或工具（比如包管理器、系统脚本等），因此被标记为“受外部管理”（externally managed），不允许随意修改其依赖。
 
 
@@ -51,9 +51,9 @@ python3 -m venv <venv-name>
 
 执行该命令后，会在当前目录下生成一个 `<venv-name>` 文件夹，其中包含以下几个重要子目录：
 
-- **bin (或 Scripts, Windows 中)：** 存放 Python 解释器和激活脚本。
-- **lib (或 Lib, Windows 中)：** 存放虚拟环境中安装的 Python 包。
-- **include:** 用于存放 C 语言头文件（某些 Python 包在编译时可能会需要）。
+- bin (或 Scripts, Windows 中)： 存放 Python 解释器和激活脚本。
+- lib (或 Lib, Windows 中)： 存放虚拟环境中安装的 Python 包。
+- include: 用于存放 C 语言头文件（某些 Python 包在编译时可能会需要）。
 
 #### **激活与退出虚拟环境**
 
