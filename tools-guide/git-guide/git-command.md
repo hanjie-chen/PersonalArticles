@@ -103,59 +103,7 @@ git add . && git commit -m "message"
 
 # git branch manage
 
-当你想要基于当前的版本开发下一个版本，或者存粹是希望不想要污染现在已经开发好的版本，可以基于现在已有的代码开启一条新的分支，继续开发
-
-比如说我现在以及把前端开发好了，想要开发后端，可以创建一条新的分支，并且切换到这个分支。可以使用命令
-
-```shell
-git checkout -b <branch-name>
-```
-
-或者，你已经做了一大堆修改了，但是意识到你需要对这些修改新开一个分支，幸运的是你还没有对修改进行 `git add` 这个时候同样也可以使用这个命令，而这些未提交的修改跟随工作目录一起切换到新分支
-
-
-
-## `git checkout` 命令详解
-
-`git checkout` 常用于切换分支
-
-### `git checkout <branch-name>`
-
-这个命令会首先查找名为 `branch-name` 的本地分支, 如果找到了, 就切换到这个分支。
-
-如果没有找到本地分支, 它会查找名为 `branch-name` 的远程分支, 如果找到了, 就创建一个同名的本地分支并建立跟踪关系, 然后切换到这个新的本地分支。
-
-e.g.
-
-```shell
-➜ git branch
-* main
-➜ git branch -r
-  origin/HEAD -> origin/main
-  origin/backend-development
-  origin/main
-➜ git checkout backend-development
-Switched to a new branch 'backend-development'
-branch 'backend-development' set up to track 'origin/backend-development'.
-```
-
-### `git checkout -b <branch-name>`
-
-创建新分支, 然后立即切换到这个新创建的分支（如果该分支已经存在, Git 会报错）
-
-这个命令实际上是 `git branch branch-name` 和 `git checkout branch-name` 的简写。
-
-新创建的分支会基于当前所在的分支。例如, 如果你当前在 `main` 分支, 那么新分支 `branch-name` 就会基于 `main` 分支创建。
-
-> [!note]
->
-> 当你使用 `git clone` 命令克隆一个远程仓库时, Git 会将远程仓库的所有数据都复制到你的本地机器上, 包括所有的分支和提交历史。这意味着, 在克隆完成后, 你的本地仓库将包含与远程仓库完全相同的数据
->
-> 然而, 虽然所有的分支都被克隆到了本地, 但 Git 默认只会 "检出(checkout)" 远程仓库的默认分支(通常是 `main` 或 `master`)。"检出" 的意思是, Git 会将这个分支的文件放到你的工作目录中, 让你可以直接在这些文件上工作
->
-> 所以, 当你在克隆后运行 `git branch` 命令时, 你只会看到 `main` 分支, 因为这是唯一被 "检出" 的分支。但是, 如果你运行 `git branch -r`, 你会看到所有的远程分支, 因为它们都已经被克隆到本地了
-
-## check branch - `git branch`
+## 查看分支
 
 `git branch` 查看本地分支
 
@@ -183,7 +131,61 @@ branch 'backend-development' set up to track 'origin/backend-development'.
   remotes/origin/main
 ```
 
-## merge branch - `git merge`
+
+
+## 切换分支
+
+`git checkout` 命令常用于切换分支
+
+### `git checkout <branch-name>`
+
+这个命令会首先查找名为 `branch-name` 的本地分支, 如果找到了, 就切换到这个分支。
+
+如果没有找到本地分支, 它会查找名为 `branch-name` 的远程分支, 如果找到了, 就创建一个同名的本地分支并建立跟踪关系, 然后切换到这个新的本地分支。
+
+e.g.
+
+```shell
+➜ git branch
+* main
+➜ git branch -r
+  origin/HEAD -> origin/main
+  origin/backend-development
+  origin/main
+➜ git checkout backend-development
+Switched to a new branch 'backend-development'
+branch 'backend-development' set up to track 'origin/backend-development'.
+```
+
+### `git checkout -b <branch-name>`
+
+当你想要基于当前的版本开发下一个版本，或者存粹是希望不想要污染现在已经开发好的版本，可以基于现在已有的代码开启一条新的分支，继续开发
+
+比如说我现在以及把前端开发好了，想要开发后端，可以创建一条新的分支，并且切换到这个分支。可以使用命令
+
+```shell
+git checkout -b <branch-name>
+```
+
+或者，你已经做了一大堆修改了，但是意识到你需要对这些修改新开一个分支，幸运的是你还没有对修改进行 `git add` 这个时候同样也可以使用这个命令，而这些未提交的修改跟随工作目录一起切换到新分支。
+
+这个命令会创建新分支, 然后立即切换到这个新创建的分支（如果该分支已经存在, Git 会报错）
+
+这个命令实际上是 `git branch <branch-name>` 和 `git checkout <branch-name>` 的简写。
+
+新创建的分支会基于当前所在的分支。例如, 如果你当前在 `main` 分支, 那么新分支 `branch-name` 就会基于 `main` 分支创建。
+
+> [!note]
+>
+> 当我们使用 `git clone` 命令克隆一个远程仓库时, Git 会将远程仓库的所有数据都复制到本地机器上, 包括所有的分支和提交历史。这意味着, 在克隆完成后, 你的本地仓库将包含与远程仓库完全相同的数据
+>
+> 然而, 虽然所有的分支都被克隆到了本地, 但 Git 默认只会 "检出(checkout)" 远程仓库的默认分支(通常是 `main` )。
+>
+> 所以, 当 `git clone` 后运行 `git branch` 命令时, 只会看到 `main` 分支, 因为这是唯一被 checkout 的分支。但是, 如果你运行 `git branch -r`, 你会看到所有的远程分支, 因为它们都已经被克隆到本地了
+
+
+
+## 合并分支
 
 当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。然后我们接着回到这个分支上继续开发。
 
@@ -234,11 +236,11 @@ git checkout backend-development
 
 
 
-## delete branch
+## 删除分支
 
 当某个分支完成开发并合并到 main 分支后，为了保持仓库的整洁，我们可以选择将其删除
 
-以下是删除 Git 分支的方法：
+首先，我们先删除本地分支
 
 ### delete local branch
 
@@ -260,27 +262,19 @@ git branch -d <branch-name>
 git branch -D <branch-name>
 ```
 
+> [!note]
+>
+> 使用 `git branch -d <branch-name>` 仅仅只会删除本地分支，它完全不会影响远程仓库（Remote/GitHub）上的分支。
 
+接着，我们删除远程分支
 
 ### delete remote branch
 
-如果你想删除远程仓库中的分支，可以使用以下命令：
+使用以下命令：
 
 ```bash
 git push origin --delete <branch-name>
 ```
-
-或者使用这种替代语法：
-
-```bash
-git push origin :<branch-name>
-```
-
-
-
-> [!note]
->
-> 在删除分支之前，请确保你已经切换到其他分支（通常是主分支）
 
 
 
