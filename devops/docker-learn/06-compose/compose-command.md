@@ -4,27 +4,21 @@
 
 # `docker compose up`
 
-
-
-## point yml file
-
-命令
-
 ```shell
-docker compose -f compose.yml up -d
+docker compose -f <yaml-filename> up -d
 ```
 
-#### -f compose.yml (File / 指定文件)
+#### `-f <yaml-filename>` 
 
-- 含义： 告诉 Docker Compose：“请使用 compose.yml 这个文件作为配置文件”。
-- 为什么有时候看着多余？ 默认情况下，Docker Compose 会自动寻找名为 compose.yml 或 docker-compose.yml 的文件。所以如果你没改文件名，不写 -f compose.yml 效果也是一样的。
-- 什么时候必用？ 当你的配置文件名字不叫标准名字时。比如：docker compose -f production.yml up（使用生产环境配置启动）。
+- 告诉 Docker Compose：请使用 `<yaml-filename>` 这个文件作为配置文件。
+- 不写 `-f compose.yml` 那么Docker Compose 会自动寻找名为 compose.yml 或 docker-compose.yml 的文件。
+- 当你的 yaml file 不叫标准名字时。比如：docker compose -f production.yml up（使用生产环境配置启动）。
 
-#### -d (Detached / 后台模式)
+#### `-d`
 
-- 含义： Detached mode，即“分离模式”或“后台运行”。
-- 对比：不加 -d (你平时用的)： 启动后，终端会被占用，屏幕上会疯狂滚动服务的日志。如果你按 Ctrl + C，容器通常会停止。加上 -d： 启动后，Docker 会在后台默默运行容器。终端控制权会立即还给你，你可以继续输入其他命令。
-- 场景： 只要你想让服务在服务器上一直跑，通常都会加 -d。
+- Detached mode，即“分离模式”或“后台运行”。
+- 不加 -d 启动后，终端会被占用，屏幕上会疯狂滚动服务的日志。如果你按 Ctrl + C，容器通常会停止。加上 -d： 启动后，Docker 会在后台默默运行容器。终端控制权会立即还给你，你可以继续输入其他命令。
+- 只要你想让服务在服务器上一直跑，通常都会加 -d。
 
 ### multi-file
 

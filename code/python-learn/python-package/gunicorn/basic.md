@@ -10,7 +10,7 @@
 
 #### 并发能力 (Concurrency)
 
-- Flask 自带服务器： 默认情况下通常是单进程的。如果有一个请求处理得很慢（比如上传大文件、请求外部 API），整个服务器就会卡住，其他人的请求都进不来。
+- Werkzeug： 默认情况下单进程的。如果有一个请求处理得很慢（比如上传大文件、请求外部 API），整个服务器就会卡住，其他人的请求都进不来。
 - Gunicorn： 它是预分叉 (Pre-fork) 模式。启动时，它会由一个主进程（Master）生出多个工作进程（Workers）。如果有 4 个 Worker，你就可以同时处理 4 个请求。即使一个 Worker 堵塞了，其他 Worker 依然可以响应其他用户。
 
 #### 稳定性与健壮性
@@ -27,37 +27,13 @@
 
 > Nginx (反向代理) -> Gunicorn (应用服务器) -> Flask (应用逻辑)
 
-你可能会问，有了 Gunicorn 为什么还要 Nginx？
+有了 Gunicorn 为什么还要 Nginx？
 
 - Nginx (前台接待)： 擅长处理静态文件（图片、CSS、JS），处理 SSL（HTTPS），以及抗住海量的并发连接。它把筛选过的动态请求转发给 Gunicorn。
 - Gunicorn (餐厅经理)： 接收 Nginx 转过来的动态请求，分配给 Worker。
 - Flask (厨师)： 执行 Python 代码，返回结果。
 
-
-
-## 为什么会出现这个错误？
-你现在的 `app.py` 在导入时执行了：
-
-```python
-db.create_all()
-```
-
-当你用 Gunicorn 启动多个 worker（比如 `-w 2`），发生了这样一件事：
-
-1. Gunicorn 主进程启动  
-2. 它创建 2 个 worker 进程  
-3. 每个 worker 都会加载 `app.py`  
-4. 于是 `db.create_all()` 被同时执行两次
-
-SQLite 不支持这种并发“建表”，于是第二个 worker 报错：
-
-```
-table article_meta_data already exists
-```
-
-结果：worker 启动失败 → Gunicorn 整体退出 → Nginx 502
-
-## Gunicorn 命令含义
+## Gunicorn 使用
 当前我们用的是：
 
 ```

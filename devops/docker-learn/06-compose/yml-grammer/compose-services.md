@@ -32,11 +32,7 @@ container_name: web-app
 
 e.g. `test-website-articles-data-1 `
 
-# `version`
 
-根据最新的 docker compose 规范 [Version and name top-level elements | Docker Docs](https://docs.docker.com/reference/compose-file/version-and-name/)
-
-Compose 不再使用此字段来选择验证模式， 而是默认使用最新的模式来解析文件，如果使用此字段会收到警告消息
 
 # `develop-watch`
 
@@ -235,7 +231,7 @@ nginx:
 
 用于定义容器健康检查的字段，它可以让 Docker 定期检查容器内部的运行状况，并根据检查结果决定该容器的健康状态。
 
-- **自动检测应用是否正常运行**
+- 自动检测应用是否正常运行
    例如，一个 Flask 应用可能已经崩溃，但进程仍在运行，默认情况下 Docker 不会发现这个问题，而 `healthcheck` 可以主动检查。
 - **确保依赖的服务可用**
    比如，`web-app` 依赖 `articles-sync`，可以在 `web-app` 的 `depends_on` 配置中使用 `condition: service_healthy` 让其等待 `articles-sync` 进入健康状态后再启动。
@@ -275,3 +271,47 @@ services:
 - `timeout: 10s`: 超过 10 秒没有响应就算失败。
 - `retries: 3`: 连续 3 次失败后，容器被标记为 `unhealthy`。
 - `start_period: 10s`: 容器启动后，前 10 秒内不会进行健康检查，给 Flask 预留启动时间。
+
+# `command`
+
+compose.yml 文件的中 command 字段会覆盖 dockerfile 中的 CMD 启动命令，例如如果我们有 compose.yml如下
+
+```yaml
+services:
+  web-app:
+    ...
+    command: ["flask", "run", "--host=0.0.0.0", "--debug"]
+```
+
+而在 web-app 的 Dockerfile 中这样子写道
+
+```dockerfile
+...
+
+# 启动命令 (production)
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "app:app"]
+```
+
+那么最红，实际上会使用 flask run 作为启动命令，这个特点可以用于开发环境的设定，比如说你可以做一个 compose.dev.yml 用于覆盖 dockerfile 中的命令
+
+# 自定义字段
+
+`x-` 开头的字段会被 Docker 视为“用户自定义扩展”。Compose 会完全忽略它们的内容，这使得它们成为存放 YAML 锚点的绝佳位置。
+
+例如，我们可以利用 `x-` 和 `&` 锚点来将某个配置复用，例如复用 docker log 配置
+
+```yaml
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "1m"
+    max-file: "5"
+
+services:
+  articles-sync:
+    ...
+    logging: *default-logging
+  ...
+...
+```
+

@@ -8,8 +8,7 @@ RolloutDate: 2024-08-26
 
 ```
 BriefIntroduction: 
-本人总结的git速查指南，一般来说是遇到问题 --> 问Sonnet3.5 --> 解决问题 --> 记录在这里
-虽然有很多其他的 git 资料，但是自从LLM出现之后，我遇到问题一般直接提问LLM，爽的一批
+本人总结的 git 命令速查指南
 ```
 
 <!-- split -->
@@ -37,6 +36,14 @@ git commit -m "add your specification of this commit"
 完整的 `git commit` 命令，必须要填写这次提交的信息
 
 每次提交都会记录下谁在什么时间做了什么更改，并允许你回到这个状态或者比较不同提交之间的差异。`git commit` 命令实际上创建了一个快照，它包含了暂存区中所有文件的一个特定状态。
+
+如果忘记上一次 commit 的信息，可以使用下面的命令查看
+
+```shell
+git show
+```
+
+这个命令默认显示的是 `HEAD`（当前分支最后一次提交）的内容。
 
 ## `git push`
 
@@ -135,8 +142,6 @@ git add . && git commit -m "message"
 
 ## 切换分支
 
-`git checkout` 命令常用于切换分支
-
 ### `git checkout <branch-name>`
 
 这个命令会首先查找名为 `branch-name` 的本地分支, 如果找到了, 就切换到这个分支。
@@ -159,19 +164,9 @@ branch 'backend-development' set up to track 'origin/backend-development'.
 
 ### `git checkout -b <branch-name>`
 
-当你想要基于当前的版本开发下一个版本，或者存粹是希望不想要污染现在已经开发好的版本，可以基于现在已有的代码开启一条新的分支，继续开发
-
-比如说我现在以及把前端开发好了，想要开发后端，可以创建一条新的分支，并且切换到这个分支。可以使用命令
-
-```shell
-git checkout -b <branch-name>
-```
-
-或者，你已经做了一大堆修改了，但是意识到你需要对这些修改新开一个分支，幸运的是你还没有对修改进行 `git add` 这个时候同样也可以使用这个命令，而这些未提交的修改跟随工作目录一起切换到新分支。
-
 这个命令会创建新分支, 然后立即切换到这个新创建的分支（如果该分支已经存在, Git 会报错）
 
-这个命令实际上是 `git branch <branch-name>` 和 `git checkout <branch-name>` 的简写。
+实际上这个命令是 `git branch <branch-name>` 和 `git checkout <branch-name>` 的简写。
 
 新创建的分支会基于当前所在的分支。例如, 如果你当前在 `main` 分支, 那么新分支 `branch-name` 就会基于 `main` 分支创建。
 
@@ -187,9 +182,9 @@ git checkout -b <branch-name>
 
 ## 合并分支
 
-当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。然后我们接着回到这个分支上继续开发。
+当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。
 
-这是我们需要进行的具体的步骤
+步骤如下
 
 首先切换到 main 分支：
 
@@ -215,26 +210,7 @@ git push origin main
 git checkout <branch-name>
 ```
 
-### example
-
-```bash
-# 1. 确保当前分支的修改已经提交
-git status
-
-# 2. 切换到 main 分支
-git checkout main
-
-# 3. 合并 backend-development 分支
-git merge backend-development -m "feature xxx successed apply"
-
-# 4. 如果有远程仓库，推送更新
-git push origin main
-
-# 5. 切换回 backend-development 继续开发
-git checkout backend-development
-```
-
-
+或者按照下面的命令删除分支
 
 ## 删除分支
 
@@ -466,7 +442,7 @@ cd ~
 git config --global core.excludesfile ~/.gitignore
 ```
 
-常用的 `.gitignore` 方案
+## personal `.gitignore`
 
 ```python
 # python auto generated file
@@ -475,6 +451,8 @@ __pycache__/
 
 # local environment, such as token, password etc
 .env
+# nging basic auth user-password file
+.htpasswd
 ```
 
 # case sensitivity

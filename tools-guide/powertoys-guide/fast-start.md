@@ -1,9 +1,5 @@
 # Microsoft PowerToys 快速入门
 
-Microsoft PowerToys 被称为 Windows 用户的“瑞士军刀”，它官方出品、免费、且极其强大。但是因为它功能太多（目前有 20 多个工具），确实容易让人眼花缭乱。
-
-要提高效率，不需要一次性学会所有功能。下面是 5 个最核心、最能立即提升效率的功能，建议从这里开始上手：
-
 ### 1. 快速启动器：PowerToys Run
 这是 PowerToys 的灵魂功能，用它完全可以替代慢吞吞的 Windows 开始菜单。
 *   默认快捷键： `Alt + Space` (空格键)
@@ -56,6 +52,5 @@ Windows 自带的分屏（Win+箭头）比较死板，FancyZones 适合大屏幕
 1.  打开 PowerToys 设置界面。
 2.  确保 PowerToys Run 和 Text Extractor 是开启的。
 3.  这一周强迫自己只用 `Alt + Space` 打开软件，改掉点开始菜单的习惯。
-4.  遇到不能复制的文字，试着用一次 `Win + Shift + T`。
 
 只要学会这两个，你的电脑使用效率就已经超越 90% 的人了！

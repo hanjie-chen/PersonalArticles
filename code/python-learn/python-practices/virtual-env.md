@@ -1,6 +1,6 @@
 # Python virtual environment
 
-当我们使用 pip install 的时候，可能会遇到这样子的问题
+当我们在一台 ubuntu server 中使用 pip install 命令的时候，可能会遇到这样子的问题
 
 ```bash
 $ pip install flask
@@ -30,14 +30,12 @@ hint: See PEP 668 for the detailed specification.
 
 也就是这个 python 其实是系统 python
 
-### 系统 Python 是什么？
-
 - 系统 Python 是由操作系统（如 Ubuntu、Debian 等）预装的 Python 解释器，通常位于 /usr/bin/python3 或类似的路径。
 - 它被操作系统用来运行一些核心功能或工具（比如包管理器、系统脚本等），因此被标记为“受外部管理”（externally managed），不允许随意修改其依赖。
 
+我们可以使用 python virtual environment，这是一个独立的 Python 运行环境，它包含自己的 Python 解释器和独立的第三方包集合。
 
-
-python virtual environment 是一个独立的 Python 运行环境，它包含自己的 Python 解释器和独立的第三方包集合。使用虚拟环境可以让你在同一台机器上创建多个独立的项目环境，避免项目之间的依赖冲突，同时不会污染系统级安装的 Python 及其库。
+使用虚拟环境可以让你在同一台机器上创建多个独立的项目环境，避免项目之间的依赖冲突，同时不会污染系统级安装的 Python 及其库。
 
 Python 3.3 以后内置了 `venv` 模块，可以直接使用该模块创建虚拟环境。常见的创建命令为：
 
@@ -55,7 +53,7 @@ python3 -m venv <venv-name>
 - lib (或 Lib, Windows 中)： 存放虚拟环境中安装的 Python 包。
 - include: 用于存放 C 语言头文件（某些 Python 包在编译时可能会需要）。
 
-#### **激活与退出虚拟环境**
+#### 激活与退出虚拟环境
 
 创建好虚拟环境后，需要激活它才能使用该环境内的 Python 和包管理工具（例如 pip）。激活方式根据操作系统不同而有所区别：
 
