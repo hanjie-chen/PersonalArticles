@@ -139,10 +139,50 @@ AllowUsers <username>
 修改后，重启 SSH：
 
 ```shell
-sudo systemctl restart sshd
+sudo systemctl restart sshd/ssh
 ```
 
-现在其实已经非常安全了，但是我们还要更进一步
+> [!note]
+>
+> 如果发现如下的报错
+>
+> ```shell
+> $ sudo systemctl restart sshd
+> Failed to restart sshd.service: Unit sshd.service not found.
+> ```
+>
+> 那么请试试看 `ssh` 代替 `sshd`
+>
+> 原因是：虽然很多系统使用 `sshd`，但在某些发行版（尤其是 Ubuntu 或 Debian）中，服务的标准名称可能只是 `ssh`。
+>
+> 在大多数现代发行版中，即使输入 `sshd`，系统也会自动重定向到 `ssh`，但如果系统环境配置比较精简（比如某些 Docker 容器或轻量化固件），这种重定向可能不存在。
+
+### failed again
+
+如果这个时候发现，还是可以通过 password 登录，那么往往是因为有另一个配置项在偷偷给密码登录“放行”，或者配置并没有像你想象中那样真正生效。
+
+首先我们使用下面的命令检查当前运行的ssh是怎么想的
+
+```shell
+sshd -T | grep -E "passwordauthentication|kbdinteractiveauthentication"
+```
+
+如果是这样子的输出
+
+```shell
+passwordauthentication yes
+kbdinteractiveauthentication no
+```
+
+那就意味着配置覆盖
+
+现代 Linux 发行版（如 Ubuntu 22.04+）默认启用了配置包含功能。
+
+检查 sshd_config 文件顶部这一行： `Include /etc/ssh/sshd_config.d/*.conf`
+
+如果 `/etc/ssh/sshd_config.d/` 目录下有任何文件（例如 `50-cloud-init.conf`），并且里面写了 `PasswordAuthentication yes`，那么它的优先级高于你直接在 `sshd_config` 里写的配置。
+
+解决方案是，要么直接删除冲突的文件（例如 `50-cloud-init.conf`），要么干脆注释掉 Include 那一行
 
 ## fail2ban
 

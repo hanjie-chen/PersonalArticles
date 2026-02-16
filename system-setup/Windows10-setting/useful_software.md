@@ -31,17 +31,16 @@ BriefIntroduction:
 | everything                   | 查找文件必备                                                 |
 | Vmware-workstation           | 虚拟机软件 需要一台windows 10用玩galgame 一台Linux用于开发   |
 | PotPlayer                    | 视频播放器                                                   |
-| Foobar-2000                  | 音乐播放器                                                   |
-| Motrix                       | 下载神器用于下载东西 资源做种 我为人人，人人为我             |
 | Typora                       | markdown语法写作神器 我从免费的0.7版本开始使用 一路成为付费用户 |
 | YACReader                    | 本地漫画查看神器 还可以创建本地漫画资料库                    |
 | Visual Studio code (VS code) | 轻量级代码编辑器 无论是windows还是macos都非常的好用          |
-| ~~Anaconda 3~~               | ~~Python管理神器~~ 感觉仅仅是 python 3就可以代替了，没必要上 ananconda |
+| ~~Anaconda 3~~               | ~~Python管理神器~~ 感觉仅仅是 python3 + venv 就可以代替了，没必要上 ananconda |
 | Steam                        | 娱乐神器                                                     |
 | Windows terminal             | windows端优秀的终端工具，结合oh-my-posh以获得最佳体验        |
 | Fliqlo                       | 桌面屏幕保护程序                                             |
 | Mircosoft Todo List          | 设置每日任务                                                 |
 | Koodo Reader                 | windows开源阅读软件                                          |
+| rime                         | 小狼毫，输入法神器                                           |
 
 # Software Setting
 
