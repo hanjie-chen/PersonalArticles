@@ -1,7 +1,5 @@
 # server-guide
 
-服务器如何按照我的喜好运行 SSH 服务？
-
 在 server 端的许多 ssh 配置，只需要修改 `/etc/ssh/sshd_config` 文件即可
 
 # ssh port
@@ -192,3 +190,66 @@ Last login: Fri May 31 07:41:57 2024 from 10.0.1.4
 ```
 
 如果我们想要定制这个欢迎界面信息，应该怎么办呢？
+
+这个网站可以订制出不错的字体效果： [Text to ASCII Art Generator (TAAG) (patorjk.com)](https://patorjk.com/software/taag/#p=display&h=0&v=0&f=ANSI Shadow&t=Berry Node )
+
+除此之外我们还需要知道这些 welcome message 的构成：
+
+- MOTD: message of the day(static + dymanic)
+- SSH Banner
+
+显示顺序：SSH Banner (login成功之前) --> Dynamic Motd --> Static Motd
+
+## MOTD
+
+### static motd
+
+这个部分在 `/etc/motd` 文件中，这个文件通常不存在或者为空，我们可以自己创建他
+
+### dynamic motd
+
+这个部分在 `/etc/update-motd.d` 文件夹中，其中文件如下：
+```shell
+$ ll
+total 56
+drwxr-xr-x  2 root root 4096 Feb 11 11:10 ./
+drwxr-xr-x 72 root root 4096 Feb 21 08:14 ../
+-rwxr-xr-x  1 root root 1220 Oct  3 14:35 00-header*
+-rwxr-xr-x  1 root root 1151 Oct  3 14:35 10-help-text*
+-rwxr-xr-x  1 root root 5023 Oct  3 14:35 50-motd-news*
+-rwxr-xr-x  1 root root  356 Feb 11 11:02 60-unminimize*
+-rwxr-xr-x  1 root root  218 Oct  2 14:08 90-updates-available*
+-rwxr-xr-x  1 root root  296 Feb 19  2025 91-contract-ua-esm-status*
+-rwxr-xr-x  1 root root  378 Oct  2 10:05 91-release-upgrade*
+-rwxr-xr-x  1 root root  165 Feb 18  2025 92-unattended-upgrades*
+-rwxr-xr-x  1 root root  379 Oct  2 14:08 95-hwe-eol*
+-rwxr-xr-x  1 root root  142 Oct  2 14:08 98-fsck-at-reboot*
+-rwxr-xr-x  1 root root  144 Oct  2 14:08 98-reboot-required*
+```
+
+会跟据数字逐一生成 welcome message
+
+## SSH Banner
+
+由 ssh deamon 中定义，方法如下
+
+创建 ssh banner 文件
+
+```bash
+sudo vim /etc/ssh_banner
+```
+
+设定ssh使用它
+
+```
+sudo vim /etc/ssh/sshd_config
+# Add or modify the line:
+Banner /etc/ssh_banner
+```
+
+重启 sshd 
+
+```bash
+sudo systemctl restart sshd
+```
+

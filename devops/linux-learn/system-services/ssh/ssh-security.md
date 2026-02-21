@@ -94,11 +94,7 @@ mdatp:x:999:988::/home/mdatp:/usr/sbin/nologin
 
 # enhance ssh security
 
-接着我们需要加强一下我们 ssh 的安全等级
-
-## ssh server config
-
-首先我们来编辑 ssh server 配置 `/etc/ssh/sshd_config` 
+接着我们需要加强一下我们 ssh server 的安全等级，同样是配置 `/etc/ssh/sshd_config` 文件
 
 ### disable root user login
 
@@ -106,17 +102,21 @@ mdatp:x:999:988::/home/mdatp:/usr/sbin/nologin
 PermitRootLogin no
 ```
 
-> [!note]
->
-> 如果是 default `PermitRootLogin prohibit-password` 那么也可以不用修改
-
 ### disable password login
 
 ```
 PasswordAuthentication no
 ```
 
-记得之前要提前配置好 ssh key, 可以参考 [ssh authentication](./ssh-auth.md)
+记得之前要提前配置好 ssh key, 可以参考 [ssh authentication](./client-guide.md)
+
+### allow key auth
+
+```shell
+PubkeyAuthentication yes
+```
+
+仅允许密钥登录
 
 ### change default ssh port
 
@@ -124,17 +124,28 @@ PasswordAuthentication no
 Port <non-22-port>
 ```
 
-可以参考 [ssh port change](./ssh-port.md)
-
 ### allow specifical user
 
 ```shell
 AllowUsers <username>
 ```
 
-限制特定用户才能登录
+限制特定用户才能登录，也就是白名单。在原配中不存在，需要自己写
 
-### restart ssh services
+## restart ssh services
+
+检查一下是否存在语法错误：
+```shell
+sudo sshd -t
+```
+
+无输出则一切正常，接着告知系统端口变更
+
+```
+sudo systemctl daemon-reload
+```
+
+这是因为现在的 Ubuntu 经常使用 `ssh.socket` 来管理端口，如果不进行这一步，可能会失败，详见 [server-guide](./server-gudie.md) 中的案例
 
 修改后，重启 SSH：
 
@@ -157,7 +168,7 @@ sudo systemctl restart sshd/ssh
 >
 > 在大多数现代发行版中，即使输入 `sshd`，系统也会自动重定向到 `ssh`，但如果系统环境配置比较精简（比如某些 Docker 容器或轻量化固件），这种重定向可能不存在。
 
-### failed again
+## failed example
 
 如果这个时候发现，还是可以通过 password 登录，那么往往是因为有另一个配置项在偷偷给密码登录“放行”，或者配置并没有像你想象中那样真正生效。
 
@@ -194,8 +205,6 @@ fail2ban 是个非常实用的安全工具，特别适合这种在公网运行 L
 
 它持续监控日志文件（如 `sshd` 的失败登录）一旦某个 IP 多次失败（如 5 次），就触发“ban”，把这个 IP 加入黑名单，添加防火墙规则屏蔽，经过一段时间（默认 10 分钟），自动解封（或者你也可以手动管理）。
 
-
-
 ### for example
 
 假如某个 IP 不停尝试 SSH 登录失败，log 会长这样：
@@ -204,9 +213,7 @@ fail2ban 是个非常实用的安全工具，特别适合这种在公网运行 L
 sshd[1234]: Failed password for root from 203.0.113.5 port 54321 ssh2
 ```
 
-`fail2ban` 会检测到类似的日志，封锁 `203.0.113.5` 这个 IP。
-
-
+fail2ban 检测到类似的日志，就会封锁 203.0.113.5 这个 IP。
 
 ### install `fail2ban`
 
@@ -216,8 +223,6 @@ sshd[1234]: Failed password for root from 203.0.113.5 port 54321 ssh2
 sudo apt update
 sudo apt install fail2ban
 ```
-
-
 
 ### config `fail2ban`
 
@@ -261,8 +266,6 @@ sudo fail2ban-client status sshd
 | `sudo fail2ban-client status sshd`           | 查看 SSH 的被封 IP |
 | `sudo fail2ban-client set sshd unbanip <IP>` | 手动解封一个 IP    |
 | `sudo fail2ban-client set sshd banip <IP>`   | 手动封锁一个 IP    |
-
-
 
 ### apply changed config
 

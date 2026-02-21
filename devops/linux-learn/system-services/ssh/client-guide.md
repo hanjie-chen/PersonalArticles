@@ -1,6 +1,19 @@
-# SSH 客户端完全指南 
+---
+Title: SSh 客户端完全使用指南
+Author: 陈翰杰
+Instructor: gemini-3-flash-preview, gemini-3-pro-preview
+CoverImage: ./images/ssh.png
+RolloutDate: 2026-02-21
+---
 
-“我如何更方便、更安全地连上服务器？”
+```
+BriefIntroduction: 
+ssh 在客户端的配置
+```
+
+<!-- split -->
+
+![cover image](./images/ssh.png)
 
 # Authentication
 
@@ -14,6 +27,12 @@
 ssh-keygen -t rsa -b 4096 -C "note" -f ~/.ssh/<key-filename>
 ```
 
+`-t`: type，指定算法 rsa
+
+`-b`: bits，指定安全位数，rsa 建议至少 2048
+
+`-C`: comments，注释
+
 `-f`: 指定输出文件名
 
 这样就会生成 `~/.ssh/<key-filename>`（私钥） 和 `~/.ssh/<key-filename>.pub`（公钥）
@@ -22,7 +41,7 @@ ssh-keygen -t rsa -b 4096 -C "note" -f ~/.ssh/<key-filename>
 
 一般来说我们写的注释（note），通常记录在公钥文件的结尾处，可以直接打开 `.pub` 文件查看
 
-对于文件名，我们最好起一个有意义的名字，例如 `Singapore_Linux_VM_SSH_Key` 
+对于文件名，我们最好起一个有意义的名字，例如 `Singapore-Linux-VM-SSH-Key` 
 
 e.g.
 
@@ -100,6 +119,16 @@ and check to make sure that only the key(s) you wanted were added.
 如果用的是 azure linux vm 可以在 azure portal 中添加 ssh public key
 
 ![azure ssh key add](./images/azure-ssh-key-add.png)
+
+## gcp vm
+
+在 gcp 中则是需要进入 VM instance edit 这个位置：
+
+![ssh-1](./images/gcp-vm-ssh-1.png)
+
+进入 edit 之后往下滑动就能看见 ssh key
+
+![ssh-1](./images/gcp-vm-ssh-2.png)
 
 ## ssh-key login
 
