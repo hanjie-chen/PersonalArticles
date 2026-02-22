@@ -326,7 +326,7 @@ Working Directory 	  Staging Area 	 local repository     remote repository
                 git reset --hard origin/main               
 ```
 
-# `git remote`
+# remote repo(github)
 
 可以使用以下命令查看当前 Git 仓库关联的远程地址：
 
@@ -343,7 +343,16 @@ origin  https://github.com/username/repository.git (push)
 
 其中，`origin` 是默认的远程名称，后面跟着的就是远程仓库的 URL。如果你有多个远程仓库，都会在这里列出。
 
-# `git clone`
+如果在 github 上面的 repo 名字改变了，我们可以使用下面的命令来修改本地关联的远程仓库 url
+
+```shell
+git remote set-url origin https://github.com/username/new-repo-name.git
+git remote set-url origin  git@github.com:username/new-repo-name.git
+```
+
+
+
+# download repo(github)
 
 如果我们想要下载某个 remote repository 我们可以使用 `git clone` 命令，e.g.
 

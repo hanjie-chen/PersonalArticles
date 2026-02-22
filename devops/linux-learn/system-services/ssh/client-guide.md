@@ -87,7 +87,7 @@ The key's randomart image is:
 
 既然已经生成了 ssh key, 我们就需要将 public key 添加到 remote server中去
 
-使用命令
+### command
 
 ```shell
 ssh-copy-id -p <ssh-port> -i ~/.ssh/Singapore_Linux_VM_SSH_Key.pub <username>@<remote-server-ip>
@@ -112,7 +112,21 @@ and check to make sure that only the key(s) you wanted were added.
 
 > [!note]
 >
-> 在 windows powershell 环境下无法使用 `ssh-copy-id` 命令，此时可以打开 git bash 去运行这个命令
+> - 在 windows powershell 环境下无法使用 `ssh-copy-id` 命令，此时可以打开 git bash 去运行这个命令
+>
+> - 如果在 server 上配置了禁止 password 登录，这个命令很可能会失败。或许可以试试看这个命令：
+>
+>   ```shell
+>   ssh-copy-id -i new-key.pub -o "IdentityFile=old-key" -p <port> user@IP
+>   ```
+>
+>   下次可以试试看，目前我没有尝试过
+
+### manual
+
+如果命令的方式行不通，那么我们可以手动的将 pub key 添加到 server 上去
+
+先登录 server, 打开 `~/.ssh/authorized_keys` 文件，将 `.pub` 结尾的内容复制进去
 
 ## azure vm
 

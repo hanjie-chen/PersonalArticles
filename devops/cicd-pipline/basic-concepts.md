@@ -12,11 +12,11 @@ CI/CD 不是单一的工具，而是一套流程和实践理念
 
 # Github Action
 
-简单来说，GitHub Actions 就是 GitHub 提供的一台免费的、云端的 Linux 电脑，这台电脑平时是关机的。
+简单来说，GitHub Actions 是 GitHub 提供的一台免费的、云端的 Linux 电脑，平时关机。
 
-通过在 `.github/workflows/` 下写 `.yml` 文件，我们可以给这台电脑下达指令：“当某个事件发生时（比如 Push 了代码），请立刻开机，执行以下命令。”
+通过在 `.github/workflows/` 下的 `.yml` 文件，我们可以给这台电脑下达指令：当某个事件发生时（比如 Push 了代码），请立刻开机，执行以下命令。
 
-你可以把 GitHub Actions 理解为一套“自动化流程”：
+可以把 GitHub Actions 理解为一套“自动化流程”：
 
 - Workflow (工作流)： 整个 `.yml` 文件。代表一个完整的自动化任务。
 - Event (事件/触发器)： “什么时候开始跑？”。比如 `push` 代码、有人提了 `PR`、或者你设定了定时任务。
@@ -26,9 +26,13 @@ CI/CD 不是单一的工具，而是一套流程和实践理念
 GitHub Actions 的强大之处在于：
 
 1. 环境全能： 它这台“云电脑”里已经预装好了 `git`, `docker`, `python`, `node` 等几乎所有你需要的环境。
-2. 市场（Actions Marketplace）： 别人写好的功能你可以直接拿来用。
-   - 想登录 Docker Hub？不用自己写复杂的脚本，直接用官方的 `docker/login-action`。
-   - 想发送钉钉通知？去市场搜一下直接引用。
+
+2. 市场（Actions Marketplace）： 
+
+   别人写好的功能你可以直接拿来用。
+
+   想登录 Docker Hub？不用自己写复杂的脚本，直接用官方的 `docker/login-action`。
+
 3. 免费额度： 对于公开仓库（Public Repo），它是完全免费的。
 
 
@@ -39,8 +43,6 @@ GitHub Actions 的强大之处在于：
 
 - 在 GitHub 界面上： 当你打开项目的 Actions 标签页，左侧列出的任务列表名称就是由这个 `name` 决定的。如果不写，GitHub 默认会用文件名（如 `ci.yml`）。
 - 联动作用： 在的 `cd.yml` 里，有一行 `workflows: ["CI"]`。这里的 `"CI"` 对应的正是那个文件里的 `name: CI`。这就像是给程序起个名字，方便其他程序调用。
-
-
 
 ## Action 指令：`run` vs `uses`
 

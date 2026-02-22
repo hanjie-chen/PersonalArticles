@@ -106,75 +106,9 @@ return render_template('article_details.html', article=article, article_content=
 - 如果你的 HTML 文件是独立的完整页面，推荐使用 **iframe**。
 - 如果需要将 HTML 内容嵌入到现有页面布局中，推荐使用 **JavaScript**。
 
----
 
-### 问题 3：配置开发环境和生产环境的差异
 
-#### 需求分析
-- **开发环境**：你希望将 `rendered_articles` 挂载到 `/app/rendered-articles`，方便在主机上查看和修改文件，同时可能继续使用 Flask 的静态服务进行调试。
-- **生产环境**：将 `rendered_articles` 交给 Nginx 提供服务，不需要挂载到 `/app/rendered-articles`，直接使用 `/rendered-articles`。
-
-#### 解决方案：使用环境变量统一管理
-我们可以通过环境变量 `ENV` 来控制 `compose.yaml` 和 `app.py` 的行为。
-
-1. **修改 `compose.yaml`**
-   使用条件挂载和环境变量来区分开发和生产环境：
-
-   ```yaml
-   services:
-     web-app:
-       container_name: web-app
-       build:
-         context: ./web-app
-         dockerfile: Dockerfile
-       volumes:
-         - articles_data:/articles-data:ro
-         # 开发环境挂载本地代码，生产环境不挂载
-         - ${ENV:-dev} == "dev" ? ./web-app:/app : /app
-         # 统一挂载 rendered_articles，但路径固定
-         - rendered_articles:/rendered-articles
-       environment:
-         - ARTICLES_DIRECTORY=/articles-data
-         - RENDERED_DIRECTORY=/rendered-articles
-         - FLASK_APP=app.py
-         - ENV=${ENV:-dev}
-   
-     articles-sync:
-       container_name: articles-sync
-       build:
-         context: ./articles-sync
-         dockerfile: Dockerfile
-       volumes:
-         - articles_data:/articles-data:rw
-         # 开发环境挂载日志，生产环境不挂载
-         - ${ENV:-dev} == "dev" ? ./articles-sync/logs:/var/log/personal-website : /var/log/personal-website
-       environment:
-         - GITHUB_REPO=https://github.com/hanjie-chen/PersonalArticles.git
-         - REPO_BRANCH=main
-         - LOG_DIR=/var/log/personal-website
-   
-     nginx:
-       image: nginx:alpine
-       container_name: nginx
-       ports:
-         - "80:80"
-       volumes:
-         - ./nginx/conf.d:/etc/nginx/conf.d
-         - ./nginx/logs:/var/log/nginx
-         - rendered_articles:/usr/share/nginx/html/rendered-articles
-       depends_on:
-         - web-app
-   
-   volumes:
-     articles_data:
-     rendered_articles:
-   ```
-
-   - `${ENV:-dev}` 表示如果未设置 `ENV`，默认值为 `dev`。
-   - 在开发环境中，运行 `docker-compose up` 默认使用开发配置。
-   - 在生产环境中，设置 `ENV=prod`（例如 `ENV=prod docker-compose up`），切换到生产配置。
-
-2. **调整 `web-app` 的逻辑**
+1. **调整 `web-app` 的逻辑**
    在开发环境中，你可能仍想使用 Flask 提供静态文件以便调试。我们可以通过 `ENV` 环境变量动态注册静态路由：
 
    ```python
@@ -221,7 +155,7 @@ return render_template('article_details.html', article=article, article_content=
    - 在 `ENV=dev` 时，Flask 会注册 `/rendered-articles/` 路由，方便调试。
    - 在 `ENV=prod` 时，不注册此路由，Nginx 完全接管静态文件服务。
 
-3. **开发与生产环境的运行方式**
+2. **开发与生产环境的运行方式**
    - **开发环境**：直接运行 `docker-compose up`，默认 `ENV=dev`。
    - **生产环境**：运行 `ENV=prod docker-compose up`，切换到生产模式。
 
@@ -241,12 +175,3 @@ return render_template('article_details.html', article=article, article_content=
   - `rendered_articles` 仅挂载到 `/rendered-articles` 和 Nginx 的 `/usr/share/nginx/html/rendered-articles`。
   - Nginx 高效提供静态文件，Flask 只生成 URL。
 
----
-
-### 总结
-通过以上步骤，你成功将 `rendered-articles` 整合到 Nginx 容器中，并解决了开发与生产环境的差异问题：
-1. Nginx 通过 volume 挂载和配置文件提供静态服务。
-2. `web-app` 修改为生成静态 URL，前端通过 iframe 或 JavaScript 加载内容。
-3. 使用环境变量 `ENV` 统一管理配置，确保开发调试方便，生产性能优化。
-
-希望这个方案能满足你的需求！如果有其他问题，欢迎继续讨论。
