@@ -1,5 +1,79 @@
 # publish-image
 
+集成 GHCR
+
+example
+
+```yaml
+name: CI
+
+on:
+  push:
+    branches:
+      - "**" # 任何分支有 push 都会触发
+  pull_request:
+    branches:
+      - main # 或者针对 main 分支的pull request 也会触发
+
+# GHCR push 需要 packages: write。
+# 说明：这里使用 GitHub 自动注入的 GITHUB_TOKEN，不需要手动创建 token。
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  compose-check-and-build:
+    runs-on: ubuntu-latest # 使用最近的 ubuntu image
+    steps:
+      # 拉取代码
+      - name: Checkout
+        uses: actions/checkout@v4
+      # 检查 compose.yml 语法
+      - name: Validate compose (prod)
+        run: docker compose -f compose.yml config
+
+      - name: Validate compose (dev overlay)
+        run: docker compose -f compose.yml -f compose.dev.yml config
+
+      # GHCR（ghcr.io）集成：
+      # - 仅在 push 事件执行（PR 只做检查，不推镜像）
+      # - 镜像命名：ghcr.io/<owner>/<repo>-<service>:<tag>
+      - name: Set up Docker Buildx
+        if: github.event_name == 'push'
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push web-app image
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v6
+        with:
+          context: ./web-app
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/website-web-app:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/website-web-app:latest
+
+      - name: Build and push articles-sync image
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v6
+        with:
+          context: ./articles-sync
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/website-articles-sync:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/website-articles-sync:latest
+
+```
+
+
+
 在 CI/CD yml 文件中如果声明了如下的 write 权限
 
 ```yaml
@@ -7,7 +81,7 @@ permissions:
   packages: write
 ```
 
-那么GitHub Actions 在运行过程中会生成一个临时的 `GITHUB_TOKEN`。这个 Token 默认就拥有向当前仓库所属的账户/组织写入 Package 的权力。
+那么GitHub Actions 在运行过程中会生成一个临时的 `GITHUB_TOKEN`。这个 Token 默认就拥有向当前仓库所属的账户/组织写入 Package 的权限。
 
 如果在 tags 中设定如下
 

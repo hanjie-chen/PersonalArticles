@@ -4,24 +4,6 @@
 
 app services + azure container registry + azure blob storage + app services deploy slot
 
-## 进阶方案
-进阶方案 1：配置 CI/CD Pipeline
-
-配置 GitHub Actions：
-
-- 在你的代码仓库中添加 GitHub Actions 工作流文件。
-- 配置工作流，自动构建 Docker 镜像并推送到 ACR。
-- 设置自动部署到 Azure App Services。
-
-#### 进阶方案 2：docker swarm
-
-#### 进阶方案 3：Azure Kubernetes Service (AKS)
-
-### 利用 AFD 的多 origin 功能
-Azure Front Door (AFD) 支持多个 origin 和 origin group，你可以利用这个功能同时运行不同部署方案，进行负载均衡和性能比较。
-
-
-
 # nginx document root
 
 ### 调整 `web-app` 中获取 HTML 的逻辑

@@ -23,7 +23,7 @@ tmux new -s <process-name>
 tmux ls
 ```
 
-### 回到会话（Attach） 
+### 回到会话：
 
 重新连上服务器，要看刚才那个任务跑得咋样了。
 

@@ -8,13 +8,20 @@
 docker compose -f <yaml-filename> up -d
 ```
 
-#### `-f <yaml-filename>` 
+`docker compose`
+
+- 下载镜像（如果本地没有）。
+- 创建容器。
+- 启动服务。
+- 更新配置：如果你修改了配置文件，它会检测到差异并重新创建受影响的容器。
+
+`-f <yaml-filename>` 
 
 - 告诉 Docker Compose：请使用 `<yaml-filename>` 这个文件作为配置文件。
 - 不写 `-f compose.yml` 那么Docker Compose 会自动寻找名为 compose.yml 或 docker-compose.yml 的文件。
 - 当你的 yaml file 不叫标准名字时。比如：docker compose -f production.yml up（使用生产环境配置启动）。
 
-#### `-d`
+`-d`
 
 - Detached mode，即“分离模式”或“后台运行”。
 - 不加 -d 启动后，终端会被占用，屏幕上会疯狂滚动服务的日志。如果你按 Ctrl + C，容器通常会停止。加上 -d： 启动后，Docker 会在后台默默运行容器。终端控制权会立即还给你，你可以继续输入其他命令。
@@ -90,3 +97,18 @@ docker compose build --no-cache articles-sync
 ```
 
 这个命令只会对指定服务重建镜像，并不会影响其他服务。
+
+## clean redundant container
+
+在 docker 实践过程中，当我们更新了某些部分（yaml, code etc）的时候，为了没有 downtime 的部署，常用下面这个命令
+
+```
+docker compose up -d --remove-orphans
+```
+
+它的作用是：根据配置文件启动所有容器，并在后台运行，同时清理掉那些不再需要的“孤儿”容器。
+
+`--remove-orphans`
+
+- 清理“孤儿”容器：所谓的“孤儿”容器，是指那些已经在配置文件中被删除、但仍然在 Docker 中运行的容器。
+- 场景举例：假设你以前在 `yml` 里写了 `mysql` 和 `web` 两个服务。后来你把 `mysql` 删掉了，只剩下 `web`。如果你只运行 `docker compose up`，那个旧的 `mysql` 容器可能还会残留在后台占用资源。加上这个参数，Docker 会自动发现它不再属于当前项目并将其删除。
