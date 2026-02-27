@@ -55,21 +55,29 @@ markdown
 python-frontmatter
 ```
 
+> [!note]
+>
+> 这里的大小写是不敏感的，但是推荐小写
+>
+> 对于 pip 工具（包括 pip-compile）和 requirements.in 来说，Flask, flask, FLASK 统统指向同一个包。
+>
+> 但是在 coding import 的时候，需要区分大小写（遵守包定义的命名空间）
+
 ### `pip-compile`
 
 使用 pip-compile 生成 requirements.txt：
 
 ``` bash
+# 生成 requirements.txt
 pip-compile requirements.in
+# 更新 requirements.txt
+pip-compile --upgrade requirements.in
 ```
-
-当我们更新完 requirements.in 之后，运行 `pip-compile --upgrade requirements.in` 更新 `requirements.txt` 到最新版本
 
 > [!note]
 >
-> 这个命令会重新解析 `requirements.in`，包括新添加的包
+> 这个命令会只会解析在 `requirements.in` 中提到的 package 提取这些 package 的依赖，而不会去扫描代码
 >
-> 会升级 `requirements.txt` 中已有的包，但仍会遵守 `requirements.in` 的约束。
 
 
 

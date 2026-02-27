@@ -71,15 +71,9 @@ deactivate
 
 这会让你回到系统默认的 Python 环境。
 
+## best practice
 
-
-# Global virtual enviroment
-
-因为我们无法对系统 python 进行操作（比如说是 pip install 命令）所以还是得创建一个 python 虚拟环境
-
-而我们又想让这个 python 虚拟环境下载很多的python package，应用于大部分的项目（就像 anaconda3 base env），这时候需要怎么办呢？应该将这个 venv 放在哪个文件夹呢？
-
-为了方便管理和访问，建议将全局虚拟环境存放在你的 home dir 下。一个常见的做法是使用 `~/.venv` 目录，然后在其中创建一个名为 `base` 的虚拟环境。
+为了方便，可以将全局虚拟环境存放在的 home dir 下。使用 `~/.venv` 目录，然后在其中创建虚拟环境。
 
 如果提示没有 python3-venv, 根据提示下载
 
@@ -123,7 +117,7 @@ source ~/.venv/base/bin/activate
 > alias activate-base="source ~/.venv/base/bin/activate"
 > ```
 
-# VScode python interptreter set
+## VScode python interptreter set
 
 vscode 可能无法主动搜索到这个 python virtual env, 需要手动添加路径，虚拟环境的 Python 解释器位于：
 
