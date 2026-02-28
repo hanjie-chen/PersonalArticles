@@ -27,6 +27,10 @@ docker compose -f <yaml-filename> up -d
 - 不加 -d 启动后，终端会被占用，屏幕上会疯狂滚动服务的日志。如果你按 Ctrl + C，容器通常会停止。加上 -d： 启动后，Docker 会在后台默默运行容器。终端控制权会立即还给你，你可以继续输入其他命令。
 - 只要你想让服务在服务器上一直跑，通常都会加 -d。
 
+> [!note]
+>
+> 这个命令并不会主动去 build image, 除非是没有 image, 如果有 image 就会使用旧的，也不管有 Dockerfile 中 `COPY` 指令中的文件是否变化。
+
 ### multi-file
 
 ```
@@ -48,20 +52,11 @@ docker compose -f compose.yml -f compose.dev.yml up
 这个时候，大概率是 `docker compose up` 使用了已经构建的 image 文件，为了解决这个问题，我们需要使用下面的命令强制重新构建一下 image
 
 ```shell
+# 从头开始重新构建，放弃所有 cache
 docker compose build --no-cache
-```
-
-或者
-
-```shell
+# 启动服务器前先查看代码是否变动，如果变动则重新构建（使用 cache）
 docker compose up --build
 ```
-
-这样会在 `up` 的同时强制重新构建镜像，然后再启动容器
-
-`docker compose up` 命令并不会主动去 build image, 除非是没有 image, 如果有 image 就会使用旧的，也不管有 Dockerfile 中 `COPY` 指令中的文件是否变化。
-
-但是 `docker compose build` 命令则是会去主动探测变化，如果有变化（哈希值对比），那么就会重新构建
 
 ### rebuild pointed service image
 
