@@ -236,7 +236,6 @@ ssh-add ~/.ssh/<ssh-key-filename>
 ```bash
 if [ -z "$SSH_AUTH_SOCK" ] ; then
     eval "$(ssh-agent -s)"
-    ssh-add ~/.ssh/<ssh-key-name>
 fi
 ```
 
@@ -264,11 +263,16 @@ Host Azure-Linux-VM
     User <username>
     Port <ssh-port>
     IdentityFile ~/.ssh/id_rsa
+	AddKeysToAgent yes
 ```
+
+其中 `AddKeysToAgent yes` 意思是 SSH 客户端在验证成功后，会自动把解密后的密钥顺手存入 ssh-agent（如果 ssh-agent 没有此时没有启动，则不会生效）。
 
 > [!tip]
 >
-> 在 vscode 的 remote-ssh 插件中使用 `Remote-SSH: Open SSH Configuration File...` 同样编辑的就是这个文件
+> - 在 vscode 的 remote-ssh 插件中使用 `Remote-SSH: Open SSH Configuration File...` 同样编辑的就是这个文件。
+>
+> - 如果没有 `AddKeysToAgent yes` 那么 ssh-agent 是不会在你 ssh 链接服务器的时候自动获得你的密钥的，也就是说需要你手动 ssh-add 那个 key
 
 通过编辑这个文件，我们可以为不同主机指定私钥，例如为个人服务器和公司服务器使用不同密钥。GitHub 或 GitLab 配置不同密钥。
 
