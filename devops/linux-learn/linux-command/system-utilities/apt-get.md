@@ -2,107 +2,27 @@
 
 apt (advanced package tool) 是 Debian 及其衍生版本（如 Ubuntu）的包管理系统。
 
-## `apt-get` VS `apt`
+> [!note]
+>
+> `apt-get` VS `apt`
+>
+> apt-get 的输出稳定，更适合脚本处理，例如 Dockerfile, auto-scripts, CI/CD flow
+>
+> apt更适合命令行交互，其输出包含进度条等交互元素，格式可能随版本变化
 
-apt-get 的输出稳定，更适合脚本处理，例如 Dockerfile, auto-scripts, CI/CD flow
+如果我们想要现在一个或者多个 package 比如说 npm, node.js 那么我们一般这样子操作
 
-apt更适合命令行交互，其输出包含进度条等交互元素，格式可能随版本变化
-
-
-
-# Essential Commands (Daily Usage)
-
-### update pakcage-index
-```bash
-# apt-get 方式
-apt-get update
-
-# apt 方式
-apt update
+```shell
+sudo apt update
+sudo apt install -y nodejs npm
 ```
 
-### update package
+- `sudo apt update`: 刷新本机的 package index，所谓的 package index 也就是你能装到哪些版本、从哪个镜像拿
+- `sudo apt install -y nodejs npm`: 下载 node.js, npm 并且每次询问的时候都回答 yes（不用手动输入）
 
-```bash
-# 更新所有包
-apt-get upgrade
 
-# 更新所有包，必要时可以删除旧包
-apt-get dist-upgrade
 
-# apt 方式
-apt upgrade
-apt full-upgrade  # 相当于 dist-upgrade
-```
 
-### install
-
-```bash
-# apt-get 方式
-apt-get install package_name
-
-# apt 方式
-apt install package_name
-
-# 常用选项：
--y          # 自动确认
---no-install-recommends  # 不安装推荐的包
---no-install-suggests   # 不安装建议的包
-```
-
-### delete
-```bash
-# 仅删除软件
-apt-get remove package_name
-
-# 删除软件和配置文件
-apt-get purge package_name
-# 或
-apt-get remove --purge package_name
-
-# 删除自动安装且不再使用的依赖包
-apt-get autoremove
-```
-
-### search
-```bash
-# 搜索包
-apt-cache search keyword
-
-# 显示包信息
-apt-cache show package_name
-
-# apt 方式
-apt search keyword
-apt show package_name
-```
-
-# Advanced Usage
-
-### check package dependency
-
-```bash
-# 查看依赖
-apt-cache depends package_name
-
-# 查看被依赖
-apt-cache rdepends package_name
-```
-
-### clean
-
-```bash
-# 清理已下载的安装包
-apt-get clean
-
-# 清理旧版本的安装包
-apt-get autoclean
-
-# 清理不再使用的依赖包
-apt-get autoremove
-```
-
-### 
 
 # System configuration
 

@@ -33,17 +33,27 @@ BriefIntroduction:
 git commit -m "add your specification of this commit"
 ```
 
-完整的 `git commit` 命令，必须要填写这次提交的信息
+每次提交都会记录下谁在什么时间做了什么更改，并允许你回到这个状态。
 
-每次提交都会记录下谁在什么时间做了什么更改，并允许你回到这个状态或者比较不同提交之间的差异。`git commit` 命令实际上创建了一个快照，它包含了暂存区中所有文件的一个特定状态。
+### commit id：SHA-1 哈希值
 
-如果忘记上一次 commit 的信息，可以使用下面的命令查看
+- 每次 commit 成功后，Git 会生成一个唯一的 40 位十六进制字符串（称为 SHA-1 哈希值），作为这次提交的 ID。
+- 哪怕只改动一个空格，SHA ID 都会完全改变。这保证了代码历史的不可篡改性。
+- 在执行命令或 DevOps 回滚时，通常只需要输入 SHA 的前 7 位（例如 `a1b2c3d`）即可精准定位。
+
+查看历史提交记录及其对应的 SHA ID：
+
+``` shell
+git log --oneline
+```
+
+如果忘记上一次 commit 的信息，可以使用
 
 ```shell
 git show
 ```
 
-这个命令默认显示的是 `HEAD`（当前分支最后一次提交）的内容。
+这个命令默认显示的是 `HEAD`（当前分支最后一次提交）的内容。也可以在后面加上特定的 SHA ID 来查看历史记录：`git show <SHA>`
 
 ## `git push`
 
@@ -272,7 +282,7 @@ git push origin --delete <branch-name>
 
 所以，如果你之前用过 `git pull` 但是失败了（比如你展示的错误），那么还是需要先执行 `git fetch`。因为 `git pull` 失败的话，可能没有更新本地的 `origin/main` 引用。
 
-# `git reset`
+# Rollback
 
 如果你想要删除本地的所有修改，仅仅接受来自 remote repository 的最新情况，可以使用 git reset 强制删除所有你在本地的修改。比如说你 git clone 了一个 repository, 并且做了一些实验性的修改，并且 git commit 了，然后又不想要这些修改，想要把本地的 repository 变成 github reposotory 上面的状态
 
@@ -436,9 +446,9 @@ git diff compose.yml
 
 这样可以看到具体的修改内容，再决定是否要回撤修改。
 
-# `.gitignore` file
+# .gitignore file
 
-当 python 程序运行的时候，会产生一些临时的文件，存放在本地路径的 `__pycache__` 文件夹中，但是当我们提交的时候并不希望这些临时文件被提交，这个时候，我们可以写一个 `.gitignore` 文件来忽略某些特定的文件
+当 python 程序运行的时候，会产生一些临时的文件，存放在本地路径的 `__pycache__` 文件夹中，但是当我们提交的时候并不希望这些临时文件被提交，这个时候，我们可以写一个 .gitignore 文件来忽略某些特定的文件
 
 ## Global ignore
 
