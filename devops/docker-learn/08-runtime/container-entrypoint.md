@@ -274,9 +274,3 @@ CMD ["/usr/local/bin/init.sh"]
 
 这样你就能安心用 `exec crond` 了，而且容器生命周期也更优雅。
 
-
-
-# continue
-
-https://chatgpt.com/share/68066773-3260-800a-ab15-acd74b910cb2
-

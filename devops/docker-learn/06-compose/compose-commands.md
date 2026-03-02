@@ -1,19 +1,27 @@
+---
+Title: Articles Template
+Author: 陈翰杰
+Instructor: GPT 5.2-thinking,gemini-3.0-flash
+CoverImage: 
+RolloutDate: 
+---
+
+```
+BriefIntroduction: 
+本文介绍了 docker compose 常用命令
+```
+
+<!-- split -->
+
 # docker compose command
 
-
+Docker Compose 是一个用于定义和运行多容器的工具。使用 compose.yml 文件来配置应用程序的服务、网络和 Volume。
 
 # `docker compose up`
 
 ```shell
 docker compose -f <yaml-filename> up -d
 ```
-
-`docker compose`
-
-- 下载镜像（如果本地没有）。
-- 创建容器。
-- 启动服务。
-- 更新配置：如果你修改了配置文件，它会检测到差异并重新创建受影响的容器。
 
 `-f <yaml-filename>` 
 
@@ -23,9 +31,7 @@ docker compose -f <yaml-filename> up -d
 
 `-d`
 
-- Detached mode，即“分离模式”或“后台运行”。
-- 不加 -d 启动后，终端会被占用，屏幕上会疯狂滚动服务的日志。如果你按 Ctrl + C，容器通常会停止。加上 -d： 启动后，Docker 会在后台默默运行容器。终端控制权会立即还给你，你可以继续输入其他命令。
-- 只要你想让服务在服务器上一直跑，通常都会加 -d。
+- Detached mode，即“分离模式”或“后台运行”。不加 -d 启动后，终端会被占用，屏幕上会疯狂滚动服务的日志。
 
 > [!note]
 >
@@ -37,17 +43,19 @@ docker compose -f <yaml-filename> up -d
 docker compose -f compose.yml -f compose.dev.yml up
 ```
 
-这里出现了两次 -f，这是 Docker Compose 非常强大的配置合并（Merge/Override）功能。
-
-逻辑：像“图层”一样叠加
+两次 -f，是 Docker Compose 配置合并（Merge/Override）功能。他会
 
 1. 先读取 compose.yml（基础配置）。
 2. 再读取 compose.dev.yml（开发环境配置）。
 3. 将两者合并，且后者的设置会覆盖前者。
 
+如果这个时候，机器意外的关机重启了，并且在最终合并的配置文件中配置过 contianer restart 那么 container 会完全按照最初启动时的配置（即包含 `compose.dev.yml` 的覆盖效果）自动重启。
+
+这是因为这个“合并后的最终配置”已经被发送给了 Docker Daemon（后台守护进程）。
+
 ## rebuild image
 
-当我们更新了某些构建 image 的文件的时候，比如说 requirements.txt, source code part，使用 `docker compose up` 结果发现这个修改并没有生效，反而是使用了旧的 image 去运行 container
+当我们更新了某些构建 image 的文件的时候，比如说 requirements.txt, source code 等，使用 `docker compose up` 结果发现这个修改并没有生效，反而是使用了旧的 image 去运行 container
 
 这个时候，大概率是 `docker compose up` 使用了已经构建的 image 文件，为了解决这个问题，我们需要使用下面的命令强制重新构建一下 image
 
