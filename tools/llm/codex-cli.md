@@ -28,3 +28,19 @@ codex login status
 codex login
 ```
 
+
+
+## AGENTS.md
+
+Codex 会在每次启动时自动读取并合并一条“指令链”：
+
+- 全局：`~/.codex/AGENTS.md`
+- 项目：从 repo root（通常是 Git root）一路走到当前工作目录，每层目录最多取一个 `AGENTS.md`，并按“root → leaf”顺序依次注入。 
+
+作用：把你每次都要重复说的“工作协议/目录说明/输出格式”固化下来。
+
+## interactive mode
+
+使用命令 `codex` 直接进入交互模式
+
+<img src="./images/interactive-mode.png" alt="interactive mode" style="zoom:50%;" />
