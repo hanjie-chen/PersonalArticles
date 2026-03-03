@@ -1,8 +1,6 @@
-# PersonalArticles
+# Knowledge base
 
-这个仓库用于存放我写的文章，打算在 github 中存储我的网站文章
-
-我的个人网站会从这个 github repository 中获取所有文章
+这是我的个人知识库，我的网站会从这个 github repository 中获取并展示部分文章
 
 # file organize
 
