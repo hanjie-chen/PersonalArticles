@@ -1,6 +1,6 @@
 # pytest-cov
 
-pytest-cov: 是 Pytest 的一个插件，它封装了 `coverage.py`。它的作用是：在运行测试的同时，监控 Python 解释器执行了哪些代码行，并计算出百分比。
+pytest-cov:  Pytest 负责统计代码覆盖率，告诉你代码中哪些行被执行了，哪些没被执行。
 
 可以通过 `pip install pytest-cov` 安装
 
@@ -20,9 +20,9 @@ pytest -q
 
 --cov=app 指定监测目录。只有 `app` 文件夹下的代码才会被统计覆盖率。
 
---cov-report=term-missing **报告格式**。在终端（Terminal）直接打印结果，并且最贴心的是它会列出具体**哪些行 (Lines)** 没被覆盖到。
+--cov-report=term-missing 报告格式。在终端（Terminal）直接打印结果，并且最贴心的是它会列出具体哪些行 (Lines) 没被覆盖到。
 
---cov-fail-under=30 **强制阈值（Gate）**。如果总覆盖率低于 30%，pytest 将返回一个**非零退出码**，从而直接让你的 CI 流水线挂掉（变红）。
+--cov-fail-under=30 强制阈值（Gate）。如果总覆盖率低于 30%，pytest 将返回一个**非零退出码**，从而直接让你的 CI 流水线挂掉（变红）。
 
 #### A. 增加 HTML 报告 (本地调试神器)
 

@@ -262,25 +262,51 @@ git branch -D <branch-name>
 git push origin --delete <branch-name>
 ```
 
+# local & remote both updated
 
+当我们在 remote(github) 上面最新的代码做了修改，而且在本地的代码也做了修改（git add + git commit）之后。
 
-# `git fetch`
+即使修改内容不冲突，当我们在 local git pull 的时候，就会出现下面的信息
 
-`git fetch` vs `git pull`
+```shell
+$ git pull
+remote: Enumerating objects: 20, done.
+remote: Counting objects: 100% (20/20), done.
+remote: Compressing objects: 100% (13/13), done.
+remote: Total 13 (delta 7), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (13/13), 4.71 KiB | 344.00 KiB/s, done.
+From github.com:hanjie-chen/website
+   0b18d4f..55d30e5  main       -> origin/main
+ * [new tag]         v0.1.0     -> v0.1.0
+hint: You have divergent branches and need to specify how to reconcile them.
+hint: You can do so by running one of the following commands sometime before
+hint: your next pull:
+hint:
+hint:   git config pull.rebase false  # merge
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint:
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+fatal: Need to specify how to reconcile divergent branches.
+```
 
-`git fetch`: 
+这是 git 在“征求你的意见”：既然远程（GitHub）和本地都有了不同的新提交（divergent branches），你希望用哪种方式把它们合在一起？
 
-- 只从远程仓库下载最新内容到本地
-- 不会自动合并到你的工作分支
-- 更新 `origin/main` 的引用
+我们可以使用 rebase，把你的本地提交“挪到”远端提交之后
 
-`git pull`:
+在你的仓库目录里执行：
 
-- 相当于 `git fetch` + `git merge`
-- 不仅下载最新内容，还会尝试自动合并到你的当前分支
-- 如果有冲突可能会失败
+```
+$ git pull --rebase
+Successfully rebased and updated refs/heads/main.
+```
 
-所以，如果你之前用过 `git pull` 但是失败了（比如你展示的错误），那么还是需要先执行 `git fetch`。因为 `git pull` 失败的话，可能没有更新本地的 `origin/main` 引用。
+这会做两件事：先拉远端更新，再把你本地的 commit **依次重放到** `origin/main` 最新提交之后。如果确实没冲突，它会直接成功。
+
+成功后你再 `git push`
 
 # Rollback
 
@@ -472,6 +498,9 @@ __pycache__/
 .env
 # nging basic auth user-password file
 .htpasswd
+
+# pytest-cov file
+.coverage
 ```
 
 # case sensitivity
