@@ -16,7 +16,9 @@ BriefIntroduction:
 
 ![cover image](./images/cover_image.jpeg)
 
-# 写在前面/Before we beginning/Background
+# Title: 文章模板
+
+## 写在前面/Before we beginning/Background
 
 介绍本文的背景和自己的想法，右边为文章目录，左边是同一个 category 目录下的文章 link 
 
@@ -26,7 +28,7 @@ BriefIntroduction:
 
 这篇文章用于测试我会用到的大部分 markdown 功能
 
-# Title: 文章模板
+---
 
 这里写文章的==正文内容==
 

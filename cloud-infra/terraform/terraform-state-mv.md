@@ -18,8 +18,6 @@ Plan: 13 to add, 0 to change, 13 to destroy.
 
 举个例子：
 
-之前你创建 VM 的路径是：
-
 terraform 识别旧 VM 的位置为：
 
 ```hcl
@@ -37,8 +35,6 @@ module.linux_vm.azurerm_linux_virtual_machine.linux_vm
 ### 这合理吗？
 
 技术上是合理的，但在生产环境或你已经部署了重要资源时，这是不可接受的。我需要的是保留已有资源，并让 Terraform 继续追踪它们，而不是重建它们。
-
-
 
 # resolution: terraform state mv
 

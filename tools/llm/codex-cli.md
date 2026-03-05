@@ -44,3 +44,17 @@ Codex 会在每次启动时自动读取并合并一条“指令链”：
 使用命令 `codex` 直接进入交互模式
 
 <img src="./images/interactive-mode.png" alt="interactive mode" style="zoom:50%;" />
+
+使用 `/` 可以设定和查看某些内容，比如说选择模型
+
+<img src="./images/select.png" alt="codex cli select" style="zoom:50%;" />
+
+实际上的命令不仅仅是上线显示的这些，比较常用的命令有
+
+status
+
+<img src="./images/status.png" alt="status" style="zoom:50%;" />
+
+如果我们需要开启一段新对话，那么我们可以使用
+
+- `/clear`：清屏 + 开新对话（从头开始聊）。

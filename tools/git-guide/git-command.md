@@ -489,7 +489,7 @@ git config --global core.excludesfile ~/.gitignore
 
 ## personal `.gitignore`
 
-```python
+```json
 # python auto generated file
 __pycache__/
 *.pyc
@@ -501,6 +501,11 @@ __pycache__/
 
 # pytest-cov file
 .coverage
+
+# terraform cahce file
+.terraform/
+# terraform status file
+terraform.tfstate
 ```
 
 # case sensitivity

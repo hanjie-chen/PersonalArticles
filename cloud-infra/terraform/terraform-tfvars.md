@@ -6,7 +6,7 @@
 
 
 
-# `terraform.tfvars`in modules
+# `terraform.tfvars` in modules
 
 对于一个采用 modules 的 terraform 项目，应该如何使用 `terraform.tfvars` 文件呢？
 
@@ -104,6 +104,6 @@ module "windows_vm" {
 
 ### 为什么不需要在模块文件夹下创建 `terraform.tfvars`？
 
-- **Terraform 的工作机制**：`terraform.tfvars` 文件是为根模块提供变量值的，Terraform 在运行时只会从根模块的目录读取这个文件。
-- **模块的角色**：模块（如 `linux-vm` 和 `windows-vm`）是可重用的组件，它们的变量值是通过根模块调用时传递的，而不是直接从模块文件夹中的 `.tfvars` 文件读取。
-- **避免冗余**：如果在每个模块文件夹下创建 `terraform.tfvars`，Terraform 不会自动识别这些文件，反而会导致管理混乱。
+- Terraform 的工作机制：`terraform.tfvars` 文件是为根模块提供变量值的，Terraform 在运行时只会从根模块的目录读取这个文件。
+- 模块的角色：模块（如 `linux-vm` 和 `windows-vm`）是可重用的组件，它们的变量值是通过根模块调用时传递的，而不是直接从模块文件夹中的 `.tfvars` 文件读取。
+- 避免冗余：如果在每个模块文件夹下创建 `terraform.tfvars`，Terraform 不会自动识别这些文件，反而会导致管理混乱。
