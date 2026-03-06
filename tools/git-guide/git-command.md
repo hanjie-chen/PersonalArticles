@@ -502,10 +502,13 @@ __pycache__/
 # pytest-cov file
 .coverage
 
+# ignore tf related file
 # terraform cahce file
 .terraform/
 # terraform status file
 terraform.tfstate
+# sensitive data
+terraform.tfvars
 ```
 
 # case sensitivity

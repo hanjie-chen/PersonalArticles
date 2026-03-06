@@ -2,7 +2,7 @@
 
 要让 Terraform 操作你的 Azure 资源，需通过以下任一种方式认证：
 
-### 方式 1：Azure CLI 登录（推荐）
+## 方式 1：Azure CLI 登录（推荐）
 
 关于如何安装 Azure CLI [^down-azure-cli] 简单来说一个命令就可以搞定
 
@@ -22,7 +22,7 @@ az login
 az account show
 ```
 
-#### **方式 2：服务主体认证（适合 CI/CD）**
+## 方式 2：服务主体认证（适合 CI/CD）
 
 ```hcl
 # 在 provider 块中直接配置（不推荐提交到版本库）

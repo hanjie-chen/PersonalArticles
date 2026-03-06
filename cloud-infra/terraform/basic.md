@@ -31,6 +31,8 @@ Terraform v1.10.5
 on linux_amd64
 ```
 
+如果使用 vscode 那么可以下载这个官方插件：HashiCorp Terraform
+
 # Minimal Terraform Project
 
 一个最小可运行的 Terraform 项目通常包含以下四个核心文件：
@@ -163,11 +165,13 @@ output "vm_public_ip" {
 }
 ```
 
-# Terraform Workflow 
+# Terraform Workflow
+
+在我们开始之前，要让 Terraform 操作 cloud 资源，还需要通过 cloud 认证：[Azure](../azure/terraform/auth.md) [GCP](../gcp/terraform/auth.md)
 
 写好了上面这些 `.tf` 文件后，我们就可以按顺序执行 Terraform 命令“四部曲”了（code --> cloud resource）。在执行的过程中，Terraform 会自动生成一些极其重要的文件和文件夹。
 
-## step 1: initialize (terraform init)
+## Step 1: initialize (terraform init)
 
 这个命令会初始化 tf 项目，类似于 git init 但它必须在写好 `providers.tf` 后才能运行。Terraform 会读取你的配置，知道你要用 Azure 后，它会做以下事情：
 
