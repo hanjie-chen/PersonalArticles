@@ -15,11 +15,9 @@ BriefIntroduction:
 
 ![cover image](./images/cover_image.png)
 
-# Title: Git 速查指南
-
 当在 github 上面新建完成一个仓库之后，github 会提示你如何进行下一步操作。而我们需要做的部分就是根据仓库给出的提示，初始化本地仓库，并且完成第一次推送
 
-![new repo](./images/new-repo.png)
+<img src="./images/new-repo.png" alt="new repo" style="zoom:50%;" />
 
 # Basic Commands
 

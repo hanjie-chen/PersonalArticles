@@ -100,7 +100,7 @@ approval_policy 控制 Codex 什么时候在执行命令前停下来向你要批
 - 但它替你跑的 `curl` 仍然失败
 
 因为这两者不是同一个权限开关。官方专门说明了：
-**你可以单独控制 web search，而不必给 spawned commands 真正的网络访问权限。** 本地 IDE Extension 默认启用的是 **web search cache**，它来自 OpenAI 维护的索引，不等于 shell 里的 `curl` 已经能直接访问公网。([OpenAI开发者平台](https://developers.openai.com/codex/security/?utm_source=chatgpt.com))
+你可以单独控制 web search，而不必给 spawned commands 真正的网络访问权限。 本地 IDE Extension 默认启用的是 **web search cache**，它来自 OpenAI 维护的索引，不等于 shell 里的 `curl` 已经能直接访问公网。([OpenAI开发者平台](https://developers.openai.com/codex/security/?utm_source=chatgpt.com))
 
 所以：
 
@@ -151,7 +151,24 @@ approval_policy 控制 Codex 什么时候在执行命令前停下来向你要批
 
 你可以这样记：
 
-- **sandbox**：限制 Codex 跑命令时能碰什么资源
-- **approval_policy**：限制 Codex 什么时候必须先问你
-- **network_access = true**：给 shell 命令真实公网权限
-- web_search = "live"`：给 Codex 自带搜索工具实时网页能力，不等于 `curl` 自动能用 ([OpenAI开发者平台](https://developers.openai.com/codex/app/features/?utm_source=chatgpt.com))
+- sandbox：限制 Codex 跑命令时能碰什么资源
+- approval_policy：限制 Codex 什么时候必须先问你
+- network_access = true：给 shell 命令真实公网权限
+- web_search = "live"：给 Codex 自带搜索工具实时网页能力，不等于 curl 自动能用
+
+# plan mode
+
+Plan mode 会先让 Codex 做“方案设计 / 执行分解”，再进入真正的修改与实现，而不是一上来就直接改代码。
+
+更适合复杂任务。比如重构、迁移、跨多个文件的大改动、需要分阶段验证的任务。因为它会更强调“步骤、里程碑、顺序、边界”，降低一上来改偏的概率。
+
+可能会先问你问题，如果还需要补充信息，Codex 会先问你，而不是直接动手。
+
+区分：
+
+- 普通 Agent/直接实现模式：你说做什么，它尽快开始看文件、跑命令、改代码”。
+- Plan mode：先出施工方案、拆步骤、确认方向，再继续”。
+
+
+
+ 

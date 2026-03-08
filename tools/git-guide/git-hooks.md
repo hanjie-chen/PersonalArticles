@@ -14,7 +14,7 @@ git hooks 检查图片文件后缀名，并且将其转换为小写
 
 <!-- split -->
 
-![cover](./images/pre-commit-test.png)
+<img src="./images/pre-commit-test.png" alt="cover"  />
 
 # Before we begin
 
