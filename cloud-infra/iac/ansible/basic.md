@@ -38,7 +38,7 @@ Ansible 的核心思想是“声明式”：你不需要告诉它“怎么做”
 
 告诉 Ansible “做什么”，这是最核心的部分，用 YAML 格式编写。它规定了在哪些机器上执行什么任务。
 
-**举个例子：一个简单的部署 Nginx 的剧本 `deploy_nginx.yml`**
+举个例子：一个简单的部署 Nginx 的剧本 `deploy_nginx.yml`
 
 ```yaml
 ---
@@ -58,6 +58,11 @@ Ansible 的核心思想是“声明式”：你不需要告诉它“怎么做”
         state: started
         enabled: yes
 ```
+
+> [!note]
+>
+> - Ubuntu 25.10 默认的 sudo-rs 会影响 Ansible become
+> - 切回传统 sudo 后，Ansible 流程恢复正常
 
 ### 3. Modules（模块）
 
@@ -120,19 +125,13 @@ sudo apt install ansible
 brew install ansible
 ```
 
-### 3. 安装完后怎么验证？
+验证
 
-装完之后，敲一下这个命令看看有没有反应：
-
-Bash
-
-```
+```bash
 ansible --version
 ```
 
 你会看到版本号、配置文件路径以及它使用的 Python 版本。
-
-------
 
 ### 4. 关键：如何让“控制机”控制“受控机”？
 
