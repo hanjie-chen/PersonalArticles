@@ -1,6 +1,6 @@
 # Knowledge base
 
-这是我的个人知识库，我的网站会从这个 github repository 中获取并展示部分文章
+这是我的个人知识库，我的个人博客网站会从这个 github repository 中获取并展示部分文章
 
 # file organize
 
@@ -22,7 +22,7 @@
 
 ## `.githooks` folder
 
-这是我存放关于这个仓库的 git hooks, 目前只有 1 个，那就是在 git commit 之前检查是否存在后缀名是大写的图片文件，如果存在，那么将后缀名小写
+这是我存放关于这个仓库的 git hooks, 目前只有 1 个，是在 git commit 之前检查是否存在后缀名是大写的图片文件，如果存在，那么将后缀名小写
 
 # Repository config
 

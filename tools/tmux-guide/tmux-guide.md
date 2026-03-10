@@ -1,43 +1,56 @@
 # tmux guide
 
+`tmux` 是 Terminal Multiplexer 的缩写。
+
 掌握 `tmux` 的核心只有两个点：“挂起与恢复” 和 “快捷键前缀”。
 
-Tmux 所有的快捷键操作，都必须先按一下 `Ctrl + b`（松开），然后再按具体的指令键。
-## 会话管理
+Tmux 所有的快捷键操作，都得先按一下 `Ctrl + b`（松开），然后再按具体的指令键。
+## session manage
 这是 Tmux 最核心的功能：可以在服务器上跑一个程序，断开连接回家，回家后再连上去，程序还在跑。
 
-### 新建会话：
+### craete session：
 
 ```bash
 tmux new -s <process-name>
 # 例子: tmux new -s mywork
 ```
 
-暂离/挂起（Detach） —— 最常用！
-*   场景：程序跑起来了，我要关掉 SSH 窗口或者去干别的，但不想程序断掉。
-*   操作：先按 `Ctrl + b`，松开，再按 `d` (d = detach)
-
-### 查看会话：
+### list session：
 
 ```bash
 tmux ls
 ```
 
-### 回到会话：
+### attach session：
 
 重新连上服务器，要看刚才那个任务跑得咋样了。
 
 ```bash
-tmux a -t <process-name>
-# 例子: tmux a -t mywork
+tmux attach -t <process-name>
 # 如果你只有一个会话，直接打 tmux a 也可以
 ```
 
-### 彻底关闭会话：
+> [!note]
+>
+> 对 `tmux` 来说，其实不需要完整名字。例如
+>
+> ```shell
+> $ tmux ls
+> codex-guide: 1 windows (created Tue Mar  3 14:28:08 2026)
+> k8s-learn: 1 windows (created Tue Mar 10 16:03:40 2026)
+> ```
+>
+> 那么通常 `tmux a -t k8s` 就够了，甚至 `k` 就可以，因为没有另一个以 `k` 开头的 session
+
+### detach session
+
+程序跑起来了，要关掉 SSH 窗口或者去干别的，但不想程序断掉。先按 `Ctrl + b`，松开，再按 `d` (d = detach)
+
+### close session：
 
 在 tmux 的窗口中按 `Ctrl + d`（就像关掉普通终端一样），会话就结束了。
 
-## 窗口管理（像浏览器标签页一样）
+## windows manage
 一个 Tmux 会话里可以有多个“窗口”（Window），就像浏览器里的多个标签页。
 
 *   新建一个窗口：
@@ -53,9 +66,7 @@ tmux a -t <process-name>
 *   关闭当前窗口：
     *   输入命令 `exit` 即可。
 
----
-
-### 3. 分屏（在一个屏幕里看两件事）
+### 分屏（在一个屏幕里看两件事）
 不用开两个 SSH 终端，直接把屏幕切开。
 
 *   **左右分屏**：
@@ -67,9 +78,7 @@ tmux a -t <process-name>
 *   **在分屏之间切换光标**：
     *   操作：`Ctrl + b`，然后按 **方向键**（上/下/左/右）
 
----
-
-### 4. 翻页查看历史（这很重要！）
+### 翻页查看历史
 新手最大的困扰是：Tmux 里鼠标滚轮经常滚不上去，看不了之前的日志。
 
 *   **进入“翻页模式”**：

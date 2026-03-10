@@ -178,7 +178,7 @@ kubectl create namespace k8s-lab
 
 ### 1. 什么是 Namespace？
 
-可以把 Kubernetes 集群想象成一栋**巨大的办公楼**。
+可以把 Kubernetes 集群想象成一栋巨大的办公楼。
 
 - 集群 (Cluster)：整栋大楼。
 - 命名空间 (Namespace)：大楼里的独立办公室。
@@ -195,7 +195,7 @@ kubectl create namespace k8s-lab
 
 当你敲下回车，`kubectl` 会告诉 API Server：“老板，开个新房间，名字叫 k8s-lab。”
 
-你可以通过这个命令看到成果：
+可以通过这个命令看到成果：
 
 ```shell
 sudo kubectl get ns
@@ -221,12 +221,150 @@ sudo kubectl get pods -n k8s-lab
 
 你会得到 `No resources found in k8s-lab namespace.`，因为你还没往里搬家具呢。
 
-### 4. 一个容易踩的坑
+> [!note]
+>
+> 如果不加 `-n`，所有的命令默认都是在操作 `default` 空间。
+>
+> 新手容易遇到这样的情况：
+>
+> 1. 在 `k8s-lab` 里创建了一个程序。输入 `kubectl get pods` 发现啥也没有，急得满头大汗。
+> 2. 其实程序在那跑得好好的，只是他在 `default` 办公室里找 `k8s-lab` 的人。
 
-如果你不加 `-n`，所有的命令默认都是在操作 `default` 空间。
+## create deployment
 
-很多新手会遇到这样的情况：
+使用下面的命令创建一个 deployment
 
-1. 在 `k8s-lab` 里创建了一个程序。
-2. 输入 `kubectl get pods` 发现啥也没有，急得满头大汗。
-3. 其实程序在那跑得好好的，只是他在 `default` 办公室里找 `k8s-lab` 的人。
+```shell
+kubectl -n k8s-lab create deployment demo-nginx --image=nginx:stable
+```
+
+命令详解
+
+- `-n k8s-lab`: 指定 namespace。告诉遥控器：“去 `k8s-lab` 房间操作”
+
+- `create deployment`: 动作 + 资源类型。
+
+  创建一个 Deployment（部署），而它像一个“监工”。你告诉它“我要运行 Nginx”，它负责帮你盯着。如果 Nginx 意外挂了，监工会自动再启动一个。
+
+- `demo-nginx`: 这个部署的名字。
+
+- `--image=nginx:stable`: 告诉 K3s 去哪里拉货。
+
+  - `image`（镜像）就像是装好系统的“光盘”或“U盘”。
+  - `nginx:stable` 指的是从官方仓库下载“稳定版”的 Nginx。
+
+### 执行后发生了什么？
+
+当你按下回车，集群内部会发生一连串连锁反应：
+
+1. 登记造册：API Server 把你的要求记在数据库里。
+2. 分派任务：调度器（Scheduler）看了一眼你的服务器（berrynode），发现它挺闲的，就把任务派给了它。
+3. 下载镜像：你的机器发现本地没有 `nginx:stable` 这张“光盘”，于是开始从 Docker Hub 联网下载（Pulling）。
+4. 启动容器：下载完成后，K3s 启动容器，并把它封装在一个 Pod 里。
+
+### 验证结果
+
+执行完命令后，运行下面两个命令来“监工”：
+
+查看部署进度
+
+```shell
+$ kubectl get deployment -n k8s-lab
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+demo-nginx   1/1     1            1           2m1s
+```
+
+你会看到 `READY 0/1` 变成 `1/1`。
+
+查看真正的干活仔（Pod）
+
+```shell
+$ kubectl get pods -n k8s-lab
+NAME                         READY   STATUS    RESTARTS   AGE
+demo-nginx-99b6475d5-t8mrl   1/1     Running   0          113s
+```
+
+你会发现多了一个名字叫 `demo-nginx-xxxxxx` 的 Pod。那个后缀随机字符是 Deployment 自动生成的。
+
+### 为什么不直接创建 Pod？
+
+你可能会问：“我只想跑个 Nginx，为什么要搞个 Deployment 这么复杂的词？”
+
+这里先记住一个核心关系：
+
+- Pod 是真正运行容器的最小单位
+- Deployment 不是容器本身，它是“管理 Pod 的控制器”
+
+这就是 Kubernetes 的聪明之处：
+
+- 如果你直接 `create pod`，那个 Pod 就像个临时工，死了就死了。
+- 如果你 `create deployment`，它就是个正式工。如果你手动删掉那个 Pod，Deployment 会惊呼“哎呀，少了一个人！”，然后瞬间秒出一个一模一样的新 Pod。
+
+这就是所谓的“声明式管理”：你只管说“我要 1 个 Nginx”，至于怎么维持这个状态，那是 K8s 的事。从“手动操作员”变成了“项目经理”。不再关心具体的容器怎么启动，只下达了一个“部署 Nginx”的长期指令。
+
+## expose service
+
+使用这个命令来创建 service
+
+```shell
+kubectl -n k8s-lab expose deployment demo-nginx --port=80 --target-port=80 --type=ClusterIP
+```
+
+命令拆解
+
+- `expose deployment demo-nginx`: 意思是对外声明：“我要让大家能找到 `demo-nginx` 这个部署出来的程序。”
+- `--port=80`: 这是 Service 的端口。也就是这根“内部电话线”的号码。
+- `--target-port=80`: 这是 Pod 的端口。也就是 Nginx 程序本身监听的端口。通常两者设为一样。
+- `--type=ClusterIP`: 这是服务类型。`ClusterIP` 是默认选项，意思是：“只在集群内部可见”。
+  - 就像公司内部的短号，外面的人打不进来，但大楼里其他办公室（Namespace）的人可以拨这个号找到你。
+
+在 Kubernetes 中，Pod（也就是运行 Nginx 的容器）是“短命”的。如果它重启了，IP 地址就会变。你不能指望通过一个随时会变的 IP 去访问服务。于是，Service（服务） 诞生了。
+
+kubectl expose 命令创建了一个名为 Service 的抽象层。它像是一个固定的接线员，无论后面的 Pod 怎么变、怎么死、怎么换 IP，只要找这个接线员，就能找到 Nginx。
+
+### Service 的“黑科技”：负载均衡器
+
+即便你以后把 Nginx 扩展到了 10 个 Pod，也只需要拨打这一个 Service 的“电话号码”。
+
+- 稳定性：Service 有一个固定 IP，永远不变。
+- 智能分发：当你访问 Service IP 时，它会自动把请求发给后面那堆 Pod 里的其中一个。如果某个 Pod 坏了，Service 会自动把它踢出名单。
+
+### 查看结果？
+
+运行以下命令，看看你的“电话线”接好了没：
+
+```shell
+$ kubectl get svc -n k8s-lab
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+demo-nginx   ClusterIP   10.43.171.100   <none>        80/TCP    69s
+```
+
+注：`svc` 是 `service` 的缩写
+
+你会看到一行输出：
+
+- NAME: `demo-nginx`（默认跟 Deployment 同名）。
+- TYPE: `ClusterIP`。
+- CLUSTER-IP: 这是一个 10.43.x.x 左右的虚拟 IP。
+- PORT(S): `80/TCP`。
+
+### 为什么叫 ClusterIP？
+
+这是一个新手最容易困惑的地方：你现在还不能从你的 Windows/Mac 浏览器里访问这个 IP。
+
+- 它的范围：这个 IP 只在你的 `berrynode` 内部有效。
+- 它的意义：它是为了让集群里的其他程序（比如你的数据库或后端）能找到这个 Nginx。
+
+### endpoints
+
+具体来说，当你访问 Service IP 时，它会自动把请求发给后面那堆 Pod 里的其中一个，这是通过 endpoints 的机制来实现的，它维护了一堆 pod ip, 用于 service 选择
+
+## k8s modules
+
+control plane: deployments --> Pod --> container
+
+data plane: clients --> service --> Pod --> containers
+
+- Pod：真正装着容器，容器就在这里运行
+- Deployment：负责“我希望始终有几个 Pod 活着”
+- Service：给 Pod 提供稳定入口，因为 Pod 本身名字和 IP 都可能变

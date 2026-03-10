@@ -47,7 +47,9 @@ docker compose -f compose.yml -f compose.dev.yml up
 
 1. 先读取 compose.yml（基础配置）。
 2. 再读取 compose.dev.yml（开发环境配置）。
-3. 将两者合并，且后者的设置会覆盖前者。
+3. 将两者合并。
+
+这里的合并，并不是简单的合并，他会根据情况有着 3 种行为：add, override, merge
 
 如果这个时候，机器意外的关机重启了，并且在最终合并的配置文件中配置过 contianer restart 那么 container 会完全按照最初启动时的配置（即包含 `compose.dev.yml` 的覆盖效果）自动重启。
 
