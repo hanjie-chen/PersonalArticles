@@ -118,7 +118,7 @@ git add . && git commit -m "message"
 
 # git branch manage
 
-## 查看分支
+## list branch
 
 `git branch` 查看本地分支
 
@@ -146,9 +146,7 @@ git add . && git commit -m "message"
   remotes/origin/main
 ```
 
-
-
-## 切换分支
+## switch branch
 
 ### `git checkout <branch-name>`
 
@@ -170,6 +168,8 @@ Switched to a new branch 'backend-development'
 branch 'backend-development' set up to track 'origin/backend-development'.
 ```
 
+## create branch
+
 ### `git checkout -b <branch-name>`
 
 这个命令会创建新分支, 然后立即切换到这个新创建的分支（如果该分支已经存在, Git 会报错）
@@ -186,9 +186,21 @@ branch 'backend-development' set up to track 'origin/backend-development'.
 >
 > 所以, 当 `git clone` 后运行 `git branch` 命令时, 只会看到 `main` 分支, 因为这是唯一被 checkout 的分支。但是, 如果你运行 `git branch -r`, 你会看到所有的远程分支, 因为它们都已经被克隆到本地了
 
+当我们创建好一个 branch 之后，它仅仅是在 local 的，remote 上面还没有建立起他的分支，所以第一次需要使用这个命令，将其推送到 remote 上去
 
+```shell
+git push origin <branch-name>
+```
 
-## 合并分支
+如果你觉得每次都要写分支名太麻烦，可以设置 Git 的推送行为：
+
+```bash
+git config --global push.default current
+```
+
+设置后，只要你执行 `git push`，Git 会自动推送到远程同名的分支上（如果远程没有则创建）。
+
+## merge branch
 
 当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。
 
@@ -220,7 +232,7 @@ git checkout <branch-name>
 
 或者按照下面的命令删除分支
 
-## 删除分支
+## delete branch
 
 当某个分支完成开发并合并到 main 分支后，为了保持仓库的整洁，我们可以选择将其删除
 
@@ -308,6 +320,8 @@ Successfully rebased and updated refs/heads/main.
 
 # Rollback
 
+## 
+
 如果你想要删除本地的所有修改，仅仅接受来自 remote repository 的最新情况，可以使用 git reset 强制删除所有你在本地的修改。比如说你 git clone 了一个 repository, 并且做了一些实验性的修改，并且 git commit 了，然后又不想要这些修改，想要把本地的 repository 变成 github reposotory 上面的状态
 
 可以使用如下的命令
@@ -325,6 +339,42 @@ git reset --hard origin/main  # 重置到远程状态
 
 - `origin/main` 指向远程仓库 main 分支的最新位置
 - 将本地当前分支强制重置到远程 main 分支的状态，包括：清除工作区的修改，清除暂存区的修改，清除本地的提交记录
+
+## git restore
+
+如果修改了文件，但是没有进行 git add && git commit 例如这面这种状态
+
+```bash
+Plain@Linux-VM:~/Personal_Project/getting-started-todo-app$ git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   compose.yml
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+这种情况下回撤修改非常简单，可以直接使用 git 提示中显示的命令：
+
+```bash
+git restore compose.yml
+```
+
+需要注意的是：
+
+1. 这个操作会直接丢弃你对 compose.yml 的所有修改
+2. 这个操作无法撤销，所以在执行之前请确认你真的要放弃这些修改
+
+如果你想在回撤之前查看具体修改了什么内容，可以使用：
+
+```bash
+git diff compose.yml
+```
+
+这样可以看到具体的修改内容，再决定是否要回撤修改。
 
 ## git file status
 
@@ -435,40 +485,6 @@ git clone git@github.com:hanjie-chen/PersonalArticles.git
 - git: 本质上是 ssh, 需要你在github 和 本地配置好 ssh key, config
 
 一般来说我么选择第二种，也就是配置 ssh-key, 使用 git 的方式
-
-# `git resotre`
-
-如果修改了文件，但是没有进行 git add && git commit 例如这面这种状态
-
-```bash
-Plain@Linux-VM:~/Personal_Project/getting-started-todo-app$ git status
-On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   compose.yml
-
-no changes added to commit (use "git add" and/or "git commit -a")
-```
-
-这种情况下回撤修改非常简单，可以直接使用 git 提示中显示的命令：
-
-```bash
-git restore compose.yml
-```
-
-需要注意的是：
-1. 这个操作会直接丢弃你对 compose.yml 的所有修改
-2. 这个操作无法撤销，所以在执行之前请确认你真的要放弃这些修改
-
-如果你想在回撤之前查看具体修改了什么内容，可以使用：
-```bash
-git diff compose.yml
-```
-
-这样可以看到具体的修改内容，再决定是否要回撤修改。
 
 # .gitignore file
 

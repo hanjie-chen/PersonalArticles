@@ -359,6 +359,62 @@ demo-nginx   ClusterIP   10.43.171.100   <none>        80/TCP    69s
 
 具体来说，当你访问 Service IP 时，它会自动把请求发给后面那堆 Pod 里的其中一个，这是通过 endpoints 的机制来实现的，它维护了一堆 pod ip, 用于 service 选择
 
+## node
+
+我们可以使用下面的命令来查看 node，所谓的 node 就是一台 machine
+
+```shell
+$ kubectl get nodes
+NAME        STATUS   ROLES           AGE   VERSION
+berrynode   Ready    control-plane   47h   v1.34.5+k3s1
+```
+
+cluster, node, pod, container 之间的关系
+
+```
+Kubernetes Cluster
+└── Node: berrynode
+    └── Pod: demo-nginx-99b6475d5-t8mrl
+        └── Container: nginx
+```
+
+### nodeport
+
+当我们使用下面的命令，强行开一个 node port
+
+```shell
+~$ kubectl -n k8s-lab patch svc demo-nginx -p '{"spec":{"type":"NodePort"}}'
+service/demo-nginx patched
+```
+
+- **`patch`**: 这是一个“补丁”动作。你不需要删除并重新创建 Service，而是像打补丁一样，只修改其中的一小部分配置。
+- **`svc demo-nginx`**: 目标是你的 Nginx 服务。
+- **`-p '{"spec":{"type":"NodePort"}}'`**: 这是补丁的内容。把 `type` 从默认的 `ClusterIP` 改成了 **`NodePort`**。
+
+NodePort 是 Kubernetes 最原始、最直接的“对外开门”方式。
+
+它的逻辑非常简单粗暴：
+
+1. K8s 会在你的 Node（机器） 上随机挑选一个大端口（默认范围是 30000-32767）。
+2. 它会把这个机器的端口，直接挂钩到你的 Service 上。
+3. 从此以后，任何人只要访问 `机器IP:这个大端口`，流量就会被瞬间甩进集群里的 Nginx。
+
+可以看到
+
+```shell
+$ kubectl -n k8s-lab get svc demo-nginx
+NAME         TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+demo-nginx   NodePort   10.43.171.100   <none>        80:32166/TCP   25h
+```
+
+- TYPE: 变成了 `NodePort`。
+
+- PORT(S): 变成了 `80:32166/TCP` 
+
+  `80` 是集群内部的端口。`32166` 就是 K8s 在你这台 Machine (Node) 上为你开辟的“外部后门”
+
+
+
 ## k8s modules
 
 control plane: deployments --> Pod --> container
@@ -368,3 +424,6 @@ data plane: clients --> service --> Pod --> containers
 - Pod：真正装着容器，容器就在这里运行
 - Deployment：负责“我希望始终有几个 Pod 活着”
 - Service：给 Pod 提供稳定入口，因为 Pod 本身名字和 IP 都可能变
+
+
+
