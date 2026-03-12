@@ -415,7 +415,7 @@ demo-nginx   NodePort   10.43.171.100   <none>        80:32166/TCP   25h
 
 
 
-## k8s modules
+# k8s modules
 
 control plane: deployments --> Pod --> container
 
@@ -426,4 +426,125 @@ data plane: clients --> service --> Pod --> containers
 - Service：给 Pod 提供稳定入口，因为 Pod 本身名字和 IP 都可能变
 
 
+
+# output yaml
+
+`-o yaml` 就是直接把这个资源的“全套原始数据”提取出来给你看。
+
+`-o yaml` 输出 Kubernetes 存储在数据库里的真实面目。在 K8s 的世界里，一切皆文件（YAML），你现在手里拿到的就是那份最权威的“施工图纸”。
+
+```shell
+$ kubectl -n k8s-lab get deployments demo-nginx -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2026-03-10T07:43:52Z"
+  generation: 1
+  labels:
+    app: demo-nginx
+  name: demo-nginx
+  namespace: k8s-lab
+  resourceVersion: "28629"
+  uid: 187b0960-c5e3-4125-adfc-6289fafaa13f
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: demo-nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: demo-nginx
+    spec:
+      containers:
+      - image: nginx:stable
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-03-10T07:43:52Z"
+    lastUpdateTime: "2026-03-10T07:44:23Z"
+    message: ReplicaSet "demo-nginx-99b6475d5" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-03-10T10:41:57Z"
+    lastUpdateTime: "2026-03-10T10:41:57Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+```
+
+命令拆解
+
+- **`-n k8s-lab`**: 依然是定位到你的“实验室”办公室。
+- **`get deployment demo-nginx`**: 获取这个部署对象。
+- **`-o yaml`**: 这是关键。`-o` 代表 Output（输出格式），`yaml` 告诉 Kubernetes：“别给我看简略的表格，把存储在数据库（etcd）里的完整 YAML 定义导出来。”
+
+### 为什么这份数据这么长？
+
+当你运行这个命令时，你会看到几百行内容。我们可以把它们归纳为四个核心板块：
+
+#### 1. 元数据 (metadata)
+
+这部分记录了“我是谁”。
+
+- 除了你定义的 `name` 和 `namespace`，你会看到很多 K8s 自动生成的字段。
+- **`uid`**: 这个对象的唯一身份证号。
+- **`resourceVersion`**: 类似于版本版本号，每当你修改一次，这个数字就会变。
+- **`creationTimestamp`**: 它出生的精确时间。
+
+#### 2. 期望状态 (spec) —— **最核心部分**
+
+这是你当初下单时要求的“蓝图”。
+
+- **`replicas: 1`**: 你要求的副本数。
+- **`selector`**: 我们之前反复提到的“寻人启事”（标签选择器）。
+- **`template`**: Pod 的模具。里面定义了容器镜像（`nginx:stable`）、端口、存储等信息。
+
+#### 3. 状态信息 (status) —— **实时反馈**
+
+这是 Kubernetes 自动加进去的，用来记录“现在活干得怎么样了”。
+
+- 它会记录当前有多少个 Pod 在跑，有多少个是可用的。
+- 这部分你无法手动修改，它是 K8s 自行观测的结果。
+
+#### 4. 托管信息 (managedFields) —— **往往被忽略的长篇大论**
+
+你会看到一大段记录了谁、在什么时候、修改了哪些字段。这相当于一份“**操作审计日志**”，用来追踪这个资源的历史变更。
+
+在实际工作中，这个命令有三个用途：
+
+1. 备份与迁移：你可以把输出的内容存成文件：
+
+   `kubectl get deployment demo-nginx -o yaml > my-backup.yaml`
+
+   以后想在别的集群重建，直接 `kubectl apply -f my-backup.yaml` 就行了。
+
+2. 学习与借鉴：如果你不知道某个复杂的功能怎么写，可以先用命令行简单创建一个，然后用 `-o yaml` 把完整的结构导出来参考。
+
+3. 深层排错：有时候 `describe` 看不到细微的配置错误，但在原始 YAML 里，任何参数都无所遁形。
 
