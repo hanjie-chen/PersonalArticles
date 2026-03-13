@@ -72,14 +72,14 @@ provider "google" {
 
 在 GitHub Actions 或 GitLab CI 等“无头服务器”中，无法弹出浏览器扫码登录。此时我们需要使用机器级别的身份。
 
-### :x: 传统方式：Service Account 静态密钥（不推荐）
+### :x: 传统方式：Service Account
 
-过去的做法是去 GCP 控制台下载一个 Service Account 的 `.json` 密钥文件。
+过去的做法是去 GCP 控制台下载一个 Service Account 的 `.json` 静态密钥文件。
 
 - 配置法：在 CI/CD 中把 JSON 存入 Secrets，并在运行时通过环境变量 `GOOGLE_APPLICATION_CREDENTIALS` 指向该文件供 Terraform 读取。
 - 痛点：长期有效的静态密钥存在极大的泄露风险，且需要定期轮换。
 
-### :heavy_check_mark: 现代最佳实践：Workload Identity Federation (WIF)
+### :heavy_check_mark: 最佳实践：Workload Identity Federation (WIF)
 
 这是目前 Google 官方强烈推荐的无密钥认证方式，彻底告别了 JSON 文件。
 
@@ -101,11 +101,11 @@ provider "google" {
     run: 'terraform plan'
   ```
 
-  执行完这个 `auth` 步骤后，它会在 CI 环境里自动伪装成 ADC 环境变量，后续的 Terraform 命令会像在本地一样“无感”且安全地运行！
+  执行完 `auth` 步骤后，它会在 CI 环境里自动伪装成 ADC 环境变量，后续的 Terraform 命令会像在本地一样“无感”且安全地运行！
 
 # GCP vs Azure
 
-如果你习惯了 Azure，切换到 GCP 时请牢记这两个最大区别：
+如果习惯了 Azure，切换到 GCP 时请牢记这两个最大区别：
 
 1. 认证命令不同：
    - Azure：`az login` 就能搞定一切。
