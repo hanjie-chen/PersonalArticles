@@ -1,17 +1,6 @@
 # Microsoft PowerToys 快速入门
 
-### 1. 快速启动器：PowerToys Run
-这是 PowerToys 的灵魂功能，用它完全可以替代慢吞吞的 Windows 开始菜单。
-*   默认快捷键： `Alt + Space` (空格键)
-*   怎么用： 按下快捷键，屏幕中间会出现一个搜索框。
-*   能做什么：
-    *   秒开软件： 输入 "chrome"、"word" 直接回车打开。
-    *   做算术： 直接输入 `56*12`，它会显示结果。
-    *   单位换算： 输入 `100 usd` 甚至能看到汇率换算。
-    *   搜索文件： 输入文件名快速定位。
-*   效率提升点： 手指不需要离开键盘，也不用去开始菜单里翻找。
-
-### 2. 屏幕OCR神器：Text Extractor
+### 1. 屏幕OCR神器：Text Extractor
 如果你经常需要从图片、视频、或者无法复制的 PDF 中提取文字，这个功能是神技。
 *   怎么用： 按下快捷键，鼠标变成十字，像截图一样框选屏幕上的文字。
 *   结果： 这一瞬间，文字已经被识别并复制到你的剪贴板了，直接去文档里 `Ctrl + V` 粘贴即可。
@@ -54,3 +43,13 @@ Windows 自带的分屏（Win+箭头）比较死板，FancyZones 适合大屏幕
 3.  这一周强迫自己只用 `Alt + Space` 打开软件，改掉点开始菜单的习惯。
 
 只要学会这两个，你的电脑使用效率就已经超越 90% 的人了！
+
+# advance
+
+1. powertoys command paletete
+
+首先我们关闭，自带的 powertoys run 转而使用 powertoys command paletete
+
+这是因为后者可以使用 vscode 搜索到 vistual studio code，而前者不可以
+
+然后我们将 powertoys command paletete 的快捷键修改为 alt + space 从而完美代替 powertoys run

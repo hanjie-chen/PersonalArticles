@@ -52,3 +52,48 @@ Events:                   <none>
 - 如果你的网站打不开，你 `describe svc` 发现 Endpoints 是 `<none>`，那就说明 Service 没找到 Pod。
 - 这通常是因为你手抖把 Deployment 里的标签写错了，或者是 Pod 还没启动成功。
 - 你的输出显示 `10.42.0.11:80`，说明链路已经完全打通了。
+
+# service 底层逻辑
+
+我们可以使用 `kubectl get svc demo-nginx -o yaml` 观察 Service 的网络实现。
+
+**`clusterIPs`**: 这是一个列表，展示了该服务分配到的虚拟 IP。
+
+**`nodePort`**: 当 Service 类型为 `NodePort` 时，这里会显示 K8s 在物理机上强行开启的端口号（如 `32166`），这是外部流量进入集群的入口。
+
+**`externalTrafficPolicy`**: 决定了外部流量是如何在节点间路由的。
+
+```shell
+kubectl -n k8s-lab get svc demo-nginx -o yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2026-03-10T07:58:56Z"
+  labels:
+    app: demo-nginx
+  name: demo-nginx
+  namespace: k8s-lab
+  resourceVersion: "54053"
+  uid: 2e46036a-bd9a-4652-af73-c94747f9dc8c
+spec:
+  clusterIP: 10.43.171.100
+  clusterIPs:
+  - 10.43.171.100
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - nodePort: 32166
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: demo-nginx
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}
+```
+

@@ -44,6 +44,41 @@ BriefIntroduction:
 
 # Software Setting
 
+## Rime
+
+当我们使用 fu pan 来尝试打印「复盘」的时候，就会发现失败，因为一个bug（繁体字转简体字）
+
+我们可以设置一个 custom_phrase.txt 到用户文件夹中，设置如下
+
+```txt
+复盘	fupan	100
+复盘	fp	100
+```
+
+注意：中间必须是 Tab，不是空格
+
+然后右键单机小狼毫重新部署服务
+
+### 同步备份
+
+Rime 官方推荐的多设备同步方式是给 `installation.yaml` 设置 `sync_dir`，然后使用“同步用户资料”。
+
+官方说明里写得很明确：同步时会把用户词典生成/合并为 `*.userdb.txt` 快照，并把用户文件夹里非自动生成的 YAML 和 `.txt` 文件单向备份到同步目录。同步目录里典型会出现 `installation.yaml`、`default.custom.yaml`、`weasel.custom.yaml` 和 `*.userdb.txt`，
+
+1. 打开用户文件夹里的 `installation.yaml`
+2. 加一行，例如
+
+```yaml
+sync_dir: 'D:\OneDrive\backup\Rime\backup'
+```
+
+1. 保存后重新部署
+2. 在小狼毫里执行“同步用户资料”
+
+注意：同步用户资料包含 pull + push 2个动作
+
+它会先从同步目录拉取已有的用户词典快照并合并到当前词典，然后把当前用户配置和新词典快照推回同步目录。如果同步目录是空的，它就单纯把当前配置备份过去；如果不空，它就先合并再备份。
+
 ## Edge Settings
 
 设置目的：防止搜索内容跳转cn.bing.com，而是使用new bing

@@ -90,3 +90,78 @@ StrategyType：RollingUpdate
 3. Pod（它是打工人）：真正干活的。
 
 所以你的 `demo-nginx-xxxx-yyyy` 这种名字，中间那一串 `xxxx` 其实就是这个 **ReplicaSet** 的 ID。
+
+# 查看原始 yaml
+
+我们可以通过使用 `kubectl get deployment demo-nginx -o yaml` 可以看到 K8s 数据库中存储的完整定义。
+
+```shell
+$ kubectl -n k8s-lab get deployment demo-nginx -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2026-03-10T07:43:52Z"
+  generation: 1
+  labels:
+    app: demo-nginx
+  name: demo-nginx
+  namespace: k8s-lab
+  resourceVersion: "28629"
+  uid: 187b0960-c5e3-4125-adfc-6289fafaa13f
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: demo-nginx
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: demo-nginx
+    spec:
+      containers:
+      - image: nginx:stable
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2026-03-10T07:43:52Z"
+    lastUpdateTime: "2026-03-10T07:44:23Z"
+    message: ReplicaSet "demo-nginx-99b6475d5" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2026-03-10T10:41:57Z"
+    lastUpdateTime: "2026-03-10T10:41:57Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+```
+
+关键字段 `spec.strategy`: 这里详细定义了“滚动更新”的细节，比如 `maxSurge: 25%`（更新时允许超出的 Pod 比例）。
+
+关键字段 `status`: 记录了 `availableReplicas` 等实时观察到的状态，这是 K8s 控制循环（Control Loop）的判断依据。
+
+技巧：可以用这个命令导出模板：`kubectl get deploy x -o yaml > template.yaml`。
