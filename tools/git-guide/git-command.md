@@ -170,7 +170,11 @@ branch 'backend-development' set up to track 'origin/backend-development'.
 
 ## create branch
 
-### `git checkout -b <branch-name>`
+我们可以使用下面的命令
+
+```shell
+git checkout -b <branch-name>
+```
 
 这个命令会创建新分支, 然后立即切换到这个新创建的分支（如果该分支已经存在, Git 会报错）
 

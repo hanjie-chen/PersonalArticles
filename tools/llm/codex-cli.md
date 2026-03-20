@@ -267,4 +267,6 @@ network_access = true
 
 
 
- 
+# 修改 config.toml
+
+修改 config.toml 可以在 vscode plugin 中即刻生效，无需 reload
