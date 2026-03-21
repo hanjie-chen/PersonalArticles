@@ -165,7 +165,7 @@ docker pull myregistry.example.com/myimage:latest
 
 # `docker images` command
 
-当我们使用 `docker images` 命令的时候，就会发现可能会出现奇怪的的 dangling images:
+当我们使用 `docker images` 命令的时候，就会发现可能会出现奇怪的的 none images:
 
 ```shell
 $ docker images
@@ -178,7 +178,9 @@ website-articles-sync   latest    448d2ca47dfe   2 weeks ago   18.8MB
 nginx                   alpine    1ff4bb4faebc   7 weeks ago   47.9MB
 ```
 
-出现 `<none>:<none>` 的镜像的原因
+这些 none image 其实叫 dangling images
+
+出现 dangling images 的原因
 
 1. 镜像构建过程中的中间产物或旧版本被覆盖：
    
@@ -190,7 +192,7 @@ nginx                   alpine    1ff4bb4faebc   7 weeks ago   47.9MB
    
 3. 多阶段构建（Multi-stage Build）的副产物：
    
-   如果你在 Dockerfile 中使用了多阶段构建，中间阶段的镜像可能会在构建完成后失去引用，变成悬空镜像。
+   如果在 Dockerfile 中使用了多阶段构建，中间阶段的镜像可能会在构建完成后失去引用，变成悬空镜像。
 
 
 ## clear dangling images
@@ -203,8 +205,46 @@ nginx                   alpine    1ff4bb4faebc   7 weeks ago   47.9MB
    ```
    这会删除所有没有被任何容器引用且没有标签的镜像（即 `<none>:<none>` 的镜像）。
    
-2. 清理未使用的镜像、容器、网络等：
-   如果你想更彻底地清理，可以运行：
+   未释放任何的空间，当我们使用这个命令的时候发现
+   
+   ```shell
+   $ docker image prune
+   WARNING! This will remove all dangling images.
+   Are you sure you want to continue? [y/N] y
+   Deleted Images:
+   deleted: sha256:392c3571e7321948a10dccb39f7665236dfb7e3db1ba3a700f335880d5b9fa02
+   ...
+   deleted: sha256:a7c5d2902a07beba2357e546d6d7fd9abe0cc64618fb4ef990e23ef6295ac6f1
+   
+   Total reclaimed space: 0B
+   ```
+   
+   明明删除了那么多镜像，为什么最终释放的空间确实 0B 呢？这里涉及到了 Docker 镜像的“分层机制”。
+   
+   要理解这个现象，我们需要区分两个概念：镜像（Images） 和 层（Layers）。
+   
+   当执行 `docker image prune` 时，删除的是那些没有标签（TAG 为 `<none>`）且没有被任何容器使用的镜像。这通常发生在重新构建镜像（Build）后，旧的镜像层被新的覆盖，旧的就变成了“孤儿”。
+   
+   Docker 镜像是像积木一样叠起来的。虽然删除了一些 dangling images 的引用，但这些镜像所包含的底层数据（Layers）可能还在被其他正在使用的镜像所引用。
+   
+   只有当一个层（Layer）不再被任何镜像引用时，Docker 才会真正从磁盘上物理删除它。
+   
+   - 刚才删除的那些 `sha256` 记录，很多时候只是元数据指针或者是已经包含在其他镜像中的中间层。
+   - 如果这些层仍然是某个活跃镜像（比如你的网站镜像）的一部分，Docker 就不会真的删除文件，自然也就没有空间被释放。
+   
+   刚才的操作就像是清理了书架上的旧索引卡片，但书架上的书本身还在（因为其他索引还在用这些书）。虽然清理了“名义上”的冗余镜像，但实际占空间的二进制文件依然被保留着。
+   
+   如果确定不需要保留任何没在运行的东西，可以使用更彻底的命令：
+   
+   清理所有未使用的镜像（不只是虚悬的）：
+   
+   ```shell
+   docker image prune -a
+   ```
+   
+   注意：这会删除所有目前没有被容器使用的镜像，下次启动时可能需要重新拉取。
+   
+2. 一键全清理（镜像、容器、网络）：
    
    ```bash
    docker system prune
