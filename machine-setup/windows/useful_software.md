@@ -34,12 +34,12 @@ BriefIntroduction:
 | Typora                       | markdown语法写作神器 我从免费的0.7版本开始使用 一路成为付费用户 |
 | YACReader                    | 本地漫画查看神器 还可以创建本地漫画资料库                    |
 | Visual Studio code (VS code) | 轻量级代码编辑器 无论是windows还是macos都非常的好用          |
-| ~~Anaconda 3~~               | ~~Python管理神器~~ 感觉仅仅是 python3 + venv 就可以代替了，没必要上 ananconda |
 | Steam                        | 娱乐神器                                                     |
 | Windows terminal             | windows端优秀的终端工具，结合oh-my-posh以获得最佳体验        |
 | Fliqlo                       | 桌面屏幕保护程序                                             |
 | Mircosoft Todo List          | 设置每日任务                                                 |
 | Koodo Reader                 | windows开源阅读软件                                          |
+| codex                        | 尝试帮你解决任何问题的神器                                   |
 | rime                         | 小狼毫，输入法神器                                           |
 
 # Software Setting
@@ -123,27 +123,7 @@ sync_dir: 'D:\OneDrive\backup\Rime\backup'
 
 1. 注意，这个方法不能隐藏桌面快捷方式，否则下次启动，快捷键将无法使用。这种方式会在桌面留下快捷方式，我更加喜欢简洁的桌面，于是这个方案就被我弃用了
 
-## Anaconda 3 Settings
 
-设置目的：解决anaconda 3 navigator 界面文字过小的问题
-
-方法：在环境变量中添加QT_SCALE_FACTOR=1.25意味着，放大1.25倍。如下图所示。
-
-![enviroment](./images/enviroment-varible.png)
-
-最终显示效果如下 可以按照自己的喜好放大
-
-![anaconda-navigator](./images/anaconda-navigator.png)
-
-注意，anaconda3 只会帮你注册一个python的环境变量，而不会注册python3环境变量
-
-可以在CMD（Administrator）创建一个符号链接来达到类似的效果，注意 Powershell 中无法使用下面的 `mklink` 命令
-
-```cmd
-mklink "F:\anaconda3\python3.exe" "F:\anaconda3\python.exe"
-```
-
-个人感觉这个而已经没有什么用了，自从使用了docker之后
 
 ## Windows Terminal优化
 

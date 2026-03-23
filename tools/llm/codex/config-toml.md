@@ -1,75 +1,3 @@
-# codex cli使用指南
-
-下载 codex cli
-
-```shell
-npm i -g @openai/codex
-# macos download
-brew install codex
-```
-
-> [!note]
->
-> 在用 npm 命令安装时需要注意全局 prefix 最好放到用户目下，而不是系统目录下，详见 [npm-guide](../npm/npm.md)
-
-验证
-
-```shell
-which codex
-codex --version
-```
-
-登录
-
-```shell
-# 查看登录状态
-codex login status
-# 打开网页登录
-codex login
-```
-
-## AGENTS.md
-
-Codex 会在每次启动时自动读取并合并一条“指令链”：
-
-- 全局：`~/.codex/AGENTS.md`
-- 项目：从 repo root（通常是 Git root）一路走到当前工作目录，每层目录最多取一个 `AGENTS.md`，并按“root → leaf”顺序依次注入。 
-
-作用：把你每次都要重复说的“工作协议/目录说明/输出格式”固化下来。
-
-## interactive mode
-
-使用命令 `codex` 直接进入交互模式
-
-<img src="./images/interactive-mode.png" alt="interactive mode" style="zoom:50%;" />
-
-使用 `/` 可以设定和查看某些内容，比如说选择模型
-
-<img src="./images/select.png" alt="codex cli select" style="zoom:50%;" />
-
-实际上的命令不仅仅是上线显示的这些，比较常用的命令有
-
-status
-
-<img src="./images/status.png" alt="status" style="zoom:50%;" />
-
-如果我们需要开启一段新对话，那么我们可以使用
-
-- `/clear`：清屏 + 开新对话（从头开始聊）。
-
-# plan mode
-
-Plan mode 会先让 Codex 做“方案设计 / 执行分解”，再进入真正的修改与实现，而不是一上来就直接改代码。
-
-更适合复杂任务。比如重构、迁移、跨多个文件的大改动、需要分阶段验证的任务。因为它会更强调“步骤、里程碑、顺序、边界”，降低一上来改偏的概率。
-
-可能会先问你问题，如果还需要补充信息，Codex 会先问你，而不是直接动手。
-
-区分：
-
-- 普通 Agent/直接实现模式：你说做什么，它尽快开始看文件、跑命令、改代码”。
-- Plan mode：先出施工方案、拆步骤、确认方向，再继续”。
-
 # config.toml
 
 Codex 的用户级配置默认在 `~/.codex/config.toml`，项目级配置可以放在仓库里的 `.codex/config.toml`；CLI 和 IDE 扩展共用同一套配置层。
@@ -116,6 +44,8 @@ network_access = true
 - 现在开始进入 `sandbox_workspace_write` 这个分组
 - 接下来写的键，默认都属于这个分组
 - 直到你再写一个新的 `[xxx]`
+
+
 
 ## Codex  `config.toml`
 
@@ -265,8 +195,66 @@ network_access = true
 
 可以用这个 schema 来获得自动补全和诊断。
 
-
-
 # 修改 config.toml
 
 修改 config.toml 可以在 vscode plugin 中即刻生效，无需 reload
+
+我的 config.toml
+
+```toml
+#:schema https://developers.openai.com/codex/config-schema.json
+# =========================
+# Codex 全局基础设置
+# =========================
+
+# 默认模型
+model = "gpt-5.4"
+
+# 推理强度
+model_reasoning_effort = "high"
+
+# 不弹审批
+# 可选值常见有：
+# - "untrusted"   : 只对不受信命令询问
+# - "on-request"  : 需要越界时询问
+# - "never"       : 不询问
+approval_policy = "on-request"
+
+# 沙箱模式：
+# - "read-only"
+# - "workspace-write"
+# - "danger-full-access"
+#
+sandbox_mode = "danger-full-access"
+
+# 网页搜索模式：
+# - "disabled"
+# - "cached"
+# - "live"
+web_search = "live"
+
+# =========================
+# workspace-write 的附加设置
+# =========================
+[sandbox_workspace_write]
+
+# 允许沙箱内命令访问网络
+# 例如 curl / git fetch / pip / npm 等
+network_access = true
+
+# 如有需要，也可以额外放开别的可写目录
+# writable_roots = ["/home/plain/some-other-dir"]
+
+# =========================
+# 项目信任设置
+# =========================
+[projects."/home/plain/personal-project"]
+
+# trusted 只是表示信任这个项目，允许读取项目内 .codex/config.toml
+# 不是“自动批准所有修改”
+trust_level = "trusted"
+
+[features]
+multi_agent = true
+```
+
