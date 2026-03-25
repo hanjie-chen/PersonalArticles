@@ -4,7 +4,7 @@ Docker Compose：它主要管理一台机器上的多个容器。如果你在 `d
 
 Kubernetes：它管理的是一堆服务器（集群）。K8S 把成百上千台机器的资源（CPU、内存）池化，你只需要告诉它：“我要运行这个镜像的 3 个副本”，它会自动挑选最空闲的机器把容器扔进去。
 
-> 为什么叫 K8s？因为 K 和 s 之间刚好有 8 个字母（u-b-e-r-n-e-t-e）通常读作 “K-Eights”（K-诶茨）。
+> 为什么叫 K8s？因为 K 和 s 之间刚好有 8 个字母（u-b-e-r-n-e-t-e）通常读作 “K-Eights”。
 
 为了成本考虑（树莓派 8GB Mem），使用 k3s 代替 k8s 来进行实验，因为它的使用方法和 k8s 完全一样，但是轻量化了很多（吃的资源比 k8s 少多了）
 
@@ -99,7 +99,7 @@ lrwxrwxrwx 1 root root 3 Mar  9 17:14 /usr/local/bin/kubectl -> k3s
 
 # `kubectl` command
 
-简单来说，可以把 `kubectl` 理解为集群的万能管家：
+kubectl 命令负责跟 kubernets 集群交互，和管理资源对象
 
 - 看状态：程序死了没？服务器累不累？
 - 下命令：给我再开 3 个网页副本！

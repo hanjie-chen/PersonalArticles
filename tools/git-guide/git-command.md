@@ -94,11 +94,22 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 ## `git pull`
 
-和 `git push` 对应的命令，就是 `git pull`, 这个命令从 github remote repository上面拉取最新的仓库情况同步到本地仓库。
+和 `git push` 对应，`git pull` 用来将 remote repo(github) 的最新变化同步到本地。
 
-比如说我在多台机器上面同时开发一个项目，在 Azure VM 上，在 local machien(windows 10) 上，在 Macbook Pro 笔记本上，如果在一台机器上 `git push` 了最新的情况，其他机器就需要 `git pull` 以保持最新的情况
+比如在多台机器上开发同一个项目：Azure VM、local machien(Windows 10)、MacBook Pro。
 
-需要注意的是，在Git中,每个分支都有自己独立的提交历史。当你在一个分支上执行 `git pull` 命令时,只会更新当前所在的分支,其他分支不会受到影响。因此,如果你想让每个分支都保持最新状态,需要在每个分支上分别执行 `git pull` 命令。
+如果在其中一台机器上执行了 `git push`，其他机器就需要执行 `git pull`，让本地代码跟上远端最新状态。
+
+默认情况下，在某个 branch 上执行 `git pull`，只会真正更新当前本地分支；它不会自动更新其他本地分支，但通常会先刷新远端跟踪分支的信息。
+
+更准确地说：
+
+git pull = git fetch + git merge
+
+- `git fetch`：从远端获取最新引用，更新本地的远端跟踪分支（如 `origin/main`、`origin/dev`）
+- `git merge`：把当前 branch 对应的远端跟踪分支合并到当前 local branch
+
+所以 current local branch 会被真正更新，other local branch 不会自动前进，但远端跟踪分支的信息通常会被刷新
 
 
 
