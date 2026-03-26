@@ -145,7 +145,7 @@ sudo sshd -t
 sudo systemctl daemon-reload
 ```
 
-这是因为现在的 Ubuntu 经常使用 `ssh.socket` 来管理端口，如果不进行这一步，可能会失败，详见 [server-guide](./server-gudie.md) 中的案例
+这是因为现在的 Ubuntu 经常使用 `ssh.socket` 来管理端口，如果不进行这一步，可能会失败，详见 [server-guide](./server-guide.md) 中的案例
 
 修改后，重启 SSH：
 

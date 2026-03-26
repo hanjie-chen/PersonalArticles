@@ -1,4 +1,4 @@
-# deamon process
+# daemon process
 
 简化守护进程标准流程如下
 
