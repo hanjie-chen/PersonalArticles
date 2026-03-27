@@ -1,7 +1,7 @@
 ---
 Title: Git 命令速查指南
 Author: 陈翰杰
-Instructor: GPT-4o, Sonnet3.5
+Instructor: GPT-4o, Sonnet3.5, gemini
 CoverImage: ./images/cover_image.png
 RolloutDate: 2024-08-26
 ---
@@ -100,14 +100,14 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 如果在其中一台机器上执行了 `git push`，其他机器就需要执行 `git pull`，让本地代码跟上远端最新状态。
 
-默认情况下，在某个 branch 上执行 `git pull`，只会真正更新当前本地分支；它不会自动更新其他本地分支，但通常会先刷新远端跟踪分支的信息。
+默认情况下，在某个 branch 上执行 `git pull`，只会更新当前本地分支；而不会自动更新其他分支，但通常会刷新远端跟踪分支的信息。
 
 更准确地说：
 
 git pull = git fetch + git merge
 
-- `git fetch`：从远端获取最新引用，更新本地的远端跟踪分支（如 `origin/main`、`origin/dev`）
-- `git merge`：把当前 branch 对应的远端跟踪分支合并到当前 local branch
+- git fetch：拿到当前 remote branch 上最新 commit
+- git merge：尝试把 commit 合并到 current local branch 上
 
 所以 current local branch 会被真正更新，other local branch 不会自动前进，但远端跟踪分支的信息通常会被刷新
 
@@ -335,8 +335,6 @@ Successfully rebased and updated refs/heads/main.
 
 # Rollback
 
-## 
-
 如果你想要删除本地的所有修改，仅仅接受来自 remote repository 的最新情况，可以使用 git reset 强制删除所有你在本地的修改。比如说你 git clone 了一个 repository, 并且做了一些实验性的修改，并且 git commit 了，然后又不想要这些修改，想要把本地的 repository 变成 github reposotory 上面的状态
 
 可以使用如下的命令
@@ -449,17 +447,15 @@ git remote set-url origin https://github.com/username/new-repo-name.git
 git remote set-url origin  git@github.com:username/new-repo-name.git
 ```
 
-
-
 # download repo(github)
 
-如果我们想要下载某个 remote repository 我们可以使用 `git clone` 命令，e.g.
+如果我们想要下载某个 remote repository 我们可以使用 `git clone [url]` 命令，e.g.
 
 ```shell
 git clone https://github.com/hanjie-chen/PersonalArticles.git
 ```
 
-但是这样子就会造成一个问题，那就是这个 remote repository 下载到本地会使用 remote repository 的名称，建立一个文件夹，把 repository 放到里面
+这个命令会在本地创建一个同名文件夹，然后将 remote repo 的内容下载进去
 
 ```shell
 ~ # git clone https://github.com/hanjie-chen/PersonalArticles.git
@@ -474,7 +470,7 @@ Resolving deltas: 100% (416/416), done.
 PersonalArticles
 ```
 
-如果我们想要指定这个文件夹名称，我们可以直接在 `git clone` 命令末尾加上文件夹路径 e.g.
+如果我们想要指定这个文件夹，我们可以直接在 `git clone` 命令末尾加上文件夹路径 e.g.
 
 ```bash
 git clone https://github.com/hanjie-chen/PersonalArticles.git ./articles-data
@@ -482,6 +478,20 @@ git clone https://github.com/hanjie-chen/PersonalArticles.git ./articles-data
 > [!note]
 >
 > 目标目录必须是空的，这样操作之后，git 仓库的所有内容（包括.git 文件夹）都会直接存放在指定目录下
+
+## Shallow Clone
+
+有时候，我们只需要下载当前 repo 的代码（比如说对于一个 knowledge base repo）而不需要这个仓库的历史信息，我们可以使用这个命令只拿取当前内容
+
+```shell
+git clone --depth 1 [url]
+```
+
+默认的 `git clone` 会把仓库从“第一行代码”到“当前代码”的所有历史修改全部下载下来。
+
+而 `--depth 1` 告诉 Git：“我只要最后一次提交（Commit）的状态，之前的历史记录我通通不要。”
+
+可以减少因为历史修改带来的存储空间压力
 
 ## `https://` VS. `git@`
 
