@@ -272,6 +272,84 @@ git config --global push.default current
 
 设置后，只要你执行 `git push`，Git 会自动推送到远程同名的分支上（如果远程没有则创建）。
 
+## Parallel Branch Work
+
+如果我们遇到这样一个问题
+
+在 main branch 上开发，并和 coding agent（如 Codex、Claude Code）对话。这个 agent 可能会运行很长时间，所以我们不需要一直盯着它。
+
+但这时，如果我们还想去另外一个 k8s-lab branch 上查看或修改某些东西，该怎么办？
+
+如果两个 session 共用同一个 Git 工作目录，那么直接在当前目录执行：
+
+```shell
+git checkout k8s-lab
+```
+
+就会把这个目录里的文件切换到 k8s-lab branch 的状态。这样一来，正在 main branch 上运行的那个 agent session 所依赖的工作目录也会被改变，可能导致它的上下文或运行环境被打乱。
+
+> [!note]
+>
+> 这也解释了为什么 tmux 不能真正解决这个问题。
+>
+> tmux 只是多开 terminal session；如果这些 terminal 都操作同一个 Git 目录，那么只要在其中一个 terminal 里执行了 git checkout，其他 terminal 看到的目录状态也会一起变化，因为它们共享的是同一个 working directory。
+
+这时，就可以使用 git worktree 命令
+
+它会在同一个 Git repository 下，再创建一个独立的 working directory（工作目录），并通常让这个目录 checkout 到某个 branch
+
+例如：
+
+```text
+repo
+├── website/          -> main
+└── website-k8s/      -> k8s-lab
+```
+
+这样：
+
+- `website/` 这个 worktree 当前 checkout 在 `main`
+- `website-k8s/` 这个 worktree 当前 checkout 在 `k8s-lab`
+
+于是，一个 coding agent session 可以继续在 main branch 上运行；
+
+而我们自己则可以进入另一个 worktree，在 k8s-lab branch 上查看或修改代码，而不会影响前者。
+
+可以把 worktree 的理解为：把某一条 branch 展开为一个独立的 working directory.
+
+在前面的 Git State Flow 里，Working Directory 表示“编辑文件时所在的位置”；git worktree 可以理解为让同一个 repository 同时拥有多个独立的 Working Directory。
+
+> [!note]
+>
+> 同一个 branch 默认不能同时被 checkout 到两个 worktree 中。
+
+使用方法
+
+创建一个新的 worktree
+
+```shell
+git worktree add ../website-k8s k8s-lab
+```
+
+- 在 `../website-k8s` 创建一个新目录
+- 这个目录 checkout 到 `k8s-lab`
+
+也就是 `git worktree add <path> <branch>`。
+
+查看 worktree 列表
+
+```shell
+git worktree list
+```
+
+删除 worktree
+
+```shell
+git worktree remove ../website-k8s
+```
+
+如果这个 worktree 里还有未提交改动，Git 默认可能会拒绝删除。
+
 ## Merge Branch
 
 当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。

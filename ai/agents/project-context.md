@@ -1,9 +1,26 @@
-这里写一些关于 AI 辅助编程的个人经验：如何让 AI 快速读懂一个比较复杂的 project，并且能够上手修改？
+---
+Title: Articles Template
+Author: 陈翰杰
+Instructor: chatGPT 3.5
+CoverImage: ./images/agents-readme.jpg
+RolloutDate: 2026-03-29
+---
+
+```
+BriefIntroduction: 
+这是我写的一些关于 AI agent 辅助编程的个人经验
+```
+
+<!-- split -->
+
+<img src="./images/agents-readme.jpg" alt="cover" style="zoom: 67%;" />
+
+如何让 AI 快速读懂一个比较复杂的 project，并且能够上手修改？
 
 我觉得这个问题可以分成两部分：
 
 1. 让 AI 读懂项目
-2. 让 AI 知道如何修改项目
+2. 让 AI 知道如何修改项目，怎样修改项目
 
 # Understand the project
 
