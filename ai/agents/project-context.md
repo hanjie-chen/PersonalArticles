@@ -1,7 +1,7 @@
 ---
-Title: Articles Template
+Title: AGENTS.md & README.md 使用指南
 Author: 陈翰杰
-Instructor: chatGPT 3.5
+Instructor: GPT-5
 CoverImage: ./images/agents-readme.jpg
 RolloutDate: 2026-03-29
 ---
