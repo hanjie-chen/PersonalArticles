@@ -106,3 +106,15 @@ Login methods: 选择默认的 Accept all availabe identity providers
 - Cookie settings：控制登录 Cookie 的安全属性（如 HttpOnly）。
 - 401 Response：当有人没登录就访问时，是返回一个登录页还是直接扔回一个 401 错误码。
 - Managed OAuth (Beta)：让 Cloudflare 帮你管理更复杂的 OAuth 流程。
+
+
+
+# adjust page style
+
+location: Reusable components --> Access login page
+
+我们可以在这个界面调整 access contorl 的登录界面样式，不过只能调整部分，最中间的登录框还是不可以修改的
+
+最终效果如下
+
+<img src="./images/login-page-style.png" alt="login page style" style="zoom: 33%;" />

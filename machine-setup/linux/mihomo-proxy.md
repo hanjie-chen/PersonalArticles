@@ -75,7 +75,7 @@ curl -sS https://chatgpt.com/cdn-cgi/trace | egrep '^(ip=|loc=|colo=|http=)'
 ### 查看proxy-auto当前使用的节点
 
 ```shell
-curl -s -H 'Authorization: Bearer xxxx' \
+curl -s -H 'Authorization: Bearer 1236547' \
   http://127.0.0.1:9090/group/PROXY_AUTO \
 | jq -r '.now'
 ```
@@ -83,7 +83,7 @@ curl -s -H 'Authorization: Bearer xxxx' \
 ### 查看 open-sg 使用的节点
 
 ```shell
-curl -s -H 'Authorization: Bearer xxx' \
+curl -s -H 'Authorization: Bearer 1236547' \
   http://127.0.0.1:9090/group/OPENAI_SG \
 | jq -r '.now'
 ```
@@ -91,12 +91,12 @@ curl -s -H 'Authorization: Bearer xxx' \
 测试延迟
 
 ```shell
-name=$(curl -s -H 'Authorization: Bearer xxx' \
+name=$(curl -s -H 'Authorization: Bearer 1236547' \
   http://127.0.0.1:9090/group/OPENAI_SG | jq -r '.now')
 
 enc=$(jq -rn --arg v "$name" '$v|@uri')
 
-curl -s -G -H 'Authorization: Bearer xxx' \
+curl -s -G -H 'Authorization: Bearer 1236547' \
   --data-urlencode 'url=https://chatgpt.com/cdn-cgi/trace' \
   --data-urlencode 'timeout=8000' \
   "http://127.0.0.1:9090/proxies/$enc/delay"
