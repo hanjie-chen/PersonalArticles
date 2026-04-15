@@ -8,19 +8,19 @@ RolloutDate: 2026-03-29
 
 ```
 BriefIntroduction: 
-这是我写的一些关于 AI agent 辅助编程的个人经验
+一些关于 AI agent 辅助编程的个人经验
 ```
 
 <!-- split -->
 
 <img src="./images/agents-readme.jpg" alt="cover" style="zoom: 67%;" />
 
-如何让 AI 快速读懂一个比较复杂的 project，并且能够上手修改？
+在我们使用 coding agent(claude code, codex) 的时候，常常遇到这样子一个问题：如何让 AI 快速读懂一个比较复杂的 project，然后上手修改？
 
-我觉得这个问题可以分成两部分：
+其实问题可以分成两部分：
 
 1. 让 AI 读懂项目
-2. 让 AI 知道如何修改项目，怎样修改项目
+2. 让 AI 知道如何修改
 
 # Understand the project
 
@@ -44,7 +44,7 @@ BriefIntroduction:
 
 ## sub-folder README.md
 
-对于那些本身拥有独立子系统逻辑的目录，最好在目录下单独放一份 README.md，用来解释：
+对于那些本身拥有独立子系统逻辑的目录，我们可以在目录下单独放一份 README.md，用来解释：
 
 - 这个子系统的职责是什么
 - 入口文件在哪里
@@ -71,7 +71,7 @@ BriefIntroduction:
 
 当我们解决了“让 AI 读懂 project”这个问题之后，下一步就是让 AI 知道该如何安全地修改它。
 
-这时就需要另一类文档：agent instruction file，比如 Codex 使用 AGENTS.md，Claude Code 使用 CLAUDE.md。
+这时就需要另一类文档：agent instruction file，比如 Codex 使用 AGENTS.md，Claude Code 使用 CLAUDE.md。接下来我们以 AGENTS.md 为例来说明这一点。
 
 AGENTS.md 不是“另一个 README”。它更偏向于行动指南，而不是项目介绍。
 
@@ -80,7 +80,8 @@ AGENTS.md 不是“另一个 README”。它更偏向于行动指南，而不是
 - README.md 回答：这是什么项目，怎么跑，结构大概怎样
 - AGENTS.md 回答：如果你现在要动这个仓库，应该先看哪里、遵守什么约束、不要踩哪些坑
 
-也就是说：
+而 AGENTS.md 也分为三层
 
-- README.md 偏介绍 / 导航 / onboarding
-- AGENTS.md 偏执行 / 协作 / 约束
+- global AGENTS.md
+- project root AGENTS.md
+- sub-floder AGENTS.md
