@@ -1,46 +1,69 @@
-# Knowledge base
+# Knowledge Base
 
-这是我的个人知识库，我的个人博客网站会从这个 github repository 中获取并展示部分文章
+这是我的个人知识库，同时也是博客网站的内容来源仓库。使用 markdown 语法编写
 
-# file organize
+## Repository Structure
 
-然后再说一说文件组织形式
+这个仓库把路径当作 taxonomy。
 
-一般来说都是 `.md` 文章目录下配置一个 `images` 文件夹用于存放图片
+- 每一层目录都表示一个更具体的主题范围。
+- 路径表达的是“属于什么主题”。
+- 文件名尽量简短，把大部分上下文交给目录路径表达。
 
-少数几个会有 `assets` 文件夹，其中包含 `images` `config` 等各种 resource
+例如：
 
-# Special directory
+- `ai/coding-agents/codex/codex-cli.md`
+- `code/python/package/flask/basic.md`
 
-`.<folder-name>` 格式的文件夹不会再出现在 Typora 的目录中，`__<folder-name>__` 格式的文件夹会出现在 Typora 的目录中
+## Directory README
 
-这正是我想要的，因为我需要查看 `__template__` 的文章模板，而 `.githooks` 只需要运行就可以了
+除了 project root `README.md`，某些目录也有自己的 `README.md`。
 
-## `__template__` folder
+它是这个目录的入口页，包含内容：
 
-根路径下的  `__template__` 文件夹是存放文章模板的地方
+- 说明这个目录的主题范围
+- 列出下面有哪些子主题或子目录
+- 给出阅读入口或常见跳转路径
+- 记录少量值得先知道的 observations, notes, or guiding ideas
 
-## `.githooks` folder
+如果一段内容明确属于某个分类，但暂时还不值得单独写成完整文章，可以先放在对应目录的 `README.md` 中，而不是硬拆成一篇独立文章。
 
-这是我存放关于这个仓库的 git hooks, 目前只有 1 个，是在 git commit 之前检查是否存在后缀名是大写的图片文件，如果存在，那么将后缀名小写
+## File Organization
 
-# Repository config
+一般来说，文章目录下会有同级 `images/` 文件夹用于存放图片。
 
-enable case sensitive [Windows only]
+少数目录会使用 `assets/`，其中可以包含 `images/`、`config/` 等其他资源。
+
+## Special Directories
+
+`.<folder-name>` 格式的目录不会出现在 Typora 的目录树中，`__<folder-name>__` 格式的目录会出现在 Typora 的目录树中。
+
+这样可以把“需要看到的模板”和“只用于仓库运行的辅助目录”区分开。
+
+### `__template__/`
+
+根目录下的 `__template__/` 用来存放文章模板。
+
+### `.githooks/`
+
+`.githooks/` 用来存放这个仓库的 Git hooks。当前有一个 hook，会在 commit 前检查图片文件扩展名是否为大写；如果是，则自动改成小写。
+
+## Repository Setup
+
+Enable case-sensitive paths on Windows:
 
 ```shell
 git config core.ignorecase false
 ```
 
-configure git hooks path [python3 environment require]
+Configure Git hooks path:
 
 ```shell
 git config core.hooksPath .githooks
 ```
 
-> 必须可以在命令行中可以运行 python3 –version 命令，而且输出不为空 e.g.
->
-> ```clearshell
-> > python3 --version
-> Python 3.12.8
-> ```
+需要保证命令行中可以正常运行：
+
+```shell
+python3 --version
+```
