@@ -64,6 +64,14 @@ articles-dir/
 
 `.githooks/` 用来存放这个仓库的 Git hooks。当前有一个 hook，会在 commit 前检查图片文件扩展名是否为大写；如果是，则自动改成小写。
 
+### `.kb-tools/`
+
+`.kb-tools/` 用来存放这个仓库的辅助工具。
+
+目前翻译相关工具位于 `.kb-tools/translator/`。
+
+如果要使用或修改翻译工具，请先阅读 `.kb-tools/translator/README.md`。
+
 ## Repository Setup
 
 Enable case-sensitive paths on Windows:
