@@ -35,6 +35,9 @@ python .\translate.py
 
 - `--limit`
   - 限制本次列出或翻译的文章数量，默认是 `1`
+- `--jobs`
+  - 仅 `translate.py` 支持
+  - 同时并行启动多少个 `codex exec` 进程，默认是 `2`
 - `--model`
   - 仅 `translate.py` 支持
   - 显式指定 Codex 模型；如果不传，就使用本机 Codex CLI 的默认模型
@@ -47,6 +50,7 @@ python .\translate.py
 ```powershell
 python .kb-tools/translator/list-candidates.py --limit 5
 python .kb-tools/translator/translate.py --limit 1
+python .kb-tools/translator/translate.py --limit 5 --jobs 2
 python .kb-tools/translator/translate.py --limit 1 --model gpt-5.4
 ```
 
@@ -63,6 +67,7 @@ python .kb-tools/translator/translate.py --limit 1 --model gpt-5.4
 - 如果英文稿不存在，则状态为 `missing_translation`
 - 如果英文稿存在，但 `source_blob` 和当前中文主稿不一致，则状态为 `outdated_translation`
 - `translate.py` 遇到 `missing_translation` 或 `outdated_translation` 时，会整篇重写英文稿，不做增量更新
+- `translate.py` 开始执行时，会先打印本次命中的候选文章列表，再显示每篇文章的翻译进度
 - 如果翻译失败：
   - 不会创建半成品文件
   - 已有英文稿也不会被覆盖

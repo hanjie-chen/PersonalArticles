@@ -1,9 +1,11 @@
 import importlib.util
+import io
 import subprocess
 import sys
 import tempfile
 import textwrap
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest import mock
 
@@ -15,6 +17,10 @@ kb_translation = importlib.util.module_from_spec(SPEC)
 sys.modules["workflow"] = kb_translation
 assert SPEC.loader is not None
 SPEC.loader.exec_module(kb_translation)
+CLI_SPEC = importlib.util.spec_from_file_location("translate_cli", CLI_PATH)
+translate_cli = importlib.util.module_from_spec(CLI_SPEC)
+assert CLI_SPEC.loader is not None
+CLI_SPEC.loader.exec_module(translate_cli)
 
 
 class TranslateArticlesTest(unittest.TestCase):
@@ -166,7 +172,63 @@ class TranslateArticlesTest(unittest.TestCase):
             )
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertEqual(result.stdout.strip(), "")
+            self.assertEqual(result.stdout.strip(), "found 0 candidate(s)")
+
+    def test_build_parser_accepts_jobs_option(self):
+        parser = translate_cli.build_parser()
+        args = parser.parse_args(["--limit", "5", "--jobs", "2"])
+        self.assertEqual(args.limit, 5)
+        self.assertEqual(args.jobs, 2)
+
+    def test_build_parser_defaults_jobs_to_two(self):
+        parser = translate_cli.build_parser()
+        args = parser.parse_args([])
+        self.assertEqual(args.jobs, 2)
+
+    def test_main_prints_candidate_list_and_progress_summary(self):
+        repo_root = Path(r"E:\repo")
+        candidates = [
+            kb_translation.Candidate(
+                source_md=repo_root / "topic" / "first.md",
+                status="missing_translation",
+            ),
+            kb_translation.Candidate(
+                source_md=repo_root / "topic" / "second.md",
+                status="outdated_translation",
+            ),
+        ]
+
+        with mock.patch.object(
+            translate_cli, "build_parser"
+        ) as build_parser, mock.patch.object(
+            translate_cli, "find_candidates", return_value=candidates
+        ), mock.patch.object(
+            translate_cli,
+            "translate_candidate",
+            side_effect=[
+                repo_root / "topic" / "resources" / "i18n" / "first-en.md",
+                repo_root / "topic" / "resources" / "i18n" / "second-en.md",
+            ],
+        ):
+            build_parser.return_value.parse_args.return_value = mock.Mock(
+                root_dir=str(repo_root),
+                limit=5,
+                model=None,
+                jobs=2,
+            )
+            stdout = io.StringIO()
+            stderr = io.StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = translate_cli.main()
+
+        output = stdout.getvalue()
+        self.assertEqual(exit_code, 0)
+        self.assertIn("found 2 candidate(s)", output)
+        self.assertIn("[1] missing_translation\ttopic/first.md", output)
+        self.assertIn("[2] outdated_translation\ttopic/second.md", output)
+        self.assertIn("starting 2 worker(s)", output)
+        self.assertIn("[1/2] translating\ttopic/first.md", output)
+        self.assertIn("[2/2] translating\ttopic/second.md", output)
 
     def test_default_repo_root_points_to_kb_root(self):
         expected = MODULE_PATH.parents[2]
@@ -207,4 +269,3 @@ class TranslateArticlesTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
