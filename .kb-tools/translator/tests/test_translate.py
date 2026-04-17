@@ -19,6 +19,7 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(kb_translation)
 CLI_SPEC = importlib.util.spec_from_file_location("translate_cli", CLI_PATH)
 translate_cli = importlib.util.module_from_spec(CLI_SPEC)
+sys.modules["translate_cli"] = translate_cli
 assert CLI_SPEC.loader is not None
 CLI_SPEC.loader.exec_module(translate_cli)
 
@@ -172,7 +173,7 @@ class TranslateArticlesTest(unittest.TestCase):
             )
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertEqual(result.stdout.strip(), "found 0 candidate(s)")
+            self.assertEqual(result.stdout.strip(), "Found 0 candidate(s)")
 
     def test_build_parser_accepts_jobs_option(self):
         parser = translate_cli.build_parser()
@@ -223,12 +224,15 @@ class TranslateArticlesTest(unittest.TestCase):
 
         output = stdout.getvalue()
         self.assertEqual(exit_code, 0)
-        self.assertIn("found 2 candidate(s)", output)
+        self.assertIn("Found 2 candidate(s)", output)
         self.assertIn("[1] missing_translation\ttopic/first.md", output)
         self.assertIn("[2] outdated_translation\ttopic/second.md", output)
-        self.assertIn("starting 2 worker(s)", output)
+        self.assertIn("Starting 2 worker(s)", output)
+        self.assertIn("worker-", output)
         self.assertIn("[1/2] translating\ttopic/first.md", output)
         self.assertIn("[2/2] translating\ttopic/second.md", output)
+        self.assertIn("Finished", output)
+        self.assertIn("success: 2", output)
 
     def test_default_repo_root_points_to_kb_root(self):
         expected = MODULE_PATH.parents[2]
