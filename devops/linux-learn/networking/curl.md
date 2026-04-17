@@ -2,7 +2,7 @@
 Title: Curl Command
 Author: 陈翰杰
 Instructor: Sonnet 3.5
-CoverImage: ./images/curl-cover-image.png
+CoverImage: ./resources/images/curl-cover-image.png
 RolloutDate: 2024-12-08
 ---
 
@@ -13,7 +13,7 @@ curl 命令详解
 
 <!-- split -->
 
-![curl](./images/curl-cover-image.png)
+![curl](./resources/images/curl-cover-image.png)
 
 # Before we begin
 

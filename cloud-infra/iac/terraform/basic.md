@@ -2,7 +2,7 @@
 Title: Terraform 入门指南
 Author: 陈翰杰
 Instructor: gemini-3.1-pro-proview
-CoverImage: ./images/tf-cover.png
+CoverImage: ./resources/images/tf-cover.png
 RolloutDate: 2026-03-06
 ---
 
@@ -13,7 +13,7 @@ terraform 入门指南
 
 <!-- split -->
 
-![cover](./images/tf-cover.png)
+![cover](./resources/images/tf-cover.png)
 
 # Terraform 入门指南
 

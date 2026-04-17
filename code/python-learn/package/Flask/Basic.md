@@ -2,7 +2,7 @@
 Title: Flask basic knowledge
 Author: 陈翰杰
 Instructor: Sonnet 3.5
-CoverImage: ./images/cover_image.png
+CoverImage: ./resources/images/cover_image.png
 RolloutDate: 2024-11-22
 ---
 
@@ -13,7 +13,7 @@ Flask learning note, flask version >= 3.0.X
 
 <!-- split -->
 
-![cover](./images/cover_image.png)
+![cover](./resources/images/cover_image.png)
 
 # Flask Basic
 

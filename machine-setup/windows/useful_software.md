@@ -2,7 +2,7 @@
 Title: Windows Extra Software & Software Settings
 Author: 陈翰杰
 Instructor: chatGPT3.5, GPT4
-CoverImage: ./images/vertical-tab.png
+CoverImage: ./resources/images/vertical-tab.png
 RolloutDate: 2023-09-30
 ---
 
@@ -13,7 +13,7 @@ BriefIntroduction:
 
 <!-- split -->
 
-![cover-image](./images/vertical-tab.png)
+![cover-image](./resources/images/vertical-tab.png)
 
 # 写在前面
 
@@ -89,21 +89,21 @@ sync_dir: 'D:\OneDrive\backup\Rime\backup'
 
 原因在于搜索栏的搜索引擎设置问题。进入edge 设置-->隐私、搜索和服务-->地址栏和搜索-->管理搜索引擎，如下图所示
 
-![search-engine-preview](./images/search-engine-preview.png)
+![search-engine-preview](./resources/images/search-engine-preview.png)
 
 修改查询URL即可（重新添加1个，并且设置为默认）
 
-![search-engine-current](./images/search-engine-current.png)
+![search-engine-current](./resources/images/search-engine-current.png)
 
 这样子就OK了，参考了这篇文章[^1]
 
 1. 垂直标签页
 
-   <img src="./images/vertical-tab.png" alt="picture" style="zoom:60%;" />
+   <img src="./resources/images/vertical-tab.png" alt="picture" style="zoom:60%;" />
 
 2. 隐藏标题栏
 
-   <img src="./images/hidden-tablename.png" alt="picture" style="zoom:60%;" />
+   <img src="./resources/images/hidden-tablename.png" alt="picture" style="zoom:60%;" />
 
 3. 其他设置
 

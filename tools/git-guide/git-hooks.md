@@ -2,7 +2,7 @@
 Title: Git Hooks 使用指南
 Author: 陈翰杰
 Instructor: o1-preview
-CoverImage: ./images/pre-commit-test.png
+CoverImage: ./resources/images/pre-commit-test.png
 RolloutDate: 2025-01-11
 ---
 
@@ -14,7 +14,7 @@ git hooks 检查图片文件后缀名，并且将其转换为小写
 
 <!-- split -->
 
-<img src="./images/pre-commit-test.png" alt="cover"  />
+<img src="./resources/images/pre-commit-test.png" alt="cover"  />
 
 # Before we begin
 
@@ -248,7 +248,7 @@ To github.com:hanjie-chen/PersonalArticles.git
 
 result
 
-![pre-commit success](./images/pre-commit-test.png)
+![pre-commit success](./resources/images/pre-commit-test.png)
 
 ## 代码详解
 

@@ -59,4 +59,4 @@ reference [azurerm_network_interface | Resources | hashicorp/azurerm | Terraform
 
 其中关于 ip_configuration 的部分对应 Azure portal 的这个部分
 
-![nic-config](./images/nic-ip-config.jpeg)
+![nic-config](./resources/images/nic-ip-config.jpeg)

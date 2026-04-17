@@ -2,7 +2,7 @@
 Title: Terraform Azure VM 创建指南
 Author: 陈翰杰
 Instructor: grok3, chatGPt-4o
-CoverImage: ./images/cover-image.png
+CoverImage: ./resources/images/cover-image.png
 RolloutDate: 2025-02-27
 ---
 
@@ -13,13 +13,13 @@ BriefIntroduction:
 
 <!-- split -->
 
-![cover image](./images/cover-image.png)
+![cover image](./resources/images/cover-image.png)
 
 # VM OS disk setting
 
 当我们使用 terraform 创建一台 vm 的时候，会发现 `os_disk` block 是必须要选择的，实际上对对应的就是 Azure portal 创建 virutal machine 界面的 disk 部分
 
-![vm disk](./images/vm-disk.png)
+![vm disk](./resources/images/vm-disk.png)
 
 根据这篇terraform 的文章 [azurerm_linux_virtual_machine | Resources | hashicorp/azurerm | Terraform | Terraform Registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_virtual_machine)
 
@@ -29,11 +29,11 @@ BriefIntroduction:
 
 关于 `caching` 在 Azure portal 上面指的是 Host caching
 
-![caching](./images/caching.jpeg)
+![caching](./resources/images/caching.jpeg)
 
 在 Portal 创建 Azure VM 的时候系统盘无法指定，但是 data disk可以指定
 
-![create-vm-disk-caching](./images/create-vm-disk-caching.jpeg)
+![create-vm-disk-caching](./resources/images/create-vm-disk-caching.jpeg)
 
 关于Azure VM Disk的具体内容可以查看这篇[文档](../native/virtual-machine/virtual-machine.md)
 
@@ -51,7 +51,7 @@ BriefIntroduction:
 
 所谓的 LRS 就是 local redundant storage, ZRS 就是 zone redundant sotrage
 
-![disk type](./images/disk-type.png)
+![disk type](./resources/images/disk-type.png)
 
 # 关于默认的磁盘大小
 
@@ -83,7 +83,7 @@ source_image_reference {
 
 [Find and use marketplace purchase plan information using the CLI - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage)
 
-![image list](./images/image-list-less.png)
+![image list](./resources/images/image-list-less.png)
 
 如果想看全部的 image 的话需要加上 `--all` 参数
 
@@ -124,7 +124,7 @@ output like
 
 可以到到 Azure marketplace 稍微可以看到一些信息，比如说 publisher ID, product ID 这 2 个小大写可能对不上
 
-![marketplace image info](./images/marketplace-image.png)
+![marketplace image info](./resources/images/marketplace-image.png)
 
 不过可以将某些关键字放在 [Azure VM Image List](https://az-vm-image.info/) 网站进行搜索，在结合一下 grok3
 
@@ -132,11 +132,11 @@ output like
 
 我们不必把这个 vm 真正的创建出来，仅仅设定到 review 界面，就可以看到右下角存在 `Downlaod a template for automation` 点击进入
 
-![arm-template](./images/arm-template.png)
+![arm-template](./resources/images/arm-template.png)
 
 来到这个界面，直接 ctrl + F 查找 `imagereference` 就能看到
 
-![arm tempalte image reference](./images/arm-image-reference.png)
+![arm tempalte image reference](./resources/images/arm-image-reference.png)
 
 # VM size
 

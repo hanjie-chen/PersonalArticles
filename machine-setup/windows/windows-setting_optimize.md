@@ -2,7 +2,7 @@
 Title: Windows System Settings
 Author: 陈翰杰
 Instructor: chatGPT3.5, GPT4
-CoverImage: ./images/setting.png
+CoverImage: ./resources/images/setting.png
 RolloutDate: 2023-09-30
 ---
 
@@ -13,7 +13,7 @@ BriefIntroduction:
 
 <!-- split -->
 
-![cover-image](./images/setting.png)
+![cover-image](./resources/images/setting.png)
 
 # windows 10 setting
 
@@ -23,9 +23,9 @@ BriefIntroduction:
 
    win+i快捷键打开系统设置，点击第一个系统，进入之后左边栏滑倒最下面的关于，可以看到有重命名这台电脑的选项
 
-   ![setting](./images/setting.png)
+   ![setting](./resources/images/setting.png)
 
-   ![rename](./images/rename.png)
+   ![rename](./resources/images/rename.png)
 
    重命名之后重启电脑即可
 
@@ -67,21 +67,21 @@ BriefIntroduction:
 
 win键打开开始菜单，选择设置图标，右键设置个性化，可以选择那些图标在开始菜单上面
 
-![start-menu-setting](./images/start-menu-setting.png)
+![start-menu-setting](./resources/images/start-menu-setting.png)
 
 个人只保留设置选项
 
-![start-menu](./images/start-menu-setting-1.png)
+![start-menu](./resources/images/start-menu-setting-1.png)
 
 ## 文件资源管理器设置
 
 查看-->选项-->打开文件资源管理器时打开:此电脑
 
-![filesystem](./images/filesystem-setting-0.png)
+![filesystem](./resources/images/filesystem-setting-0.png)
 
 同时我会将快速访问中的显示常用文件夹和最近使用的文件给取消，同时取消在快速访问中的4个固定选项
 
-![filesystem](./images/filesystem-setting-1.png)
+![filesystem](./resources/images/filesystem-setting-1.png)
 
 左侧5个系统文件夹：视频，文档，下载，音乐，图片，修改他们的路径为E盘。
 

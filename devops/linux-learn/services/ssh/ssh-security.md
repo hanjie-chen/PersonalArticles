@@ -2,7 +2,7 @@
 
 今天查看邮件的时候发现，似乎有人尝试爆破我的 azure linux vm, 因为我的 azure linux vm 有一个 public ip, 所以其实我之前就考虑这个安全隐患
 
-<img src="./images/email-notice.png" alt="email notice" style="zoom:43%;" />
+<img src="./resources/images/email-notice.png" alt="email notice" style="zoom:43%;" />
 
 当然最好的方法是不要对公网开放相关的端口，但是没办法我需要开放端口，使得我自己连接上去
 
@@ -28,7 +28,7 @@ $ last -a
 grep "Failed password" /var/log/auth.log | tail -n 50
 ```
 
-![failed ssh attempt](./images/failed-attempt.png)
+![failed ssh attempt](./resources/images/failed-attempt.png)
 
 注意到可以看到甚至使用了 root 尝试来登录，不过对于 ubuntu 来说
 

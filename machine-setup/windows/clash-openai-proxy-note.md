@@ -2,7 +2,7 @@
 Title: Codex app reconnect issue with windows clash
 Author: 陈翰杰
 Instructor: Codex(gpt-5.4)
-CoverImage: ./images/codex-reconnect.png
+CoverImage: ./resources/images/codex-reconnect.png
 RolloutDate: 2026-03-21
 ---
 
@@ -13,7 +13,7 @@ BriefIntroduction:
 
 <!-- split -->
 
-![codex reconnect](./images/codex-reconnect.png)
+![codex reconnect](./resources/images/codex-reconnect.png)
 
 # Issue Description
 

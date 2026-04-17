@@ -2,7 +2,7 @@
 Title: Git Command 速查指南
 Author: 陈翰杰
 Instructor: GPT5, Sonnet3.5, gemini
-CoverImage: ./images/cover_image.png
+CoverImage: ./resources/images/cover_image.png
 RolloutDate: 2024-08-26
 ---
 
@@ -13,11 +13,11 @@ BriefIntroduction:
 
 <!-- split -->
 
-![cover image](./images/cover_image.png)
+![cover image](./resources/images/cover_image.png)
 
 当在 github 上面新建完成一个仓库之后，github 会提示你如何进行下一步操作。而我们需要做的部分就是根据仓库给出的提示，初始化本地仓库，并且完成第一次推送
 
-<img src="./images/new-repo.png" alt="new repo" style="zoom:50%;" />
+<img src="./resources/images/new-repo.png" alt="new repo" style="zoom:50%;" />
 
 # Local Workflow
 

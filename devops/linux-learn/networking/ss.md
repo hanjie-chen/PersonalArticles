@@ -26,5 +26,5 @@ tcp    LISTEN  0       128          0.0.0.0:22          0.0.0.0:*     users:(("s
 
 e.g.
 
-![ss](./images/ss.png)
+![ss](./resources/images/ss.png)
 

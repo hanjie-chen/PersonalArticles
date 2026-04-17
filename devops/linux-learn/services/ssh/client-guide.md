@@ -2,7 +2,7 @@
 Title: SSh 客户端完全使用指南
 Author: 陈翰杰
 Instructor: gemini-3-flash-preview, gemini-3-pro-preview
-CoverImage: ./images/ssh.png
+CoverImage: ./resources/images/ssh.png
 RolloutDate: 2026-02-21
 ---
 
@@ -13,7 +13,7 @@ ssh 在客户端的配置
 
 <!-- split -->
 
-![cover image](./images/ssh.png)
+![cover image](./resources/images/ssh.png)
 
 # Authentication
 
@@ -132,17 +132,17 @@ and check to make sure that only the key(s) you wanted were added.
 
 如果用的是 azure linux vm 可以在 azure portal 中添加 ssh public key
 
-![azure ssh key add](./images/azure-ssh-key-add.png)
+![azure ssh key add](./resources/images/azure-ssh-key-add.png)
 
 ## gcp vm
 
 在 gcp 中则是需要进入 VM instance edit 这个位置：
 
-![ssh-1](./images/gcp-vm-ssh-1.png)
+![ssh-1](./resources/images/gcp-vm-ssh-1.png)
 
 进入 edit 之后往下滑动就能看见 ssh key
 
-![ssh-1](./images/gcp-vm-ssh-2.png)
+![ssh-1](./resources/images/gcp-vm-ssh-2.png)
 
 ## ssh-key login
 

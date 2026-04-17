@@ -2,7 +2,7 @@
 Title: Personal Windows PS Command
 Author: 陈翰杰
 Instructor: Sonnet 3.5, chatgpt-4o
-CoverImage: ./images/cover_image.webp
+CoverImage: ./resources/images/cover_image.webp
 RolloutDate: 2024-09-19
 ---
 
@@ -13,7 +13,7 @@ personal windows powershell command, for my convinence
 
 <!-- split -->
 
-![cover](./images/cover_image.webp)
+![cover](./resources/images/cover_image.webp)
 
 # How to use these customize commands
 

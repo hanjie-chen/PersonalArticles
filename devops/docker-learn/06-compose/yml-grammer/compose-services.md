@@ -2,7 +2,7 @@
 Title: docker compose.ymal services block 语法速查
 Author: 陈翰杰
 Instructor: o1-preview, grok3
-CoverImage: ./images/cover-image.png
+CoverImage: ./resources/images/cover-image.png
 RolloutDate: 2025-01-16
 ---
 
@@ -13,7 +13,7 @@ docker compose.ymal top level services block 语法速查
 
 <!-- split -->
 
-![docker compose](./images/cover-image.png)
+![docker compose](./resources/images/cover-image.png)
 
 # `compose.yml` –> services 语法详解
 

@@ -40,7 +40,7 @@ winget install --id Microsoft.Powershell --source winget
 
 当第一次使用 powershell 7 的时候，文件夹会有蓝色的背景颜色，有人已经提过了github issue: https://github.com/PowerShell/PowerShell/issues/18550
 
-![powershell 7 blue folder background](./images/ps7-folder-blue-bg.png)
+![powershell 7 blue folder background](./resources/images/ps7-folder-blue-bg.png)
 
 解决方案是自定义颜色在 `$PROFILE` 中
 
@@ -109,7 +109,7 @@ foreach ($extension in $colors.Keys) {
 
 效果如下：
 
-![powershell-file-display-color](./images/file-color-example.png)
+![powershell-file-display-color](./resources/images/file-color-example.png)
 
 
 

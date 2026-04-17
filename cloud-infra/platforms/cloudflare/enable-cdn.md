@@ -2,7 +2,7 @@
 Title: cloudflare 使用指南
 Author: 陈翰杰
 Instructor: gpt, gemini
-CoverImage: ./images/cf.jpg
+CoverImage: ./resources/images/cf.jpg
 RolloutDate: 2026-04-06
 ---
 
@@ -13,7 +13,7 @@ cf 使用指南
 
 <!-- split -->
 
-![cf](./images/cf.jpg)
+![cf](./resources/images/cf.jpg)
 
 # domian DNS hold
 

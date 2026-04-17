@@ -2,7 +2,7 @@
 Title: GCP Terraform 入门设置
 Author: 陈翰杰
 Instructor: gemini-3.1-pro-preview
-CoverImage: ./images/tf-gcp-cover.avif
+CoverImage: ./resources/images/tf-gcp-cover.avif
 RolloutDate: 2026-03-08
 ---
 
@@ -13,7 +13,7 @@ BriefIntroduction:
 
 <!-- split -->
 
-![tf gcp cover](./images/tf-gcp-cover.avif)
+![tf gcp cover](./resources/images/tf-gcp-cover.avif)
 
 要让 Terraform 操作 GCP (Google Cloud Platform) 的资源，我们首先需要在代码中配置 Provider，然后为 Terraform 提供操作 GCP 的身份凭证。
 

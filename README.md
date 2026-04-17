@@ -30,9 +30,25 @@
 
 ## File Organization
 
-一般来说，文章目录下会有同级 `images/` 文件夹用于存放图片。
+目前的文章目录有两种格式
 
-少数目录会使用 `assets/`，其中可以包含 `images/`、`config/` 等其他资源。
+```
+articles-dir/
+├───resources/
+│   ├───i18n/
+│   │   └───example-en.md
+│   └───images/
+└───example.md
+```
+
+一般来说，文章目录下会有同级 `resources/` 文件夹，用于存放这篇文章的附属文件。
+
+例如：
+
+- `resources/images/` 用于存放图片
+- `resources/i18n/` 用于存放主文档的翻译稿
+
+有些文件夹如果只有图片的话，则是一个直接的 `images` 文件夹
 
 ## Special Directories
 

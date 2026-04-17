@@ -2,7 +2,7 @@
 Title: docker volume 使用简介
 Author: 陈翰杰
 Instructor: chatgpt-4o
-CoverImage: ./images/cover-image.jpg
+CoverImage: ./resources/images/cover-image.jpg
 RolloutDate: 2025-03-18
 ---
 
@@ -13,7 +13,7 @@ BriefIntroduction:
 
 <!-- split -->
 
-![cover image](./images/cover-image.jpg)
+![cover image](./resources/images/cover-image.jpg)
 
 # Docker Volume 
 

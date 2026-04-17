@@ -2,7 +2,7 @@
 Title: Flask-SQLAlchemy 基础
 Author: 陈翰杰
 Instructor: Sonnet 3.5
-CoverImage: ./images/cover_image.webp
+CoverImage: ./resources/images/cover_image.webp
 RolloutDate: 2024-11-14
 ---
 
@@ -13,7 +13,7 @@ flask-sqlalchemy 基础知识
 
 <!-- split -->
 
-![cover](./images/cover_image.webp)
+![cover](./resources/images/cover_image.webp)
 
 # Before we beginning
 

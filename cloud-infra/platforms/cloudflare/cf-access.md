@@ -117,4 +117,4 @@ location: Reusable components --> Access login page
 
 最终效果如下
 
-<img src="./images/login-page-style.png" alt="login page style" style="zoom: 33%;" />
+<img src="./resources/images/login-page-style.png" alt="login page style" style="zoom: 33%;" />
