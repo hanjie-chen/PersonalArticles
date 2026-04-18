@@ -1,4 +1,13 @@
-<!-- source_blob: c754b19ef8c577db4dac8a1608257d3343a25da6 -->
+---
+Title: Flask Basic Knowledge
+SourceBlob: c754b19ef8c577db4dac8a1608257d3343a25da6
+---
+
+```
+BriefIntroduction: Flask study notes, Flask version >= 3.0.X
+```
+
+<!-- split -->
 
 # Flask Basic
 
@@ -38,9 +47,9 @@ def page_not_found(error_info):  # 接受异常对象作为参数
 
 ```
 
-## Run the Code
+## run the code
 
-If the previous code file is named hello.py, then use the following command:
+If the previous code file was named `hello.py`, then use the following command:
 
 ```shell
 flask --app hello run
@@ -52,11 +61,11 @@ python -m flask --app hello run
 
 > [!note]
 >
-> If the py file is named app.py / wsgi.py, you can omit the `-app` parameter and use the `flask run` command directly.
+> If the Python file is named `app.py` / `wsgi.py`, you can omit the `-app` parameter and use the `flask run` command directly.
 >
 > `WSGI` stands for Web Server Gateway Interface.
 
-This starts a server that listens on `localhost:5000` by default.
+This will start a server that listens on `localhost:5000` by default.
 
 ```bash
 $ flask run
@@ -66,7 +75,7 @@ WARNING: This is a development server. Do not use it in a production deployment.
 Press CTRL+C to quit
 ```
 
-This can only be accessed locally. To expose it to a certain IP address, you can add `--host = `, for example:
+This can only be accessed locally. To expose it to a specific IP address, you can add `--host = `, for example:
 
 ```python
 --host=0.0.0.0 - 监听所有可用的 IPv4 地址
@@ -76,13 +85,13 @@ This can only be accessed locally. To expose it to a certain IP address, you can
 
 > [!note]
 >
-> Flask's `--host` parameter does not support directly specifying an IP address range (such as CIDR notation `192.168.0.0/24`). The `--host` parameter can only specify the exact IP address the server should listen on.
+> Flask's `--host` parameter does not support specifying an IP address range directly (such as CIDR notation `192.168.0.0/24`). The `--host` parameter can only specify the exact IP address that the server should listen on.
 
-### Enable Debug Mode
+### enable debug mode
 
-After modifying the code, if you want to check whether the result matches your expectations, you normally need to press `ctrl+c` and run `flask run` again. But if you enable debug mode, the server will automatically reload the modified code without needing to stop and restart it.
+After modifying the code, if you want to check whether the result matches expectations, you normally need to press `ctrl+c` and then run `flask run` again. But if debug mode is enabled, the server will automatically reload the modified code without needing to stop and restart it manually.
 
-You only need to add the `--debug` parameter.
+Just add the `--debug` parameter:
 
 ```python
 $ flask run --debug
@@ -103,9 +112,9 @@ Note that debug mode here not only detects changes to `.py` files, but also chan
 
 ## HTML Escaping
 
-When handling user input, you need to pay special attention to XSS attacks. HTML escaping is a defense mechanism that converts special characters into their corresponding HTML entities (for example, `<` becomes `&lt;`) to prevent malicious scripts from executing.
+When processing user input, special attention must be paid to XSS attacks. HTML Escaping is a defense mechanism that converts special characters into their corresponding HTML entities (for example, `<` becomes `&lt;`) to prevent malicious scripts from executing.
 
-For example, if the user enters `<script>alert('hack')</script>`
+For example, if the user enters `<script>alert('hack')</script>` 
 
 In Flask, Jinja2 templates escape automatically:
 ```python
@@ -127,9 +136,9 @@ escaped_content = escape(user_input)
 ```
 # Route Function
 
-Flask automatically calls route functions based on URL matching. You only need to define the routes and corresponding functions correctly in `app.py`, and use `url_for()` correctly in `templates` to reference those functions.
+Flask automatically calls route functions based on URL matching. We only need to define the routes and corresponding functions correctly in `app.py`, and use `url_for()` correctly in `templates` to reference those functions.
 
-> The `url_for()` function generates a URL based on the route function name defined in the Flask application. In this example, it generates the URL for `"/Articles"`.
+> The `url_for()` function generates a URL based on the route function name defined in the Flask application. In this example, it will generate the URL for `"/Articles"`.
 
 For example:
 
@@ -165,6 +174,7 @@ In `index.html`:
       </div>
     </nav>
 ```
+
 
 In `index.html`, `{{ url_for('article_index') }}` is used to generate the link. Here, `'article_index'` refers to the function name defined in `app.py`.
 
@@ -208,7 +218,7 @@ Flask provides several built-in converters:
 @app.route('/user/<uuid:user_id>')  # 接受UUID字符串
 ```
 
-### Multi-Variable Routes
+### Multi-variable routes
 
 ```python
 @app.route('/blog/<int:year>/<int:month>/<int:day>/<slug>')
@@ -229,7 +239,7 @@ def article_detail(category, title):
 ```
 
 In this example:
-- `<path:category>` allows a path containing slashes, which is suitable for multi-level categories.
+- `<path:category>` allows paths containing slashes, which is suitable for multi-level categories.
 - `<title>` is a normal string parameter used for the article title.
 
 Using a multi-parameter URL in a template:
@@ -256,17 +266,17 @@ URLs with a trailing slash (such as `/projects/`): visiting `/projects` -> autom
 
 URLs without a trailing slash (such as `/about`): visiting `/about/` -> returns a 404 error
 
-Recommendations:
-- If the URL represents a collection or directory, use a trailing slash (such as `/users/`)
-- If the URL represents a specific resource or file, do not use a trailing slash (such as `/user/123` or `/about`)
+Recommendation:
+- If this URL represents a collection or directory, use a trailing slash (such as `/users/`)
+- If this URL represents a specific resource or file, do not use a trailing slash (such as `/user/123` or `/about`)
 
-This is like a file system: `/home/user/` is a directory, while `/home/user/file.txt` is a file.
+This is like in a file system: `/home/user/` is a directory, while `/home/user/file.txt` is a file.
 
-## `url_for()` Function
+## `url_for()` function
 
 `url_for()` is the URL generation function provided by Flask. It accepts two types of parameters:
 1. The first parameter is the **endpoint** (usually the name of the view function)
-2. After that, it can take any number of keyword arguments used to pass variables
+2. It can be followed by any number of keyword arguments used to pass variables
 
 for example
 
@@ -295,7 +305,7 @@ with app.test_request_context():
     print(url_for('profile', username='John', page=2)) # 输出: /user/John?page=2
 ```
 
-**Special Parameters**
+**Special parameters**
 
 ```python
 # _external=True: 生成完整的 URL（包含域名）
@@ -311,9 +321,9 @@ url_for('index', _external=True, _scheme='https')
 # 输出: https://localhost/
 ```
 
-### Best Practice
+### best practice
 
-Always use `url_for()`.
+Always use `url_for()`
 
 ```python
 # 不推荐
@@ -322,9 +332,9 @@ Always use `url_for()`.
 # 推荐
 <a href="{{ url_for('profile', username='john') }}">John's profile</a>
 ```
-If the URL rules are modified in the future, you only need to update the route decorator instead of changing every link in all templates.
+If the URL rule is modified in the future, you only need to update the route decorator instead of changing links in every template.
 
-**Handling Static Files**
+**Handling static files**
 
 ```python
 # 访问静态文件
@@ -332,7 +342,7 @@ url_for('static', filename='style.css')      # 输出: /static/style.css
 url_for('static', filename='js/script.js')   # 输出: /static/js/script.js
 ```
 
-**Using in Templates**
+**Using in templates**
 
 ```html
 <!-- 在 Jinja2 模板中使用 -->
@@ -340,7 +350,7 @@ url_for('static', filename='js/script.js')   # 输出: /static/js/script.js
 <a href="{{ url_for('profile', username='john') }}">John's Profile</a>
 ```
 
-## HTTP Methods
+## HTTP methods
 
 Flask can distinguish different HTTP methods for the same path.
 
@@ -367,13 +377,13 @@ def login_post():
     return do_the_login()    
 ```
 
-# Static Folder
+# Static folder
 
 `static` is a built-in special endpoint in Flask. Flask registers this endpoint by default to handle static files, so you cannot create a view function named `'static'`, because that would conflict with Flask's built-in static file handling.
 
-## Default Static Folder
+## default static folder
 
-You can modify the configuration to change the default static folder.
+You can change the default static folder by modifying the configuration.
 
 ```python
 # 修改静态文件夹和URL路径
@@ -386,8 +396,8 @@ app = Flask(__name__,
 url_for('static', filename='style.css')  # 输出: /resources/style.css
 ```
 
-- `static_folder` is the folder name in the **physical file system** where static files are actually stored
-- `static_url_path` is the prefix in the **URL path** used to access static files
+- `static_folder` is the folder name where static files are actually stored in the **physical file system**
+- `static_url_path` is the prefix used in the **URL path** to access static files
 
 The purpose of this design is to decouple the physical storage path from the URL path.
 
@@ -420,7 +430,7 @@ url_for('static', filename='images/logo.png')  # 输出: /public/images/logo.png
 
 ### Advantage
 
-This design can hide the actual server file structure and is also more flexible.
+This design can hide the actual server file structure and is more flexible.
 
 ```python
 # 开发环境
@@ -457,7 +467,9 @@ else:
 app.static_url_path = '/static'         # URL保持一致
 ```
 
-## Add a Custom Static Folder
+
+
+## add customize static folder
 
 In addition to the default `static` folder for static files, if you want to create another static folder for convenient use with `url_for()`, you can do it like this:
 
@@ -475,16 +487,16 @@ app.add_url_rule('/uploads/<path:filename>', 'serve_uploads', serve_uploads)
 
 ### `send_from_directory()`
 
-Both methods above can add an extra static folder. The core is the `send_from_directory` function, which Flask provides for securely sending files.
+These two approaches can add an extra static folder. The core is the `send_from_directory` function, which Flask provides for safely sending files.
 
-It sends files from a specified directory to the client and supports file downloads and static file serving.
+It sends files from a specified directory to the client, providing file download and static file serving.
 
 ```python
 send_from_directory(directory, path, **kwargs)
 ```
 
 - `directory`: the directory path where the file is located
-- `path`: the filename to send
+- `path`: the file name to send
 - `**kwargs`: other optional parameters (such as `mimetype`, `as_attachment`, etc.)
 
 for example
@@ -503,7 +515,7 @@ def download_file(filename):
 
 - **Security**: automatically handles path traversal attacks and prevents access to files outside the directory
 - **Convenience**: automatically handles MIME types
-- **Flexibility**: can control whether the file opens directly in the browser or is downloaded as an attachment
+- **Flexibility**: can control whether a file is opened directly in the browser or downloaded as an attachment
 
 **Code example - file download**:
 
@@ -527,9 +539,9 @@ def view_file(filename):
 
 ### `@app.route` VS `add_url_rule`
 
-If the static folder needs additional processing logic (such as permission checks, logging, etc.), use the `@app.route` approach; if it only provides file access, use the `add_url_rule` approach.
+If the static folder needs extra processing logic (such as permission checks, logging, etc.), use the `@app.route` approach. If it only needs to provide file access, use the `add_url_rule` approach.
 
-## Detailed Explanation of `add_url_rule`
+## Detailed explanation of `add_url_rule`
 
 ```python
 app.add_url_rule('/rendered_articles/<path:filename>',
@@ -537,13 +549,13 @@ app.add_url_rule('/rendered_articles/<path:filename>',
                  view_func=lambda filename: send_from_directory(app.config['RENDERED_ARTICLES_FOLDER'], filename))
 ```
 
-This code does the following:
+The purpose of this code is:
 
-- Creates a URL rule to handle all requests beginning with `/rendered_articles/`
-- When a URL such as `/rendered_articles/some-file.html` is accessed, it automatically calls the specified `view_func`
+- Create a URL rule to handle all requests starting with `/rendered_articles/`
+- When a URL like `/rendered_articles/some-file.html` is accessed, it automatically calls the specified `view_func`
 - `view_func` uses `send_from_directory` to send the file
 
-### Actual Workflow
+### Actual workflow
 
 In the code, this rule is mainly used in the `article_details.html` template:
 
@@ -570,9 +582,11 @@ send_from_directory(app.config['RENDERED_ARTICLES_FOLDER'], filename)
 # 4. 返回文件内容给用户
 ```
 
+
+
 # Render Template
 
-Flask uses the `render_template` function to load HTML files. By default, it looks for template files in the `templates` folder.
+Flask uses the `render_template` function to load HTML files, and by default it looks for template files in the `templates` folder.
 
 How it works: load the specified template file -> inject the passed variable data into the template -> return the rendered HTML string
 
@@ -614,15 +628,17 @@ def hello(name=None):
 </html>
 ```
 
+
+
 ## Jinja2
 
 Flask uses Jinja2 as its template engine by default, so it has some advanced features.
 
 > [!note]
 >
-> For more details, see [Template Designer Documentation — Jinja Documentation (3.1.x)](https://jinja.palletsprojects.com/en/stable/templates/)
+> For more detailed content, see [Template Designer Documentation — Jinja Documentation (3.1.x)](https://jinja.palletsprojects.com/en/stable/templates/)
 
-### Delimiters
+### delimiter
 
 `{{ }}` - used to output the value of a variable or expression
 
@@ -655,7 +671,7 @@ This kind of comment is removed when the template is rendered, while HTML commen
 <p>Hello World</p>
 ```
 
-### Global Variable
+### Global variable
 
 ### Template Inheritance
 
@@ -690,7 +706,7 @@ This is one of Jinja2's most powerful features, implemented with the `{% extends
 
 ### Macros
 
-Macros are similar to functions in other programming languages and let you reuse template code.
+Macros are similar to functions in other programming languages and can be used to reuse template code.
 
 ```html
 {# macros.html #}
@@ -733,7 +749,7 @@ Using macros:
 
 ### Include
 
-You can use `{% include %}` to include other template files:
+Use `{% include %}` to include other template files:
 
 ```html
 {# components/header.html #}
@@ -787,7 +803,7 @@ You can import an entire template file as a module:
 
 ### Context Processors
 
-Register a context processor in Flask to make variables available in all templates:
+Register context processors in Flask to make variables available in all templates:
 
 ```python
 @app.context_processor
@@ -801,7 +817,7 @@ def utility_processor():
     )
 ```
 
-Use in any template:
+Use them in any template:
 
 ```html
 <p>Price: {{ format_price(100) }}</p>
@@ -811,6 +827,8 @@ Use in any template:
 # Redirects and Errors
 
 next : [Quickstart — Flask Documentation (3.1.x)](https://flask.palletsprojects.com/en/stable/quickstart/#redirects-and-errors)
+
+
 
 # Reference
 

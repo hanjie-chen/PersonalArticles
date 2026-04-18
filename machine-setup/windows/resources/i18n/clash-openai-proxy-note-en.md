@@ -1,12 +1,21 @@
-<!-- source_blob: 024c979cdb05d71687774cd82327e81ed2f107db -->
+---
+Title: Codex App Reconnect Issue Caused by Clash Rules on Windows
+SourceBlob: 024c979cdb05d71687774cd82327e81ed2f107db
+---
+
+```
+BriefIntroduction: While using the Codex app on Windows 10, I kept running into a `reconnecting` issue. It would only start thinking after failing five times. I had Codex analyze it, and it finally got fixed after burning through half of the 128k context window. The conclusion was that the Clash rules were not written correctly and the traffic was falling through to `GEOIP` matching, so I’m documenting it here.
+```
+
+<!-- split -->
 
 # Issue Description
 
-When using Codex in a Windows 10 environment, it frequently only succeeds in thinking after `reconnect` appears.
+When using Codex in a Windows 10 environment, it frequently gets stuck on `reconnect` before it can successfully start thinking.
 
 # Root Cause
 
-In the currently used Clash subscription rules, there is:
+In the Clash subscription rules currently in use, there is:
 
 ```yaml
 - GEOIP,CN,DIRECT
@@ -15,15 +24,15 @@ In the currently used Clash subscription rules, there is:
 
 The problem is:
 
-1. Some resolution results for `chatgpt.com` or `chat.openai.com` are incorrectly identified as `CN`
-2. Once they match `GEOIP,CN,DIRECT`, the request is sent directly
+1. Some DNS resolution results for `chatgpt.com` or `chat.openai.com` may be incorrectly identified as `CN`
+2. Once they hit `GEOIP,CN,DIRECT`, the request is sent directly
 3. After the direct connection times out, Codex starts behaving like it is repeatedly `reconnect`ing
 
 In other words, the traffic-splitting rules are not precise enough.
 
 # Resolution
 
-In the currently active subscription file, move the OpenAI-related domain rules ahead of `GEOIP,CN,DIRECT`. The core rules are:
+In the currently active subscription file, place the OpenAI-related domain rules before `GEOIP,CN,DIRECT`. The core rules are as follows:
 
 ```yaml
 - DOMAIN-SUFFIX,chatgpt.com,⚓️其他流量
@@ -34,7 +43,7 @@ In the currently active subscription file, move the OpenAI-related domain rules 
 
 This ensures that `chatgpt.com`, `chat.openai.com`, `ab.chatgpt.com`, `oaistatic.com`, and `oaiusercontent.com` all go through the proxy first instead of falling through to `GEOIP,CN,DIRECT`.
 
-However, if we manually update the subscription, these manual rules will be overwritten. So we additionally created a manual automatic repair solution.
+However, if we manually update the subscription, those manual rules will be overwritten. So we added an extra manual auto-repair solution.
 
 We wrote a PowerShell script and placed it at: `C:\Users\Windows 10\.config\clash\codex-maintain-openai-rules.ps1`
 
@@ -42,7 +51,7 @@ Its purpose is to:
 
 1. Find the currently active Clash profile
 2. Automatically check whether the OpenAI rules exist
-3. Reinsert them before `GEOIP,CN,DIRECT` if they are missing
+3. If they are missing, reinsert them before `GEOIP,CN,DIRECT`
 4. Generate the runtime configuration currently used for execution
 5. Hot-reload Clash
 
@@ -59,14 +68,14 @@ Set-Alias -Name clash-fix-openai -Value Fix-ClashOpenAIRules
 
 This way, after manually updating the Clash subscription, we can run the `clash-fix-openai` command to write those rules back in.
 
-# Troubleshoot
+# Troubleshooting
 
-If `reconnect` appears again later, how do you check whether the OpenAI rules are still there and whether the script is working?
+If `reconnect` shows up again later, how do you check whether the OpenAI rules are still there and whether the script is working?
 
 Check in the following order:
 
 1. Whether Clash is running and the local port `127.0.0.1:7890` is still listening
-2. Whether the current profile still retains the OpenAI rules
+2. Whether the OpenAI rules are still present in the current profile
 3. Whether the Clash logs show that the DomainSuffix rules were matched
 
 ```powershell
@@ -94,9 +103,9 @@ rAddr=chatgpt.com:443 ... rule=GeoIP(CN) proxy=DIRECT
 
 then the old problem has returned.
 
-# powershell scripts
+# PowerShell Scripts
 
-Main maintenance PowerShell script code
+Main maintenance script PowerShell code
 
 File: `C:\Users\Windows 10\.config\clash\codex-maintain-openai-rules.ps1`
 

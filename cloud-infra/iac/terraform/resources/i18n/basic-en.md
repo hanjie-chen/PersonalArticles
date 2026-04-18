@@ -1,14 +1,23 @@
-<!-- source_blob: 724501b7210f3ae1d638743e5e2bee4d9d29ff9b -->
+---
+Title: Beginner's Guide to Terraform
+SourceBlob: 724501b7210f3ae1d638743e5e2bee4d9d29ff9b
+---
 
-# Terraform Beginner's Guide
+```
+BriefIntroduction: A beginner's guide to Terraform
+```
 
-The pain of cloud-native work: imagine clicking through a cloud console to create 10 servers, configure networking, and set up firewalls. It takes half a day. Then the next day you realize you need to build the same test environment again in another region. Wouldn't that be maddening?
+<!-- split -->
 
-Infrastructure as Code (IaC): what if you could write all of that configuration down like code, and every time you clicked "run," the environment would be created automatically? That is exactly what Terraform is for.
+# Beginner's Guide to Terraform
 
-In simple terms, Terraform uses code to manage components on the cloud (`azure`, `gcp`, `aws`). This means you no longer have to keep clicking around in the portal. It is much easier to manage, and when creating many resources, it can do so in parallel to speed things up.
+The pain point of cloud-native: imagine spending half a day clicking around a cloud platform to create 10 servers, configure networking and firewalls, and finish everything manually. Then the next day, you realize you need to build the exact same test environment in another region. Wouldn't that be a nightmare?
 
-Download it from the official site: [Install | Terraform | HashiCorp Developer](https://developer.hashicorp.com/terraform/install). You can use the command `terraform --version` to verify that the installation is complete.
+Infrastructure as Code (IaC): if you could write all of that configuration down like code, and every time you just click "run" and the environment gets built automatically, wouldn't that be great? That's exactly what Terraform is meant to do.
+
+Put simply, Terraform uses code to manage components on the cloud (`azure`, `gcp`, `aws`), so you no longer need to click around in the portal. It is also very convenient to manage, and when creating many resources, they can be provisioned in parallel to speed things up.
+
+Download it from the official website: [Install | Terraform | HashiCorp Developer](https://developer.hashicorp.com/terraform/install). You can verify that the installation is complete with the command `terraform --version`.
 
 ```shell
 $ terraform --version
@@ -22,14 +31,14 @@ If you use VS Code, you can also install the official extension: HashiCorp Terra
 
 A minimal runnable Terraform project usually contains the following four core files:
 
-  - `providers.tf`: declares the provider (which cloud you want to operate on)
+  - `providers.tf`: declares the provider (which cloud platform to operate on)
   - `main.tf`: defines cloud resources (`resource`)
-  - `variables.tf` & `terraform.tfvars`: reusable parameters (such as region/name) and sensitive passwords
+  - `variables.tf` & `terraform.tfvars`: reusable parameters (such as `region` / `name`) and sensitive passwords
   - `outputs.tf`: information you want printed in the terminal after deployment (such as an IP address)
 
 ## Syntax (main.tf)
 
-In Terraform, the syntax of a resource block is:
+In Terraform, the syntax for a resource block is:
 
 ```cpp
 resource "<resource-type>" "<local-resource-name>" {
@@ -37,7 +46,7 @@ resource "<resource-type>" "<local-resource-name>" {
 }
 ```
 
-For example, to create an Azure resource group:
+For example, creating an Azure resource group:
 
 ```cpp
 resource "azurerm_resource_group" "main" {
@@ -48,9 +57,9 @@ resource "azurerm_resource_group" "main" {
 
 Here:
 
-- `"azurerm_resource_group"` is the resource type, meaning it creates an Azure resource group.
+- `"azurerm_resource_group"` is the resource type, which means creating an Azure resource group
 
-- `"main"` is the local resource name. It is only used inside Terraform code, making it easier for other resources to reference it. For example:
+- `"main"` is the local resource name. It is only used inside Terraform code so other resources can reference it conveniently. For example:
 
   ```cpp
   resource "azurerm_virtual_network" "main" {
@@ -63,7 +72,7 @@ Here:
   > [!note]
   >
   > - This name must be unique within the scope of the Terraform configuration, but it is not used as the actual resource name in the cloud provider.
-  > - You can choose any name that fits your preference and project needs, such as `"main"`, `"resource_group"`, or `"rg"`.
+  > - You can choose any suitable name based on your own preference and project needs, such as `"main"`, `"resource_group"`, or `"rg"`.
 
 ## Variables (variables.tf & terraform.tfvars)
 
@@ -78,20 +87,20 @@ variable "resource_region" {
 
 > [!note]
 >
-> Azure uses two ways to represent location names:
+> Azure has two ways to represent location names:
 >
-> 1. Human-readable names (Display Name), such as `"Southeast Asia"` and `"East US"`, which are commonly shown in the Azure portal.
-> 2. Location codes (Location Name or Location Code), such as `"southeastasia"` and `"eastus"`, which are commonly used in API calls and scripts.
+> 1. Human-readable names (Display Name): such as "Southeast Asia", "East US", and so on, which are usually shown in the Azure portal.
+> 2. Location codes (Location Name or Location Code): such as "southeastasia", "eastus", and so on, which are usually used in API calls and scripts.
 >
-> In Terraform, the AzureRM provider (Azure Resource Manager Provider) accepts both forms.
+> In Terraform, the AzureRM provider (Azure Resource Manager Provider) accepts both formats for location names.
 >
-> It is recommended to use canonical location names, which are lowercase and contain no spaces, such as `"southeastasia"`.
+> It is recommended to use canonical location names, meaning all lowercase with no spaces, such as `"southeastasia"`.
 >
-> This is because canonical location names keep your configuration consistent with Azure APIs, CLI tools, and SDKs, which typically use that format to specify locations.
+> This is because canonical location names keep your configuration consistent with Azure APIs, CLI tools, and SDKs. These tools typically use canonical location names to specify locations.
 
 ### Using Variables
 
-In other `.tf` files, such as `network.tf`, we can use variables defined in `variables.tf` through the `var.<variable-name>` syntax. For example:
+In other `.tf` files, such as `network.tf`, we can use variables defined in `variables.tf` with the format `var.<variable-name>`, e.g.
 
 ```yaml
 # variables.tf
@@ -115,9 +124,9 @@ resource "azurerm_resource_group" "main" {
 
 ### Sensitive variables
 
-Because the code will be pushed to GitHub, passwords must never be written in `variables.tf`. The best practice is to use a `terraform.tfvars` file instead.
+Because the code will be pushed to GitHub, passwords must never be written directly in `variables.tf`. The best practice is to use a `terraform.tfvars` file instead.
 
-Create a file named `terraform.tfvars` that contains the password variable. Then add that file to `.gitignore` so it will not be committed to GitHub.
+Create a file named `terraform.tfvars` containing the password variable, then add that file to `.gitignore` so it will not be committed to GitHub.
 
 1. Create the `terraform.tfvars` file:
 
@@ -125,9 +134,9 @@ Create a file named `terraform.tfvars` that contains the password variable. Then
    admin_password = "YourSecurePassword"
    ```
 
-2. Add `terraform.tfvars` to the `.gitignore` file.
+2. In the `.gitignore` file, add `terraform.tfvars`
 
-3. In `variables.tf`, declare the `admin_password` variable without a default value, and mark it as sensitive.
+3. In `variables.tf`, declare the `admin_password` variable without setting a default value, and mark it as sensitive.
 
    ```cpp
    variable "admin_password" {
@@ -137,9 +146,9 @@ Create a file named `terraform.tfvars` that contains the password variable. Then
    }
    ```
 
-4. Terraform will automatically read the variable value from `terraform.tfvars`.
+4. Terraform will automatically read variable values from `terraform.tfvars`.
 
-## Outputs
+## outputs
 
 After deployment, we usually need to retrieve some key information, such as the public IP of the VM we just created. This is defined in `outputs.tf`:
 
@@ -152,20 +161,20 @@ output "vm_public_ip" {
 
 # Terraform Workflow
 
-Before we begin, Terraform still needs cloud authentication in order to operate on cloud resources: [Azure](../azure/terraform/auth.md) [GCP](../gcp/terraform/auth.md)
+Before we begin, Terraform still needs cloud authentication in order to manage cloud resources: [Azure](../azure/terraform/auth.md) [GCP](../gcp/terraform/auth.md)
 
-After writing the `.tf` files above, we can execute Terraform's four-step workflow in order (`code --> cloud resource`). During this process, Terraform automatically generates several extremely important files and directories.
+After writing the `.tf` files above, we can execute Terraform's four-step command workflow in order (`code --> cloud resource`). During this process, Terraform will automatically generate some extremely important files and folders.
 
-## Step 1: Initialize (`terraform init`)
+## Step 1: initialize (`terraform init`)
 
-This command initializes a Terraform project. It is similar to `git init`, but it can only run after `providers.tf` has been written. Terraform reads your configuration, sees that you want to use Azure, and then does the following:
+This command initializes the Terraform project. It is similar to `git init`, but it can only run after `providers.tf` has been written. Terraform reads your configuration, sees that you want to use Azure, and then does the following:
 
-1. Downloads the provider plugin: automatically downloads Azure plugin code.
-2. Initializes the backend: configures where the state file is stored.
+1. Downloads provider plugins: automatically downloads Azure plugin code.
+2. Initializes the backend: configures where the state file will be stored.
 
-After running it, the following are created:
+Files and folders generated after running it:
 
-1. The `.terraform/` directory: a local cache directory that stores the plugins just downloaded. It must be added to `.gitignore`.
+1. The `.terraform/` folder: a local cache directory that stores the plugins just downloaded. It must be added to `.gitignore`.
 
    - Plugins (Providers) `.terraform/providers/...`
 
@@ -173,18 +182,18 @@ After running it, the following are created:
 
    - Modules `.terraform/modules/`
 
-     If your code references external modules, whether from a local path or a remote GitHub repository, `init` copies or links the module code here.
+     If your code references external modules, whether from a local path or a remote GitHub repository, `init` will copy or link the module code here.
 
    - Backend configuration `.terraform/terraform.tfstate`:
 
-     This is like a "pointer." It does not record your resources. It only records something like: "Hey Terraform, the real state file is in a remote S3 bucket, and its name is `network.tfstate`."
+     This works like a "pointer." It does not record your resources. It only records: "Hey, Terraform, the real state file is in the remote S3 bucket, and its name is `network.tfstate`."
 
-     Only when a `backend` is configured, such as AWS S3 or Azure Blob, will `init` generate this hidden file to record connection information.
+     This hidden file is generated only when a `backend` is configured (such as AWS S3, Azure Blob, etc.) so Terraform can record connection information.
 
 2. `.terraform.lock.hcl`: the version lock file. It ensures everyone on the team downloads the same provider versions and avoids version conflicts. This file should be committed to Git.
 
-   - If the file already exists, Terraform reads the existing `.terraform.lock.hcl` and initializes providers according to it.
-   - If the file does not exist, Terraform generates a new `.terraform.lock.hcl` during initialization.
+   - If this file already exists, Terraform reads the existing `.terraform.lock.hcl` and initializes providers according to it.
+   - If it does not exist, Terraform generates a new `.terraform.lock.hcl` during initialization.
 
 For example:
 
@@ -211,7 +220,7 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 ```
 
-## Step 2: Validate Syntax (`terraform validate`)
+## Step 2: validate syntax (`terraform validate`)
 
 The `terraform validate` command checks whether the syntax and logic of your Terraform configuration files are correct. For example:
 
@@ -222,46 +231,46 @@ Success! The configuration is valid.
 
 It checks:
 
-1. Syntax, such as matching brackets and correct quote usage.
-2. Whether resource attributes conform to the provider schema. For example, whether the `name` of `azurerm_network_interface` is a string.
-3. References, such as whether the variables or resources you reference actually exist.
+1. Syntax, such as matching brackets and correct quote usage
+2. Whether resource attributes match the Terraform provider schema, for example whether the `name` of `azurerm_network_interface` is a string
+3. References, such as whether the variables or resources you reference actually exist
 
 > [!note]
 >
-> It does not check whether the current cloud state or resources actually exist. As long as the syntax is correct and the resource definitions meet requirements, `validate` will not report an error.
+> It does not check whether cloud-side state or resources actually exist. As long as the syntax is correct and the configuration meets the resource requirements, `validate` will not report an error.
 
-## Step 3: Preview Changes (`terraform plan`)
+## Step 3: preview changes (`terraform plan`)
 
-The `terraform plan` command does not modify anything. It only outputs a "plan" that tells you what Terraform intends to do:
+The `terraform plan` command does not modify anything. It only outputs a "plan" telling you what Terraform intends to do:
 
-- `+` means a new resource will be created.
-- `-` means a resource will be destroyed.
-- `~` means a resource attribute will be modified.
+- `+` means a resource will be created
+- `-` means a resource will be destroyed
+- `~` means a resource attribute will be modified
 
-### Core Concept: Where Is the Boundary?
+### Core Concept: Where is the boundary?
 
-Many beginners have a major misunderstanding about `terraform plan`. They think it is some kind of "cloud vacuum cleaner" that will delete every resource that exists in the cloud but is not in the local code. That is wrong.
+Many beginners have a major misunderstanding about `terraform plan`: they think it is a "cloud vacuum cleaner" that will delete every resource in the cloud that exists remotely but not in local code. That is wrong.
 
-Terraform actually only manages its own defined scope, and that scope is determined by its state file (`terraform.tfstate`), which acts like a ledger.
+Terraform only manages its own territory, and that territory is defined by its state file (`terraform.tfstate`, the ledger).
 
-1. Exists in the cloud, but not in the code or the ledger:
-   For example, a coworker manually created a VM in the web console. Terraform ignores it completely and will never delete it, because it is outside Terraform's scope.
-2. Exists in the ledger and in the cloud, but you deleted it from the code:
-   Terraform notices immediately: "This machine is mine to manage, but today's code says it should be removed." Only then will `plan` output `- destroy` and remove it from the cloud.
-3. Someone manually changed a resource managed by Terraform:
-   For example, someone secretly added port 80 in the web console. Terraform notices that the actual state does not match the code, and `plan` outputs `~ update`. On the next deployment, it will remove port 80 and force the resource back to the state defined in code.
+1. If a resource exists in the cloud, but not in the code or the ledger:
+   (for example, a coworker manually created a VM in the web console), Terraform is effectively blind to it and will never delete it, because it is outside Terraform's scope.
+2. If a resource exists in the ledger and in the cloud, but you remove it from the code:
+   Terraform will detect it immediately and think: "This machine is under my management, but the latest code says it should be gone." At that point, `plan` will output `- destroy` and remove it from the cloud.
+3. If someone manually changes a resource managed by Terraform:
+   (for example, secretly opening port 80 in the console), Terraform will notice that the actual state no longer matches the code. `plan` will output `~ update`, and on the next deployment it will ruthlessly remove port 80 and force the resource back to the state defined in code.
 
-> Summary: Terraform only compares and corrects resources that it created and recorded itself. If a resource is not in the ledger, Terraform does not care about it at all.
+> Summary: Terraform only compares and corrects resources that it created itself and has recorded in its ledger. Anything not in that ledger is outside its concern.
 
-### Production Best Practice
+### Production best practice
 
-At the bottom of this command's output, you may also see a note like this:
+At the bottom of this command, you may also see a note like this:
 
 ```shell
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
 ```
 
-This is because `terraform apply` re-evaluates the state and generates a new plan. If something changes during that time, such as the remote state being modified or the code in your working directory being updated, then the actions performed by `terraform apply` may not exactly match the `terraform plan` output you reviewed earlier.
+That is because `terraform apply` will re-evaluate the state and generate a new plan. If anything changes during that time, such as remote state being modified or code in your working directory being updated, the actions performed by `terraform apply` may not exactly match the output you saw earlier from `terraform plan`.
 
 You can use the `-out` option:
 
@@ -269,24 +278,24 @@ You can use the `-out` option:
 terraform plan -out myplan.tfplan
 ```
 
-Terraform will then save the plan to `myplan.tfplan`, and you can run the saved plan file with:
+Then Terraform saves the plan to `myplan.tfplan`, and you can apply that exact saved plan with:
 
 ```shell
 terraform apply myplan.tfplan
 ```
 
-This ensures Terraform executes exactly the plan you reviewed earlier.
+This ensures Terraform executes strictly according to the plan you reviewed earlier.
 
-## Step 4: Deploy Resources (`terraform apply`)
+## Step 4: deploy resources (`terraform apply`)
 
-After confirming that the plan is correct, run the deployment.
+After confirming the plan is correct, execute the deployment.
 
-If you saved a plan file in the previous step, you can run `terraform apply myplan.tfplan` directly. Otherwise, run `terraform apply`. Terraform will show the plan again and ask you to type `yes` to confirm, unless you use the `-auto-approve` option to skip confirmation.
+If you saved the plan file in the previous step, you can run `terraform apply myplan.tfplan` directly. Otherwise, use `terraform apply`, which will show the plan again and ask you to type `yes` to confirm (or you can use the `-auto-approve` option to skip confirmation).
 
-Files generated after running it:
+File generated after running it:
 
-`terraform.tfstate`: the state file. Terraform writes all detailed information about the resources it just created in the cloud into this JSON file, including the password passed in from `tfvars`. This file is the only basis Terraform uses to manage these resources later. It contains sensitive information and must never be committed to Git.
+`terraform.tfstate`: the state file. Terraform writes detailed information about the resources it just created in the cloud into this JSON file, including the password passed in from `tfvars`. This is the only basis Terraform uses to manage those resources later. It contains sensitive information and must never be committed to Git.
 
-## Step 5: Check Output
+## Step 5: check output
 
-If outputs are defined in `outputs.tf`, they will be printed automatically after `apply` succeeds. You can also run `terraform output` at any time to view this key information again.
+If outputs are defined in `outputs.tf`, they will be printed automatically after a successful `apply`. You can also run `terraform output` at any time to view this key information again.

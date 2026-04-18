@@ -116,6 +116,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("root_dir", nargs="?", default=None, help="Repository root directory")
     parser.add_argument("--limit", type=int, default=1, help="Maximum number of candidates to translate")
     parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Re-translate every publishable article candidate even if SourceBlob already matches",
+    )
+    parser.add_argument(
         "--jobs",
         type=int,
         default=2,
@@ -134,7 +139,7 @@ def main() -> int:
     repo_root = (
         Path(args.root_dir).resolve() if args.root_dir else default_repo_root(Path(__file__))
     )
-    candidates = find_candidates(repo_root, max(args.limit, 0))
+    candidates = find_candidates(repo_root, max(args.limit, 0), force=args.force)
     total = len(candidates)
 
     if total == 0:

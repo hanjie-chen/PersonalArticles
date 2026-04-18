@@ -35,6 +35,10 @@ python .\translate.py
 
 - `--limit`
   - 限制本次列出或翻译的文章数量，默认是 `1`
+- `--force`
+  - `list-candidates.py` 和 `translate.py` 都支持
+  - 忽略“只看是否过期”的默认模式，把所有仍然需要升级或重翻的 publishable 文章加入当前批次
+  - 已经是当前英文稿格式、且 `SourceBlob` 已匹配的文章，不会重复进入下一批
 - `--jobs`
   - 仅 `translate.py` 支持
   - 同时并行启动多少个 `codex exec` 进程，默认是 `2`
@@ -49,7 +53,9 @@ python .\translate.py
 
 ```powershell
 python .kb-tools/translator/list-candidates.py --limit 5
+python .kb-tools/translator/list-candidates.py --limit 5 --force
 python .kb-tools/translator/translate.py --limit 1
+python .kb-tools/translator/translate.py --limit 5 --force
 python .kb-tools/translator/translate.py --limit 5 --jobs 2
 python .kb-tools/translator/translate.py --limit 1 --model gpt-5.4
 ```
@@ -58,14 +64,27 @@ python .kb-tools/translator/translate.py --limit 1 --model gpt-5.4
 
 - 只把“可发布且目录中存在 `resources/images/` 的顶层 `.md`”视为可翻译主稿
 - 英文稿路径固定为 `resources/i18n/<same-name>-en.md`
-- 英文稿顶部会写入一行：
+- 英文稿会写成单文件格式，包含：
 
-```md
-<!-- source_blob: <git-blob-hash> -->
+````md
+---
+Title: <English title>
+SourceBlob: <git-blob-hash>
+---
+
 ```
+BriefIntroduction: <English brief introduction>
+```
+
+<!-- split -->
+
+<English Markdown body>
+````
 
 - 如果英文稿不存在，则状态为 `missing_translation`
 - 如果英文稿存在，但 `source_blob` 和当前中文主稿不一致，则状态为 `outdated_translation`
+- 如果使用 `--force`，则状态会显示为 `force_translation`
+  - 这表示英文稿虽然没有过期，但仍停留在旧格式，需要升级到当前单文件格式
 - `translate.py` 遇到 `missing_translation` 或 `outdated_translation` 时，会整篇重写英文稿，不做增量更新
 - `translate.py` 开始执行时，会先打印本次命中的候选文章列表，再显示每篇文章的翻译进度
 - 如果翻译失败：

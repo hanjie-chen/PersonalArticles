@@ -1,12 +1,21 @@
-<!-- source_blob: a329c20dabea9c6457525ab576c464632f7da097 -->
+---
+Title: Personal Windows PowerShell Commands
+SourceBlob: a329c20dabea9c6457525ab576c464632f7da097
+---
 
-# How to Use These Custom Commands
+```
+BriefIntroduction: Personal Windows PowerShell commands for convenience.
+```
 
-Add these commands to the PowerShell `$PROFILE`, then run `. $PROFILE` to reload the file. After that, you can use these commands.
+<!-- split -->
 
-# The `open` Command
+# How to use these custom commands
 
-It opens a file in a maximized window. If it opens a folder, it uses the default window size.
+Add these commands to the PowerShell `$PROFILE`, and then run `. $PROFILR` to reload the file. After that, you can use these commands.
+
+# Command `open`
+
+It opens a file in a maximized window, but if it opens a folder, it uses the default size.
 
 ```powershell
 # Custom aliases created by Plain 2024-09-19
@@ -31,9 +40,9 @@ function Open-Smart {
 Set-Alias -Name open -Value Open-Smart
 ```
 
-# The `touch` Command
+# Command `touch`
 
-It works like the Linux `touch` command. If the file does not exist, it creates one. If the file already exists, it updates the timestamp.
+It works like the Linux command `touch`. If the file does not exist, it will create one. If the file already exists, it will update the timestamp.
 
 ```powershell
 # custom command created by Plain 2024-09-23
@@ -60,13 +69,13 @@ function Touch-File {
 Set-Alias -Name touch -Value Touch-File
 ```
 
-# The `tree` Command
+# Command `tree`
 
-A Linux-like `tree` command that replaces PowerShell's built-in `tree`.
+A Linux-like `tree` command, used to replace PowerShell's native `tree`.
 
-Use `tree -DirectoriesOnly` to show only directories.
+Use `tree -DirectoriesOnly` to show directories only.
 
-Use `tree -Ignore "images", "image"` to ignore certain folders.
+Use `tree -Ignore "images", "image"` to ignore some folders.
 
 ```powershell
 # Linux-like tree command, added by Plain in 2024-11-15
@@ -137,7 +146,7 @@ function Show-TreeWithFiles {
 Set-Alias -Name tree -Value Show-TreeWithFiles -Force
 ```
 
-The colors used for the `tree` output:
+The colors for the `tree` output:
 
 ```powershell
 # add by Plain in 2024-10-05

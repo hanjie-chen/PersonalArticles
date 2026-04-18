@@ -75,7 +75,23 @@ class TranslateArticlesTest(unittest.TestCase):
             ), mock.patch.object(
                 kb_translation,
                 "request_translation",
-                return_value="# English title\n\nEnglish body.\n",
+                return_value=textwrap.dedent(
+                    """\
+                    ---
+                    Title: English title
+                    ---
+
+                    ```
+                    BriefIntroduction: English intro
+                    ```
+
+                    <!-- split -->
+
+                    # English title
+
+                    English body.
+                    """
+                ),
             ):
                 translation_path = kb_translation.translate_candidate(
                     repo_root=repo_root,
@@ -88,7 +104,9 @@ class TranslateArticlesTest(unittest.TestCase):
                 article_path.parent / "resources" / "i18n" / "basic-en.md",
             )
             content = translation_path.read_text(encoding="utf-8")
-            self.assertTrue(content.startswith(f"<!-- source_blob: {'a' * 40} -->\n\n"))
+            self.assertIn("---\nTitle: English title\nSourceBlob: " + ("a" * 40), content)
+            self.assertIn("BriefIntroduction: English intro", content)
+            self.assertIn("<!-- split -->", content)
             self.assertIn("# English title", content)
             self.assertIn("English body.", content)
 
@@ -103,6 +121,16 @@ class TranslateArticlesTest(unittest.TestCase):
 
             translated_markdown = textwrap.dedent(
                 """\
+                ---
+                Title: English title
+                ---
+
+                ```
+                BriefIntroduction: English intro
+                ```
+
+                <!-- split -->
+
                 <img src="./resources/images/cover.png" alt="cover" style="zoom: 67%;" />
 
                 # English title
@@ -128,6 +156,7 @@ class TranslateArticlesTest(unittest.TestCase):
 
             content = translation_path.read_text(encoding="utf-8")
             self.assertNotIn('<img src="./resources/images/cover.png"', content)
+            self.assertIn("BriefIntroduction: English intro", content)
             self.assertIn("# English title", content)
             self.assertIn("English body.", content)
 
@@ -181,6 +210,11 @@ class TranslateArticlesTest(unittest.TestCase):
         self.assertEqual(args.limit, 5)
         self.assertEqual(args.jobs, 2)
 
+    def test_build_parser_accepts_force_option(self):
+        parser = translate_cli.build_parser()
+        args = parser.parse_args(["--force"])
+        self.assertTrue(args.force)
+
     def test_build_parser_defaults_jobs_to_two(self):
         parser = translate_cli.build_parser()
         args = parser.parse_args([])
@@ -216,6 +250,7 @@ class TranslateArticlesTest(unittest.TestCase):
                 limit=5,
                 model=None,
                 jobs=2,
+                force=False,
             )
             stdout = io.StringIO()
             stderr = io.StringIO()
@@ -234,9 +269,60 @@ class TranslateArticlesTest(unittest.TestCase):
         self.assertIn("Finished", output)
         self.assertIn("success: 2", output)
 
+    def test_main_passes_force_to_candidate_finder(self):
+        repo_root = Path(r"E:\repo")
+        with mock.patch.object(
+            translate_cli, "build_parser"
+        ) as build_parser, mock.patch.object(
+            translate_cli, "find_candidates", return_value=[]
+        ) as find_candidates:
+            build_parser.return_value.parse_args.return_value = mock.Mock(
+                root_dir=str(repo_root),
+                limit=5,
+                model=None,
+                jobs=2,
+                force=True,
+            )
+            stdout = io.StringIO()
+            stderr = io.StringIO()
+            with redirect_stdout(stdout), redirect_stderr(stderr):
+                exit_code = translate_cli.main()
+
+        self.assertEqual(exit_code, 0)
+        find_candidates.assert_called_once_with(repo_root, 5, force=True)
+        self.assertIn("Found 0 candidate(s)", stdout.getvalue())
+
     def test_default_repo_root_points_to_kb_root(self):
         expected = MODULE_PATH.parents[2]
         self.assertEqual(kb_translation.default_repo_root(MODULE_PATH), expected)
+
+    def test_read_translation_source_blob_supports_new_frontmatter_field(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            translation_path = Path(temp_dir) / "basic-en.md"
+            translation_path.write_text(
+                textwrap.dedent(
+                    """\
+                    ---
+                    Title: English title
+                    SourceBlob: 1111111111111111111111111111111111111111
+                    ---
+
+                    ```
+                    BriefIntroduction: English intro
+                    ```
+
+                    <!-- split -->
+
+                    # English title
+                    """
+                ),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(
+                kb_translation.read_translation_source_blob(translation_path),
+                "1111111111111111111111111111111111111111",
+            )
 
     def test_request_translation_uses_codex_exec_and_returns_last_message(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -255,7 +341,11 @@ class TranslateArticlesTest(unittest.TestCase):
             with mock.patch.object(kb_translation.subprocess, "run", side_effect=fake_run):
                 translated = kb_translation.request_translation(
                     repo_root=repo_root,
-                    source_markdown="# 中文\n\n正文\n",
+                    source_article=kb_translation.SourceArticle(
+                        title="中文标题",
+                        brief_intro="中文简介",
+                        body="# 中文\n\n正文\n",
+                    ),
                     model="gpt-test",
                 )
 

@@ -1,37 +1,46 @@
-<!-- source_blob: aa2cad30895b14a47419bd83b344928cea365446 -->
+---
+Title: Git Hooks Usage Guide
+SourceBlob: aa2cad30895b14a47419bd83b344928cea365446
+---
+
+```
+BriefIntroduction: Use a Git hook to check image file extensions and convert them to lowercase. Because my website runs on Linux, it is case-sensitive. But I often edit Markdown on Windows, which is not case-sensitive. That means images can display correctly on Windows while returning 404 Not Found on my website.
+```
+
+<!-- split -->
 
 # Before we begin
 
-Suppose we run into a problem like this: in a Windows environment, we have a Git repository that contains images, and those images have extensions with mixed casing, such as `.PNG, .png`
+Suppose we run into a problem like this: in a Windows environment, we have a Git repository that contains images, and those image file extensions may use both uppercase and lowercase letters, such as `.PNG` and `.png`.
 
-Now we need to change any uppercase image extensions to lowercase, and also ensure that every future commit keeps image extensions lowercase. What should we do?
+If we need to rename uppercase image extensions to lowercase, and also ensure that every future commit keeps image extensions lowercase, what should we do?
 
-A straightforward idea is to first scan the existing image files, rename any uppercase extensions to lowercase, commit that change, and then `git push` it to GitHub.
+A straightforward idea is to first scan the existing image files, rename any uppercase extensions to lowercase, commit the change, and then `git push` it to GitHub.
 
-The first issue we will run into is that Windows file names are case-insensitive. Git does have a solution for this, which is to [enable case sensitivity](./Git使用指南#Git between different OS) specifically in the Git repository.
+The first problem we will encounter is that Windows file names are case-insensitive. Git does have a solution for this, which is to [enable case sensitivity](./Git使用指南#Git between different OS) specifically in the Git repository.
 
-But how do we ensure that all future committed images also use lowercase extensions? We can try using Git hooks to automatically trigger a script we write ourselves.
+But how do we ensure that all future committed images also use lowercase extensions? We can try using Git Hooks to automatically trigger a script that we write ourselves.
 
 # Git Hooks
 
-Git Hooks are Git's scripting mechanism that allows you to automatically run custom scripts before or after certain events occur in a Git repository. They can help you automate workflows, perform code quality checks, enforce commit conventions, and more.
+Git Hooks are a scripting mechanism in Git that allows you to automatically run custom scripts before or after certain events in a Git repository. They can help you automate workflows, perform code quality checks, enforce commit conventions, and more.
 
 Git Hooks are divided into two categories:
 
-1. **Client-side Hooks**: Run in the local repository and respond to operations such as commit, merge, and push. They are commonly used for code formatting, linting, commit message validation, and so on.
-2. **Server-side Hooks**: Run in the remote repository (server) and respond to events such as receiving pushes or updating refs. They are commonly used to enforce commit policies or trigger continuous integration.
+1. **Client-side Hooks**: Run in the local repository and respond to operations such as commit, merge, and push. They are commonly used for code formatting, code checks, commit message validation, and so on.
+2. **Server-side Hooks**: Run in the remote repository (server) and respond to events such as receiving pushes or updating refs. They are commonly used to enforce commit policies, trigger continuous integration, and so on.
 
 > [!note]
 >
 > server-side hooks:
 >
-> If you manage your own Git server, you can use server-side hooks to enforce stricter policies. For example, you can block commits containing certain keywords, or automatically deploy code after receiving a push.
+> If you manage your own Git server, you can use server-side hooks to enforce stricter policies. For example, you can block commits containing certain keywords, or automatically deploy code after a push is received.
 >
-> **Note**: If you use a hosted Git platform such as GitHub or GitLab, you usually cannot customize server-side hooks. However, these platforms provide features like Webhooks and CI/CD integrations that can achieve similar goals.
+> **Note**: If you use a hosted Git platform such as GitHub or GitLab, you usually cannot customize server-side hooks. However, these platforms provide Webhooks, CI/CD integrations, and similar features that can achieve comparable results.
 
 ## `./git/hooks` dir
 
-Git Hooks are stored in the `.git/hooks` directory of each repository. By default, this directory contains some example scripts ending in `.sample`
+Git Hooks are stored in the `.git/hooks` directory of each repository. By default, this directory contains some example scripts ending with `.sample`.
 
 ```powershell
 PS C:\Users\Plain\PersonalArticles\.git\hooks> ls
@@ -58,11 +67,11 @@ Mode                 LastWriteTime         Length Name
 
 These example scripts are templates you can use as references. If you want to enable a hook, simply remove the `.sample` extension, write your own script, and make sure the script has executable permission.
 
-## Sharing Git Hooks in a project
+## Sharing Git Hooks in a Project
 
-By default, Git Hooks are not added to version control, which means other users who clone the repository will not automatically receive your hook scripts. To solve this, we can store the hook scripts in the repository and set `hooksPath`.
+By default, Git Hooks are not added to version control, which means other users who clone the repository will not automatically get your hook scripts. To solve this, we can store the hook scripts inside the repository and configure `hooksPath`.
 
-Create a directory in the repository to store the hook scripts:
+Create a directory in the repository to store hook scripts:
 
 ```bash
 mkdir .githooks
@@ -87,13 +96,13 @@ git add .githooks
 git commit -m "Add git hooks"
 ```
 
-This way, other developers will also get the hook scripts after cloning the repository.
+This way, after other developers clone the repository, they will also get the hook scripts.
 
-# check image upper case extension
+# Check uppercase image extensions
 
-We use the `pre-commit` hook to automatically run a script before the `git commit` command. I use Python because both my Windows and Linux environments have Python available.
+We use the `pre-commit` hook to automatically run a script before the `git commit` command. I chose Python because both my Windows and Linux environments have Python available.
 
-Main function: before committing code, automatically convert the extensions of all image files in the staging area whose extensions contain uppercase letters to lowercase.
+Main function: before code is committed, automatically convert the extensions of all image files in the staging area whose extensions contain uppercase letters to lowercase.
 
 pre-commit
 
@@ -243,11 +252,11 @@ result
 # -*- coding: utf-8 -*-
 ```
 
-The first line, `#!/usr/bin/env python3`, is a shebang used to specify that the script should be run with the `python3` interpreter. When the script is executed directly on a Unix/Linux system, the system will use the specified interpreter to run it.
+The first line, `#!/usr/bin/env python3`, is a Shebang used to specify that the script should be interpreted by `python3`. When the script is executed directly on a Unix/Linux system, the system will use the specified interpreter to run it.
 
 > [!note]
 >
-> Pay special attention to the fact that the system must have the `python3` environment variable available, not just the `python` environment variable. In the following situation, the script cannot run:
+> Pay special attention here: the system must have the `python3` environment variable available, not just the `python` environment variable. In the following case, the script will not run:
 >
 > ```shell
 > ➜ articles git:(main) ✗ python3 --version
@@ -259,7 +268,7 @@ The first line, `#!/usr/bin/env python3`, is a shebang used to specify that the 
 
 The second line, `# -*- coding: utf-8 -*-`, specifies that the script file uses UTF-8 encoding, which is important for correctly handling strings that contain non-ASCII characters.
 
-### Importing the required modules:
+### Import the required modules:
 
 ```python
 import os
@@ -268,10 +277,10 @@ import subprocess
 ```
 
 - The `os` module provides functionality for interacting with the operating system, such as working with files and directories.
-- The `sys` module provides functionality for interacting with the Python interpreter, such as exiting the program or accessing command-line arguments.
-- The `subprocess` module allows us to start new processes, connect to their input/output/error pipes, and retrieve return values.
+- The `sys` module provides functionality for interacting with the Python interpreter, such as exiting the program and accessing command-line arguments.
+- The `subprocess` module allows us to start new processes, connect to their input/output/error pipes, and retrieve their return values.
 
-### Getting the list of files in the staging area:
+### Get the list of files in the staging area:
 
 ```python
 def get_staged_files():
@@ -281,12 +290,12 @@ def get_staged_files():
     return files
 ```
 
-- Use `subprocess.run` to execute the Git command `git diff --cached --name-only` and get the list of changed files in the staging area.
-  - `stdout=subprocess.PIPE` means the subprocess standard output is captured into `result.stdout`.
-  - `text=True` means the output is handled as text strings.
+- Use `subprocess.run` to execute the Git command `git diff --cached --name-only` and retrieve the list of changed files in the staging area.
+  - `stdout=subprocess.PIPE` means the standard output of the subprocess is captured into `result.stdout`.
+  - `text=True` means the output is handled as a string.
 - Split the output by lines to get the file list `files`.
 
-### Converting uppercase image extensions to lowercase:
+### Convert uppercase image extensions to lowercase:
 
 ```python
 def rename_image_extensions(files):
@@ -310,20 +319,20 @@ def rename_image_extensions(files):
     return renamed
 ```
 
-- Define a list `image_extensions` containing uppercase image extensions.
-- Iterate through the list of files in the staging area:
+- Define a list `image_extensions` that contains uppercase image extensions.
+- Iterate through the list of staged files:
   - Use `os.path.isfile(file)` to check whether the file exists in the working tree.
-  - Use `os.path.splitext(file)` to separate the file name and extension.
-  - Check the conditions:
+  - Use `os.path.splitext(file)` to split the file name and extension.
+  - Check the following conditions:
     - `ext.upper() in image_extensions`: whether the file extension, converted to uppercase, is in the image extension list.
     - `ext != ext.lower()`: whether the extension contains uppercase letters.
-  - If the conditions are met:
+  - If both conditions are met:
     - Use `ext.lower()` to convert the extension to lowercase and generate the new file name `new_file`.
     - Use `os.rename(file, new_file)` to rename the file.
     - Update the Git staging area:
       - `git add new_file`: add the new file to the staging area.
-      - `git rm --cached file`: remove the old file from the staging area index only, without deleting the file from the working tree.
-    - Set `renamed = True`, indicating that at least one file was renamed.
+      - `git rm --cached file`: remove the old file from the staging area, but only from the index, not from the working tree.
+    - Set `renamed = True` to indicate that at least one file was renamed.
     - Output the rename information.
 
 ### Main function entry point:
@@ -348,8 +357,8 @@ if __name__ == '__main__':
 ```
 
 - Call `get_staged_files()` to get the list of files in the staging area.
-- If there are no files in the staging area, the program exits normally, allowing the commit to continue.
+- If there are no files in the staging area, the program exits normally and allows the commit to continue.
 - Call `rename_image_extensions(files)` to process the files.
-- Decide the next step based on the value of `rename`:
-  - If any files were renamed, output a message and stop the commit (`sys.exit(1)`), so the user can review the changes and commit again.
-  - If no files were renamed, the program exits normally (`sys.exit(0)`), allowing the commit to continue.
+- Decide the next step based on the value of `renamed`:
+  - If any files were renamed, output a message and stop the commit (`sys.exit(1)`) so the user can review the changes and commit again.
+  - If no files were renamed, the program exits normally (`sys.exit(0)`) and allows the commit to continue.

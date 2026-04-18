@@ -10,7 +10,7 @@ from pathlib import Path
 
 BRIEF_INTRO_PATTERN = re.compile(r"```.*?BriefIntroduction:\s*(.*?)```", re.DOTALL)
 FRONTMATTER_PATTERN = re.compile(r"\A---\s*\n(.*?)\n---\s*\n", re.DOTALL)
-SOURCE_BLOB_PATTERN = re.compile(r"<!--\s*source_blob:\s*([0-9a-f]{40})\s*-->")
+SOURCE_BLOB_PATTERN = re.compile(r"<!--\s*source_blob:\s*([^\s]+)\s*-->")
 REQUIRED_FRONTMATTER_FIELDS = ("Title", "Author", "CoverImage", "RolloutDate")
 
 
@@ -18,6 +18,20 @@ REQUIRED_FRONTMATTER_FIELDS = ("Title", "Author", "CoverImage", "RolloutDate")
 class Candidate:
     source_md: Path
     status: str
+
+
+@dataclass(frozen=True)
+class SourceArticle:
+    title: str
+    brief_intro: str
+    body: str
+
+
+@dataclass(frozen=True)
+class TranslatedArticle:
+    title: str
+    brief_intro: str
+    body: str
 
 
 def default_repo_root(script_path: Path) -> Path:
@@ -84,6 +98,13 @@ def is_publishable_markdown(md_path: Path) -> bool:
     return all(metadata.get(field) for field in REQUIRED_FRONTMATTER_FIELDS)
 
 
+def extract_brief_intro(text: str) -> str | None:
+    match = BRIEF_INTRO_PATTERN.search(text)
+    if not match:
+        return None
+    return match.group(1).strip()
+
+
 def compute_source_blob(root_dir: Path, source_md: Path) -> str:
     result = subprocess.run(
         [
@@ -107,22 +128,49 @@ def read_translation_source_blob(translation_md: Path) -> str | None:
         return None
 
     text = translation_md.read_text(encoding="utf-8")
+    metadata = extract_frontmatter(text)
+    if metadata and metadata.get("SourceBlob"):
+        return metadata["SourceBlob"]
     match = SOURCE_BLOB_PATTERN.search(text)
     if not match:
         return None
     return match.group(1)
 
 
+def uses_current_translation_format(translation_md: Path) -> bool:
+    if not translation_md.exists():
+        return False
+
+    text = translation_md.read_text(encoding="utf-8")
+    metadata = extract_frontmatter(text)
+    if not metadata:
+        return False
+    if not metadata.get("Title") or not metadata.get("SourceBlob"):
+        return False
+    if not extract_brief_intro(text):
+        return False
+    return "<!-- split -->" in text
+
+
 def expected_translation_path(source_md: Path) -> Path:
     return source_md.parent / "resources" / "i18n" / f"{source_md.stem}-en.md"
 
 
-def extract_translation_source(source_md: Path) -> str:
+def extract_source_article(source_md: Path) -> SourceArticle:
     text = source_md.read_text(encoding="utf-8")
     divided_article = text.split("<!-- split -->", 1)
     if len(divided_article) != 2:
         raise ValueError(f"{source_md} is not publishable")
-    return divided_article[1].lstrip("\n")
+    metadata_part, body_part = divided_article
+    metadata = extract_frontmatter(metadata_part)
+    brief_intro = extract_brief_intro(metadata_part)
+    if not metadata or not metadata.get("Title") or not brief_intro:
+        raise ValueError(f"{source_md} is missing title or brief introduction")
+    return SourceArticle(
+        title=metadata["Title"],
+        brief_intro=brief_intro,
+        body=body_part.lstrip("\n"),
+    )
 
 
 def cover_image_path(source_md: Path) -> str | None:
@@ -158,7 +206,9 @@ def remove_leading_cover_image(translated_markdown: str, cover_image: str | None
     return "\n".join(remaining_lines).rstrip() + "\n"
 
 
-def find_candidates(root_dir: Path, limit: int | None = 1) -> list[Candidate]:
+def find_candidates(
+    root_dir: Path, limit: int | None = 1, *, force: bool = False
+) -> list[Candidate]:
     candidates: list[Candidate] = []
 
     for current_dir in sorted(root_dir.rglob("*")):
@@ -176,13 +226,34 @@ def find_candidates(root_dir: Path, limit: int | None = 1) -> list[Candidate]:
                 continue
 
             translation_md = expected_translation_path(source_md)
+            source_blob = compute_source_blob(root_dir, source_md)
+
+            if force:
+                if not translation_md.exists():
+                    candidates.append(
+                        Candidate(source_md=source_md, status="missing_translation")
+                    )
+                    continue
+
+                translation_blob = read_translation_source_blob(translation_md)
+                if translation_blob != source_blob:
+                    candidates.append(
+                        Candidate(source_md=source_md, status="outdated_translation")
+                    )
+                    continue
+
+                if not uses_current_translation_format(translation_md):
+                    candidates.append(
+                        Candidate(source_md=source_md, status="force_translation")
+                    )
+                continue
+
             if not translation_md.exists():
                 candidates.append(
                     Candidate(source_md=source_md, status="missing_translation")
                 )
                 continue
 
-            source_blob = compute_source_blob(root_dir, source_md)
             translation_blob = read_translation_source_blob(translation_md)
             if translation_blob != source_blob:
                 candidates.append(
@@ -195,19 +266,32 @@ def find_candidates(root_dir: Path, limit: int | None = 1) -> list[Candidate]:
 def request_translation(
     *,
     repo_root: Path,
-    source_markdown: str,
+    source_article: SourceArticle,
     model: str | None,
 ) -> str:
     prompt = (
-        "Translate the following Markdown article body from Simplified Chinese to English.\n"
+        "Translate the following Simplified Chinese Markdown article into English.\n"
         "Requirements:\n"
-        "- Keep the Markdown structure intact.\n"
-        "- Translate headings and prose naturally into clear English.\n"
+        "- Return a complete English article in this exact shape:\n"
+        "  ---\n"
+        "  Title: <English title>\n"
+        "  ---\n\n"
+        "  ```\n"
+        "  BriefIntroduction: <English brief introduction>\n"
+        "  ```\n\n"
+        "  <!-- split -->\n\n"
+        "  <English Markdown body>\n"
+        "- Keep the Markdown body structure intact.\n"
+        "- Translate headings, title, and brief introduction naturally into clear English.\n"
         "- Preserve code fences, code content, inline code, links, image paths, and HTML tags unless natural-language alt text needs translation.\n"
-        "- Do not add frontmatter.\n"
-        "- Return only the translated Markdown body.\n\n"
-        "Markdown body:\n"
-        f"{source_markdown}"
+        "- Do not include Author, CoverImage, RolloutDate, or SourceBlob.\n"
+        "- Return only the translated article content.\n\n"
+        "Source title:\n"
+        f"{source_article.title}\n\n"
+        "Source brief introduction:\n"
+        f"{source_article.brief_intro}\n\n"
+        "Source Markdown body:\n"
+        f"{source_article.body}"
     )
 
     with tempfile.NamedTemporaryFile(
@@ -258,11 +342,42 @@ def request_translation(
     return translated + "\n"
 
 
+def parse_translated_article(translated_text: str) -> TranslatedArticle:
+    divided_article = translated_text.split("<!-- split -->", 1)
+    if len(divided_article) != 2:
+        raise ValueError("Translated article is missing <!-- split -->")
+
+    metadata_part, body_part = divided_article
+    metadata = extract_frontmatter(metadata_part)
+    brief_intro = extract_brief_intro(metadata_part)
+    if not metadata or not metadata.get("Title"):
+        raise ValueError("Translated article is missing Title")
+    if not brief_intro:
+        raise ValueError("Translated article is missing BriefIntroduction")
+
+    body = body_part.lstrip("\n")
+    return TranslatedArticle(
+        title=metadata["Title"],
+        brief_intro=brief_intro,
+        body=body,
+    )
+
+
 def write_translation_file(
-    translation_md: Path, source_blob: str, translated_markdown: str
+    translation_md: Path, source_blob: str, translated_article: TranslatedArticle
 ) -> None:
     translation_md.parent.mkdir(parents=True, exist_ok=True)
-    content = f"<!-- source_blob: {source_blob} -->\n\n{translated_markdown.lstrip()}"
+    content = (
+        "---\n"
+        f"Title: {translated_article.title}\n"
+        f"SourceBlob: {source_blob}\n"
+        "---\n\n"
+        "```\n"
+        f"BriefIntroduction: {translated_article.brief_intro}\n"
+        "```\n\n"
+        "<!-- split -->\n\n"
+        f"{translated_article.body.lstrip()}"
+    )
     translation_md.write_text(content, encoding="utf-8")
 
 
@@ -273,15 +388,19 @@ def translate_candidate(
     model: str | None,
 ) -> Path:
     source_blob = compute_source_blob(repo_root, candidate.source_md)
-    source_markdown = extract_translation_source(candidate.source_md)
+    source_article = extract_source_article(candidate.source_md)
     cover_image = cover_image_path(candidate.source_md)
-    translated_markdown = request_translation(
+    translated_text = request_translation(
         repo_root=repo_root,
-        source_markdown=source_markdown,
+        source_article=source_article,
         model=model,
     )
-    translated_markdown = remove_leading_cover_image(translated_markdown, cover_image)
+    translated_article = parse_translated_article(translated_text)
+    translated_article = TranslatedArticle(
+        title=translated_article.title,
+        brief_intro=translated_article.brief_intro,
+        body=remove_leading_cover_image(translated_article.body, cover_image),
+    )
     translation_md = expected_translation_path(candidate.source_md)
-    write_translation_file(translation_md, source_blob, translated_markdown)
+    write_translation_file(translation_md, source_blob, translated_article)
     return translation_md
-

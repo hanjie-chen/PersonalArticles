@@ -1,8 +1,17 @@
-<!-- source_blob: 23bc64313ec789c4a105ca5cd9d7b80b96fc94c7 -->
+---
+Title: Flask-SQLAlchemy Basics
+SourceBlob: 23bc64313ec789c4a105ca5cd9d7b80b96fc94c7
+---
+
+```
+BriefIntroduction: Basic knowledge of Flask-SQLAlchemy
+```
+
+<!-- split -->
 
 # Before We Begin
 
-It's best to read [SQLAlchemy Basic](../SQLAlchemy/Basic.md) first, then come back to this section.
+It is best to first read [SQLAlchemy Basic](../SQLAlchemy/Basic.md) and then come back to this section.
 
 # Flask-SQLAlchemy Basic
 
@@ -25,9 +34,9 @@ db = SQLAlchemy(model_class=Base)
 
 ### `flask` VS `Flask`
 
-`flask` (lowercase) is the name of the Python package. This is the standard naming convention for modules/packages.
+`flask` (lowercase) is the name of the Python package. This is the standard naming style for a module/package.
 
-`Flask` (uppercase) is the class name. In Python, class names usually start with a capital letter (PascalCase).
+`Flask` (capitalized) is the class name. In Python, class names typically start with an uppercase letter (PascalCase naming convention).
 
 This is a common Python naming convention, not something confusing:
 - Package/module names use lowercase (for example: flask, os, sys)
@@ -35,9 +44,9 @@ This is a common Python naming convention, not something confusing:
 
 ### `SQLAlchemy` in `flask_sqlalchemy`
 
-The `SQLAlchemy` class is an integration class. Its main purpose is to:
+The `SQLAlchemy` class is an integration class. Its main purpose is:
 
-Act as a bridge between Flask and SQLAlchemy, providing a unified interface to manage:
+To act as a bridge between Flask and SQLAlchemy, providing a unified interface for managing:
 
 database connections, session management, model definitions, and query construction
 
@@ -108,31 +117,31 @@ class SQLAlchemy:
 **Why use `db.Model`?**
 
 - `db.Model` is a base class enhanced by Flask-SQLAlchemy
-- It inherits from the original `Base` class, but adds extra features:
-  - Automatic table name generation (no need for `__tablename__`)
-  - Integration with Flask's context management
-  - A more convenient query interface
-  - Added session management features
+- It inherits from the original `Base` class, but adds extra functionality:
+  - Automatically generates table names (no need for `__tablename__`)
+  - Integrates Flask's context management
+  - Provides a more convenient query interface
+  - Adds session management features
 
 **The relationship between Flask-SQLAlchemy and SQLAlchemy**
 
 ```
 Flask-SQLAlchemy
      │
-     ├── Provides Flask integration
-     ├── Automatically manages database connections
-     ├── Handles application context
-     └── Simplifies configuration and usage
+     ├── 提供 Flask 集成
+     ├── 自动管理数据库连接
+     ├── 处理应用上下文
+     └── 简化配置和使用
          │
          ▼
-   SQLAlchemy (core)
+   SQLAlchemy (核心)
      │
-     ├── Database abstraction layer
-     ├── SQL query construction
-     └── ORM features
+     ├── 数据库抽象层
+     ├── SQL 查询构建
+     └── ORM 功能
 ```
 
-# Define and Create Tables
+# Define and Create Table
 
 ## Define TABLE
 
@@ -183,8 +192,8 @@ class Article_Meta_Data(db.Model):
 
 Because of how SQLAlchemy and Flask-SQLAlchemy work:
 
-1. When your model class inherits from `db.Model`, that model is automatically registered in SQLAlchemy metadata.
-2. When you call `db.create_all()`, SQLAlchemy checks all registered model classes and creates the tables.
+1. When your model class inherits from `db.Model`, that model is automatically registered in SQLAlchemy's metadata.
+2. When you call `db.create_all()`, SQLAlchemy checks all registered model classes and creates their tables.
 
 However, there is one important prerequisite here: **your model class must be imported and executed by the Python interpreter before `db.create_all()` is called**.
 
@@ -217,7 +226,7 @@ def create_all(self):
             table.create()
 ```
 
-A common example scenario:
+Common scenario example:
 
 ```python
 # 初始模型
@@ -238,11 +247,11 @@ class User(db.Model):
 
 > note
 >
-> `db.create_all()` will automatically create the database file according to `app.config['SQLALCHEMY_DATABASE_URI']`
+> `db.create_all()` will automatically create the database file based on `app.config['SQLALCHEMY_DATABASE_URI']`
 
-### How do you handle table schema updates?
+### How should schema updates be handled?
 
-**Drop and recreate** (development environment):
+**Delete and recreate** (development environment):
 
 ```python
 with app.app_context():
@@ -269,45 +278,45 @@ $ flask db upgrade
 
 ## `app.app_context()`
 
-### Application Instance and Its Context
+### Application instance and its context
 
-First, we need to understand that each `Flask` object represents an independent application instance. When you create a Flask application, you are actually creating an instance of that application:
+First, we need to understand that every `Flask` object represents an independent application instance. When you create a Flask application, you are actually creating an instance of that application:
 
 ```python
 app = Flask(__name__)
 ```
 
-This `app` object is a specific application instance. And `app.app_context()` creates an application context, which is an independent execution environment where all operations are associated with a specific application instance.
+This `app` object is a specific application instance. And `app.app_context()` creates an application context, which is an independent execution environment where operations are associated with a specific application instance.
 
-Flask uses `_app_ctx_stack` to keep track of the currently active application context. When you use `with app.app_context():`:
+Flask uses `_app_ctx_stack` to track the currently active application context. When you use `with app.app_context():`:
 
-The application's context is pushed onto `_app_ctx_stack`.
+The context of that application is pushed onto `_app_ctx_stack`.
 
-Inside the `with` block, the `current_app` proxy object points to the application context on the top of the stack. When the `with` block exits, the context is popped.
+Inside the `with` block, the `current_app` proxy points to the application context at the top of the stack. When the `with` block exits, the context is popped.
 
 ```python
 with app.app_context():
-    # 这个应用的上下文被推送到栈顶
+    # The context of this application is pushed to the top of the stack
     ...
-# 退出 with 块时，上下文被弹出
+# When the with block exits, the context is popped
 ```
 
-In a multi-application scenario, each application has its own context. For example:
+In multi-application scenarios, each application has its own context. For example:
 
 ```python
 app1 = Flask('app1')
 app2 = Flask('app2')
 
 with app1.app_context():
-    # 这里的操作属于 app1
+    # Operations here belong to app1
     ...
 
 with app2.app_context():
-    # 这里的操作属于 app2
+    # Operations here belong to app2
     ...
 ```
 
-Let's look at a complete example to understand the process:
+Let's look at a complete example to understand this process:
 
 ```python
 from flask import Flask, current_app
@@ -340,11 +349,11 @@ with app1.app_context():
 
 > note:
 >
-> In CLI commands: if you use the `@app.cli.command()` decorator, Flask will also automatically provide the context.
+> In CLI commands: if you use the `@app.cli.command()` decorator, Flask will also provide the context automatically.
 >
 > In tests, you can use `app.test_request_context()` to simulate a request context.
 
-### Why does `db.create_all()` require an application context?
+### Why does `db.create_all()` need an application context?
 
 There are several reasons why `db.create_all()` needs an application context:
 
@@ -352,22 +361,22 @@ There are several reasons why `db.create_all()` needs an application context:
 
 2. **Multi-application support**: If your project has multiple Flask applications and each uses a different database, the context ensures that the correct configuration is used.
 
-3. **Lazy initialization**: Flask-SQLAlchemy uses a lazy initialization pattern, and some settings can only be completed within an application context.
+3. **Lazy initialization**: Flask-SQLAlchemy uses lazy initialization, and some settings can only be completed within an application context.
 
-### Automatic Handling in View Functions
+### Automatic handling in view functions
 
-When handling web requests, Flask automatically creates and manages an application context for each request, so you do not need to explicitly use `with app.app_context()` inside view functions.
+When handling web requests, Flask automatically creates and manages an application context for each request, so there is no need to explicitly use `with app.app_context()` inside view functions.
 
 ```python
 @app.route('/')
 def index():
-    # 这里已经在应用上下文中了
+    # The application context already exists here
     return f"Current app: {current_app.name}"
 ```
 
-# CRUD
+# CUDR
 
-Flask-SQLAlchemy CRUD is very similar to SQLAlchemy ORM CRUD.
+Flask-SQLAlchemy CUDR is very similar to SQLAlchemy ORM CUDR.
 
 ## Insert
 
@@ -404,9 +413,9 @@ result = db.session.execute(
 )
 ```
 
-### Exploring the Essence of `db.select`
+### Exploring the essence of `db.select`
 
-From the source code of [flask-sqlalchemy extension.py](https://github.com/pallets-eco/flask-sqlalchemy/blob/3e3e92ba557649ab5251eda860a67656cc8c10af/src/flask_sqlalchemy/extension.py), we can see that the `SQLAlchemy` class does not directly define a `select` method. Instead, it handles undefined attribute access through the `__getattr__` magic method. This mechanism is quite elegant. Let's look at how it works:
+From the source code of [flask-sqlalchemy extension.py](https://github.com/pallets-eco/flask-sqlalchemy/blob/3e3e92ba557649ab5251eda860a67656cc8c10af/src/flask_sqlalchemy/extension.py), we can see that the `SQLAlchemy` class does not directly define a `select` method. Instead, it handles undefined attribute access through the `__getattr__` magic method. This mechanism is quite elegant. Let's see how it works:
 
 ```python
 import typing as t
@@ -437,27 +446,27 @@ class SQLALchemy:
     raise AttributeError(name)
 ```
 
-The flow of this code is:
+The workflow of this code is:
 
 1. When we access `db.select`, Python first checks whether the `SQLAlchemy` class has this attribute
 2. If it does not find it, it calls the `__getattr__` method
 3. Inside `__getattr__`, it looks for the attribute in the `sa` (SQLAlchemy) and `sa_orm` (SQLAlchemy ORM) modules in sequence
-4. Since the `select` function exists in the `sqlalchemy` module, `hasattr(sa, 'select')` returns `True`
+4. Since the `select` function exists in the `sqlalchemy` module, `hasattr(sa, 'select')` returns True
 5. It then returns the original SQLAlchemy `select` function through `getattr(sa, 'select')`
 
 This explains why:
 
 1. `db.select` is actually `sqlalchemy.select`
 2. You cannot find a direct definition of `select` in the source code
-3. `type(db.select())` shows `<class 'sqlalchemy.sql.selectable.Select'>`, which is SQLAlchemy's `Select` object
+3. `type(db.select())` displays `<class 'sqlalchemy.sql.selectable.Select'>`, which is SQLAlchemy's `Select` object
 
-This design pattern is called the Proxy Pattern. Flask-SQLAlchemy uses it to proxy most SQLAlchemy functionality through the `db` object, so we can directly access SQLAlchemy features through `db`.
+This design pattern is called the Proxy Pattern. In this way, Flask-SQLAlchemy proxies most of SQLAlchemy's functionality onto the `db` object, allowing us to access SQLAlchemy features directly through `db`.
 
 ### `sqlalchemy.select` VS `db.select`
 
-Since `db.select` is actually `sqlalchemy.select`, would using `sqlalchemy.select` directly be faster because it avoids loading `__getattr__()`?
+Since we now know that `db.select` is actually `sqlalchemy.select`, would directly using `sqlalchemy.select` be faster because it avoids loading through `__getattr__()`?
 
-In practice, these two styles run at exactly the same speed, with no performance difference at all.
+In practice, the execution speed of the two approaches is exactly the same. There is no performance difference at all.
 
 ```python
 # 方式1
@@ -468,21 +477,21 @@ select(User)  # 直接调用sqlalchemy.select
 db.select(User)  # 通过__getattr__获取后调用sqlalchemy.select
 ```
 
-Although `db.select` needs to access the function through the `__getattr__` magic method, this process:
+Although `db.select` needs to obtain the function through the `__getattr__` magic method, this process:
 
 - Only happens the first time `db.select` is accessed
-- Uses the cached attribute directly on later accesses
-- Adds overhead so small that it can be ignored compared with actual query execution time
+- Later accesses directly use the already cached attribute
+- This extra overhead is negligible compared with the actual query execution time
 
-Still, `db.select` is recommended because:
+But `db.select` is still recommended because:
 
-- All database-related operations go through the `db` object. If Flask-SQLAlchemy ever needs to extend or modify `select`, your code will not need to change.
+- All database-related operations go through the `db` object. If Flask-SQLAlchemy ever needs to extend or modify `select` in the future, your code does not need to change
 
-- From a software engineering perspective, using `db.select` is better practice. It follows the principles of dependency injection and separation of concerns, and it also makes the code easier to maintain and test.
+- From a software engineering perspective, using `db.select` is better practice. This follows the principles of dependency injection and separation of concerns, and it also makes the code easier to maintain and test.
 
 ## Delete & Update
 
-First, use a query statement to filter out the specific entry, for example:
+First, use a query statement to select a specific entry, for example:
 
 ```python
 article = db.session.execute(

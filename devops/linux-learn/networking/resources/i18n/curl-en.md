@@ -1,12 +1,21 @@
-<!-- source_blob: 33fadc496c58ab1f990e2529b6b8e25157c36c3f -->
+---
+Title: The curl Command
+SourceBlob: 33fadc496c58ab1f990e2529b6b8e25157c36c3f
+---
+
+```
+BriefIntroduction: A detailed explanation of the curl command
+```
+
+<!-- split -->
 
 # Before we begin
 
-When I was working as an Azure support engineer, I often dealt with products such as Azure Application Gateway (APG) and Azure Front Door (AFD), mainly these two. I was constantly using the `curl` command to test website connectivity and similar scenarios, so I spent some time studying `curl` and decided to record what I learned here.
+When working as an Azure support engineer, you often run into products like Azure Application Gateway (APG) and Azure Front Door (AFD), mainly these two. In practice, you end up using the `curl` command all the time to test website connectivity and related scenarios, so I took some time to study `curl` in depth and recorded my notes here.
 
-# The `curl` command
+# The curl Command
 
-The options and parameters I use most often are `-i -v`, because they let me see all the important information. For example:
+The way I use it most often is with `-i -v`, because that lets me see all the important information. For example:
 
 ```bash
 curl -i -v https://www.google.com:443
@@ -55,9 +64,9 @@ curl -i -v https://www.google.com:443
 HTTP/2 200
 ```
 
-# Analysis of the output
+# Output Analysis
 
-## Initial connection
+## Initial Connection
 
 ### 1. Initial connection phase
 ```bash
@@ -65,8 +74,8 @@ HTTP/2 200
 * TCP_NODELAY set
 * Connected to www.google.com (209.85.203.104) port 443 (#0)
 ```
-- First, it tries to connect to Google's IP address (`209.85.203.104`) on port `443` (the default HTTPS port).
-- `TCP_NODELAY` is enabled. This is a TCP option used to disable the Nagle algorithm.
+- First, it tries to connect to Google's IP address (`209.85.203.104`) on port `443` (the default port for HTTPS).
+- `TCP_NODELAY` is enabled, which is a TCP option used to disable the Nagle algorithm.
 - The TCP connection is established successfully.
 
 ### 2. ALPN (Application-Layer Protocol Negotiation)
@@ -84,9 +93,9 @@ HTTP/2 200
   CApath: /etc/ssl/certs
 ```
 - `curl` uses the system CA certificate store to verify the server certificate.
-- It specifies the locations of the certificate file and certificate directory.
+- The certificate file path and certificate directory path are specified here.
 
-## TLS handshake process
+## TLS Handshake Process
 ```bash
 * TLSv1.3 (OUT), TLS handshake, Client hello (1):
 * TLSv1.3 (IN), TLS handshake, Server hello (2):
@@ -100,12 +109,12 @@ HTTP/2 200
 
 ### `(OUT)` and `(IN)`
 
-- `OUT`: data sent from the client (outgoing)
-- `IN`: data received from the server (incoming)
+- `OUT`: means data is sent from the client (outgoing)
+- `IN`: means data is received from the server (incoming)
 
 ### Message Type
 
-The numbers in parentheses are the Message Types defined in the TLS protocol. In TLS, messages are divided into different protocol types (Content Types), and each type contains its own message types. The main protocol types are:
+The numbers in parentheses are Message Types defined by the TLS protocol. In TLS, messages are divided into different protocol types (Content Types), and each protocol type contains its own message types. The main protocol types are:
 
 ```
 TLS Protocol
@@ -122,28 +131,28 @@ TLS Protocol
 └── Application Data Protocol (23)
 ```
 
-So in the output, the `(1)` here refers to the message type under the Handshake Protocol:
+So in the following output, `(1)` is a message type under the Handshake Protocol:
 
 ```bash
 * TLSv1.3 (OUT), TLS handshake, Client hello (1):
 ```
 
-While the `(1)` below refers to the message type under the Change Cipher Spec Protocol:
+And the `(1)` below is a message type under the Change Cipher Spec Protocol:
 
 ```bash
 * TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
 ```
 
-This is like using the same number in different namespaces because they belong to different contexts, just like files in different folders can have the same name.
+This is similar to how the same number can be used in different namespaces because they belong to different contexts, just like files in different folders can have the same name.
 
 > [!note]
 >
-> In TLS 1.3, the Change Cipher Spec message has effectively become a legacy message. It no longer has real cryptographic significance in the new version, but it is still retained for compatibility. That is why you can still see this message during the TLS 1.3 handshake even though it is no longer technically required.
+> In TLS 1.3, the Change Cipher Spec message is actually a legacy message. It no longer has real cryptographic significance in the newer version, but it is still retained for compatibility. That is why you can still see this message in a TLS 1.3 handshake even though it is no longer technically required.
 
 ### Full handshake flow
 
 ```
-Client                                         Server
+客户端 (Client)                                服务器 (Server)
    |                                                |
    |-------(OUT) Client Hello (1)------------------>|
    |                                               	|
@@ -158,33 +167,33 @@ Client                                         Server
 
 ```
 
-Details of each step:
-- `Client Hello (1)`: The client starts the handshake and sends the supported TLS versions, cipher suites, random values, and more.
-- `Server Hello (2)`: The server responds and selects the TLS version and cipher suite.
-- `Encrypted Extensions (8)`: The server sends encrypted extension information.
-- `Certificate (11)`: The server sends its digital certificate.
-- `Certificate Verify (15)`: The server proves that it owns the private key corresponding to the certificate.
-- `Finished (20)`: Both sides send a Finished message to confirm that the handshake is complete.
-- `Change Cipher Spec (1)`: Tells the other side that subsequent communication will use the negotiated encryption parameters.
+Detailed explanation of each step:
+- `Client Hello (1)`: the client initiates the handshake and sends the supported TLS versions, cipher suites, random values, and so on
+- `Server Hello (2)`: the server responds and selects the TLS version and cipher suite
+- `Encrypted Extensions (8)`: the server sends encrypted extension information
+- `Certificate (11)`: the server sends its digital certificate
+- `Certificate Verify (15)`: the server proves that it owns the private key corresponding to the certificate
+- `Finished (20)`: both sides send a Finished message to confirm that the handshake is complete
+- `Change Cipher Spec (1)`: notifies the peer that subsequent communication will use the negotiated encryption parameters
 
 This process ensures that:
-1. Both sides negotiate which encryption algorithms to use.
-2. The server identity is verified.
-3. Secure session keys are established.
-4. Subsequent communication is protected.
+1. Both sides negotiate which encryption algorithms to use
+2. The server identity is verified
+3. A secure session key is established
+4. Subsequent communication is protected
 
 > [!note]
 >
-> In TLS 1.3, compared with earlier versions, the handshake process has been optimized to reduce round trips and improve both performance and security. Most messages in the process are sent from the server to the client (`IN`), while the client mainly sends the initial and final messages (`OUT`).
+> In TLS 1.3, compared with earlier versions, the handshake process is optimized to reduce round trips and improve both performance and security. Most of the messages in the process are sent from the server to the client (`IN`), while the client mainly sends the opening and closing messages (`OUT`).
 
 ### SSL connection information
 ```bash
 * SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
 * ALPN, server accepted to use h2
 ```
-- TLS 1.3 is used.
-- The `TLS_AES_256_GCM_SHA384` cipher suite is used.
-- The server agrees to use the HTTP/2 (`h2`) protocol.
+- TLS 1.3 is used
+- The `TLS_AES_256_GCM_SHA384` cipher suite is used
+- The server agrees to use HTTP/2 (`h2`)
 
 ## Server certificate
 ```bash
@@ -196,11 +205,10 @@ This process ensures that:
 *  issuer: C=US; O=Google Trust Services; CN=WR2
 *  SSL certificate verify ok.
 ```
-
 ### Subject (certificate subject)
 
-The Subject represents the identity information of the certificate owner. It uses DN (Distinguished Name) format and may include the following fields:
-- `CN` (Common Name): usually the website domain name or server name
+The Subject represents identity information about the certificate owner. It uses the DN (Distinguished Name) format and can contain fields such as:
+- `CN` (Common Name): the common name, usually a website domain name or server name
 - `O` (Organization): organization name
 - `OU` (Organizational Unit): organizational unit
 - `L` (Locality): city or region
@@ -208,7 +216,7 @@ The Subject represents the identity information of the certificate owner. It use
 - `C` (Country): country code (two letters)
 - `E` (Email): email address
 
-So here, `CN=www.google.com` means that this certificate was issued for the domain name `www.google.com`.
+So here, `CN=www.google.com` means that this certificate was issued for the domain `www.google.com`.
 
 ### Subject Alternative Name
 ```bash
@@ -217,14 +225,14 @@ subjectAltName: host "www.google.com" matched cert's "www.google.com"
 - `host "www.google.com"`: the hostname we are accessing
 - `matched cert's "www.google.com"`: this hostname matches one of the values in the certificate's SAN list
 
-Modern browsers mainly use SAN rather than CN to verify domain names. SAN can include:
+Modern browsers primarily use SAN rather than CN to validate domain names. SAN can include:
 
 - DNS names
 - IP addresses
 - Email addresses
 - URIs
 
-For example, the SAN of a certificate might include:
+For example, a certificate's SAN might include:
 ```
 DNS:www.google.com
 DNS:*.google.com
@@ -235,29 +243,27 @@ DNS:google.com
 ```bash
 issuer: C=US; O=Google Trust Services; CN=WR2
 ```
-
 The meaning of each field here is:
 - `C=US`: Country = United States
 - `O=Google Trust Services`: Organization = Google Trust Services
-- `CN=WR2`: Common Name = WR2 (this is the internal name of the certificate issuance system)
+- `CN=WR2`: Common Name = WR2 (this is the system name of the certificate issuer)
 
-So this indicates:
-- The certificate was issued in the United States
+So this means:
+- The certificate was issued by an entity located in the United States
 - The organization is Google Trust Services
 - The specific issuing system is WR2
 
 This hierarchical structure helps establish the chain of trust:
 
 ```
-Root CA (Root Certificate Authority)
+Root CA（根证书颁发机构）
     ↓
-Intermediate CA (Intermediate Certificate Authority: Google Trust Services)
+Intermediate CA（中间证书颁发机构：Google Trust Services）
     ↓
-End-entity Certificate (End certificate: www.google.com)
+End-entity Certificate（终端证书：www.google.com）
 ```
 
-A more complete example of a certificate subject might look like this:
-
+A more complete certificate subject example might look like this:
 ```
 Subject: 
     CN = www.example.com
@@ -269,9 +275,9 @@ Subject:
     E = admin@example.com
 ```
 
-This hierarchical naming structure ensures the completeness and uniqueness of certificate information, allowing a certificate to accurately identify both its owner and its issuer.
+This hierarchical naming structure ensures the completeness and uniqueness of certificate information, allowing the certificate to accurately identify both its owner and issuer.
 
-### Establishing the HTTP/2 protocol
+### HTTP/2 protocol establishment
 ```bash
 * Using HTTP2, server supports multi-use
 * Connection state changed (HTTP/2 confirmed)
@@ -303,13 +309,13 @@ HTTP/2 200
 ```
 - Receives new session tickets (used for TLS session resumption)
 - Sets the maximum concurrent streams to `100`
-- The server returns status code `200`, indicating the request succeeded
+- The server returns status code `200`, indicating that the request succeeded
 
 This output shows a complete HTTPS request process, including:
 1. TCP connection establishment
 2. TLS handshake
-3. Certificate verification
+3. Certificate validation
 4. HTTP/2 protocol negotiation
 5. Request transmission and response reception
 
-With the `-v` option, we can see all of these low-level details, which is especially useful when debugging HTTPS connection issues.
+With the `-v` parameter, we can see all of these low-level details, which is especially useful when debugging HTTPS connection issues.

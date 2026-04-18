@@ -1,4 +1,13 @@
-<!-- source_blob: f8d13a82d6f354641f58effe87254fd1fd95df0f -->
+---
+Title: SQLAlchemy Basics
+SourceBlob: f8d13a82d6f354641f58effe87254fd1fd95df0f
+---
+
+```
+BriefIntroduction: These are some notes summarizing the basics of SQLAlchemy.
+```
+
+<!-- split -->
 
 # SQLAlchemy Core Components
 
@@ -6,13 +15,13 @@
 
 ORM is a programming technique used to establish a mapping between object-oriented programming languages and relational databases. Its full name is Object-Relational Mapping.
 
-By using this technique, you can operate on a database directly through a programming language without writing SQL statements by hand. Code written this way can also be migrated more easily across different database systems.
+By using this technique, you can operate on a database directly through a programming language without having to write SQL statements manually. It also makes it easier to migrate code across different database systems.
 
-Basic ORM concepts
+Basic ORM concepts:
 
 - Entity: Corresponds to a table in the database.
 - Property: Corresponds to a column in a table.
-- Relationship: Represents associations between entities (such as one-to-many, many-to-many, and so on).
+- Relationship: Represents associations between entities, such as one-to-many or many-to-many.
 
 ## Python SQLAlchemy Example
 
@@ -42,7 +51,7 @@ session.commit()
 users = session.query(User).filter(User.name == "Alice").all()
 ```
 
-In this example, we define a `User` class that maps to the `users` table in the database. We can create, query, and manipulate user data in an object-oriented way without writing SQL directly.
+In this example, we define a `User` class that maps to the `users` table in the database. We can use an object-oriented approach to create, query, and manipulate user data without writing SQL statements directly.
 
 Comparison between ORM and traditional database operations:
 
@@ -58,11 +67,11 @@ Comparison between ORM and traditional database operations:
   users = session.query(User).filter(User.name == "Alice").all()
   ```
 
-The ORM approach is closer to object-oriented thinking, and the code is more intuitive and easier to maintain.
+The ORM approach is closer to object-oriented programming thinking, and the code is more intuitive and easier to maintain.
 
 # Engine
 
-The SQLAlchemy engine uses the `create_engine` function to connect to a database.
+A SQLAlchemy engine uses the `create_engine` function to connect to a database.
 
 For example:
 
@@ -71,7 +80,7 @@ from sqlalchemy import create_engine
 engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
 ```
 
-The second line creates a SQLAlchemy `engine` object, which is responsible for managing connections to the database. Let's break down what this line means:
+The second line creates a SQLAlchemy `engine` object, which is responsible for managing the database connection. Let’s break down what this line means:
 
 ```python
 engine = create_engine('sqlite+pysqlite:///:memory:', echo=True)
@@ -79,19 +88,19 @@ engine = create_engine('sqlite+pysqlite:///:memory:', echo=True)
 
 1. **The `create_engine` function**:
 
-   - `create_engine` is a function provided by SQLAlchemy to create an `engine` object. This object is the core of database interaction.
+   - `create_engine` is a function provided by SQLAlchemy for creating an `engine` object. This object is the core of interacting with the database.
 
 2. **Database URL**:
 
-   - `'sqlite+pysqlite:///:memory:'` is a database URL used to specify the database type and connection method.
+   - `'sqlite+pysqlite:///:memory:'` is a database URL that specifies the database type and connection method.
 
-     - `sqlite`: Specifies that SQLite is being used.
+     - `sqlite`: specifies that SQLite is being used.
 
-     - `pysqlite`: Specifies the DBAPI driver being used. In modern Python, `pysqlite` usually corresponds to the standard library `sqlite3`.
+     - `pysqlite`: specifies the DBAPI driver. In modern Python, `pysqlite` usually corresponds to the standard-library `sqlite3`.
 
-     - `/:memory:`: Specifies that the database runs in memory.
+     - `/:memory:`: specifies that the database runs in memory.
 
-       This means the database is temporary. It starts with no tables or data and is not persisted to disk. You need to create tables and insert data manually after connecting in order to perform actual database operations. Each time the program restarts, the database is reset. This approach is ideal for testing and development.
+       This means the database is temporary, starts with no tables or data, and is not persisted to disk. You need to create tables and insert data manually after connecting in order to do real database operations. Every time the program restarts, the database resets. This approach is especially suitable for testing and development.
 
 3. **The `echo=True` parameter**:
 
@@ -99,9 +108,9 @@ engine = create_engine('sqlite+pysqlite:///:memory:', echo=True)
 
 # Connection
 
-## Build a connection and execute SQL statements
+## Create a Connection and Execute SQL Statements
 
-SQLAlchemy provides a simple yet powerful way to interact with a database. Let's look at the basic connection and SQL execution process through an example.
+SQLAlchemy provides a simple yet powerful way to interact with a database. Let’s look at the basic connection and SQL execution process through an example.
 
 ```python
 from sqlalchemy import text
@@ -140,15 +149,15 @@ Running this code produces the following output:
 
 ---
 
-### Code explanation: `text()` --> `execute()`
+### Code Explanation: `text()` --> `execute()`
 
-`text()` is used to create an executable SQL text object, which can then be passed to a connection object's `execute()` method.
+`text()` is used to create an executable SQL text object, which can then be passed to a connection object’s `execute()` method.
 
 > note:
 >
-> In early versions of SQLAlchemy, `execute()` could accept raw SQL strings directly. However, starting with SQLAlchemy 1.4, directly passing SQL strings was deprecated to improve security and consistency.
+> In early versions of SQLAlchemy, the `execute()` method could accept raw SQL strings directly. However, starting from SQLAlchemy 1.4, passing SQL strings directly was deprecated for better security and consistency.
 
-Using `text()` lets us use named parameters like `:parameter`, which helps prevent SQL injection and improves code readability.
+Using `text()` allows us to use named parameters like `:parameter`, which helps prevent SQL injection attacks and improves code readability.
 
 For example:
 
@@ -175,15 +184,15 @@ conn.execute(
 )
 ```
 
-### Transaction management: `BEGIN (implicit)`
+### `BEGIN (implicit)` Transaction Management
 
-When SQLAlchemy logs `BEGIN (implicit)`, it means SQLAlchemy has recognized the start of a transaction, but this is based on the behavior of the database driver rather than because SQLAlchemy or the application explicitly sent a `BEGIN` command.
+When SQLAlchemy logs `BEGIN (implicit)`, it means SQLAlchemy has recognized the start of a transaction, but this is based on the behavior of the database driver rather than SQLAlchemy or the application explicitly sending a `BEGIN` command.
 
-Many database drivers automatically start a transaction when you execute the first operation that requires one. This means you do not need to explicitly call `BEGIN` to start a transaction.
+Many database drivers automatically start a transaction when you execute the first operation that requires one. This means you do not need to call `BEGIN` explicitly to start a transaction.
 
-## Return values from `execute` queries
+## Query Return Values from `execute`
 
-Let's first look at a basic example of executing a query:
+Let’s first look at a basic query execution example:
 
 ```bash
 >>> with engine.connect() as conn:
@@ -199,7 +208,7 @@ Let's first look at a basic example of executing a query:
 
 `result` is a `list`. In this example, `result` contains two `tuple` values: `(1, 1)` and `(2, 4)`.
 
-### Parameterized queries
+### Parameterized Query
 
 ```bash
 >>> with engine.connect() as conn:
@@ -216,24 +225,24 @@ x: 2  y: 4
 
 **Executing a query with parameters**:
 
-- `text("SELECT x, y FROM some_table WHERE y > :y")`: Creates a SQL query text object using the named parameter `:y`
-- `{"y": 2}`: A parameter dictionary that binds the named parameter `:y` to the value `2`
+- `text("SELECT x, y FROM some_table WHERE y > :y")`: creates a SQL query text object using the named parameter `:y`
+- `{"y": 2}`: a parameter dictionary that binds the named parameter `:y` to the value `2`
 
-Explanation of the log output:
+Explanation of the runtime log output:
 
-- `BEGIN (implicit)`: Starts an implicit transaction
-- `SELECT x, y FROM some_table WHERE y > ?`: The actual SQL executed, where `?` is the parameter placeholder
-- `[generated in 0.00051s] (2,)`: Shows the query generation time and the bound parameter value
+- `BEGIN (implicit)`: starts an implicit transaction
+- `SELECT x, y FROM some_table WHERE y > ?`: the actual SQL being executed, where `?` is the parameter placeholder
+- `[generated in 0.00051s] (2,)`: shows the time taken to generate the query and the bound parameter value
 
-- `x: 2 y: 4`: Prints the row that matches the condition `y > 2`, where `x` is `2` and `y` is `4`
+- `x: 2 y: 4`: prints the row that matches the condition `y > 2`, where `x` is `2` and `y` is `4`
 
-- `ROLLBACK`: Ends the transaction and rolls it back. This usually happens because transaction handling is done automatically when the `with` block ends
+- `ROLLBACK`: ends the transaction and rolls it back. This usually happens automatically when the `with` block ends
 
 ## ORM
 
 `Session` is a core concept in SQLAlchemy ORM (Object-Relational Mapping). It provides a higher-level abstraction for managing database interactions.
 
-Example code
+example code
 
 ```python
 from sqlalchemy.orm import Session
@@ -247,7 +256,7 @@ with Session(engine) as session:
         print(f"x: {row.x}  y: {row.y}")
 ```
 
-Result
+result
 
 ```bash
 2024-09-07 16:06:34,299 INFO sqlalchemy.engine.Engine BEGIN (implicit)
@@ -262,17 +271,17 @@ x: 13  y: 14
 
 Imagine you are designing a house:
 
-- You need a blueprint showing the position, size, and purpose of each room
+- You need a blueprint that marks the location, size, and purpose of each room
 - You also need construction instructions telling the workers how to build the house
 
-In SQLAlchemy, Metadata is like that blueprint:
+In SQLAlchemy, `Metadata` is like that blueprint:
 
-- It records the "design drawings" of all tables (table names, column names, data types, and so on)
-- It also comes with a "construction manual" (`create_all`, `drop_all`, and other methods) to guide the database in creating tables from the design
+- It records the “design drawings” of all tables (table names, column names, data types, and so on)
+- It also includes “construction instructions” (`create_all`, `drop_all`, and similar methods) that tell the database how to create tables according to the design
 
 ## Core define
 
-Use the `Table` object to define table structures directly, for example:
+Use `Table` objects to define table structures directly, for example:
 
 ```python
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
@@ -300,7 +309,7 @@ address_table = Table(
 metadata_obj.create_all(engine)
 ```
 
-~~Nobody normally uses this~~
+~~No one normally uses this~~
 
 ## ORM Declarative Forms define
 
@@ -348,7 +357,7 @@ Base.metadata.create_all(engine)
 
 ### About the empty `Base` class
 
-By defining an empty `Base` class, you can add custom methods or attributes in the future that will be inherited by all model classes, without modifying each individual model.
+By defining an empty `Base` class, you can add custom methods or attributes in the future that will be inherited by all model classes, without modifying each model individually.
 
 For example, adding a `created_at` column to all tables:
 
@@ -361,11 +370,11 @@ For example, adding a `created_at` column to all tables:
        created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
    ```
 
-In large projects, you can define the `Base` class in a separate file to improve code organization.
+In large projects, the `Base` class can be defined in a separate file for better code organization.
 
 > Changes between old and new versions:
 >
-> It is worth noting that SQLAlchemy handles declarative base classes differently across versions. In older versions, the `declarative_base()` function was used to create the base class. In SQLAlchemy 2.0, the `DeclarativeBase` class was introduced.
+> It is worth noting that SQLAlchemy has changed how declarative base classes are handled across versions. In older versions, the `declarative_base()` function was used to create the base class. In SQLAlchemy 2.0, the `DeclarativeBase` class was introduced.
 
 ---
 
@@ -374,9 +383,9 @@ In large projects, you can define the `Base` class in a separate file to improve
 `Mapped` and `mapped_column` are new concepts in SQLAlchemy 2.0: type annotations.
 
 - `Mapped[]` is used for type hints to specify the type of an ORM-mapped attribute
-- `mapped_column()` defines the concrete attributes of a column and creates a `Column` object
+- `mapped_column()` defines the specific properties of a column and creates a `Column` object
 
-Interpreting them together with the `User` and `Address` classes:
+Reading them together with the `User` and `Address` classes:
 
 ```python
 class User(Base):
@@ -427,7 +436,7 @@ class Address(Base):
 >     addresses = relationship("Address", back_populates="user")
 > ```
 >
-> The main difference in the new version is the use of `something: Mapped[int]` and `mapped_cloumn`, which makes the code more explicit and type-safe. However, SQLAlchemy 2.0 still supports the old declaration style.
+> The main difference in newer versions is the use of `something: Mapped[int]` and `mapped_cloumn`, which makes the code clearer and more type-safe. However, SQLAlchemy 2.0 still supports the old definition style.
 
 For more details, please read [Table Configuration with Declarative — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/orm/declarative_tables.html#orm-declarative-table)
 
@@ -466,9 +475,9 @@ from sqlalchemy import (
 )
 ```
 
-[Complete SQLAlchemy type list](https://docs.sqlalchemy.org/en/20/core/types.html)
+[Full SQLAlchemy type list](https://docs.sqlalchemy.org/en/20/core/types.html)
 
-If the Python type inside `Mapped[]` is incompatible with the database column type in `mapped_column()`, SQLAlchemy will raise an error at runtime. For example:
+If the Python type inside `Mapped[]` is incompatible with the database column type inside `mapped_column()`, SQLAlchemy will raise a runtime error. For example:
 
 ```python
 # 这会导致错误，因为类型不兼容
@@ -480,7 +489,7 @@ name: Mapped[str] = mapped_column(String)
 is_active: Mapped[bool] = mapped_column(Boolean)
 ```
 
-SQLAlchemy's type system checks whether these types are compatible. Here are some common type correspondences:
+SQLAlchemy’s type system checks whether these types are compatible. Here are some common mappings:
 
 ```python
 Python 类型    SQLAlchemy 类型
@@ -497,7 +506,7 @@ dict          JSON
 
 ***
 
-In SQLAlchemy 2.0+, if you write only `Mapped[str]` without using `mapped_column()`, SQLAlchemy will apply some default configuration:
+In SQLAlchemy 2.0+, if you write only `Mapped[str]` without using `mapped_column()`, SQLAlchemy will use some default configuration:
 
 For a simple `Mapped[str]`:
 
@@ -507,10 +516,10 @@ email_address: Mapped[str]
 email_address: Mapped[str] = mapped_column(String())  # String() 没有指定长度
 ```
 
-In this case, SQLAlchemy uses the database's default `VARCHAR` length:
-- MySQL/MariaDB: defaults to `VARCHAR(255)`
-- PostgreSQL: no specific limit, but explicitly specifying a length is still recommended
-- SQLite: no enforced length limit
+In this case, SQLAlchemy will use the database’s default `VARCHAR` length:
+- MySQL/MariaDB: the default is `VARCHAR(255)`
+- PostgreSQL: there is no specific limit, but it is still recommended to specify a length explicitly
+- SQLite: there is no enforced length limit
 
 Best practice:
 ```python
@@ -524,9 +533,9 @@ class Address(Base):
     email_address2: Mapped[str] = mapped_column(String(255))
 ```
 
-### Metadata features
+### Metadata Features
 
-All table information for model classes that inherit from `Base` is automatically registered in `Base.metadata`.
+The table information for all model classes that inherit from `Base` is automatically registered in `Base.metadata`.
 
 You can access all registered tables through `metadata.tables`.
 
@@ -541,9 +550,7 @@ Base.metadata.drop_all(engine)
 Base.metadata.reflect(engine)
 ```
 
-
-
-## Run ORM Declarative code
+## Run ORM Declarative Code
 
 ```bash
 2024-09-13 10:11:23,848 INFO sqlalchemy.engine.Engine BEGIN (implicit)
@@ -579,7 +586,7 @@ CREATE TABLE address (
 2024-09-13 10:11:23,853 INFO sqlalchemy.engine.Engine COMMIT
 ```
 
-Before creating tables, SQLAlchemy first executes these `PRAGMA` statements to check whether the tables already exist in the main database (`main`) and the temporary database (`temp`), ensuring that it does not recreate existing tables.
+Before creating the tables, SQLAlchemy first executes `PRAGMA` statements to check whether these tables already exist in the main database (`main`) and the temporary database (`temp`), ensuring that existing tables are not created again.
 
 ```
 PRAGMA main.table_info("user_account")
@@ -590,7 +597,7 @@ PRAGMA temp.table_info("address")
 
 # CUDR Operation
 
-Likewise, there are Core-style CUDR operations and ORM-style CUDR operations. We will introduce both, with the main focus on ORM.
+Similarly, there are Core-style CUDR operations and ORM-style CUDR operations. We will introduce both, with a focus on ORM.
 
 ## Core CUDR
 
@@ -641,11 +648,11 @@ More details are in [Basic.py file](./Basic.py)
 
 ## ORM CUDR
 
-### Session.new() & session.add()
+### `Session.new()` & `session.add()`
 
-`session.new` is a property of the SQLAlchemy `Session` object. It represents the collection of all new objects that have been added to the session but have not yet been committed to the database.
+`session.new` is a property of the SQLAlchemy `Session` object. It represents the set of all new objects that have been added to the session but not yet committed to the database.
 
-Let's understand it through code:
+Let’s understand it through code:
 
 ```python
 # User类的实例代表数据库表中的一行数据
@@ -668,23 +675,23 @@ print(session.new)  # 输出：IdentitySet([])
 
 ```
 
-Other related `Session` state collections:
+Other related session state collections:
 
-- `session.dirty`: contains modified objects that have not yet been committed
+- `session.dirty`: contains modified but uncommitted objects
 - `session.deleted`: contains objects marked for deletion but not yet committed
 - `session.identity_map`: contains all objects tracked by the session
 
-Together, these collections form SQLAlchemy's object state management system, helping implement efficient database operations and transaction management.
+Together, these collections form SQLAlchemy’s object state management system, helping support efficient database operations and transaction management.
 
-### Session.get()
+### `Session.get()`
 
 `session.get(entity, primary_key)` takes two main arguments:
 1. The first argument is the entity class (in this example, the `User` class)
 2. The second argument is the primary key value (in this example, `4`)
 
-If the record already exists in the session's identity map, it returns the existing object directly.
+If the record already exists in the session’s identity map, it returns the existing object directly.
 
-If it does not exist, SQL is sent to the database to fetch the data.
+If it does not exist, it sends a SQL query to the database to fetch the data.
 
 Some usage examples:
 ```python
@@ -699,21 +706,19 @@ non_exist_user = session.get(User, 999)  # 返回 None
 order = session.get(Order, (order_id, user_id))
 ```
 
+### `Session.flush()` & `Session.commit()`
 
+`flush` only synchronizes the current changes in the session to the database, but those changes are still inside the transaction and have not yet truly been committed.
 
-### Session.flush() & Session.commit()
-
-`flush` only synchronizes the current changes in the session to the database, but those changes are still inside the transaction and have not actually been committed.
-
-`commit` truly commits the transaction, permanently saving the changes to the database. In practice, `commit()` performs a `flush` first, then commits the current transaction, and then starts a new one.
+`commit` actually commits the transaction, permanently saving the changes to the database. In practice, `commit()` first performs `flush`, then commits the current transaction, and then starts a new transaction.
 
 Usually, you do not need to call `flush()` manually; let SQLAlchemy handle it automatically.
 
-Remember: `flush()` is like writing changes into a draft, while `commit()` is the actual save.
+Remember: `flush()` is like writing changes into a draft, while `commit()` is the real save.
 
 > Use case:
 >
-> If you need the primary key `id` before calling `commit()`, you can explicitly call `flush()`.
+> If you need to use the primary key `id` before `commit()`, you can call `flush()` explicitly.
 >
 > ```python
 > from sqlalchemy.ext.declarative import declarative_base
@@ -739,11 +744,7 @@ Remember: `flush()` is like writing changes into a draft, while `commit()` is th
 > session.commit()
 > ```
 
-
-
-
-
-### Session.delete()
+### `Session.delete()`
 
 ```python
 1. 标记删除
@@ -768,7 +769,6 @@ session.commit()
 ```
 
 A concrete example:
-
 ```python
 # 假设有一个用户对象
 user = session.get(User, 1)
@@ -788,20 +788,18 @@ session.commit()
 ```
 
 Key points:
-- `session.delete()` does not operate only on uncommitted data; it really deletes records from the database
-- But the deletion becomes permanently effective only after `commit()`
-- Before `commit()`, you can cancel the deletion with `session.rollback()`
+- `session.delete()` does not apply only to uncommitted data; it actually deletes records from the database
+- But the deletion only becomes truly permanent after `commit()`
+- Before `commit()`, you can undo the deletion with `session.rollback()`
 
-So the behavior of `session.delete()` is consistent with `add()` and `update()`:
+So the behavior of `session.delete()` is consistent with `add()` / `update()`:
 - First mark the change in the session
-- Then synchronize it to the database via `flush`
-- Finally make it permanent with `commit`
-
-
+- Then synchronize it to the database with `flush`
+- Finally save it permanently with `commit`
 
 ### Rollback
 
-`session.rollback()` undoes all uncommitted changes. Let me explain in detail:
+`session.rollback()` undoes all changes that have not been committed. Let me explain in detail:
 
 ```python
 ### session.rollback() 的作用
@@ -839,7 +837,6 @@ session.rollback()
 ```
 
 A complete example:
-
 ```python
 # 开始新事务
 session = Session(engine)
@@ -865,12 +862,12 @@ finally:
     session.close()             # 最后关闭 session
 ```
 
-So you can think of SQLAlchemy transaction operations this way:
+So you can understand SQLAlchemy transaction operations like this:
 - `commit()` saves all changes
 - `rollback()` undoes all unsaved changes
 - `flush()` previews the effect of changes, but they can still be undone with `rollback()`
 
-### Session.close()
+### `Session.close()`
 
 ```python
 ### session.close() 详解
@@ -930,7 +927,7 @@ with Session() as session:
 # 无需手动关闭，框架会处理
 ```
 
-2. Complete pattern for manual management
+2. Full pattern for manual management
 ```python
 session = Session()
 try:
@@ -951,9 +948,9 @@ finally:
     session.close()
 ```
 
-### Querying: `query` & `select`
+### Querying with `query` & `select`
 
-Query object type
+Type of query object:
 
 ```python
 # 使用模型类名(User)而不是表名(user_account)
@@ -962,7 +959,7 @@ session.query(User)  # 正确
 # session.query('user_account')  # 错误
 ```
 
-Methods for getting query results
+Methods for retrieving query results:
 
 ```python
 # 假设我们查询name="sandy"的用户
@@ -1015,7 +1012,7 @@ user = session.scalar_one_or_none(stmt)
 users = session.execute(stmt).scalars().all()
 ```
 
-Examples of complex queries
+Complex query examples:
 
 ```python
 # 多条件查询
@@ -1057,8 +1054,8 @@ stmt = (
 ```
 
 5. **Suggestions for choosing query methods**
-- When you expect only one result:
-  - If a result must exist: use `one()`
+- When you expect exactly one result:
+  - If there must be a result: use `one()`
   - If there may be no result: use `one_or_none()`
   - If you only need the first result: use `first()`
 
@@ -1082,39 +1079,39 @@ stmt = (
 )
 ```
 
-Remember, newer versions of SQLAlchemy recommend the 2.0-style query syntax (using `select()`), which provides better type hints and consistency. However, the older `query()` syntax is still available and remains widely used in existing codebases.
+Remember, newer versions of SQLAlchemy recommend using the 2.0-style query syntax (using `select()`), which provides better type hints and consistency. However, the older `query()` syntax is still available and is used in many existing codebases.
 
-### Session.execute
+### `Session.execute`
 
-In SQLAlchemy 2.x, there are indeed two main ways to execute queries: using the `scalar()` family directly, or using `execute()`. Each has its own use cases. Let's look at them:
+In SQLAlchemy 2.x, there are indeed two main ways to execute queries: directly using the `scalar()` family of methods, and using the `execute()` method. Each has its own use cases, so let’s analyze them:
 
-1. Use the `scalar()` family directly:
+1. Direct use of the `scalar()` family:
    - `scalar()`
    - `scalar_one()`
    - `scalar_one_or_none()`
 
-2. Use `execute()`, and then call other methods such as `scalars().all()` as needed
+2. Use `execute()`, then call other methods as needed such as `scalars().all()`
 
 Which approach is recommended mainly depends on your specific needs:
 
-1. When you expect a query to return a single result, using the `scalar()` family directly is cleaner and more straightforward:
+1. When you expect the query to return a single result, using the `scalar()` family directly is cleaner and more straightforward:
 
    - If you are sure the query will return exactly one result or `None`, use `scalar_one_or_none()`
    - If you are sure the query must return exactly one result, use `scalar_one()`
    - If you want the first result, if any, use `scalar()`
 
-   These methods return ORM objects directly, without further processing.
+   These methods return ORM objects directly, with no further processing required.
 
-2. When you need more flexible result handling, or expect multiple results, `execute()` is more suitable:
+2. When you need more flexible result handling, or expect multiple results, `execute()` is more appropriate:
 
-   - `execute()` returns a `Result` object, which offers more flexibility and control
-   - You can then call `scalars()`, `all()`, `first()`, and so on as needed
-   - This is appropriate for multi-row results or when additional result processing is required
+   - `execute()` returns a `Result` object, which provides more flexibility and control
+   - You can call `scalars()`, `all()`, `first()`, and other methods as needed
+   - This is suitable for handling multi-row results, or when you need additional processing
 
-Overall, the recommended approach in SQLAlchemy 2.x is:
+Overall, the recommended practice in SQLAlchemy 2.x is:
 
-- For queries returning a single result, prefer the `scalar()` family because it is more concise and returns ORM objects directly.
-- For queries that may return multiple results, or when you need more result-processing options, use `execute()`.
+- For single-result queries, prefer the `scalar()` family, because they are more concise and return ORM objects directly.
+- For queries that may return multiple results, or when more result-processing options are needed, use `execute()`.
 
 For example:
 
@@ -1126,15 +1123,15 @@ user = session.scalar_one_or_none(select(User).where(User.id == 1))
 users = session.execute(select(User).where(User.age > 18)).scalars().all()
 ```
 
-This approach keeps the code concise while still providing enough flexibility for different query scenarios.
+This approach keeps the code concise while still providing enough flexibility to handle different query scenarios.
 
-### Further explanation about `select`
+### Further Notes on `select`
 
-Once we import and use `select`, we do not need to import other keywords such as `where`, `order_by`, and so on, because `select` already comes with them:
+Once we import and use `select`, there is no need to import other keywords such as `where`, `order_by`, and so on separately, because `select` already comes with them:
 
 [SELECT and Related Constructs — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/core/selectable.html#sqlalchemy.sql.expression.Select)
 
-There, you can see the methods available on `select`:
+There you can see the methods included with `select`:
 ```python
 __init__(), add_columns(), add_cte(), alias(), as_scalar(), c, column(), column_descriptions, columns_clause_froms, correlate(), correlate_except(), corresponding_column(), cte(), distinct(), except_(), except_all(), execution_options(), exists(), exported_columns, fetch(), filter(), filter_by(), from_statement(), froms, get_children(), get_execution_options(), get_final_froms(), get_label_style(), group_by(), having(), inherit_cache, inner_columns, intersect(), intersect_all(), is_derived_from(), join(), join_from(), label(), lateral(), limit(), offset(), options(), order_by(), outerjoin(), outerjoin_from(), prefix_with(), reduce_columns(), replace_selectable(), scalar_subquery(), select(), select_from(), selected_columns, self_group(), set_label_style(), slice(), subquery(), suffix_with(), union(), union_all(), where(), whereclause, with_for_update(), with_hint(), with_only_columns(), with_statement_hint()
 ```
@@ -1143,11 +1140,9 @@ __init__(), add_columns(), add_cte(), alias(), as_scalar(), c, column(), column_
 
 source: [Using SELECT Statements — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/tutorial/data_select.html)
 
-
-
 ### `.where` usage
 
-In SQLAlchemy 2.0, you can use multiple `.where()` clauses, and they will be combined with `AND`.
+In SQLAlchemy 2.0, you can use multiple `.where()` clauses, and they will be connected with `AND`.
 
 ```python
 exist_check = db.session.execute(
@@ -1157,9 +1152,9 @@ exist_check = db.session.execute(
 ).scalar()
 ```
 
-There are also several equivalent alternatives:
+However, there are several equivalent alternatives:
 
-Separate multiple conditions with commas inside `where` (they are automatically combined with `AND`):
+Separate multiple conditions with commas inside `where` (they will automatically be joined with `AND`):
 
 ```python
 exist_check = db.session.execute(
@@ -1187,7 +1182,7 @@ exist_check = db.session.execute(
 
 > [!note]
 >
-> For how to use `and_()` and `or_()`, refer to the example below:
+> For usage of `and_()` and `or_()`, refer to the example below:
 >
 > ```python
 > from sqlalchemy import and_, or_
@@ -1210,20 +1205,20 @@ exist_check = db.session.execute(
 > AND address.user_id = user_account.id
 > ```
 
-All of these methods are equivalent and generate the same SQL query.
+These methods are equivalent and generate the same SQL query.
 
 # ORM relationship
 
-Some characteristics of ORM relationships
+Features related to ORM relationships
 
 ## Relationship loading strategies
 
-We can understand four different relationship loading strategies through a concrete example. Suppose we have this data:
+We can understand four different relationship loading strategies through a concrete example. Suppose we have the following data:
 
 - 10 users
 - Each user has 3 addresses
 
-Let's compare the query behavior of different loading strategies:
+Let’s compare how different loading strategies behave:
 
 ### Select in load()
 
@@ -1237,7 +1232,7 @@ users = session.execute(stmt).scalars().all()
 # Query 2: SELECT * FROM address WHERE user_id IN (1,2,3,4,5,6,7,8,9,10);  # 一次获取所有地址
 ```
 
-### Lazy Load (default) - the N+1 problem
+### Lazy Load (default) - N+1 problem
 
 ```python
 # 不使用 selectinload
@@ -1291,9 +1286,7 @@ Network overhead analysis:
 Best practice recommendations:
 - Small datasets, one-to-one relationships: `joinedload` can be used
 - Large datasets, one-to-many relationships: use `selectinload`
-- If you are not sure whether related data is needed: use the default lazy loading
-
-
+- If you are not sure whether related data will be needed: use the default lazy loading
 
 ## Session execution methods
 
@@ -1307,15 +1300,15 @@ user = session.execute(stmt).scalar()  # 完整写法
 
 These two approaches are essentially the same. `session.scalar()` is actually shorthand for `session.execute().scalar()`.
 
-**Recommendations:**
+**Usage recommendations:**
 
-1. When querying a single result, use `session.scalar()`:
+1. When querying for a single result, use `session.scalar()`:
 ```python
 # 获取单个用户
 user = session.scalar(select(User).where(User.id == 1))
 ```
 
-2. When querying multiple results, use `session.execute().scalars().all()`:
+2. When querying for multiple results, use `session.execute().scalars().all()`:
 ```python
 # 获取多个用户
 users = session.execute(select(User)).scalars().all()
@@ -1332,13 +1325,13 @@ for user in result.scalars():
 
 Short version:
 
-`session.scalar()` queries a single result
+`session.scalar()` is for querying a single result
 
-`session.execute()` returns a `Result` object, providing more control and flexibility, and is suitable for multi-row results
+`session.execute()` returns a `Result` object, offering more control and flexibility, and is suitable for multi-row results
 
-## Stmt functions
+## `stmt` functions
 
-Common functions
+Common functions:
 
 ```python
 from sqlalchemy import select, and_, or_
@@ -1412,13 +1405,13 @@ Common modifiers:
 - `.outerjoin()`: left join
 - `.distinct()`: remove duplicates
 - `.order_by()`: sort
-- `.limit()`: limit the number of results
+- `.limit()`: limit the number of rows
 - `.offset()`: skip records
 - `.options()`: configure loading options
 
 Common filter conditions:
-- `==`: equal to
-- `!=`: not equal to
+- `==`: equals
+- `!=`: not equals
 - `.in_()`: in a list
 - `.like()`: fuzzy match
 - `.ilike()`: case-insensitive fuzzy match

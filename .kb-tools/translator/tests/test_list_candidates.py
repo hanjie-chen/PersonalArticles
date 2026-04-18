@@ -77,7 +77,12 @@ class ListTranslationCandidatesTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(
                 result.stdout.strip(),
-                f"missing_translation\t{article_path.relative_to(repo_root).as_posix()}",
+                "\n".join(
+                    [
+                        "Found 1 candidate(s)",
+                        f"[1] missing_translation\t{article_path.relative_to(repo_root).as_posix()}",
+                    ]
+                ),
             )
 
     def test_lists_outdated_translation_when_source_blob_differs(self):
@@ -91,7 +96,16 @@ class ListTranslationCandidatesTest(unittest.TestCase):
             (translation_dir / "basic-en.md").write_text(
                 textwrap.dedent(
                     """\
-                    <!-- source_blob: old-blob -->
+                    ---
+                    Title: English
+                    SourceBlob: old-blob
+                    ---
+
+                    ```
+                    BriefIntroduction: English intro
+                    ```
+
+                    <!-- split -->
 
                     # English
                     """
@@ -109,10 +123,118 @@ class ListTranslationCandidatesTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(
                 result.stdout.strip(),
-                f"outdated_translation\t{article_path.relative_to(repo_root).as_posix()}",
+                "\n".join(
+                    [
+                        "Found 1 candidate(s)",
+                        f"[1] outdated_translation\t{article_path.relative_to(repo_root).as_posix()}",
+                    ]
+                ),
             )
 
     def test_skips_translation_when_source_blob_matches(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            repo_root = Path(temp_dir)
+            self.init_repo(repo_root)
+            article_dir = repo_root / "topic"
+            article_path = self.write_publishable_article(article_dir, "basic.md")
+            current_blob = self.source_blob(repo_root, article_path)
+            translation_dir = article_dir / "resources" / "i18n"
+            translation_dir.mkdir(parents=True)
+            (translation_dir / "basic-en.md").write_text(
+                textwrap.dedent(
+                    f"""\
+                    ---
+                    Title: English
+                    SourceBlob: {current_blob}
+                    ---
+
+                    ```
+                    BriefIntroduction: English intro
+                    ```
+
+                    <!-- split -->
+
+                    # English
+                    """
+                ),
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT_PATH), str(repo_root)],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(result.stdout.strip(), "Found 0 candidate(s)")
+
+    def test_respects_default_limit_of_one(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            repo_root = Path(temp_dir)
+            self.init_repo(repo_root)
+            first = self.write_publishable_article(repo_root / "alpha", "first.md")
+            self.write_publishable_article(repo_root / "beta", "second.md")
+
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT_PATH), str(repo_root)],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(
+                result.stdout.strip(),
+                "\n".join(
+                    [
+                        "Found 1 candidate(s)",
+                        f"[1] missing_translation\t{first.relative_to(repo_root).as_posix()}",
+                    ]
+                ),
+            )
+
+    def test_force_skips_articles_already_in_current_translation_format(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            repo_root = Path(temp_dir)
+            self.init_repo(repo_root)
+            article_dir = repo_root / "topic"
+            article_path = self.write_publishable_article(article_dir, "basic.md")
+            current_blob = self.source_blob(repo_root, article_path)
+            translation_dir = article_dir / "resources" / "i18n"
+            translation_dir.mkdir(parents=True)
+            (translation_dir / "basic-en.md").write_text(
+                textwrap.dedent(
+                    f"""\
+                    ---
+                    Title: English
+                    SourceBlob: {current_blob}
+                    ---
+
+                    ```
+                    BriefIntroduction: English intro
+                    ```
+
+                    <!-- split -->
+
+                    # English
+                    """
+                ),
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [sys.executable, str(SCRIPT_PATH), str(repo_root), "--force"],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(result.stdout.strip(), "Found 0 candidate(s)")
+
+    def test_force_includes_articles_still_on_legacy_translation_format(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             repo_root = Path(temp_dir)
             self.init_repo(repo_root)
@@ -133,24 +255,7 @@ class ListTranslationCandidatesTest(unittest.TestCase):
             )
 
             result = subprocess.run(
-                [sys.executable, str(SCRIPT_PATH), str(repo_root)],
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-
-            self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertEqual(result.stdout.strip(), "")
-
-    def test_respects_default_limit_of_one(self):
-        with tempfile.TemporaryDirectory() as temp_dir:
-            repo_root = Path(temp_dir)
-            self.init_repo(repo_root)
-            first = self.write_publishable_article(repo_root / "alpha", "first.md")
-            self.write_publishable_article(repo_root / "beta", "second.md")
-
-            result = subprocess.run(
-                [sys.executable, str(SCRIPT_PATH), str(repo_root)],
+                [sys.executable, str(SCRIPT_PATH), str(repo_root), "--force"],
                 capture_output=True,
                 text=True,
                 check=False,
@@ -159,10 +264,14 @@ class ListTranslationCandidatesTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(
                 result.stdout.strip(),
-                f"missing_translation\t{first.relative_to(repo_root).as_posix()}",
+                "\n".join(
+                    [
+                        "Found 1 candidate(s)",
+                        f"[1] force_translation\t{article_path.relative_to(repo_root).as_posix()}",
+                    ]
+                ),
             )
 
 
 if __name__ == "__main__":
     unittest.main()
-
