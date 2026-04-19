@@ -36,57 +36,9 @@ jobs:
             git diff --name-only "${BEFORE_SHA}" "${CURRENT_SHA}" > /tmp/changed-files.txt
           fi
 
-          python3 - <<'PY'
-          import os
-          from pathlib import PurePosixPath
-
-          changed_file = "/tmp/changed-files.txt"
-          output_file = os.environ["GITHUB_OUTPUT"]
-
-          def is_publish_affecting(path_str: str) -> bool:
-              path = PurePosixPath(path_str.lstrip("./"))
-              normalized = path.as_posix()
-
-              if not normalized:
-                  return False
-
-              if normalized.startswith((".githooks/", ".kb-tools/", "__template__/")):
-                  return False
-
-              if any(part.startswith(".") for part in path.parts):
-                  return False
-
-              if path.name in {"README.md", "AGENTS.md"}:
-                  return False
-
-              if path.suffix.lower() == ".md":
-                  return True
-
-              parts = path.parts
-              if "resources" in parts:
-                  resource_index = parts.index("resources")
-                  if resource_index + 1 < len(parts) and parts[resource_index + 1] in {
-                      "images",
-                      "i18n",
-                  }:
-                      return True
-
-              return "images" in parts or "assets" in parts
-
-          with open(changed_file, "r", encoding="utf-8") as f:
-              changed_paths = [line.strip() for line in f if line.strip()]
-
-          matched = [path for path in changed_paths if is_publish_affecting(path)]
-
-          with open(output_file, "a", encoding="utf-8") as f:
-              f.write(f"should_trigger={'true' if matched else 'false'}\n")
-              f.write(f"matched_count={len(matched)}\n")
-              if matched:
-                  summary = ", ".join(matched[:10])
-                  if len(matched) > 10:
-                      summary += ", ..."
-                  f.write(f"matched_summary={summary}\n")
-          PY
+          python3 .kb-tools/website_sync/detect_publish_affecting_changes.py \
+            --changed-file /tmp/changed-files.txt \
+            --github-output "${GITHUB_OUTPUT}"
 
       - name: Log detection result
         run: |
