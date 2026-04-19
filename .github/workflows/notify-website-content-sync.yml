@@ -1,0 +1,118 @@
+name: Notify Website Content Sync
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: notify-website-content-sync
+  cancel-in-progress: true
+
+jobs:
+  notify-website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Detect publish-affecting changes
+        id: detect
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          CURRENT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${BEFORE_SHA}" ] || [ "${BEFORE_SHA}" = "0000000000000000000000000000000000000000" ]; then
+            git ls-files > /tmp/changed-files.txt
+          else
+            git diff --name-only "${BEFORE_SHA}" "${CURRENT_SHA}" > /tmp/changed-files.txt
+          fi
+
+          python3 - <<'PY'
+          import os
+          from pathlib import PurePosixPath
+
+          changed_file = "/tmp/changed-files.txt"
+          output_file = os.environ["GITHUB_OUTPUT"]
+
+          def is_publish_affecting(path_str: str) -> bool:
+              path = PurePosixPath(path_str.lstrip("./"))
+              normalized = path.as_posix()
+
+              if not normalized:
+                  return False
+
+              if normalized.startswith((".githooks/", ".kb-tools/", "__template__/")):
+                  return False
+
+              if any(part.startswith(".") for part in path.parts):
+                  return False
+
+              if path.name in {"README.md", "AGENTS.md"}:
+                  return False
+
+              if path.suffix.lower() == ".md":
+                  return True
+
+              parts = path.parts
+              if "resources" in parts:
+                  resource_index = parts.index("resources")
+                  if resource_index + 1 < len(parts) and parts[resource_index + 1] in {
+                      "images",
+                      "i18n",
+                  }:
+                      return True
+
+              return "images" in parts or "assets" in parts
+
+          with open(changed_file, "r", encoding="utf-8") as f:
+              changed_paths = [line.strip() for line in f if line.strip()]
+
+          matched = [path for path in changed_paths if is_publish_affecting(path)]
+
+          with open(output_file, "a", encoding="utf-8") as f:
+              f.write(f"should_trigger={'true' if matched else 'false'}\n")
+              f.write(f"matched_count={len(matched)}\n")
+              if matched:
+                  summary = ", ".join(matched[:10])
+                  if len(matched) > 10:
+                      summary += ", ..."
+                  f.write(f"matched_summary={summary}\n")
+          PY
+
+      - name: Log detection result
+        run: |
+          echo "should_trigger=${{ steps.detect.outputs.should_trigger }}"
+          echo "matched_count=${{ steps.detect.outputs.matched_count }}"
+          echo "matched_summary=${{ steps.detect.outputs.matched_summary }}"
+
+      - name: Trigger website content sync workflow
+        if: steps.detect.outputs.should_trigger == 'true'
+        env:
+          WEBSITE_TRIGGER_TOKEN: ${{ secrets.WEBSITE_WORKFLOW_TRIGGER_TOKEN }}
+        run: |
+          set -euo pipefail
+          curl -fsS \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${WEBSITE_TRIGGER_TOKEN}" \
+            https://api.github.com/repos/hanjie-chen/website/actions/workflows/content-sync.yml/dispatches \
+            -d @- <<EOF
+          {
+            "ref": "main",
+            "inputs": {
+              "source_repo": "${{ github.repository }}",
+              "source_sha": "${{ github.sha }}",
+              "source_before": "${{ github.event.before }}",
+              "trigger_reason": "knowledge-base publishable content changed"
+            }
+          }
+          EOF

@@ -91,3 +91,9 @@ git config core.hooksPath .githooks
 ```shell
 python3 --version
 ```
+
+## Website Sync
+
+Push 到 `main` 时，这个仓库可以通过 GitHub Actions 触发 `website` 仓库的 content-sync workflow。
+
+这个触发器只针对可能影响发布结果的内容变更，例如文章正文、翻译 sidecar、图片与资源文件；而 `README.md`、`AGENTS.md`、`.githooks/`、`.kb-tools/`、`__template__/` 等文档和工具目录改动，本身不会触发网站同步。
