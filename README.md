@@ -1,78 +1,70 @@
 # Knowledge Base
 
-这是我的个人知识库，同时也是博客网站的内容来源仓库。使用 markdown 语法编写
+这是我的个人知识库，也是博客网站的内容来源仓库。仓库中的内容主要使用 Markdown 编写，遵循路径即分类
 
-## Repository Structure
+## What This Repository Is
 
-这个仓库把路径当作 taxonomy。
+这个仓库主要承担两件事：
 
-- 每一层目录都表示一个更具体的主题范围。
-- 路径表达的是“属于什么主题”。
-- 文件名尽量简短，把大部分上下文交给目录路径表达。
+- 作为个人知识库，持续整理可复用的主题知识、经验和笔记
+- 作为网站内容仓库，为博客或文档站点提供可发布的内容来源
 
-例如：
+## How To Navigate
 
-- `ai/coding-agents/codex/codex-cli.md`
-- `code/python/package/flask/basic.md`
+这个仓库把路径当作文章的分类。
 
-## Directory README
+每一层目录都表示一个更具体的主题范围，从而把更多上下文交给目录路径表达，使得文件名尽量简短
 
-除了 project root `README.md`，某些目录也有自己的 `README.md`。
+例如：`ai/coding-agents/codex/codex-cli.md`
 
-它是这个目录的入口页，包含内容：
+如果你是第一次进入这个仓库，通常可以从顶层主题目录开始，再顺着目录 `README.md` 往下阅读。
 
-- 说明这个目录的主题范围
+## Content Organization
+
+除了本 `README.md`，部分目录也会有自己的 `README.md`。
+
+它通常是该目录的入口页，用来：
+
 - 列出下面有哪些子主题或子目录
-- 给出阅读入口或常见跳转路径
-- 记录少量值得先知道的 observations, notes, or guiding ideas
+- 记录少量值得先知道的 notes 或 guiding ideas
 
-如果一段内容明确属于某个分类，但暂时还不值得单独写成完整文章，可以先放在对应目录的 `README.md` 中，而不是硬拆成一篇独立文章。
+在命名上，尽量让目录承载主题语义，让文件名保持简短。
 
-## File Organization
+## Article Layout
 
-目前的文章目录有两种格式
+文章目录通常会把正文和附属资源放在一起管理。常见形式如下：
 
-```
+```text
 articles-dir/
-├───resources/
-│   ├───i18n/
-│   │   └───example-en.md
-│   └───images/
-└───example.md
+├── example-1.md
+├── example-2.md
+└── resources/
+    ├── images/
+    └── i18n/
+        ├── example-1-en.md
+        └── example-2-en.md
 ```
 
-一般来说，文章目录下会有同级 `resources/` 文件夹，用于存放这篇文章的附属文件。
+一般来说：
 
-例如：
+- `resources/images/` 用于存放与文章对应的图片等资源文件
+- `resources/i18n/` 用于存放主文档的翻译 sidecar
 
-- `resources/images/` 用于存放图片
-- `resources/i18n/` 用于存放主文档的翻译稿
-
-有些文件夹如果只有图片的话，则是一个直接的 `images` 文件夹
+有些目录如果只有图片资源，也可能直接使用 `images/`，不一定强制引入完整的 `resources/` 结构。重点是让文章与其附属资源保持清晰、稳定、容易定位的关系。
 
 ## Special Directories
 
-`.<folder-name>` 格式的目录不会出现在 Typora 的目录树中，`__<folder-name>__` 格式的目录会出现在 Typora 的目录树中。
+这个仓库里有一些特殊目录（用于模板、工具和维护）
 
-这样可以把“需要看到的模板”和“只用于仓库运行的辅助目录”区分开。
+`__template__/` 用于存放文章模板或内容骨架。
 
-### `__template__/`
+`.githooks/` 用于存放这个仓库的 Git hooks。
 
-根目录下的 `__template__/` 用来存放文章模板。
-
-### `.githooks/`
-
-`.githooks/` 用来存放这个仓库的 Git hooks。当前有一个 hook，会在 commit 前检查图片文件扩展名是否为大写；如果是，则自动改成小写。
-
-### `.kb-tools/`
-
-`.kb-tools/` 用来存放这个仓库的辅助工具。
-
-目前翻译相关工具位于 `.kb-tools/translator/`。
-
-如果要使用或修改翻译工具，请先阅读 `.kb-tools/translator/README.md`。
+`.kb-tools/` 用于存放这个仓库的辅助工具和脚本。如果要使用或修改其中的工具，请优先阅读对应子目录下的 `README.md`。
 
 ## Repository Setup
+
+如果你要在本地维护这个仓库，建议先完成以下最小配置。
 
 Enable case-sensitive paths on Windows:
 
@@ -86,16 +78,13 @@ Configure Git hooks path:
 git config core.hooksPath .githooks
 ```
 
-需要保证命令行中可以正常运行：
+同时需要保证命令行中可以正常运行：
 
 ```shell
 python3 --version
+codex exec # .kb-tools/translator 使用
 ```
 
-## Website Sync
+## Publishing
 
-Push 到 `main` 时，这个仓库可以通过 GitHub Actions 触发 `website` 仓库的 content-sync workflow。
-
-这个触发器只针对可能影响发布结果的内容变更，例如文章正文、翻译 sidecar、图片与资源文件；而 `README.md`、`AGENTS.md`、`.githooks/`、`.kb-tools/`、`__template__/` 等文档和工具目录改动，本身不会触发网站同步。
-
-对应的路径判定逻辑位于 `.kb-tools/website_sync/detect_publish_affecting_changes.py`，对应测试位于 `.kb-tools/website_sync/tests/`，这样规则可以和实现放在一起单独测试和维护，而不是全部内联在 workflow YAML 中。
+Push 到 `main` 的内容变更会触发网站内容同步。具体规则见 `.kb-tools/website_sync/` 和 `.github/workflows/`。

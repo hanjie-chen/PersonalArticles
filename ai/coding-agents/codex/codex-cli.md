@@ -43,7 +43,7 @@ Codex 会在每次启动时自动读取并合并一条“指令链”：
 
 <img src="./images/interactive-mode.png" alt="interactive mode" style="zoom:50%;" />
 
-使用 `/` 可以设定和查看某些内容，比如说选择模型
+使用 `/` 可以使用一些内置的命令
 
 <img src="./images/select.png" alt="codex cli select" style="zoom:50%;" />
 
@@ -57,7 +57,7 @@ status
 
 - `/clear`：清屏 + 开新对话（从头开始聊）。
 
-# plan mode
+## plan mode
 
 Plan mode 会先让 Codex 做“方案设计 / 执行分解”，再进入真正的修改与实现，而不是一上来就直接改代码。
 
@@ -70,6 +70,21 @@ Plan mode 会先让 Codex 做“方案设计 / 执行分解”，再进入真正
 - 普通 Agent/直接实现模式：你说做什么，它尽快开始看文件、跑命令、改代码”。
 - Plan mode：先出施工方案、拆步骤、确认方向，再继续”。
 
-# subagent
+## subagent
 
 subagent 需要指定开启，codex 无法自己判断子否开启
+
+# codex exec
+
+codex exec 命令是 Codex CLI 的非交互模式。
+
+适合脚本化的运行：给它一个 prompt，它执行任务并结束，而不是像直接运行 `codex` 那样进入一个持续对话的终端界面。
+
+也就是说：
+
+- `codex` = 交互式会话/TUI。
+- `codex exec "任务"` = 一次性 agent 任务。跑完就退出
+
+而且可以把多个 `codex exec` 当成多个独立任务去启动。 
+
+每次 `codex exec` 都是一个独立的非交互 session：它可以持久化 session，支持 `codex exec resume [SESSION_ID]` 继续某个 exec 会话；

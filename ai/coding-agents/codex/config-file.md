@@ -1,6 +1,6 @@
-# config.toml
+# Codex Config Fil
 
-Codex 的用户级配置默认在 `~/.codex/config.toml`，项目级配置可以放在仓库里的 `.codex/config.toml`；CLI 和 IDE 扩展共用同一套配置层。
+Codex 的用户级配置文件默认在 `~/.codex/config.toml`，项目级配置可以放在仓库里的 `.codex/config.toml`；CLI 和 IDE 扩展共用同一套配置层。
 
 在讲解 config.toml 配置的时候，我们也顺便讲下 toml 语法
 
@@ -8,7 +8,7 @@ Codex 的用户级配置默认在 `~/.codex/config.toml`，项目级配置可以
 
 ### TOML 只看三样东西
 
-第一种是最基础的 `键 = 值`：
+第一种是最基础的 `key = value`：
 
 ```toml
 model = "gpt-5.4"

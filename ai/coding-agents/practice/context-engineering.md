@@ -1,7 +1,7 @@
 ---
 Title: AGENTS.md & README.md 使用指南
 Author: 陈翰杰
-Instructor: GPT-5
+Instructor: GPT5(5.4)
 CoverImage: ./resources/images/agents-readme.jpg
 RolloutDate: 2026-03-29
 ---
@@ -71,17 +71,27 @@ BriefIntroduction:
 
 当我们解决了“让 AI 读懂 project”这个问题之后，下一步就是让 AI 知道该如何安全地修改它。
 
-这时就需要另一类文档：agent instruction file，比如 Codex 使用 AGENTS.md，Claude Code 使用 CLAUDE.md。接下来我们以 AGENTS.md 为例来说明这一点。
+这时就需要另一类文档：agent instruction file，比如 Codex 使用 AGENTS.md，Claude Code 使用 CLAUDE.md。接下来我们以 AGENTS.md 为例。
 
-AGENTS.md 不是“另一个 README”。它更偏向于行动指南，而不是项目介绍。
+AGENTS.md 和 README.md 的区分：
 
-最简单的区分是：
-
-- README.md 回答：这是什么项目，怎么跑，结构大概怎样
-- AGENTS.md 回答：如果你现在要动这个仓库，应该先看哪里、遵守什么约束、不要踩哪些坑
+- README.md：这是什么项目，怎么跑，结构大概怎样
+- AGENTS.md：如果现在要动这个仓库，应该先看哪里、遵守什么约束、不要踩哪些坑，也就是行动指南。
 
 而 AGENTS.md 也分为三层
 
 - global AGENTS.md
 - project root AGENTS.md
 - sub-floder AGENTS.md
+
+## global AGENTS.md
+
+通用协作偏好，跨仓库都成立。
+
+## project root AGENTS.md
+
+这个 repo 的跨子系统规则。
+
+## sub-folder AGENTS.md
+
+只放该目录独有的约束；行为说明优先放 README.md，流程约束才放 AGENTS.md。
