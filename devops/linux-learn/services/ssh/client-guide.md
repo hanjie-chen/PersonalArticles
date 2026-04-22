@@ -8,7 +8,7 @@ RolloutDate: 2026-02-21
 
 ```
 BriefIntroduction: 
-ssh 在客户端的配置
+客户端 ssh 配置指南
 ```
 
 <!-- split -->
@@ -27,19 +27,19 @@ ssh 在客户端的配置
 ssh-keygen -t rsa -b 4096 -C "note" -f ~/.ssh/<key-filename>
 ```
 
-`-t`: type，指定算法 rsa
+`-t`: type 指定算法 rsa
 
-`-b`: bits，指定安全位数，rsa 建议至少 2048
+`-b`: bits 指定安全位数，rsa 建议至少 2048
 
-`-C`: comments，注释
+`-C`: comments 注释
 
-`-f`: 指定输出文件名
+`-f`: file 指定输出文件名
 
 这样就会生成 `~/.ssh/<key-filename>`（私钥） 和 `~/.ssh/<key-filename>.pub`（公钥）
 
-生成过程中可以选择是否给私钥加 passphrase（密码短语）。如果加了，在登录时需要输入 passphrase
+生成过程中我们可以选择是否给私钥加 passphrase（密码短语）。如果加了，在登录时需要输入 passphrase 来解密私钥
 
-一般来说我们写的注释（note），通常记录在公钥文件的结尾处，可以直接打开 `.pub` 文件查看
+而我们写的注释（note），会记录在公钥文件的结尾处，可以直接打开 `.pub` 文件查看
 
 对于文件名，我们最好起一个有意义的名字，例如 `Singapore-Linux-VM-SSH-Key` 
 
@@ -85,7 +85,7 @@ The key's randomart image is:
 
 ## add ssh key to remote server
 
-既然已经生成了 ssh key, 我们就需要将 public key 添加到 remote server中去
+既然已经生成了 ssh key, 我们就需要将 public key 添加到 remote server 中去
 
 ### command
 
@@ -113,14 +113,6 @@ and check to make sure that only the key(s) you wanted were added.
 > [!note]
 >
 > - 在 windows powershell 环境下无法使用 `ssh-copy-id` 命令，此时可以打开 git bash 去运行这个命令
->
-> - 如果在 server 上配置了禁止 password 登录，这个命令很可能会失败。或许可以试试看这个命令：
->
->   ```shell
->   ssh-copy-id -i new-key.pub -o "IdentityFile=old-key" -p <port> user@IP
->   ```
->
->   下次可以试试看，目前我没有尝试过
 
 ### manual
 
@@ -148,7 +140,7 @@ and check to make sure that only the key(s) you wanted were added.
 
 如果我们直接用 `ssh username@remote-server-ip`，SSH 默认会仅尝试 `id_rsa` 这样默认命名的密钥
 
-所以我们需要在命令行临时指定：
+所以我们需要在命令行指定：
 
 ```javascript
 ssh -i ~/.ssh/id_rsa_remote_server username@remote-server-ip
