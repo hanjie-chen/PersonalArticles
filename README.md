@@ -62,6 +62,9 @@ articles-dir/
 
 `.kb-tools/` 用于存放这个仓库的辅助工具和脚本。如果要使用或修改其中的工具，请优先阅读对应子目录下的 `README.md`。
 
+- `.kb-tools/translator/` 用于生成或更新文章的英文翻译
+- `.kb-tools/website_sync/` 用于判断一次变更是否会影响网站发布结果
+
 ## Repository Setup
 
 如果你要在本地维护这个仓库，建议先完成以下最小配置。
