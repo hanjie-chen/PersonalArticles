@@ -11,9 +11,9 @@
 
 ## How To Navigate
 
-这个仓库把路径当作文章的分类。
+原则：路径即为文章分类。
 
-每一层目录都表示一个更具体的主题范围，从而把更多上下文交给目录路径表达，使得文件名尽量简短
+每一层目录都表示一个更具体的主题范围，把更多上下文交给目录路径表达，从而使得文件名保持简短
 
 例如：`ai/coding-agents/codex/codex-cli.md`
 
@@ -26,7 +26,7 @@
 它通常是该目录的入口页，用来：
 
 - 列出下面有哪些子主题或子目录
-- 记录少量值得先知道的 notes 或 guiding ideas
+- 记录该主题（目录）下值得知道的 notes 或 guiding ideas
 
 在命名上，尽量让目录承载主题语义，让文件名保持简短。
 
@@ -54,31 +54,30 @@ articles-dir/
 
 ## Special Directories
 
-这个仓库里有一些特殊目录（用于模板、工具和维护）
+这个仓库里有一些特殊目录
 
-`__template__/` 用于存放文章模板或内容骨架。
-
-`.githooks/` 用于存放这个仓库的 Git hooks。
-
-`.kb-tools/` 用于存放这个仓库的辅助工具和脚本。如果要使用或修改其中的工具，请优先阅读对应子目录下的 `README.md`。
-
-- `.kb-tools/translator/` 用于生成或更新文章的英文翻译
-- `.kb-tools/website_sync/` 用于判断一次变更是否会影响网站发布结果
+1. `__template__/` 用于存放文章模板。
+2. `.githooks/` 用于存放仓库的 Git hooks。
+3. `.kb-tools/` 用于存放这个仓库的辅助工具和脚本。如果要使用或修改其中的工具，请优先阅读对应子目录下的 `README.md`。
+   - `.kb-tools/translator/` 用于生成或更新文章的英文翻译
+   - `.kb-tools/website_sync/` 用于判断一次变更是否会影响网站发布结果
 
 ## Repository Setup
 
 如果你要在本地维护这个仓库，建议先完成以下最小配置。
 
-Enable case-sensitive paths on Windows:
+[Windows OS only] 启动大小写敏感
 
 ```shell
 git config core.ignorecase false
 ```
 
-Configure Git hooks path:
+配置 githook 路径
 
 ```shell
 git config core.hooksPath .githooks
+# 验证
+git config --get core.hooksPath
 ```
 
 同时需要保证命令行中可以正常运行：

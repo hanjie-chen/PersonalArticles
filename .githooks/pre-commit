@@ -27,7 +27,7 @@ def rename_image_extensions(files):
             subprocess.run(['git', 'add', new_file])
             subprocess.run(['git', 'rm', '--cached', file])
             renamed = True
-            print(f"rename file: {file} -> {new_file}")
+            print(f"[pre-commit] renamed: {file} -> {new_file}")
 
     return renamed
 
@@ -36,13 +36,15 @@ def main():
     if not files or files == ['']:
         sys.exit(0)
 
+    print("[pre-commit] checking staged image extensions...")
     renamed = rename_image_extensions(files)
 
     if renamed:
-        print("image extension name lowercased, staging area updated")
-        print("please confirm change, and run git commit again to commit")
+        print("[pre-commit] updated staging area after lowercasing image extensions")
+        print("[pre-commit] commit stopped; please review changes and run git commit again")
         sys.exit(1)  # 终止提交，让用户检查更改
     else:
+        print("[pre-commit] ok: no uppercase image extensions found")
         sys.exit(0)  # 正常结束，允许提交
 
 if __name__ == '__main__':
