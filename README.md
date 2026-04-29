@@ -1,6 +1,9 @@
 # Knowledge Base
 
-这是我的个人知识库，也是博客网站的内容来源仓库。仓库中的内容主要使用 Markdown 编写，遵循路径即分类
+这是我的个人知识库，用来整理文章、笔记和可复用的主题知识，同时作为个人网站的内容来源。
+
+- 个人网站：https://hanjie-chen.com/
+- 网站源码：https://github.com/hanjie-chen/website
 
 ## What This Repository Is
 

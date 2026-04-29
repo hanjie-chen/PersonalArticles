@@ -245,6 +245,8 @@ ssh 配置文件一般默认路径是 `~/.ssh/config` 这个文件本质上是 S
 
 不过我们先来看看他最基础的功能：简化连接命令，将复杂的将复杂的 ssh 命令参数转化为一个 host, 用 `ssh <Host>` 命令快速登录，无需每次都输入一系列复杂的参数
 
+通过编辑这个文件，我们可以为不同主机指定私钥，例如为个人服务器和公司服务器使用不同密钥。GitHub 或 GitLab 配置不同密钥。
+
 一个经典的配置如下
 
 ```json
@@ -254,52 +256,45 @@ Host <name>
     Port <ssh-port>
     IdentityFile ~/.ssh/id_rsa
 	AddKeysToAgent yes
+	IdentitiesOnly yes
 	ServerAliveInterval 20
 	ServerAliveCountMax 6
 	TCPKeepAlive yes
 	IPQoS none
 ```
 
-1. AddKeysToAgent yes
+1. IdentityFile ~/.ssh/id_rsa
+
+   请优先尝试这个 key
+
+2. AddKeysToAgent yes
 
    ssh client 在验证成功后，自动把解密后的密钥存入 ssh-agent（如果 ssh-agent 没有此时没有启动，则不会生效）。
 
    如果没有这一条，那么 ssh-agent 是不会在你 ssh 链接服务器的时候自动获得你的密钥的，也就是说需要你手动 ssh-add 那个 key
 
-2. ServerAliveInterval 20
+3. IdentitiesOnly yes
+
+   连接时，只用 `~/.ssh/id_rsa` 这把 key 做公钥认证；不要再额外尝试其他的 key。
+
+4. ServerAliveInterval 20
 
    SSH 客户端每 20 秒给服务器发一次应用层心跳包，防止链路被当成“空闲连接”而回收。
 
-3. ServerAliveCountMax 6
+5. ServerAliveCountMax 6
 
    连续 6 次心跳没收到回复 ssh client 才断开链接，防止网络抖动时立刻断。
 
-4. TCPKeepAlive yes
+6. TCPKeepAlive yes
 
    启用操作系统 TCP 层 keepalive。
 
-5. IPQoS none
+7. IPQoS none
 
    不设置 SSH 流量的 DSCP/QoS 标记。绕过某些网络设备对特定 QoS 标记处理不当导致的掉线/限速。
 
 > [!tip]
 >
 > 在 vscode 的 remote-ssh 插件中使用 `Remote-SSH: Open SSH Configuration File...` 同样编辑的就是这个文件。
-
-通过编辑这个文件，我们可以为不同主机指定私钥，例如为个人服务器和公司服务器使用不同密钥。GitHub 或 GitLab 配置不同密钥。
-
-```
-Host github.com
-  User git
-  IdentityFile ~/.ssh/github_key  # GitHub 专用密钥
-
-Host company-server
-  HostName example.com
-  User dev
-  IdentityFile ~/.ssh/work_key    # 公司服务器密钥
-```
-
-> [!important]
 >
-> 注意 ssh config 不支持直接配置密码
-
+> 改完 ~/.ssh/config 对新的 SSH 连接会立刻生效，不需要重启 Windows，也通常不需要重启 ssh-agent。

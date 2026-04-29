@@ -624,27 +624,7 @@ git config --global core.excludesfile ~/.gitignore
 
 ### personal `.gitignore`
 
-```gitignore
-# python auto generated file
-__pycache__/
-*.pyc
-
-# local environment, such as token, password etc
-.env
-# nging basic auth user-password file
-.htpasswd
-
-# pytest-cov file
-.coverage
-
-# ignore tf related file
-# terraform cahce file
-.terraform/
-# terraform status file
-terraform.tfstate
-# sensitive data
-terraform.tfvars
-```
+在我的个人配置仓库中: https://github.com/hanjie-chen/personal-config/blob/main/git/.gitignore
 
 ## case sensitivity(windows)
 
