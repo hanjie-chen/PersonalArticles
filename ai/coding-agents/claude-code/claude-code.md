@@ -23,25 +23,38 @@ claude doctor
 claude update
 ```
 
-# command
+# 使用指南（claude code terminal）
+
+## command
 
 /model: 切换模型和思考强度
+
+/exit: 退出
 
 /btw: 在当前上下文开一个临时的对话框询问信息（by the way）提问完成之后关闭不会污染上下文。使用方法是 ` /btw <question> ` 在命令之后空格直接加上问题。然后 esc 退出
 
 /insights: 会生成一份HTML报告，分析你过去一个月使用Claude Code的习惯，包括你最常用哪些命令，你有哪些重复性的操作模式，然后给你推荐一些自定义命令和Skills。
 这个命令生成的报告存储位置是固定在 ` ~/.claude/usage-data/report.html ` 每次运行 `/insights` 会覆盖上一次的报告，不会保留历史。
 
+/simplify: 启动三个平行的Agent，分别从代码复用、代码质量、运行效率三个角度审查你的改动。注意，是没有 commit 过的代码
+
+## 其他技巧
+
+ctrl + j: 换行
+ctrl + u: 删除整行输入。
+
 @filename: 使用 @ 可以引用文件，需要注意 @ 和之前的字符需要保持一个空格
+!: 执行终端命令
+
 
 # CLAUDE.md
 
 一个好的 claude.md 需要包含这些内容
 
  1. 项目一句话简介 — 让cc秒懂这是什么
-  2. 目录结构 + 每个文件夹的用途 — 让cc需要找什么就去哪里，不用乱翻
-  3. 关键设定文件索引 — 按需读取
-  4. 当前进度 — 做到那里，现在在解决什么问题
+ 2. 目录结构 + 每个文件夹的用途 — 让cc需要找什么就去哪里，不用乱翻
+ 3. 关键设定文件索引 — 按需读取
+ 4. 当前进度 — 做到那里，现在在解决什么问题
 
 # claude code 配置
 
@@ -170,3 +183,4 @@ printf "[%s] %s | %s" "$short" "$ctx_str" "$cost_str"
 
 重启 cc 即可生效。
 
+## 主动压缩
