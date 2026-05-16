@@ -24,6 +24,22 @@ assert CLI_SPEC.loader is not None
 CLI_SPEC.loader.exec_module(translate_cli)
 
 
+def run_git(args, cwd):
+    return subprocess.run(
+        ["git", *args],
+        cwd=cwd,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+
+def init_repo(repo_root: Path) -> None:
+    run_git(["init"], cwd=repo_root)
+    run_git(["config", "user.name", "Codex"], cwd=repo_root)
+    run_git(["config", "user.email", "codex@example.com"], cwd=repo_root)
+
+
 class TranslateArticlesTest(unittest.TestCase):
     def write_publishable_article(self, article_dir: Path, md_name: str = "article.md") -> Path:
         resources_images = article_dir / "resources" / "images"
@@ -215,13 +231,19 @@ class TranslateArticlesTest(unittest.TestCase):
         args = parser.parse_args(["--force"])
         self.assertTrue(args.force)
 
+    def test_build_parser_accepts_staged_and_all_options(self):
+        parser = translate_cli.build_parser()
+        args = parser.parse_args(["--staged", "--all"])
+        self.assertTrue(args.staged)
+        self.assertTrue(args.all)
+
     def test_build_parser_defaults_jobs_to_two(self):
         parser = translate_cli.build_parser()
         args = parser.parse_args([])
         self.assertEqual(args.jobs, 2)
 
     def test_main_prints_candidate_list_and_progress_summary(self):
-        repo_root = Path(r"E:\repo")
+        repo_root = Path("/tmp/repo").resolve()
         candidates = [
             kb_translation.Candidate(
                 source_md=repo_root / "topic" / "first.md",
@@ -248,6 +270,8 @@ class TranslateArticlesTest(unittest.TestCase):
             build_parser.return_value.parse_args.return_value = mock.Mock(
                 root_dir=str(repo_root),
                 limit=5,
+                all=False,
+                staged=False,
                 model=None,
                 jobs=2,
                 force=False,
@@ -270,7 +294,7 @@ class TranslateArticlesTest(unittest.TestCase):
         self.assertIn("success: 2", output)
 
     def test_main_passes_force_to_candidate_finder(self):
-        repo_root = Path(r"E:\repo")
+        repo_root = Path("/tmp/repo").resolve()
         with mock.patch.object(
             translate_cli, "build_parser"
         ) as build_parser, mock.patch.object(
@@ -279,6 +303,8 @@ class TranslateArticlesTest(unittest.TestCase):
             build_parser.return_value.parse_args.return_value = mock.Mock(
                 root_dir=str(repo_root),
                 limit=5,
+                all=False,
+                staged=False,
                 model=None,
                 jobs=2,
                 force=True,
@@ -291,6 +317,40 @@ class TranslateArticlesTest(unittest.TestCase):
         self.assertEqual(exit_code, 0)
         find_candidates.assert_called_once_with(repo_root, 5, force=True)
         self.assertIn("Found 0 candidate(s)", stdout.getvalue())
+
+    def test_find_staged_candidates_only_checks_staged_source_articles(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            repo_root = Path(temp_dir)
+            init_repo(repo_root)
+            staged_article = self.write_publishable_article(repo_root / "staged", "basic.md")
+            self.write_publishable_article(repo_root / "unstaged", "draft.md")
+            run_git(["add", str(staged_article.relative_to(repo_root))], cwd=repo_root)
+
+            candidates = kb_translation.find_staged_candidates(repo_root, limit=None)
+
+            self.assertEqual(candidates, [
+                kb_translation.Candidate(
+                    source_md=staged_article,
+                    status="missing_translation",
+                )
+            ])
+
+    def test_find_staged_candidates_rejects_partially_staged_articles(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            repo_root = Path(temp_dir)
+            init_repo(repo_root)
+            article_path = self.write_publishable_article(repo_root / "topic", "basic.md")
+            run_git(["add", "."], cwd=repo_root)
+            run_git(["commit", "-m", "initial"], cwd=repo_root)
+
+            with article_path.open("a", encoding="utf-8") as article:
+                article.write("\nStaged paragraph.\n")
+            run_git(["add", str(article_path.relative_to(repo_root))], cwd=repo_root)
+            with article_path.open("a", encoding="utf-8") as article:
+                article.write("\nUnstaged paragraph.\n")
+
+            with self.assertRaises(kb_translation.PartiallyStagedArticleError):
+                kb_translation.find_staged_candidates(repo_root, limit=None)
 
     def test_default_repo_root_points_to_kb_root(self):
         expected = MODULE_PATH.parents[2]

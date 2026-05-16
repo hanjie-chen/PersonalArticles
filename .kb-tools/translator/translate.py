@@ -7,7 +7,7 @@ import sys
 from threading import Lock, Thread
 from pathlib import Path
 
-from workflow import default_repo_root, find_candidates, translate_candidate
+from workflow import default_repo_root, find_candidates, find_staged_candidates, translate_candidate
 
 
 SECTION_LINE = "=" * 48
@@ -116,6 +116,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("root_dir", nargs="?", default=None, help="Repository root directory")
     parser.add_argument("--limit", type=int, default=1, help="Maximum number of candidates to translate")
     parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Translate every candidate instead of applying --limit",
+    )
+    parser.add_argument(
+        "--staged",
+        action="store_true",
+        help="Only translate candidates for staged source articles",
+    )
+    parser.add_argument(
         "--force",
         action="store_true",
         help="Re-translate every publishable article candidate even if SourceBlob already matches",
@@ -139,7 +149,9 @@ def main() -> int:
     repo_root = (
         Path(args.root_dir).resolve() if args.root_dir else default_repo_root(Path(__file__))
     )
-    candidates = find_candidates(repo_root, max(args.limit, 0), force=args.force)
+    limit = None if args.all else max(args.limit, 0)
+    finder = find_staged_candidates if args.staged else find_candidates
+    candidates = finder(repo_root, limit, force=args.force)
     total = len(candidates)
 
     if total == 0:

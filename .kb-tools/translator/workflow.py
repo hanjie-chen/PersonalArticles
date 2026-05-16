@@ -20,6 +20,10 @@ class Candidate:
     status: str
 
 
+class PartiallyStagedArticleError(RuntimeError):
+    pass
+
+
 @dataclass(frozen=True)
 class SourceArticle:
     title: str
@@ -156,6 +160,34 @@ def expected_translation_path(source_md: Path) -> Path:
     return source_md.parent / "resources" / "i18n" / f"{source_md.stem}-en.md"
 
 
+def candidate_for_source(
+    root_dir: Path, source_md: Path, *, force: bool = False
+) -> Candidate | None:
+    if not source_md.is_file():
+        return None
+    if not is_scannable_directory(source_md.parent, root_dir):
+        return None
+    if not (source_md.parent / "resources" / "images").is_dir():
+        return None
+    if not is_publishable_markdown(source_md):
+        return None
+
+    translation_md = expected_translation_path(source_md)
+    source_blob = compute_source_blob(root_dir, source_md)
+
+    if not translation_md.exists():
+        return Candidate(source_md=source_md, status="missing_translation")
+
+    translation_blob = read_translation_source_blob(translation_md)
+    if translation_blob != source_blob:
+        return Candidate(source_md=source_md, status="outdated_translation")
+
+    if force and not uses_current_translation_format(translation_md):
+        return Candidate(source_md=source_md, status="force_translation")
+
+    return None
+
+
 def extract_source_article(source_md: Path) -> SourceArticle:
     text = source_md.read_text(encoding="utf-8")
     divided_article = text.split("<!-- split -->", 1)
@@ -222,43 +254,76 @@ def find_candidates(
         for source_md in sorted(current_dir.glob("*.md")):
             if limit is not None and len(candidates) >= limit:
                 break
-            if not is_publishable_markdown(source_md):
-                continue
+            candidate = candidate_for_source(root_dir, source_md, force=force)
+            if candidate:
+                candidates.append(candidate)
 
-            translation_md = expected_translation_path(source_md)
-            source_blob = compute_source_blob(root_dir, source_md)
+    return candidates
 
-            if force:
-                if not translation_md.exists():
-                    candidates.append(
-                        Candidate(source_md=source_md, status="missing_translation")
-                    )
-                    continue
 
-                translation_blob = read_translation_source_blob(translation_md)
-                if translation_blob != source_blob:
-                    candidates.append(
-                        Candidate(source_md=source_md, status="outdated_translation")
-                    )
-                    continue
+def staged_paths(root_dir: Path) -> list[Path]:
+    result = subprocess.run(
+        [
+            "git",
+            "-c",
+            f"safe.directory={root_dir}",
+            "-C",
+            str(root_dir),
+            "diff",
+            "--cached",
+            "--name-only",
+            "--diff-filter=ACMR",
+        ],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    return [root_dir / line for line in result.stdout.splitlines() if line]
 
-                if not uses_current_translation_format(translation_md):
-                    candidates.append(
-                        Candidate(source_md=source_md, status="force_translation")
-                    )
-                continue
 
-            if not translation_md.exists():
-                candidates.append(
-                    Candidate(source_md=source_md, status="missing_translation")
-                )
-                continue
+def has_unstaged_changes(root_dir: Path, path: Path) -> bool:
+    result = subprocess.run(
+        [
+            "git",
+            "-c",
+            f"safe.directory={root_dir}",
+            "-C",
+            str(root_dir),
+            "diff",
+            "--quiet",
+            "--",
+            str(path.relative_to(root_dir)),
+        ],
+        check=False,
+    )
+    return result.returncode != 0
 
-            translation_blob = read_translation_source_blob(translation_md)
-            if translation_blob != source_blob:
-                candidates.append(
-                    Candidate(source_md=source_md, status="outdated_translation")
-                )
+
+def find_staged_candidates(
+    root_dir: Path, limit: int | None = 1, *, force: bool = False
+) -> list[Candidate]:
+    candidates: list[Candidate] = []
+    seen: set[Path] = set()
+
+    for source_md in sorted(staged_paths(root_dir)):
+        if limit is not None and len(candidates) >= limit:
+            break
+        if source_md in seen or source_md.suffix.lower() != ".md":
+            continue
+        seen.add(source_md)
+
+        candidate = candidate_for_source(root_dir, source_md, force=force)
+        if not candidate:
+            continue
+
+        if has_unstaged_changes(root_dir, source_md):
+            relative_path = source_md.relative_to(root_dir).as_posix()
+            raise PartiallyStagedArticleError(
+                "Cannot translate a staged article that also has unstaged changes: "
+                f"{relative_path}"
+            )
+
+        candidates.append(candidate)
 
     return candidates
 

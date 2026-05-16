@@ -2,6 +2,7 @@ import contextlib
 import importlib.machinery
 import importlib.util
 import io
+import subprocess
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -19,55 +20,65 @@ def load_module():
     return module
 
 
-class PreCommitHookTests(unittest.TestCase):
-    def test_prints_visible_success_when_no_uppercase_image_extensions_exist(self):
+class PreCommitRunnerTests(unittest.TestCase):
+    def test_runs_hook_scripts_in_order(self):
         module = load_module()
+        scripts = [
+            Path(".githooks/pre-commit.d/10-first.py"),
+            Path(".githooks/pre-commit.d/20-second.py"),
+        ]
         stdout = io.StringIO()
 
         with (
+            mock.patch.object(module, "iter_hook_scripts", return_value=scripts),
             mock.patch.object(
-                module,
-                "get_staged_files",
-                return_value=["article.md", "resources/images/cover.png"],
-            ),
-            mock.patch.object(module, "rename_image_extensions", return_value=False),
+                module.subprocess,
+                "run",
+                return_value=subprocess.CompletedProcess([], 0),
+            ) as run,
             contextlib.redirect_stdout(stdout),
-            self.assertRaises(SystemExit) as exit_context,
         ):
-            module.main()
+            exit_code = module.main()
 
-        self.assertEqual(exit_context.exception.code, 0)
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(
+            [call.args[0][1] for call in run.call_args_list],
+            [str(scripts[0]), str(scripts[1])],
+        )
         self.assertEqual(
             stdout.getvalue().strip().splitlines(),
             [
-                "[pre-commit] checking staged image extensions...",
-                "[pre-commit] ok: no uppercase image extensions found",
+                "[pre-commit] running 10-first.py",
+                "[pre-commit] running 20-second.py",
             ],
         )
 
-    def test_prints_review_instruction_when_image_extensions_are_renamed(self):
+    def test_stops_after_first_failed_script(self):
         module = load_module()
+        scripts = [
+            Path(".githooks/pre-commit.d/10-first.py"),
+            Path(".githooks/pre-commit.d/20-second.py"),
+        ]
         stdout = io.StringIO()
 
         with (
+            mock.patch.object(module, "iter_hook_scripts", return_value=scripts),
             mock.patch.object(
-                module,
-                "get_staged_files",
-                return_value=["resources/images/cover.JPG"],
-            ),
-            mock.patch.object(module, "rename_image_extensions", return_value=True),
+                module.subprocess,
+                "run",
+                return_value=subprocess.CompletedProcess([], 1),
+            ) as run,
             contextlib.redirect_stdout(stdout),
-            self.assertRaises(SystemExit) as exit_context,
         ):
-            module.main()
+            exit_code = module.main()
 
-        self.assertEqual(exit_context.exception.code, 1)
+        self.assertEqual(exit_code, 1)
+        self.assertEqual(run.call_count, 1)
         self.assertEqual(
             stdout.getvalue().strip().splitlines(),
             [
-                "[pre-commit] checking staged image extensions...",
-                "[pre-commit] updated staging area after lowercasing image extensions",
-                "[pre-commit] commit stopped; please review changes and run git commit again",
+                "[pre-commit] running 10-first.py",
+                "[pre-commit] stopped after 10-first.py",
             ],
         )
 

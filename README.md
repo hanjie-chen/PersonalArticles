@@ -59,7 +59,7 @@ articles-dir/
 这个仓库里有一些特殊目录
 
 1. `__template__/` 用于存放文章模板。
-2. `.githooks/` 用于存放仓库的 Git hooks。
+2. `.githooks/` 用于存放仓库的 Git hooks；`pre-commit` 是统一入口，具体检查按顺序放在 `pre-commit.d/`。
 3. `.kb-tools/` 用于存放这个仓库的辅助工具和脚本。如果要使用或修改其中的工具，请优先阅读对应子目录下的 `README.md`。
    - `.kb-tools/translator/` 用于生成或更新文章的英文翻译
    - `.kb-tools/website_sync/` 用于判断一次变更是否会影响网站发布结果
