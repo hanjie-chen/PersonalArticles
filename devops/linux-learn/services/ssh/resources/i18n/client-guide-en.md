@@ -1,10 +1,10 @@
 ---
-Title: Complete Guide to Using an SSH Client
-SourceBlob: a471b57366f81e12652fcb7930461c6bc4b69eca
+Title: Complete SSH Client Guide
+SourceBlob: 22fcb7f0469ea838c15c43a16a1571e628bad136
 ---
 
 ```
-BriefIntroduction: SSH configuration on the client side
+BriefIntroduction: SSH client configuration guide
 ```
 
 <!-- split -->
@@ -13,9 +13,9 @@ BriefIntroduction: SSH configuration on the client side
 
 When we use SSH to connect to a remote server, we usually need to enter a username and password to log in.
 
-However, this can easily lead to security issues. For example, a server with a public IP may be exposed to password brute-force attacks. For security reasons, we can use SSH keys instead.
+However, this can create security risks. For example, a server with a public IP may be exposed to password brute-force attacks. For better security, we can use an SSH key.
 
-# generate ssh key
+# Generate SSH Key
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "note" -f ~/.ssh/<key-filename>
@@ -23,19 +23,19 @@ ssh-keygen -t rsa -b 4096 -C "note" -f ~/.ssh/<key-filename>
 
 `-t`: type, specifies the algorithm, here `rsa`
 
-`-b`: bits, specifies the security level in bits; for RSA, at least 2048 is recommended
+`-b`: bits, specifies the security bit length. For RSA, at least 2048 is recommended.
 
 `-C`: comments
 
-`-f`: specifies the output filename
+`-f`: file, specifies the output file name
 
 This will generate `~/.ssh/<key-filename>` (private key) and `~/.ssh/<key-filename>.pub` (public key).
 
-During generation, you can choose whether to protect the private key with a passphrase. If you do, you will need to enter the passphrase when logging in.
+During generation, we can choose whether to add a passphrase to the private key. If a passphrase is added, you need to enter it during login to decrypt the private key.
 
-In general, the comment we write (`note`) is usually recorded at the end of the public key file, and you can open the `.pub` file directly to check it.
+The comment we write (`note`) is recorded at the end of the public key file. You can open the `.pub` file directly to check it.
 
-For the filename, it is best to use something meaningful, such as `Singapore-Linux-VM-SSH-Key`.
+For the file name, it is best to use a meaningful name, such as `Singapore-Linux-VM-SSH-Key`.
 
 e.g.
 
@@ -64,7 +64,7 @@ The key's randomart image is:
 
 > [!note]
 >
-> If you run this command in Windows PowerShell, it may fail after prompting you for the passphrase twice and show an error:
+> In a Windows PowerShell environment, this command may fail after asking you to enter the passphrase twice and then report an error:
 >
 > ```powershell
 > Generating public/private rsa key pair.
@@ -73,21 +73,21 @@ The key's randomart image is:
 > Saving key "~/.ssh/github-ssh-key" failed: No such file or directory
 > ```
 >
-> This happens because in some versions of PowerShell, the `~` symbol is not expanded by PowerShell before being passed to the command.
+> This is because in some versions of PowerShell, the `~` symbol is not expanded by PowerShell before being passed to the command.
 >
 > For example: [Powershell does not expand '~' for external programs · Issue #20031 · PowerShell/PowerShell](https://github.com/PowerShell/PowerShell/issues/20031)
 
-## add ssh key to remote server
+## Add SSH Key to Remote Server
 
 Now that the SSH key has been generated, we need to add the public key to the remote server.
 
-### command
+### Command
 
 ```shell
 ssh-copy-id -p <ssh-port> -i ~/.ssh/Singapore_Linux_VM_SSH_Key.pub <username>@<remote-server-ip>
 ```
 
-If you are using the default port `22`, you can omit the `-p <ssh-port>` parameter.
+If you are using the default port 22, you can omit the `-p <ssh-port>` parameter.
 
 e.g.
 
@@ -106,29 +106,21 @@ and check to make sure that only the key(s) you wanted were added.
 
 > [!note]
 >
-> - In Windows PowerShell, you cannot use the `ssh-copy-id` command. In that case, you can open Git Bash and run it there.
->
-> - If password login has been disabled on the server, this command will likely fail. You might be able to try this command instead:
->
->   ```shell
->   ssh-copy-id -i new-key.pub -o "IdentityFile=old-key" -p <port> user@IP
->   ```
->
->   You can try it next time; I have not tested it myself yet.
+> - In a Windows PowerShell environment, the `ssh-copy-id` command is not available. In this case, you can open Git Bash and run the command there.
 
-### manual
+### Manual
 
-If the command-based method does not work, you can manually add the public key to the server.
+If the command method does not work, we can manually add the public key to the server.
 
-First log in to the server, open the `~/.ssh/authorized_keys` file, and paste in the contents of the `.pub` file.
+First log in to the server, open the `~/.ssh/authorized_keys` file, and copy the contents of the `.pub` file into it.
 
-## azure vm
+## Azure VM
 
-If you are using an Azure Linux VM, you can add the SSH public key in the Azure Portal.
+If you are using an Azure Linux VM, you can add the SSH public key in the Azure portal.
 
 ![azure ssh key add](./resources/images/azure-ssh-key-add.png)
 
-## gcp vm
+## GCP VM
 
 In GCP, you need to go to the VM instance edit page:
 
@@ -138,17 +130,17 @@ After entering edit mode, scroll down and you will see the SSH key section.
 
 ![ssh-1](./resources/images/gcp-vm-ssh-2.png)
 
-## ssh-key login
+## SSH Key Login
 
-If we directly use `ssh username@remote-server-ip`, SSH will only try default-named keys such as `id_rsa` by default.
+If we directly use `ssh username@remote-server-ip`, SSH will, by default, only try keys with default names such as `id_rsa`.
 
-So we need to specify the key temporarily on the command line:
+So we need to specify the key in the command line:
 
 ```javascript
 ssh -i ~/.ssh/id_rsa_remote_server username@remote-server-ip
 ```
 
-Of course, for convenience, we usually add a configuration to `~/.ssh/config` so that SSH automatically knows which key to use for that connection. For example:
+For convenience, we usually add configuration to `~/.ssh/config` so SSH automatically knows which key to use for the request. For example:
 
 ```javascript
 Host remote-server
@@ -157,19 +149,19 @@ Host remote-server
     IdentityFile ~/.ssh/id_rsa_remote_server
 ```
 
-Then you can simply use `ssh remote-server`, and it will automatically use that key.
+Then you only need to run `ssh remote-server`, and SSH will automatically use that key.
 
 # Key Management
 
-SSH Agent is used to store decrypted private keys in memory, so you only need to enter the passphrase once and can reuse the key throughout the session.
+SSH Agent is used to store decrypted private keys. It caches decrypted private keys in memory, so you only need to enter the passphrase once and can reuse the key during the session.
 
-In other words, if the private key has no passphrase, you do not need SSH Agent, because SSH can read the private key file directly.
+In other words, if the private key has no password, SSH Agent is not needed because SSH can read the private key file directly.
 
-If the private key has a passphrase, then without SSH Agent you need to enter it every time you connect with SSH. With SSH Agent, you only need to enter it once when adding the key to the agent.
+If the private key has a password, without SSH Agent you need to enter the password every time you use SSH to connect. With SSH Agent, you only need to enter the password once when adding the key to the Agent.
 
-## Windows Setup
+## Windows Setting
 
-Check the SSH Agent service:
+Check the ssh agent service:
 
 ```powershell
 Get-Service ssh-agent
@@ -187,29 +179,29 @@ If needed, set it to start automatically:
 Set-Service -Name ssh-agent -StartupType Automatic
 ```
 
-Add an SSH key to the SSH Agent:
+Add the ssh key to ssh agent:
 
 ```powershell
 ssh-add C:\Users\<username>\.ssh\github-ssh-key
 ```
 
-Check which SSH keys have already been added:
+View the ssh keys that have already been added:
 
 ```powershell
 ssh-add -l
 ```
 
-## Linux Setup
+## Linux Setting
 
-First, check whether `ssh-agent` is already running:
+First, check whether ssh-agent has already started:
 
 ```shell
 echo $SSH_AGENT_PID
 ```
 
-If `ssh-agent` is running, it will display its process ID (PID); if it is not running, the output will be empty.
+If `ssh-agent` is running, its process ID (PID) will be displayed. If it is not running, the output will be empty.
 
-If the output is empty, use the following command to start `ssh-agent`:
+If the output is empty, start ssh-agent with the following command:
 
 ```bash
 eval "$(ssh-agent -s)"
@@ -223,7 +215,7 @@ ssh-add ~/.ssh/<ssh-key-filename>
 
 ## Persistence
 
-To make this persistent, you can add these commands to your shell configuration file. Depending on which shell you use, that may be:
+To make this persistent, you can add these commands to your shell configuration file. Depending on the shell you use, this can be:
 
 For Bash (`~/.bashrc` or `~/.bash_profile`):
 
@@ -236,16 +228,18 @@ fi
 After saving the file, reload the configuration:
 
 ```bash
-source ~/.bashrc  # if using bash
+source ~/.bashrc  # 如果使用 bash
 ```
 
-With this setup, every time you open a new terminal session, `ssh-agent` will start automatically, and your SSH key can then be added.
+After this setup, every time you open a new terminal session, ssh-agent will start automatically and add your SSH key.
 
 # Configuration
 
-The default path of the SSH configuration file is usually `~/.ssh/config`. This file is essentially the global configuration file for the SSH client and supports many features.
+The default path of the ssh configuration file is usually `~/.ssh/config`. This file is essentially the global configuration file for the SSH client and supports many features.
 
-But first, let’s look at its most basic function: simplifying connection commands by turning a complex set of SSH parameters into a single host alias, so you can log in quickly with `ssh <Host>` instead of entering a long command every time.
+But first, let’s look at its most basic function: simplifying connection commands. It converts complex SSH command parameters into a host entry, allowing you to log in quickly with `ssh <Host>` without entering a series of complex parameters every time.
+
+By editing this file, we can specify private keys for different hosts. For example, we can use different keys for personal servers and company servers, or configure different keys for GitHub and GitLab.
 
 A classic configuration looks like this:
 
@@ -256,51 +250,45 @@ Host <name>
     Port <ssh-port>
     IdentityFile ~/.ssh/id_rsa
 	AddKeysToAgent yes
+	IdentitiesOnly yes
 	ServerAliveInterval 20
 	ServerAliveCountMax 6
 	TCPKeepAlive yes
 	IPQoS none
 ```
 
-1. AddKeysToAgent yes
+1. IdentityFile ~/.ssh/id_rsa
 
-   After successful authentication, the SSH client automatically stores the decrypted key in `ssh-agent` (if `ssh-agent` is not running at that time, this will not take effect).
+   Try this key first.
 
-   Without this line, `ssh-agent` will not automatically receive your key when you connect to the server with SSH, which means you need to run `ssh-add` manually for that key.
+2. AddKeysToAgent yes
 
-2. ServerAliveInterval 20
+   After successful authentication, the ssh client automatically stores the decrypted key in ssh-agent. If ssh-agent is not running at the time, this will not take effect.
 
-   The SSH client sends an application-layer heartbeat packet to the server every 20 seconds to prevent the connection from being reclaimed as an idle connection.
+   Without this line, ssh-agent will not automatically obtain your key when you connect to the server via ssh. In other words, you would need to manually run `ssh-add` for that key.
 
-3. ServerAliveCountMax 6
+3. IdentitiesOnly yes
 
-   The SSH client disconnects only after 6 consecutive heartbeats receive no reply, which helps avoid immediate disconnection during brief network instability.
+   During connection, only use the `~/.ssh/id_rsa` key for public key authentication. Do not try any additional keys.
 
-4. TCPKeepAlive yes
+4. ServerAliveInterval 20
 
-   Enables keepalive at the operating system TCP layer.
+   The SSH client sends an application-layer heartbeat packet to the server every 20 seconds to prevent the connection from being treated as idle and reclaimed.
 
-5. IPQoS none
+5. ServerAliveCountMax 6
 
-   Does not set DSCP/QoS markings for SSH traffic. This avoids disconnections or throttling caused by some network devices mishandling certain QoS markings.
+   The ssh client disconnects only after 6 consecutive heartbeats receive no response, preventing immediate disconnection during temporary network instability.
+
+6. TCPKeepAlive yes
+
+   Enable keepalive at the operating system TCP layer.
+
+7. IPQoS none
+
+   Do not set DSCP/QoS tags for SSH traffic. This can bypass disconnections or speed limits caused by certain network devices mishandling specific QoS tags.
 
 > [!tip]
 >
-> In the VS Code Remote-SSH extension, using `Remote-SSH: Open SSH Configuration File...` edits this same file.
-
-By editing this file, we can specify different private keys for different hosts, such as using separate keys for personal servers and company servers, or different keys for GitHub and GitLab.
-
-```
-Host github.com
-  User git
-  IdentityFile ~/.ssh/github_key  # dedicated GitHub key
-
-Host company-server
-  HostName example.com
-  User dev
-  IdentityFile ~/.ssh/work_key    # company server key
-```
-
-> [!important]
+> In VS Code’s Remote-SSH extension, `Remote-SSH: Open SSH Configuration File...` edits this same file.
 >
-> Note that SSH config does not support configuring passwords directly.
+> After modifying `~/.ssh/config`, new SSH connections take effect immediately. You do not need to restart Windows, and usually do not need to restart ssh-agent.
