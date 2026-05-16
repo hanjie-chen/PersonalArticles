@@ -9,7 +9,7 @@ RolloutDate: 2025-01-11
 ```
 BriefIntroduction: 
 git hooks 检查图片文件后缀名，并且将其转换为小写
-因为我的web site running 在一个 Linux 上面所以，实际上是大小写敏感的，但是我经常在 windows 上面编辑 makrdown，但是windows 是大小写不敏感的，所以会存在windows上面可以显示的图片，导致我的web site没有显示404 not found
+因为我的 website 跑在一个 Linux 上，是大小写敏感的，但是我经常在 windows 上面编辑 makrdown，但是windows 是大小写不敏感的，所以会存在windows上面可以显示的图片，导致我的web site没有显示404 not found
 ```
 
 <!-- split -->

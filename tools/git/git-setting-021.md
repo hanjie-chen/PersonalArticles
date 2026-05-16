@@ -4,8 +4,6 @@
 
 当你拿到一台空白的 windows machine 的时候，应该如何设置 git 呢？
 
-
-
 # download git
 
 为了方便，我们直接打开 cmd 使用 winget 下来 git
@@ -19,8 +17,6 @@ winget install --id Git.Git
 > [!note]
 >
 > 如果使用 cmd 安装完成之后，使用 `git --version` 命令显示没有找到，那么新开一个 cmd 或者 powershell 一般就能看到
-
-
 
 # ssh key generate
 
@@ -70,8 +66,6 @@ Host github.com
   User git
   IdentityFile C:/Users/<username>/.ssh/github-ssh-key
 ```
-
-
 
 # ssh agent
 
@@ -153,8 +147,6 @@ git clone git@github.com:hanjie-chen/PersonalArticles.git
 > 但是如果是 `git clone https://github.com/user-name/repo-name.git` 则无需 ssh 验证，但是当你 git push 的时候，会弹出一个方框让你进行 github 账号登录和验证
 
 如果之前不小心 git clone https 的，可以使用 `git remote set-url origin` 命令重置为 ssh url
-
-
 
 # config git global settings
 
