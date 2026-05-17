@@ -40,4 +40,4 @@
 ## Notes
 
 - 如果只是修改 `README.md`、工具脚本、模板目录或其他不影响网站发布结果的内容，这条 workflow 仍然会运行，但检测步骤会给出 `should_trigger=false`
-- 如果你要调整“什么变更才应该触发网站同步”，优先修改 `.kb-tools/website_sync/` 中的规则和测试，而不是先改这份 workflow
+- 如果要调整“什么变更才应该触发网站同步”，优先修改 `.kb-tools/website_sync/` 中的规则和测试，而不是先改这份 workflow

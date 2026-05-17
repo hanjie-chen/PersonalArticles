@@ -26,10 +26,6 @@
 - **切换睡眠侧：** 每次切换侧睡方向可以平衡颈部肌肉的压力，避免某一侧持续受力过久，从而减少慢性紧张导致的疼痛。例如，如果第一晚睡左边导致右脑侧疼痛，第二晚睡右边可能让左颈部肌肉得到休息，缓解对侧的疼痛。
 - **仰睡几乎没有问题：** 仰睡通常能让头颈部保持更中立的位置，减少颈部肌肉的拉伸或压缩，因此不会引发类似问题。这与研究一致，建议颈部问题患者优先选择仰睡或侧睡时使用支持性枕头 [Clevive: Best Sleeping Position to Prevent Cervicogenic Headaches](https://clevive.com/what-is-the-best-sleeping-position-to-prevent-cervicogenic-headaches/)。
 
----
-
----
-
 ### 详细报告
 
 以下是关于你描述现象的深入分析，涵盖可能的原因、相关研究和建议，旨在提供全面的理解。

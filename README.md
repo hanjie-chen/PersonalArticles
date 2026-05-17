@@ -91,4 +91,4 @@ codex exec # .kb-tools/translator 使用
 
 ## Publishing
 
-Push 到 `main` 的内容变更会触发网站内容同步。具体规则见 `.kb-tools/website_sync/` 和 `.github/workflows/`。
+Push 到 `main` 的内容变更可能会触发网站内容同步。具体规则见 `.kb-tools/website_sync/` 和 `.github/workflows/`。
