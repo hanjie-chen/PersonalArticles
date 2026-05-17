@@ -44,7 +44,7 @@ class NormalizeImageExtensionsHookTests(unittest.TestCase):
         self.assertEqual(
             stdout.getvalue().strip().splitlines(),
             [
-                "image: ok, no uppercase image extensions found",
+                "[ok] image: no uppercase image extensions found",
             ],
         )
 
@@ -68,7 +68,7 @@ class NormalizeImageExtensionsHookTests(unittest.TestCase):
         self.assertEqual(
             stdout.getvalue().strip().splitlines(),
             [
-                "image: staged renamed image paths",
+                "[add] image: staged renamed image paths",
             ],
         )
 

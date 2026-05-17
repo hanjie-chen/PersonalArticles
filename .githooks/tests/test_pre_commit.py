@@ -48,8 +48,9 @@ class PreCommitRunnerTests(unittest.TestCase):
         self.assertEqual(
             stdout.getvalue().strip().splitlines(),
             [
-                "[pre-commit] running 10-first.py",
-                "[pre-commit] running 20-second.py",
+                "[pre-commit]",
+                "├─ 10-first.py",
+                "└─ 20-second.py",
             ],
         )
 
@@ -77,7 +78,8 @@ class PreCommitRunnerTests(unittest.TestCase):
         self.assertEqual(
             stdout.getvalue().strip().splitlines(),
             [
-                "[pre-commit] running 10-first.py",
+                "[pre-commit]",
+                "├─ 10-first.py",
                 "[pre-commit] failed: 10-first.py exited with status 1",
             ],
         )
@@ -109,9 +111,11 @@ class PreCommitRunnerTests(unittest.TestCase):
         self.assertEqual(
             stdout.getvalue().strip().splitlines(),
             [
-                "[pre-commit] running 10-first.py",
-                "[pre-commit] running 20-second.py",
-                "[pre-commit] stopped: review generated changes and commit again",
+                "[pre-commit]",
+                "├─ 10-first.py",
+                "└─ 20-second.py",
+                "",
+                "[pre-commit] review required: generated changes were staged",
             ],
         )
 

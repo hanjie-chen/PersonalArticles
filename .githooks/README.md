@@ -48,21 +48,24 @@ Current order:
 Typical successful output:
 
 ```text
-[pre-commit] running 10-normalize-image-extensions.py
-  |- image: ok, no uppercase image extensions found
-[pre-commit] running 20-translate-staged-articles.py
-  |- translate: ok, no staged articles need translation
+[pre-commit]
+├─ 10-normalize-image-extensions.py
+│  └─ [ok] image: no uppercase image extensions found
+└─ 20-translate-staged-articles.py
+   └─ [ok] translate: no staged articles need translation
 ```
 
 If one or more hooks generate changes, the runner keeps going and stops once at the end:
 
 ```text
-[pre-commit] running 10-normalize-image-extensions.py
-  |- image: renamed resources/images/Cover.PNG -> resources/images/Cover.png
-  |- image: staged renamed image paths
-[pre-commit] running 20-translate-staged-articles.py
-  |- translate: ok, no staged articles need translation
-[pre-commit] stopped: review generated changes and commit again
+[pre-commit]
+├─ 10-normalize-image-extensions.py
+│  ├─ [fix] image: resources/images/Cover.PNG -> resources/images/Cover.png
+│  └─ [add] image: staged renamed image paths
+└─ 20-translate-staged-articles.py
+   └─ [ok] translate: no staged articles need translation
+
+[pre-commit] review required: generated changes were staged
 ```
 
 ## Translation Hook

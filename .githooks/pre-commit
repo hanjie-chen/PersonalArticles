@@ -30,16 +30,26 @@ def iter_hook_scripts() -> list[Path]:
 
 def main() -> int:
     review_needed = False
+    scripts = iter_hook_scripts()
 
-    for script_path in iter_hook_scripts():
-        print(f"[pre-commit] running {script_path.name}", flush=True)
+    if not scripts:
+        return 0
+
+    print("[pre-commit]", flush=True)
+    for index, script_path in enumerate(scripts):
+        is_last_script = index == len(scripts) - 1
+        script_prefix = "└─" if is_last_script else "├─"
+        child_prefix = "   " if is_last_script else "│  "
+
+        print(f"{script_prefix} {script_path.name}", flush=True)
         result = subprocess.run(
             command_for(script_path),
             check=False,
             env={
                 **os.environ,
-                "GITHOOK_LOG_PREFIX": "  |- ",
-                "GITHOOK_LOG_DETAIL_PREFIX": "  |  |- ",
+                "GITHOOK_LOG_ITEM_PREFIX": f"{child_prefix}├─ ",
+                "GITHOOK_LOG_LAST_PREFIX": f"{child_prefix}└─ ",
+                "GITHOOK_LOG_DETAIL_PREFIX": f"{child_prefix}│  ├─ ",
             },
         )
         if result.returncode == REVIEW_NEEDED:
@@ -54,7 +64,8 @@ def main() -> int:
             return result.returncode
 
     if review_needed:
-        print("[pre-commit] stopped: review generated changes and commit again", flush=True)
+        print("", flush=True)
+        print("[pre-commit] review required: generated changes were staged", flush=True)
         return 1
 
     return 0

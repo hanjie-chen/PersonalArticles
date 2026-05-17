@@ -10,9 +10,10 @@ IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.svg'}
 REVIEW_NEEDED = 2
 
 
-def log(message):
-    prefix = os.environ.get("GITHOOK_LOG_PREFIX", "")
-    print(f"{prefix}image: {message}", flush=True)
+def log(status, message, *, last=False):
+    prefix_name = "GITHOOK_LOG_LAST_PREFIX" if last else "GITHOOK_LOG_ITEM_PREFIX"
+    prefix = os.environ.get(prefix_name, "")
+    print(f"{prefix}[{status}] image: {message}", flush=True)
 
 
 def get_staged_files():
@@ -51,7 +52,7 @@ def rename_image_extensions(files):
             new_file = file[:-len(ext)] + ext.lower()
             rename_with_git(file, new_file)
             renamed = True
-            log(f"renamed {file} -> {new_file}")
+            log("fix", f"{file} -> {new_file}")
 
     return renamed
 
@@ -59,16 +60,16 @@ def rename_image_extensions(files):
 def main():
     files = get_staged_files()
     if not files:
-        log("ok, no staged files")
+        log("ok", "no staged files", last=True)
         sys.exit(0)
 
     renamed = rename_image_extensions(files)
 
     if renamed:
-        log("staged renamed image paths")
+        log("add", "staged renamed image paths", last=True)
         sys.exit(REVIEW_NEEDED)
 
-    log("ok, no uppercase image extensions found")
+    log("ok", "no uppercase image extensions found", last=True)
     sys.exit(0)
 
 
