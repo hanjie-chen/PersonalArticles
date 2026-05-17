@@ -23,10 +23,10 @@ def load_translator(root_dir: Path):
     from workflow import (  # pylint: disable=import-outside-toplevel
         PartiallyStagedArticleError,
         find_staged_candidates,
-        translate_candidate,
     )
+    from translate import run_translation_jobs  # pylint: disable=import-outside-toplevel
 
-    return PartiallyStagedArticleError, find_staged_candidates, translate_candidate
+    return PartiallyStagedArticleError, find_staged_candidates, run_translation_jobs
 
 
 def git_add(root_dir: Path, path: Path) -> None:
@@ -36,12 +36,27 @@ def git_add(root_dir: Path, path: Path) -> None:
     )
 
 
+def worker_count_for(total: int) -> int:
+    configured = os.environ.get("KB_TRANSLATOR_JOBS")
+    if not configured:
+        return total
+
+    try:
+        return min(max(int(configured), 1), total)
+    except ValueError:
+        print(
+            f"[pre-commit:translate] ignoring invalid KB_TRANSLATOR_JOBS={configured!r}",
+            file=sys.stderr,
+        )
+        return total
+
+
 def main() -> int:
     root_dir = repo_root()
     (
         partially_staged_error,
         find_staged_candidates,
-        translate_candidate,
+        run_translation_jobs,
     ) = load_translator(root_dir)
 
     print("[pre-commit:translate] checking staged articles...")
@@ -62,21 +77,40 @@ def main() -> int:
 
     model = os.environ.get("KB_TRANSLATOR_MODEL")
     total = len(candidates)
+    indexed_candidates = list(enumerate(candidates, start=1))
 
-    for index, candidate in enumerate(candidates, start=1):
+    for index, candidate in indexed_candidates:
         relative_source = candidate.source_md.relative_to(root_dir).as_posix()
         print(
             f"[pre-commit:translate] [{index}/{total}] "
             f"{candidate.status}\t{relative_source}"
         )
-        translation_path = translate_candidate(
-            repo_root=root_dir,
-            candidate=candidate,
-            model=model,
+
+    worker_count = worker_count_for(total)
+    print(f"[pre-commit:translate] starting {worker_count} worker(s)")
+    results = run_translation_jobs(
+        repo_root=root_dir,
+        indexed_candidates=indexed_candidates,
+        worker_count=worker_count,
+        model=model,
+    )
+
+    success_count = 0
+    failure_count = 0
+    for result in results:
+        if result.error or not result.translation_path:
+            failure_count += 1
+            continue
+        success_count += 1
+        git_add(root_dir, root_dir / result.translation_path)
+
+    if failure_count:
+        print(
+            f"[pre-commit:translate] translated {success_count}, failed {failure_count}",
+            file=sys.stderr,
         )
-        git_add(root_dir, translation_path)
-        relative_translation = translation_path.relative_to(root_dir).as_posix()
-        print(f"[pre-commit:translate] translated\t{relative_translation}")
+        print("[pre-commit:translate] commit stopped; please review errors and run git commit again")
+        return 1
 
     print("[pre-commit:translate] updated staging area after translating articles")
     print("[pre-commit:translate] commit stopped; please review changes and run git commit again")

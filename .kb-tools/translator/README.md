@@ -52,6 +52,12 @@ python .\translate.py
 - `--model`
   - 仅 `translate.py` 支持
   - 显式指定 Codex 模型；如果不传，就使用本机 Codex CLI 的默认模型
+- `KB_TRANSLATOR_MODEL`
+  - pre-commit 翻译 hook 使用的可选环境变量
+  - 显式指定 hook 中调用 Codex 的模型
+- `KB_TRANSLATOR_JOBS`
+  - pre-commit 翻译 hook 使用的可选环境变量
+  - 限制并行翻译 worker 数；默认 staged 几篇候选文章就启动几个 worker
 - `root_dir`
   - 可选
   - 默认会自动推导仓库根目录；只有在你想对别的目录做测试时才需要显式传入
@@ -67,6 +73,7 @@ python .kb-tools/translator/translate.py --limit 5 --force
 python .kb-tools/translator/translate.py --staged --all --jobs 1
 python .kb-tools/translator/translate.py --limit 5 --jobs 2
 python .kb-tools/translator/translate.py --limit 1 --model gpt-5.4
+KB_TRANSLATOR_JOBS=2 git commit
 ```
 
 ## How It Works
