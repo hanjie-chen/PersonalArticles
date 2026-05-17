@@ -48,7 +48,12 @@ class TranslateStagedArticlesHookTests(unittest.TestCase):
             mock.patch.object(
                 module,
                 "load_translator",
-                return_value=(RuntimeError, lambda root, limit: candidates, run_translation_jobs),
+                return_value=(
+                    RuntimeError,
+                    lambda root, limit: candidates,
+                    lambda root: [],
+                    run_translation_jobs,
+                ),
             ),
             mock.patch.object(module, "git_add") as git_add,
             mock.patch.dict(module.os.environ, {}, clear=True),

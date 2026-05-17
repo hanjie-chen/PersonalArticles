@@ -102,6 +102,11 @@ BriefIntroduction: <English brief introduction>
 - 如果使用 `--force`，则状态会显示为 `force_translation`
   - 这表示英文稿虽然没有过期，但仍停留在旧格式，需要升级到当前单文件格式
 - 如果使用 `--staged`，只会从 staged 文件中挑选中文主稿；已经存在但未 staged 的历史候选不会进入当前批次
+- pre-commit 翻译 hook 会先处理 staged 中文主稿 rename：
+  - 如果 `old.md` 被改名为 `new.md`
+  - 且 `resources/i18n/old-en.md` 存在、`resources/i18n/new-en.md` 不存在
+  - hook 会先用 `git mv` 把英文 sidecar 移到新文件名
+  - 然后再按 `SourceBlob` 判断是否需要重翻
 - `translate.py` 遇到 `missing_translation` 或 `outdated_translation` 时，会整篇重写英文稿，不做增量更新
 - `translate.py` 开始执行时，会先打印本次命中的候选文章列表，再显示每篇文章的翻译进度
 - 如果翻译失败：

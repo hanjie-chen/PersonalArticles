@@ -352,6 +352,124 @@ class TranslateArticlesTest(unittest.TestCase):
             with self.assertRaises(kb_translation.PartiallyStagedArticleError):
                 kb_translation.find_staged_candidates(repo_root, limit=None)
 
+    def test_move_staged_translation_sidecars_follows_article_rename(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            repo_root = Path(temp_dir)
+            init_repo(repo_root)
+            article_path = self.write_publishable_article(repo_root / "topic", "basic.md")
+            current_blob = run_git(["hash-object", str(article_path)], cwd=repo_root).stdout.strip()
+            translation_path = article_path.parent / "resources" / "i18n" / "basic-en.md"
+            translation_path.parent.mkdir(parents=True)
+            translation_path.write_text(
+                textwrap.dedent(
+                    f"""\
+                    ---
+                    Title: English title
+                    SourceBlob: {current_blob}
+                    ---
+
+                    ```
+                    BriefIntroduction: English intro
+                    ```
+
+                    <!-- split -->
+
+                    # English title
+                    """
+                ),
+                encoding="utf-8",
+            )
+            run_git(["add", "."], cwd=repo_root)
+            run_git(["commit", "-m", "initial"], cwd=repo_root)
+
+            renamed_article = article_path.with_name("renamed.md")
+            run_git(
+                [
+                    "mv",
+                    str(article_path.relative_to(repo_root)),
+                    str(renamed_article.relative_to(repo_root)),
+                ],
+                cwd=repo_root,
+            )
+
+            moved = kb_translation.move_staged_translation_sidecars(repo_root)
+
+            renamed_translation = renamed_article.parent / "resources" / "i18n" / "renamed-en.md"
+            self.assertEqual(
+                moved,
+                [
+                    kb_translation.TranslationSidecarMove(
+                        old_path=translation_path,
+                        new_path=renamed_translation,
+                    )
+                ],
+            )
+            self.assertFalse(translation_path.exists())
+            self.assertTrue(renamed_translation.exists())
+            status = run_git(["status", "--short"], cwd=repo_root).stdout
+            self.assertIn("R  topic/basic.md -> topic/renamed.md", status)
+            self.assertIn(
+                "R  topic/resources/i18n/basic-en.md -> topic/resources/i18n/renamed-en.md",
+                status,
+            )
+            self.assertEqual(kb_translation.find_staged_candidates(repo_root, limit=None), [])
+
+    def test_renamed_and_modified_article_still_becomes_outdated_after_sidecar_move(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            repo_root = Path(temp_dir)
+            init_repo(repo_root)
+            article_path = self.write_publishable_article(repo_root / "topic", "basic.md")
+            original_blob = run_git(["hash-object", str(article_path)], cwd=repo_root).stdout.strip()
+            translation_path = article_path.parent / "resources" / "i18n" / "basic-en.md"
+            translation_path.parent.mkdir(parents=True)
+            translation_path.write_text(
+                textwrap.dedent(
+                    f"""\
+                    ---
+                    Title: English title
+                    SourceBlob: {original_blob}
+                    ---
+
+                    ```
+                    BriefIntroduction: English intro
+                    ```
+
+                    <!-- split -->
+
+                    # English title
+                    """
+                ),
+                encoding="utf-8",
+            )
+            run_git(["add", "."], cwd=repo_root)
+            run_git(["commit", "-m", "initial"], cwd=repo_root)
+
+            renamed_article = article_path.with_name("renamed.md")
+            run_git(
+                [
+                    "mv",
+                    str(article_path.relative_to(repo_root)),
+                    str(renamed_article.relative_to(repo_root)),
+                ],
+                cwd=repo_root,
+            )
+            with renamed_article.open("a", encoding="utf-8") as article:
+                article.write("\n新段落。\n")
+            run_git(["add", str(renamed_article.relative_to(repo_root))], cwd=repo_root)
+
+            kb_translation.move_staged_translation_sidecars(repo_root)
+            candidates = kb_translation.find_staged_candidates(repo_root, limit=None)
+
+            self.assertEqual(
+                candidates,
+                [
+                    kb_translation.Candidate(
+                        source_md=renamed_article,
+                        status="outdated_translation",
+                    )
+                ],
+            )
+
     def test_default_repo_root_points_to_kb_root(self):
         expected = MODULE_PATH.parents[2]
         self.assertEqual(kb_translation.default_repo_root(MODULE_PATH), expected)

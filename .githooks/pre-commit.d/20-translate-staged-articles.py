@@ -36,10 +36,16 @@ def load_translator(root_dir: Path):
     from workflow import (  # pylint: disable=import-outside-toplevel
         PartiallyStagedArticleError,
         find_staged_candidates,
+        move_staged_translation_sidecars,
     )
     from translate import run_translation_jobs  # pylint: disable=import-outside-toplevel
 
-    return PartiallyStagedArticleError, find_staged_candidates, run_translation_jobs
+    return (
+        PartiallyStagedArticleError,
+        find_staged_candidates,
+        move_staged_translation_sidecars,
+        run_translation_jobs,
+    )
 
 
 def git_add(root_dir: Path, path: Path) -> None:
@@ -66,8 +72,15 @@ def main() -> int:
     (
         partially_staged_error,
         find_staged_candidates,
+        move_staged_translation_sidecars,
         run_translation_jobs,
     ) = load_translator(root_dir)
+
+    sidecar_moves = move_staged_translation_sidecars(root_dir)
+    for sidecar_move in sidecar_moves:
+        old_path = sidecar_move.old_path.relative_to(root_dir).as_posix()
+        new_path = sidecar_move.new_path.relative_to(root_dir).as_posix()
+        log("fix", f"sidecar {old_path} -> {new_path}")
 
     try:
         candidates = find_staged_candidates(root_dir, limit=None)
@@ -78,7 +91,7 @@ def main() -> int:
 
     if not candidates:
         log("ok", "no staged articles need translation", last=True)
-        return 0
+        return REVIEW_NEEDED if sidecar_moves else 0
 
     model = os.environ.get("KB_TRANSLATOR_MODEL")
     total = len(candidates)

@@ -20,6 +20,18 @@ class Candidate:
     status: str
 
 
+@dataclass(frozen=True)
+class StagedRename:
+    old_path: Path
+    new_path: Path
+
+
+@dataclass(frozen=True)
+class TranslationSidecarMove:
+    old_path: Path
+    new_path: Path
+
+
 class PartiallyStagedArticleError(RuntimeError):
     pass
 
@@ -158,6 +170,80 @@ def uses_current_translation_format(translation_md: Path) -> bool:
 
 def expected_translation_path(source_md: Path) -> Path:
     return source_md.parent / "resources" / "i18n" / f"{source_md.stem}-en.md"
+
+
+def staged_renames(root_dir: Path) -> list[StagedRename]:
+    result = subprocess.run(
+        [
+            "git",
+            "-c",
+            f"safe.directory={root_dir}",
+            "-C",
+            str(root_dir),
+            "diff",
+            "--cached",
+            "--name-status",
+            "--find-renames",
+            "--diff-filter=R",
+        ],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    renames: list[StagedRename] = []
+    for line in result.stdout.splitlines():
+        parts = line.split("\t")
+        if len(parts) != 3:
+            continue
+        _, old_path, new_path = parts
+        renames.append(
+            StagedRename(
+                old_path=root_dir / old_path,
+                new_path=root_dir / new_path,
+            )
+        )
+    return renames
+
+
+def move_staged_translation_sidecars(root_dir: Path) -> list[TranslationSidecarMove]:
+    moved: list[TranslationSidecarMove] = []
+
+    for rename in staged_renames(root_dir):
+        if rename.old_path.suffix.lower() != ".md" or rename.new_path.suffix.lower() != ".md":
+            continue
+        if not rename.new_path.is_file():
+            continue
+
+        old_translation = expected_translation_path(rename.old_path)
+        new_translation = expected_translation_path(rename.new_path)
+        if old_translation == new_translation:
+            continue
+        if not old_translation.exists() or new_translation.exists():
+            continue
+
+        new_translation.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(
+            [
+                "git",
+                "-c",
+                f"safe.directory={root_dir}",
+                "-C",
+                str(root_dir),
+                "mv",
+                "--",
+                str(old_translation.relative_to(root_dir)),
+                str(new_translation.relative_to(root_dir)),
+            ],
+            check=True,
+        )
+        moved.append(
+            TranslationSidecarMove(
+                old_path=old_translation,
+                new_path=new_translation,
+            )
+        )
+
+    return moved
 
 
 def candidate_for_source(

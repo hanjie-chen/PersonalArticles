@@ -41,6 +41,7 @@ Current order:
    - asks for review if it changes staged files
 2. `20-translate-staged-articles.py`
    - checks staged publishable articles
+   - moves matching English sidecars when staged source articles are renamed
    - translates missing or outdated English sidecars
    - stages generated translation files
    - asks for review if it changes staged files

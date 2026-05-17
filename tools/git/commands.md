@@ -27,7 +27,7 @@ BriefIntroduction:
 
 ## git add
 
-当然我一般直接使用 `git add .` 全都提交，这个命令的作用是将修改过的文件添加到暂存区（staging area）。
+我一般直接去 project root 目录使用 `git add .` 全都提交，这个命令的作用是将修改过的文件添加到暂存区（staging area）。
 
 ## git commit
 
@@ -40,7 +40,7 @@ git commit -m "add your specification of this commit"
 ### commit id
 
 - 每次 commit 成功后，Git 会生成一个唯一的 40 位十六进制字符串（称为 SHA-1 哈希值），作为这次提交的 ID。
-- 哪怕只改动一个空格，SHA ID 都会完全改变。这保证了代码历史的不可篡改性。
+- 哪怕只改动一个空格，SHA ID 都会完全改变。
 - 在执行命令或 DevOps 回滚时，通常只需要输入 SHA 的前 7 位（例如 `a1b2c3d`）即可精准定位。
 
 查看历史提交记录及其对应的 SHA ID：
@@ -108,11 +108,9 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 ## git pull
 
-和 git push 对应，git pull 用来将 remote repo(github) 的最新变化同步到本地。
+和 git push 对应，git pull 用来将 remote repo (e.g. github) 的最新变化同步到本地。
 
-比如在多台机器上开发同一个项目：Azure VM、local machine(Windows 10)、MacBook Pro。
-
-如果在其中一台机器上执行了 git push，其他机器就需要执行 git pull，让本地代码跟上远端最新状态。
+假如我们在多台机器（Azure VM、local PC、MacBook Pro）上开发同一个项目，并在其中一台机器上执行了 git push，那么其他机器就需要执行 git pull，让本地代码跟上远端最新状态。
 
 默认情况下，在某个 branch 上执行 git pull，只会更新当前本地分支；而不会自动更新其他分支，但通常会刷新远端跟踪分支的信息。
 
@@ -196,14 +194,14 @@ Working Directory     Staging Area       Local Repository    Remote Repository
 
 ## List Branches
 
-`git branch` 查看本地分支
+查看本地分支
 
 ```shell
 ➜ git branch
 * main
 ```
 
-`git branch -r` 查看远程分支
+查看远程分支
 
 ```shell
 ➜ git branch -r
@@ -212,7 +210,7 @@ Working Directory     Staging Area       Local Repository    Remote Repository
   origin/main
 ```
 
-`git branch -a` 查看所有分支（本地和远程）
+查看所有分支（本地和远程）
 
 ```shell
 ➜ git branch -a
@@ -603,72 +601,3 @@ git remote set-url origin https://github.com/username/new-repo-name.git
 git remote set-url origin git@github.com:username/new-repo-name.git
 ```
 
-# Appendix
-
-## .gitignore file
-
-有时候我们并不需要所有的文件都提交到 remote repo 中去，比如说 python 程序运行时，产生的临时文件（ `__pycache__` ）我们并不希望这些临时文件被提交
-
-这个时候，我们可以写一个 .gitignore 文件来忽略某些特定的文件
-
-### Global ignore
-
-为了方便，我一般使用全局的，这样子就不用每个 repository 都配置过去了，只需要进入 `~`(user home directory)
-
-然后创建一个 `.gitignore` 文件，并且配置 git 使用这个全局文件
-
-```shell
-cd ~
-git config --global core.excludesfile ~/.gitignore
-```
-
-### personal `.gitignore`
-
-在我的个人配置仓库中: https://github.com/hanjie-chen/personal-config/blob/main/git/.gitignore
-
-## case sensitivity(windows)
-
-在 windows OS 中，大小写不敏感，也就是说对于文件 `apg-multi-waf.md` 和 `apg-multi-waf.MD` 会被认为是同一个文件
-
-但是在 Linux, 则是大小写敏感的，我个人也倾向于大小写敏感的，虽然无法修改整个 windows 操作系统为大小写敏感，但是对于 windows git, 我们可以设置
-
-首先我们使用下面的命令查看目前仓库是否为大小写敏感
-
-```powershell
-> git config core.ignorecase
-true
-```
-
-如果为 true 那么就意味着大小写不敏感，需要设置为 false
-
-```powershell
-> git config core.ignorecase false
-```
-
-然后就可以准确识别了
-
-```powershell
-> ls
-
-    Directory: C:\Users\Plain\PersonalArticles\azure
-
-Mode                 LastWriteTime         Length Name
-----                 -------------         ------ ----
--a---            1/9/2025  1:04 AM           1108 apg-multi-waf.md
-
-> mv .\apg-multi-waf.md .\apg-multi-waf.MD
-> git status
-On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes not staged for commit:
-  (use "git add/rm <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        deleted:    apg-multi-waf.md
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        apg-multi-waf.MD
-
-no changes added to commit (use "git add" and/or "git commit -a")
-```
