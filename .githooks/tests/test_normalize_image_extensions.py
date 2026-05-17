@@ -44,8 +44,7 @@ class NormalizeImageExtensionsHookTests(unittest.TestCase):
         self.assertEqual(
             stdout.getvalue().strip().splitlines(),
             [
-                "[pre-commit:image] checking staged image extensions...",
-                "[pre-commit:image] ok: no uppercase image extensions found",
+                "image: ok, no uppercase image extensions found",
             ],
         )
 
@@ -65,13 +64,11 @@ class NormalizeImageExtensionsHookTests(unittest.TestCase):
         ):
             module.main()
 
-        self.assertEqual(exit_context.exception.code, 1)
+        self.assertEqual(exit_context.exception.code, module.REVIEW_NEEDED)
         self.assertEqual(
             stdout.getvalue().strip().splitlines(),
             [
-                "[pre-commit:image] checking staged image extensions...",
-                "[pre-commit:image] updated staging area after lowercasing image extensions",
-                "[pre-commit:image] commit stopped; please review changes and run git commit again",
+                "image: staged renamed image paths",
             ],
         )
 

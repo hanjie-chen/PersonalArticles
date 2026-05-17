@@ -78,7 +78,40 @@ class PreCommitRunnerTests(unittest.TestCase):
             stdout.getvalue().strip().splitlines(),
             [
                 "[pre-commit] running 10-first.py",
-                "[pre-commit] stopped after 10-first.py",
+                "[pre-commit] failed: 10-first.py exited with status 1",
+            ],
+        )
+
+    def test_continues_after_review_needed_and_stops_at_end(self):
+        module = load_module()
+        scripts = [
+            Path(".githooks/pre-commit.d/10-first.py"),
+            Path(".githooks/pre-commit.d/20-second.py"),
+        ]
+        stdout = io.StringIO()
+
+        with (
+            mock.patch.object(module, "iter_hook_scripts", return_value=scripts),
+            mock.patch.object(
+                module.subprocess,
+                "run",
+                side_effect=[
+                    subprocess.CompletedProcess([], module.REVIEW_NEEDED),
+                    subprocess.CompletedProcess([], 0),
+                ],
+            ) as run,
+            contextlib.redirect_stdout(stdout),
+        ):
+            exit_code = module.main()
+
+        self.assertEqual(exit_code, 1)
+        self.assertEqual(run.call_count, 2)
+        self.assertEqual(
+            stdout.getvalue().strip().splitlines(),
+            [
+                "[pre-commit] running 10-first.py",
+                "[pre-commit] running 20-second.py",
+                "[pre-commit] stopped: review generated changes and commit again",
             ],
         )
 

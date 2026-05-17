@@ -40,6 +40,7 @@ def run_translation_jobs(
     indexed_candidates,
     worker_count: int,
     model: str | None,
+    log_prefix: str = "",
 ) -> list[TranslationResult]:
     total = len(indexed_candidates)
     task_queue: Queue[tuple[int, object]] = Queue()
@@ -52,7 +53,7 @@ def run_translation_jobs(
 
     def log(message: str, *, stream=None) -> None:
         with print_lock:
-            print(message, file=stream or sys.stdout)
+            print(f"{log_prefix}{message}", file=stream or sys.stdout)
 
     def worker(worker_id: int) -> None:
         while True:

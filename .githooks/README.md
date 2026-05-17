@@ -28,16 +28,42 @@ git config core.hooksPath .githooks
 
 It works as a runner and executes files in `pre-commit.d/` by filename order. Use numeric prefixes to make ordering explicit.
 
+Hook scripts use this exit-code contract:
+
+- `0`: check passed
+- `1`: hard failure; stop immediately
+- `2`: generated or staged changes; continue running later hooks, then stop before the commit is created
+
 Current order:
 
 1. `10-normalize-image-extensions.py`
    - lowercases staged image file extensions
-   - stops the commit if it changes staged files
+   - asks for review if it changes staged files
 2. `20-translate-staged-articles.py`
    - checks staged publishable articles
    - translates missing or outdated English sidecars
    - stages generated translation files
-   - stops the commit so changes can be reviewed
+   - asks for review if it changes staged files
+
+Typical successful output:
+
+```text
+[pre-commit] running 10-normalize-image-extensions.py
+  |- image: ok, no uppercase image extensions found
+[pre-commit] running 20-translate-staged-articles.py
+  |- translate: ok, no staged articles need translation
+```
+
+If one or more hooks generate changes, the runner keeps going and stops once at the end:
+
+```text
+[pre-commit] running 10-normalize-image-extensions.py
+  |- image: renamed resources/images/Cover.PNG -> resources/images/Cover.png
+  |- image: staged renamed image paths
+[pre-commit] running 20-translate-staged-articles.py
+  |- translate: ok, no staged articles need translation
+[pre-commit] stopped: review generated changes and commit again
+```
 
 ## Translation Hook
 

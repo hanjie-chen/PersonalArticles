@@ -1,5 +1,7 @@
 import importlib.machinery
 import importlib.util
+import contextlib
+import io
 import types
 import unittest
 from pathlib import Path
@@ -34,6 +36,7 @@ class TranslateStagedArticlesHookTests(unittest.TestCase):
             types.SimpleNamespace(translation_path="resources/i18n/first-en.md", error=None),
             types.SimpleNamespace(translation_path="resources/i18n/second-en.md", error=None),
         ]
+        stdout = io.StringIO()
 
         def run_translation_jobs(**kwargs):
             self.assertEqual(kwargs["worker_count"], 2)
@@ -49,10 +52,11 @@ class TranslateStagedArticlesHookTests(unittest.TestCase):
             ),
             mock.patch.object(module, "git_add") as git_add,
             mock.patch.dict(module.os.environ, {}, clear=True),
+            contextlib.redirect_stdout(stdout),
         ):
             exit_code = module.main()
 
-        self.assertEqual(exit_code, 1)
+        self.assertEqual(exit_code, module.REVIEW_NEEDED)
         self.assertEqual(
             [call.args for call in git_add.call_args_list],
             [

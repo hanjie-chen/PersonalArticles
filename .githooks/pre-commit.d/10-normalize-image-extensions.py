@@ -7,6 +7,12 @@ import sys
 
 
 IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.svg'}
+REVIEW_NEEDED = 2
+
+
+def log(message):
+    prefix = os.environ.get("GITHOOK_LOG_PREFIX", "")
+    print(f"{prefix}image: {message}", flush=True)
 
 
 def get_staged_files():
@@ -45,7 +51,7 @@ def rename_image_extensions(files):
             new_file = file[:-len(ext)] + ext.lower()
             rename_with_git(file, new_file)
             renamed = True
-            print(f"[pre-commit:image] renamed: {file} -> {new_file}")
+            log(f"renamed {file} -> {new_file}")
 
     return renamed
 
@@ -53,17 +59,16 @@ def rename_image_extensions(files):
 def main():
     files = get_staged_files()
     if not files:
+        log("ok, no staged files")
         sys.exit(0)
 
-    print("[pre-commit:image] checking staged image extensions...")
     renamed = rename_image_extensions(files)
 
     if renamed:
-        print("[pre-commit:image] updated staging area after lowercasing image extensions")
-        print("[pre-commit:image] commit stopped; please review changes and run git commit again")
-        sys.exit(1)
+        log("staged renamed image paths")
+        sys.exit(REVIEW_NEEDED)
 
-    print("[pre-commit:image] ok: no uppercase image extensions found")
+    log("ok, no uppercase image extensions found")
     sys.exit(0)
 
 

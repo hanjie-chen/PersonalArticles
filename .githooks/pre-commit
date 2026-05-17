@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -8,6 +9,7 @@ from pathlib import Path
 
 HOOK_DIR = Path(__file__).resolve().parent
 SCRIPT_DIR = HOOK_DIR / "pre-commit.d"
+REVIEW_NEEDED = 2
 
 
 def command_for(script_path: Path) -> list[str]:
@@ -27,12 +29,34 @@ def iter_hook_scripts() -> list[Path]:
 
 
 def main() -> int:
+    review_needed = False
+
     for script_path in iter_hook_scripts():
         print(f"[pre-commit] running {script_path.name}", flush=True)
-        result = subprocess.run(command_for(script_path), check=False)
+        result = subprocess.run(
+            command_for(script_path),
+            check=False,
+            env={
+                **os.environ,
+                "GITHOOK_LOG_PREFIX": "  |- ",
+                "GITHOOK_LOG_DETAIL_PREFIX": "  |  |- ",
+            },
+        )
+        if result.returncode == REVIEW_NEEDED:
+            review_needed = True
+            continue
         if result.returncode != 0:
-            print(f"[pre-commit] stopped after {script_path.name}", flush=True)
+            print(
+                f"[pre-commit] failed: {script_path.name} exited with status "
+                f"{result.returncode}",
+                flush=True,
+            )
             return result.returncode
+
+    if review_needed:
+        print("[pre-commit] stopped: review generated changes and commit again", flush=True)
+        return 1
+
     return 0
 
 
