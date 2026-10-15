@@ -8,7 +8,7 @@ RolloutDate: 2026-02-21
 
 ```
 BriefIntroduction: 
-本文主要讲 client ssh 如何连接到远程主机。这其中需要解决的问题和一些优化包括了：ssh 身份认证，ssh 命令简化
+本文主要讲 client ssh 到 remote host。主要内容是 ssh config 的设置
 ```
 
 <!-- split -->
@@ -17,7 +17,7 @@ BriefIntroduction:
 
 # Before we beginning
 
-当我们使用 SSH 连接到一台远程服务器的时候，需要输入 username、password 来进行登录。
+当我们使用 SSH 连接到一台远程服务器的时候，需要输入 username、password 来进行登录。比如
 
 但是这样子容易遇到一些安全问题，比如说一台 server（public ip）可能会遇到密码爆破攻击。出于安全考虑，我们通常会使用 SSH key。
 

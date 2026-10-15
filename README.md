@@ -1,9 +1,10 @@
 # Knowledge Base
 
-这是我的个人知识库，持续整理可复用的知识、经验和笔记，同时作为个人网站的内容来源。
+写给我自己看的笔记。
 
-- 个人网站：https://hanjie-chen.com/
-- 网站源码：https://github.com/hanjie-chen/website
+更多包含自己的思考和实践的整理，而不是完整的教程，因为通用的知识不会时直接问 AI 就行了，更快，更方便。
+
+这里的文章会同步到我的[个人网站](https://hanjie-chen.com/)
 
 ## Navigation
 
