@@ -9,7 +9,7 @@ Start with the root `README.md`. Before creating, moving, or revising content in
 - Preserve the scope and level of completeness of drafts; do not turn notes or fragments into polished articles unless explicitly asked.
 - When adding structure, keep related points together and use short, descriptive headings. Prefer English headings when practical, but use Chinese when it fits the topic more naturally.
 - Use Chinese, English, or both in the body, whichever explains the topic most clearly.
-- When preparing an article for publication, follow `__template__/Article_Template.md`.
+- Format notes as `__template__/note.md` shows.
 
 ## Content Placement and Naming
 

@@ -4,7 +4,7 @@
 
 更多包含自己的思考和实践的整理，而不是完整的教程，因为通用的知识不会时直接问 AI 就行了，更快，更方便。
 
-这里的文章会同步到我的[个人网站](https://hanjie-chen.com/)
+所有笔记（包括草稿）都会同步到我的[个人网站](https://hanjie-chen.com/)。
 
 ## Navigation
 
@@ -29,7 +29,7 @@
 
 草稿只有图片资源时，可以直接使用 `images/`，不必预先创建完整的资源结构。
 
-准备发布时，统一使用以下结构：
+整理好的笔记统一使用以下结构：
 
 ```text
 content-dir/
@@ -43,7 +43,7 @@ content-dir/
 
 ## Special Directories
 
-- `__template__/` — 存放可发布正文的模板
+- `__template__/` — 笔记模板；写笔记时参考 `note.md` 的格式，它也用来测试 Markdown 渲染效果
 - `.githooks/` — 存放仓库管理的 Git hooks
 
 ## Setup
