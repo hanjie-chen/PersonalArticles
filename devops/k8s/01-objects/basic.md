@@ -1,4 +1,4 @@
-# basic
+## basic
 
 Docker Compose：它主要管理一台机器上的多个容器。如果你在 `docker-compose.yml` 里定义了 5 个服务，它们全都跑在同一台服务器上。如果这台服务器宕机了，你的服务就全没了。
 
@@ -8,7 +8,7 @@ Kubernetes：它管理的是一堆服务器（集群）。K8S 把成百上千台
 
 为了成本考虑（树莓派 8GB Mem），使用 k3s 代替 k8s 来进行实验，因为它的使用方法和 k8s 完全一样，但是轻量化了很多（吃的资源比 k8s 少多了）
 
-## downlaod
+### downlaod
 
 安装 k3s
 
@@ -72,7 +72,7 @@ K3s 虽然“轻量”，但它内置了一些基础服务来保证集群正常�
 - Running: 已经启动成功，正常运行（如你的 `metrics-server`）。
 - ContainerCreating: 正在创建中。这通常是因为 K3s 正在从网上下载镜像。
 
-## 配置 kubctl 命令给 user
+### 配置 kubctl 命令给 user
 
 和 docker 一样，为了每次不要使用 sudo 才能使用这个命令，先把 kubeconfig 拷到你的普通用户目录：
 
@@ -97,7 +97,7 @@ $ ls -l /usr/local/bin/kubectl
 lrwxrwxrwx 1 root root 3 Mar  9 17:14 /usr/local/bin/kubectl -> k3s
 ```
 
-# `kubectl` command
+## `kubectl` command
 
 kubectl 命令负责跟 kubernets 集群交互，和管理资源对象
 
@@ -120,7 +120,7 @@ kubectl 命令负责跟 kubernets 集群交互，和管理资源对象
 >
 > 所以，`kubectl` 合起来的意思就是：“Kubernetes 控制器”。
 
-## 它的本质是什么？
+### 它的本质是什么？
 
 `kubectl` 是一个命令行工具（CLI）。虽然你是在 K3s 所在的服务器上运行它，但它本质上是一个“客户端”。
 
@@ -136,7 +136,7 @@ kubectl 命令负责跟 kubernets 集群交互，和管理资源对象
 3. 身份验证：它会携带一个名为 `kubeconfig` 的证书文件（通常在 `/etc/rancher/k3s/k3s.yaml`），证明它有权下达指令。
 4. 获取结果：API Server 查完数据库（etcd）后告诉它结果，它再把结果格式化打印在你的屏幕上。
 
-## 命令的结构
+### 命令的结构
 
 kubectl 命令都遵循这个公式：`kubectl [动作] [资源类型] [资源名称] [参数]`
 
@@ -161,7 +161,7 @@ kubectl 命令都遵循这个公式：`kubectl [动作] [资源类型] [资源�
 - `-n kube-system`: 只看 `kube-system` 这个“文件夹”里的东西。
 - `-o yaml`: 以完整的 YAML 格式输出结果。
 
-## create namespace
+### create namespace
 
 创建一个单独的 namespace
 
@@ -176,7 +176,7 @@ kubectl create namespace k8s-lab
 - **`namespace`**: 资源类型（我要创建的东西叫“命名空间”）。
 - **`k8s-lab`**: 资源名称（这个地盘的名字叫 `k8s-lab`）。
 
-### 1. 什么是 Namespace？
+#### 1. 什么是 Namespace？
 
 可以把 Kubernetes 集群想象成一栋巨大的办公楼。
 
@@ -191,7 +191,7 @@ kubectl create namespace k8s-lab
 2. 整洁性：如果你把所有的 Pod 都堆在一起，`kubectl get pods` 出来的列表会长得让你绝望。分了空间后，你可以只看某个空间里的东西。
 3. 权限控制：以后你可以规定“张三只能进入 `k8s-lab` 办公室，不能进入核心机房 `kube-system`”。
 
-### 2. 执行完会发生什么？
+#### 2. 执行完会发生什么？
 
 当你敲下回车，`kubectl` 会告诉 API Server：“老板，开个新房间，名字叫 k8s-lab。”
 
@@ -209,7 +209,7 @@ sudo kubectl get ns
 - kube-system: 核心机房（K3s 自己的组件在那）。
 - k8s-lab: 你刚刚亲手开辟的实验室。
 
-### 3. 如何使用这个“新房间”？
+#### 3. 如何使用这个“新房间”？
 
 创建完之后，它现在是空的。如果你想在这个实验室里跑程序，你需要在命令后面加一个 `-n`（namespace 的缩写）参数。
 
@@ -230,7 +230,7 @@ sudo kubectl get pods -n k8s-lab
 > 1. 在 `k8s-lab` 里创建了一个程序。输入 `kubectl get pods` 发现啥也没有，急得满头大汗。
 > 2. 其实程序在那跑得好好的，只是他在 `default` 办公室里找 `k8s-lab` 的人。
 
-## create deployment
+### create deployment
 
 使用下面的命令创建一个 deployment
 
@@ -253,7 +253,7 @@ kubectl -n k8s-lab create deployment demo-nginx --image=nginx:stable
   - `image`（镜像）就像是装好系统的“光盘”或“U盘”。
   - `nginx:stable` 指的是从官方仓库下载“稳定版”的 Nginx。
 
-### 执行后发生了什么？
+#### 执行后发生了什么？
 
 当你按下回车，集群内部会发生一连串连锁反应：
 
@@ -262,7 +262,7 @@ kubectl -n k8s-lab create deployment demo-nginx --image=nginx:stable
 3. 下载镜像：你的机器发现本地没有 `nginx:stable` 这张“光盘”，于是开始从 Docker Hub 联网下载（Pulling）。
 4. 启动容器：下载完成后，K3s 启动容器，并把它封装在一个 Pod 里。
 
-### 验证结果
+#### 验证结果
 
 执行完命令后，运行下面两个命令来“监工”：
 
@@ -286,7 +286,7 @@ demo-nginx-99b6475d5-t8mrl   1/1     Running   0          113s
 
 你会发现多了一个名字叫 `demo-nginx-xxxxxx` 的 Pod。那个后缀随机字符是 Deployment 自动生成的。
 
-### 为什么不直接创建 Pod？
+#### 为什么不直接创建 Pod？
 
 你可能会问：“我只想跑个 Nginx，为什么要搞个 Deployment 这么复杂的词？”
 
@@ -302,7 +302,7 @@ demo-nginx-99b6475d5-t8mrl   1/1     Running   0          113s
 
 这就是所谓的“声明式管理”：你只管说“我要 1 个 Nginx”，至于怎么维持这个状态，那是 K8s 的事。从“手动操作员”变成了“项目经理”。不再关心具体的容器怎么启动，只下达了一个“部署 Nginx”的长期指令。
 
-## expose service
+### expose service
 
 使用这个命令来创建 service
 
@@ -322,14 +322,14 @@ kubectl -n k8s-lab expose deployment demo-nginx --port=80 --target-port=80 --typ
 
 kubectl expose 命令创建了一个名为 Service 的抽象层。它像是一个固定的接线员，无论后面的 Pod 怎么变、怎么死、怎么换 IP，只要找这个接线员，就能找到 Nginx。
 
-### Service 的“黑科技”：负载均衡器
+#### Service 的“黑科技”：负载均衡器
 
 即便你以后把 Nginx 扩展到了 10 个 Pod，也只需要拨打这一个 Service 的“电话号码”。
 
 - 稳定性：Service 有一个固定 IP，永远不变。
 - 智能分发：当你访问 Service IP 时，它会自动把请求发给后面那堆 Pod 里的其中一个。如果某个 Pod 坏了，Service 会自动把它踢出名单。
 
-### 查看结果？
+#### 查看结果？
 
 运行以下命令，看看你的“电话线”接好了没：
 
@@ -348,18 +348,18 @@ demo-nginx   ClusterIP   10.43.171.100   <none>        80/TCP    69s
 - CLUSTER-IP: 这是一个 10.43.x.x 左右的虚拟 IP。
 - PORT(S): `80/TCP`。
 
-### 为什么叫 ClusterIP？
+#### 为什么叫 ClusterIP？
 
 这是一个新手最容易困惑的地方：你现在还不能从你的 Windows/Mac 浏览器里访问这个 IP。
 
 - 它的范围：这个 IP 只在你的 `berrynode` 内部有效。
 - 它的意义：它是为了让集群里的其他程序（比如你的数据库或后端）能找到这个 Nginx。
 
-### endpoints
+#### endpoints
 
 具体来说，当你访问 Service IP 时，它会自动把请求发给后面那堆 Pod 里的其中一个，这是通过 endpoints 的机制来实现的，它维护了一堆 pod ip, 用于 service 选择
 
-## node
+### node
 
 我们可以使用下面的命令来查看 node，所谓的 node 就是一台 machine
 
@@ -378,7 +378,7 @@ Kubernetes Cluster
         └── Container: nginx
 ```
 
-### nodeport
+#### nodeport
 
 当我们使用下面的命令，强行开一个 node port
 
@@ -415,7 +415,7 @@ demo-nginx   NodePort   10.43.171.100   <none>        80:32166/TCP   25h
 
 
 
-# k8s modules
+## k8s modules
 
 control plane: deployments --> Pod --> container
 
@@ -427,7 +427,7 @@ data plane: clients --> service --> Pod --> containers
 
 
 
-# output yaml
+## output yaml
 
 `-o yaml` 就是直接把这个资源的“全套原始数据”提取出来给你看。
 
@@ -504,11 +504,11 @@ status:
 - **`get deployment demo-nginx`**: 获取这个部署对象。
 - **`-o yaml`**: 这是关键。`-o` 代表 Output（输出格式），`yaml` 告诉 Kubernetes：“别给我看简略的表格，把存储在数据库（etcd）里的完整 YAML 定义导出来。”
 
-### 为什么这份数据这么长？
+#### 为什么这份数据这么长？
 
 当你运行这个命令时，你会看到几百行内容。我们可以把它们归纳为四个核心板块：
 
-#### 1. 元数据 (metadata)
+##### 1. 元数据 (metadata)
 
 这部分记录了“我是谁”。
 
@@ -517,7 +517,7 @@ status:
 - **`resourceVersion`**: 类似于版本版本号，每当你修改一次，这个数字就会变。
 - **`creationTimestamp`**: 它出生的精确时间。
 
-#### 2. 期望状态 (spec) —— **最核心部分**
+##### 2. 期望状态 (spec) —— **最核心部分**
 
 这是你当初下单时要求的“蓝图”。
 
@@ -525,14 +525,14 @@ status:
 - **`selector`**: 我们之前反复提到的“寻人启事”（标签选择器）。
 - **`template`**: Pod 的模具。里面定义了容器镜像（`nginx:stable`）、端口、存储等信息。
 
-#### 3. 状态信息 (status) —— **实时反馈**
+##### 3. 状态信息 (status) —— **实时反馈**
 
 这是 Kubernetes 自动加进去的，用来记录“现在活干得怎么样了”。
 
 - 它会记录当前有多少个 Pod 在跑，有多少个是可用的。
 - 这部分你无法手动修改，它是 K8s 自行观测的结果。
 
-#### 4. 托管信息 (managedFields) —— **往往被忽略的长篇大论**
+##### 4. 托管信息 (managedFields) —— **往往被忽略的长篇大论**
 
 你会看到一大段记录了谁、在什么时候、修改了哪些字段。这相当于一份“**操作审计日志**”，用来追踪这个资源的历史变更。
 

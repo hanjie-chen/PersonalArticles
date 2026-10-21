@@ -4,7 +4,7 @@
 
 在 gpt5 的推荐下，使用 mihomo 作为树莓派 ubuntu 的代理，并且开启全局模式。首先我们下载好 mihomo，然后做配置
 
-# config.yml
+## config.yml
 
 其配置文件位于 /etc/mihomo/config.yml
 
@@ -43,7 +43,7 @@ dns:
 
   让 dns 查询也跟着 proxy 走，防止 dns 污染
 
-## proxy group
+### proxy group
 
 专门给 openai url 配置 singpore 节点，其他的则是走自动选择
 
@@ -64,7 +64,7 @@ proxy-groups:
     filter: "(?i)singapore|新加坡|\\bsg\\b"
 ```
 
-# openai
+## openai
 
 下面的命令可以用于测试是否可以联通 chatgpt，以及位置
 
@@ -72,7 +72,7 @@ proxy-groups:
 curl -sS https://chatgpt.com/cdn-cgi/trace | egrep '^(ip=|loc=|colo=|http=)'
 ```
 
-### 查看proxy-auto当前使用的节点
+#### 查看proxy-auto当前使用的节点
 
 ```shell
 curl -s -H 'Authorization: Bearer 1236547' \
@@ -80,7 +80,7 @@ curl -s -H 'Authorization: Bearer 1236547' \
 | jq -r '.now'
 ```
 
-### 查看 open-sg 使用的节点
+#### 查看 open-sg 使用的节点
 
 ```shell
 curl -s -H 'Authorization: Bearer 1236547' \
@@ -102,6 +102,6 @@ curl -s -G -H 'Authorization: Bearer 1236547' \
   "http://127.0.0.1:9090/proxies/$enc/delay"
 ```
 
-# 重启 mihomo 
+## 重启 mihomo 
 
 在修改完成配置文件之后，往往需要重启 mihomo: `sudo systemctl restart mihomo`

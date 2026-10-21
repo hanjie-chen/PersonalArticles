@@ -1,22 +1,12 @@
 ---
-Title: Git Hooks 使用指南
-Author: 陈翰杰
-Instructor: o1-preview
-CoverImage: ./resources/images/pre-commit-test.png
 RolloutDate: 2025-01-11
 ---
 
-```
-BriefIntroduction: 
-git hooks 检查图片文件后缀名，并且将其转换为小写
-因为我的 website 跑在一个 Linux 上，是大小写敏感的，但是我经常在 windows 上面编辑 makrdown，但是windows 是大小写不敏感的，所以会存在windows上面可以显示的图片，导致我的web site没有显示404 not found
-```
-
-<!-- split -->
+# Git Hooks 使用指南
 
 <img src="./resources/images/pre-commit-test.png" alt="cover"  />
 
-# Before we begin
+## Before we begin
 
 如果遇到这样子一个问题，在 windows 环境中，我们有一个 git repository，其中包含图片，这些图片的后缀名称包含大写和小写，比如说 `.PNG, .png` 
 
@@ -28,7 +18,7 @@ git hooks 检查图片文件后缀名，并且将其转换为小写
 
 但是我们如何保证以后的提交的图片都要小写呢？我们可以尝试使用 git hooks 自动触发我们自己写的脚本
 
-# Git Hooks
+## Git Hooks
 
 Git Hooks 是 Git 中的脚本机制，允许您在 Git 仓库中某些事件发生前后自动执行自定义脚本。它们可以帮助您自动化工作流程、执行代码质量检查、强制执行提交规范等。
 
@@ -45,7 +35,7 @@ Git Hooks 分为两类：
 >
 > **注意**：如果您使用的是托管的 Git 平台（如 GitHub、GitLab 等），通常无法自定义服务器端钩子。但这些平台提供了 Webhooks、CI/CD 集成等功能，可以达到类似的目的。
 
-## `./git/hooks` dir
+### `./git/hooks` dir
 
 Git Hooks 存储在每个仓库的 `.git/hooks` 目录中。默认情况下，这个目录包含一些示例脚本，以 `.sample` 结尾
 
@@ -74,7 +64,7 @@ Mode                 LastWriteTime         Length Name
 
 这些示例脚本都是可供参考的模板。如果您想要启用某个钩子，只需移除 `.sample` 扩展名，编写自己的脚本，并确保脚本具有可执行权限
 
-## 在项目中共享 Git Hooks
+### 在项目中共享 Git Hooks
 
 默认情况下，Git Hooks 不会被添加到版本控制中，即其他克隆该仓库的用户不会自动获得您的钩子脚本。为了解决这个问题，我们可以将钩子脚本存储在仓库中并设置 hooksPath
 
@@ -105,7 +95,7 @@ git commit -m "Add git hooks"
 
 这样一来，其他开发者在克隆仓库后，也会获得钩子脚本。
 
-# check image upper case extension
+## check image upper case extension
 
 我们使用 `pre-commit` 钩子，在 `git commit` 命令之前自动执行脚本，使用 python 因为在我的 windows 和 Linux 环境中都存在 python 环境
 
@@ -250,9 +240,9 @@ result
 
 ![pre-commit success](./resources/images/pre-commit-test.png)
 
-## 代码详解
+### 代码详解
 
-### 文件头部：
+#### 文件头部：
 
 ```python
 #!/usr/bin/env python3
@@ -275,7 +265,7 @@ result
 
 第二行 `# -*- coding: utf-8 -*-` 指定了脚本文件的编码方式为 UTF-8，这对于正确处理包含非 ASCII 字符的字符串非常重要。
 
-### 导入必要的模块：
+#### 导入必要的模块：
 
 ```python
 import os
@@ -287,7 +277,7 @@ import subprocess
 - `sys` 模块提供了与 Python 解释器进行交互的功能，如退出程序、获取命令行参数等。
 - `subprocess` 模块允许我们启动新进程，连接它们的输入/输出/错误管道，并获取返回值。
 
-### 获取暂存区中的文件列表：
+#### 获取暂存区中的文件列表：
 
 ```python
 def get_staged_files():
@@ -302,7 +292,7 @@ def get_staged_files():
   - `text=True` 表示以字符串形式处理输出数据。
 - 将输出结果按行分割，得到文件列表 `files`。
 
-### 将大写图片扩展名转换为小写：
+#### 将大写图片扩展名转换为小写：
 
 ```python
 def rename_image_extensions(files):
@@ -342,7 +332,7 @@ def rename_image_extensions(files):
     - 设置 `renamed = True`，表示有文件被重命名。
     - 输出重命名信息。
 
-### 主函数入口：
+#### 主函数入口：
 
 ```python
 def main():

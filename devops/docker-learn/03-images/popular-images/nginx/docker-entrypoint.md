@@ -56,7 +56,7 @@ exec "$@"
 
 
 
-## 解释
+### 解释
 
 ```sh
 #!/bin/sh
@@ -93,7 +93,7 @@ if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
 
 
 
-### 查找并执行 /docker-entrypoint.d/ 下的脚本文件
+#### 查找并执行 /docker-entrypoint.d/ 下的脚本文件
 
 ```sh
 if /usr/bin/find "/docker-entrypoint.d/" -mindepth 1 -maxdepth 1 -type f -print -quit 2>/dev/null | read v; then
@@ -125,7 +125,7 @@ entrypoint_log "$0: Configuration complete; ready for start up"
 
 
 
-### 最后执行传入的命令
+#### 最后执行传入的命令
 
 ```sh
 exec "$@"

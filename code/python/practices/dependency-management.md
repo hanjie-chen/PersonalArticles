@@ -1,8 +1,8 @@
-# Generate `requirements.txt`
+## Generate `requirements.txt`
 
 为了使得我们的 python 项目的存在可移植性，我们往往需要将我们使用了那些 python 包都列出来，甚至有时候我们需要将自己使用了 python 包的那个版本都要写清楚，防止出现只有我的环境可以运行的情况
 
-## freeze
+### freeze
 
 如果使用这个命令生成 requirements.txt
 
@@ -36,7 +36,7 @@ pip freeze > requirements.txt
 4.523 [notice] To update, run: pip install --upgrade pip
 ```
 
-## pip-tools
+### pip-tools
 
 为了仅仅让有效的包放入 requirements.txt, 我么可以使用 pip-tools 中的 pip-compile 工具自动解析所有依赖关系
 
@@ -63,7 +63,7 @@ python-frontmatter
 >
 > 但是在 coding import 的时候，需要区分大小写（遵守包定义的命名空间）
 
-### `pip-compile`
+#### `pip-compile`
 
 使用 pip-compile 生成 requirements.txt：
 
@@ -81,11 +81,11 @@ pip-compile --upgrade requirements.in
 
 
 
-### `pip-sync`
+#### `pip-sync`
 
 运行 `pip-sync requirements.txt` 可以来安装/更新环境中的包
 
-# Use `requiements.txt`
+## Use `requiements.txt`
 
 对于你的 Dockerfile，可以这样使用：
 

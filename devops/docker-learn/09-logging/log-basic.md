@@ -1,4 +1,4 @@
-# docker logs
+## docker logs
 
 我们可以使用下面的命令来查看 container logs
 
@@ -15,7 +15,7 @@ docker logs -f --tail 200 <container-name/id>
 
 `--tail=200`: 限制行数。只显示该容器最后 200 行的历史日志。
 
-# dozzle-log
+## dozzle-log
 
 在开发的过程中，为了直观的同时监控多个 container, 可以添加 [dozzle](https://github.com/amir20/dozzle) 这个额外的 container 用于监控。
 
@@ -46,13 +46,13 @@ services:
 
 dozzle 的本质就是 `docker logs` 这个命令的 UI 化，所以 dozzle 的日志可见范围由 Docker 日志配置决定。
 
-## dozzle for prod env
+### dozzle for prod env
 
 一般来说，dozzle 用于开发环境的快速查看，但是如果再项目中仅仅有着几个 container 再跑，那么将其作为 prod 环境下的 log 查看也无不妥
 
 
 
-# heavy prod env
+## heavy prod env
 
 什么时候考虑使用 Loki + Grafana + Promtail/Alloy
 

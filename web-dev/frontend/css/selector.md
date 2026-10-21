@@ -1,4 +1,4 @@
-# 嵌套选择器
+## 嵌套选择器
 
 grammer
 
@@ -20,7 +20,7 @@ grammer
 
 可以多重嵌套，比如说 `.parent .children .grandchild` 
 
-# 交集选择器
+## 交集选择器
 
 grammer
 
@@ -38,7 +38,7 @@ span.linenos.special {background-color: #ffffc0}
 
 
 
-# 嵌套&交际选择器
+## 嵌套&交际选择器
 
 可以同时使用2中选择器，例如
 

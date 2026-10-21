@@ -1,5 +1,3 @@
-
-
 对于某些想要自定义的情况，我们需要写自己的插件。这篇文档讲了如何写自己的插件： [Extension API — Python-Markdown 3.7 documentation](https://python-markdown.github.io/extensions/api/)
 
 例如，想要实现 GFM admonition 的话，可以参考这个 [dahlia/markdown-gfm-admonition: An extension of Python Markdown that enables the admonition syntax of GFM](https://github.com/dahlia/markdown-gfm-admonition)
@@ -74,7 +72,7 @@ def make_Extension(**kwargs):
 
 
 
-## 导入部分
+### 导入部分
 
 `import re` 用于正则表达式处理，匹配 Markdown 中的特定标记。
 
@@ -92,7 +90,7 @@ Markdown 相关导入
 
 `from xml.etree.ElementTree import Element, SubElement` 标准库中的 XML 模块，用于构造和修改 HTML（或 XML）元素。这里用来创建新的 DOM 元素（如 `<div>` 和 `<p>` 标签）。
 
-## 扩展类：`Gfm_Admonition_Extension`
+### 扩展类：`Gfm_Admonition_Extension`
 
 ```python
 class Gfm_Admonition_Extension(Extension):
@@ -120,7 +118,7 @@ class Gfm_Admonition_Extension(Extension):
 - 第二个参数 `"gfm_admonition"` 是块处理器的名称，可以任意取，但建议使用有意义的名称。
 - 第三个参数 `105` 是优先级；数字越低表示越早执行（优先级排序由 Markdown 决定），这里设置一个合适的优先级使该扩展在正确的顺序中运行。
 
-## 块处理器类：`Gfm_Admonition_Processor`
+### 块处理器类：`Gfm_Admonition_Processor`
 
 ```python
 class Gfm_Admonition_Processor(BlockProcessor):
@@ -128,7 +126,7 @@ class Gfm_Admonition_Processor(BlockProcessor):
 
 继承 `BlockProcessor` 类，当需要处理 Markdown 的块级语法时，必须继承 `BlockProcessor` 并实现 `test()` 与 `run()` 方法。
 
-### `__init__()` 方法
+#### `__init__()` 方法
 
 ```python
     def __init__(self, parser: BlockParser):
@@ -139,7 +137,7 @@ class Gfm_Admonition_Processor(BlockProcessor):
 
 
 
-### `test` 方法
+#### `test` 方法
 
 ```python
     def test(self, parent: Element, block: str) -> bool:
@@ -158,7 +156,7 @@ class Gfm_Admonition_Processor(BlockProcessor):
 必要性：
 `test` 方法是 BlockProcessor 必须实现的。它决定了 Markdown 文本中的哪个块需要由该处理器来转换。
 
-### `run()` 方法
+#### `run()` 方法
 
 ```python
     def run(self, parent: Element, blocks: List[str]) -> Optional[bool]:
@@ -273,7 +271,7 @@ class Gfm_Admonition_Processor(BlockProcessor):
 
    清理已处理的块，并返回 `True` 表示该块已被成功处理。
 
-## `makr_Extension` 工厂函数
+### `makr_Extension` 工厂函数
 
 ```python
 def make_Extension(**kwargs):

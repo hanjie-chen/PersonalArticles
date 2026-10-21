@@ -17,7 +17,7 @@ custom setting
 
 powershell customerized command and profile
 
-## git安装方法
+### git安装方法
 
 使用winget 这个 windows 10  自带的包管理工具自动安装git 版本控制
 
@@ -35,7 +35,7 @@ winget install Git.Git
 >
 > 如果使用 cmd 安装完成之后，使用 `git --version` 命令显示没有找到，那么新开一个 cmd 或者 powershell 一般就能看到
 
-## python3 安装方法
+### python3 安装方法
 
 首先使用命令
 
@@ -72,7 +72,7 @@ Python 3.9  Python.Python.3.9  3.9.13    winget
 winget install --id Python.Python.3.12 -e
 ```
 
-### python3 command
+#### python3 command
 
 此时，只有使用 `python` 命令，可以生效，而 `python3` 命令则是会跳转到 MS store, 让你下载一个新的python 3
 
@@ -93,7 +93,7 @@ pip 24.3.1 from C:\Users\Plain\AppData\Local\Programs\Python\Python312\Lib\site-
 
 其中 `<python-path>` 就是 `C:\Users\Plain\AppData\Local\Programs\Python\Python312`
 
-## windows terminal 下载方法
+### windows terminal 下载方法
 
 首先使用命令
 
@@ -121,6 +121,6 @@ winget install --id Microsoft.WindowsTerminal -e
 
 
 
-## vscode, chrome 安装方法
+### vscode, chrome 安装方法
 
 在 edge 中下载chrom, vscode

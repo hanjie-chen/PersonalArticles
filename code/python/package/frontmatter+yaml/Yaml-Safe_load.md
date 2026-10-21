@@ -34,7 +34,7 @@ def safe_load(stream):
 
 
 
-# 日期和时间的转换
+## 日期和时间的转换
 
 在 `SafeConstructor` 类中，有一个 `construct_yaml_timestamp` 方法负责处理日期和时间的转换。这个方法使用正则表达式来匹配 YAML 中的时间戳格式：
 
@@ -76,7 +76,7 @@ def construct_yaml_timestamp(self, node):
 
 如您所见，当只有日期部分时（YYYY-MM-DD），它会返回一个 `datetime.date` 对象。如果包含时间部分，则返回一个 `datetime.datetime` 对象。
 
-# 其他特殊类型的转换
+## 其他特殊类型的转换
 
 除了日期和时间，`SafeConstructor` 还定义了其他几种特殊类型的转换：
 

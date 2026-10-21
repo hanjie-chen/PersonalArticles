@@ -1,21 +1,10 @@
 ---
-Title: Terraform 入门指南
-Author: 陈翰杰
-Instructor: gemini-3.1-pro-proview
-CoverImage: ./resources/images/tf-cover.png
 RolloutDate: 2026-03-06
 ---
 
-```
-BriefIntroduction: 
-terraform 入门指南
-```
-
-<!-- split -->
+# Terraform 入门指南
 
 ![cover](./resources/images/tf-cover.png)
-
-# Terraform 入门指南
 
 云原生的痛：想象一下在云平台上狂点鼠标创建了 10 台服务器、配置了网络和防火墙，花了半天时间。结果第二天发现还需要在另一个地区照原样再搞一套测试环境。—— 会不会崩溃？
 
@@ -33,7 +22,7 @@ on linux_amd64
 
 如果使用 vscode 那么可以下载这个官方插件：HashiCorp Terraform
 
-# Minimal Terraform Project
+## Minimal Terraform Project
 
 一个最小可运行的 Terraform 项目通常包含以下四个核心文件：
 
@@ -42,7 +31,7 @@ on linux_amd64
   - `variables.tf` & `terraform.tfvars`：可复用参数（region/name 等）和敏感密码。
   - `outputs.tf`：部署完成后希望终端打印出的信息（如 IP 地址）
 
-## Syntax (main.tf)
+### Syntax (main.tf)
 
 在 Terraform 中，资源块的语法格式是：
 
@@ -80,7 +69,7 @@ resource "azurerm_resource_group" "main" {
   > - 这个名称在 Terraform 配置的范围内必须是唯一的，但在云提供商的实际资源中，这个名称不会被使用。
   > - 可以根据自己的喜好和项目需要，选择合适的名称。例如，用 `"main"`,  `"resource_group"`, `"rg"`。
 
-## Variables (variables.tf & terraform.tfvars)
+### Variables (variables.tf & terraform.tfvars)
 
 我们会在在 `variables.tf` 这个文件中编写那些可以用来复用的变量，例如 resource location
 
@@ -104,7 +93,7 @@ variable "resource_region" {
 >
 > 因为使用标准的区域代码可以确保配置与 Azure 的 API、CLI 和 SDK 保持一致。这些工具通常使用标准的区域代码来指定位置。
 
-### Using Variables
+#### Using Variables
 
 再其他的 tf 文件，比如说 network.tf 中我们可以使用 `var.<variable-name>` 的方式来使用再 variables.tf 中定义的变量 e.g.
 
@@ -128,7 +117,7 @@ resource "azurerm_resource_group" "main" {
 }
 ```
 
-### Sensitive variables
+#### Sensitive variables
 
 由于代码会推送到 Github，所以密码绝对不能写在 `variables.tf` 中，最佳实践是使用 `terraform.tfvars` 文件：
 
@@ -154,7 +143,7 @@ resource "azurerm_resource_group" "main" {
 
 4. Terraform 会自动读取 `terraform.tfvars` 中的变量值。
 
-## outputs
+### outputs
 
 部署完成后，我们需要获取一些关键信息（比如刚建好的 VM 的公网 IP），这就在 `outputs.tf` 里定义：
 
@@ -165,13 +154,13 @@ output "vm_public_ip" {
 }
 ```
 
-# Terraform Workflow
+## Terraform Workflow
 
 在我们开始之前，要让 Terraform 操作 cloud 资源，还需要通过 cloud 认证：[Azure](../azure/terraform/auth.md) [GCP](../gcp/terraform/auth.md)
 
 写好了上面这些 `.tf` 文件后，我们就可以按顺序执行 Terraform 命令“四部曲”了（code --> cloud resource）。在执行的过程中，Terraform 会自动生成一些极其重要的文件和文件夹。
 
-## Step 1: initialize (terraform init)
+### Step 1: initialize (terraform init)
 
 这个命令会初始化 tf 项目，类似于 git init 但它必须在写好 `providers.tf` 后才能运行。Terraform 会读取你的配置，知道你要用 Azure 后，它会做以下事情：
 
@@ -226,7 +215,7 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 ```
 
-## step 2: validate syntax (terraform validate)
+### step 2: validate syntax (terraform validate)
 
 `terraform validate` 这个命令验证 Terraform 配置文件的语法和逻辑是否正确。e.g.
 
@@ -245,7 +234,7 @@ Success! The configuration is valid.
 >
 > 它不会检查 cloud 上状态或资源是否存在，只要语法正确且符合资源的要求，validate 就不会报错。
 
-## step 3: preview changes (terraform plan)
+### step 3: preview changes (terraform plan)
 
 `terraform plan` 命令不修改任何东西，只输出一个“计划书”，告诉你它打算干嘛：
 
@@ -253,7 +242,7 @@ Success! The configuration is valid.
 - `-` 表示要销毁资源。
 - `~` 表示要修改资源属性。
 
-### Core Concept: 边界在哪里？
+#### Core Concept: 边界在哪里？
 
 很多初学者对 `terraform plan` 有一个巨大的误解：以为它是“云端吸尘器”，只要云上存在但本地代码里没有的资源，它全会删掉。—— 这是错的！
 
@@ -268,7 +257,7 @@ Terraform 实际上只管自己的“一亩三分地”，这个地盘是由它�
 
 > 总结：Terraform 只对比并修正 “由它自己创建并记录在册的资源”。不在账本里的资源，它一概不管！
 
-### prod best practice
+#### prod best practice
 
 这个命令底部还可以看到这样子一个 note
 
@@ -292,7 +281,7 @@ terraform apply myplan.tfplan
 
 确保 Terraform 严格按照之前审查的计划执行。
 
-## step 4: deploy resources (terraform apply)
+### step 4: deploy resources (terraform apply)
 
 检查 plan 无误后，执行部署。
 
@@ -302,6 +291,6 @@ terraform apply myplan.tfplan
 
 `terraform.tfstate`：状态文件。Terraform 把刚在云上建好的资源详细信息（包括刚才那个 `tfvars` 传进来的密码！）全写在这个 JSON 文件里。它是 Terraform 以后管理这些资源的唯一依据。包含敏感信息，绝对不能提交到 Git！
 
-## step 5: check output
+### step 5: check output
 
 如果在 `outputs.tf` 中定义了输出，apply 成功后会自动打印。你也可以随时敲 `terraform output` 重新查看这些关键信息。

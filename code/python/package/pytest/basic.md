@@ -14,7 +14,7 @@ my_project/
 └── requirements.txt
 ```
 
-## conftest.py
+### conftest.py
 
 接下来说一说 conftest.py 文件
 
@@ -43,7 +43,7 @@ if APP_DIR not in sys.path:
 
 除此之外，这个文件还可以
 
-#### 1. 共享 Fixtures（最常用的功能）
+##### 1. 共享 Fixtures（最常用的功能）
 
 如果你在 `conftest.py` 中定义了一个 `fixture`，那么所有的测试文件可以直接使用它，而不需要显式导入。
 
@@ -56,15 +56,15 @@ def login_user():
     return {"username": "admin", "access_level": "god_mode"}
 ```
 
-#### 2. 配置 Hooks（钩子函数）
+##### 2. 配置 Hooks（钩子函数）
 
 你可以修改 `pytest` 的运行行为。例如，在测试报告中添加自定义信息，或者根据命令行参数决定运行哪些测试。
 
-#### 3. 加载外部插件
+##### 3. 加载外部插件
 
 你可以在这里通过 `pytest_plugins = [...]` 来引入其他的插件。
 
-## pytest 机制
+### pytest 机制
 
 打开终端，输入 `pytest` 并敲下回车时，它会执行下面的三个步骤
 
@@ -80,7 +80,7 @@ def login_user():
 
    一切就绪，开始一个个运行那些 `test_` 开头的函数。
 
-## test case
+### test case
 
 简单来说，一个测试用例（test case）就是一段代码，它专门用来验证你的程序在特定情况下的表现是否符合预期。
 

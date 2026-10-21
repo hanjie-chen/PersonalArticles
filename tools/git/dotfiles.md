@@ -6,7 +6,7 @@ git 有一些 `.` 开头的文件，比如说 `.git`
 
 这个时候，我们可以写一个 .gitignore 文件来忽略某些特定的文件
 
-### Global ignore
+#### Global ignore
 
 为了方便，我一般使用全局的，这样子就不用每个 repository 都配置过去了，只需要进入 `~`(user home directory)
 
@@ -17,11 +17,11 @@ cd ~
 git config --global core.excludesfile ~/.gitignore
 ```
 
-### personal `.gitignore`
+#### personal `.gitignore`
 
 在我的个人配置仓库中: https://github.com/hanjie-chen/personal-config/blob/main/git/.gitignore
 
-## case sensitivity(windows)
+### case sensitivity(windows)
 
 在 windows OS 中，大小写不敏感，也就是说对于文件 `apg-multi-waf.md` 和 `apg-multi-waf.MD` 会被认为是同一个文件
 

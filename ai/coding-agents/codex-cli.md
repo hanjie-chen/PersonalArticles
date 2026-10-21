@@ -28,7 +28,7 @@ codex login status
 codex login
 ```
 
-## AGENTS.md
+### AGENTS.md
 
 Codex 会在每次启动时自动读取并合并一条“指令链”：
 
@@ -37,7 +37,7 @@ Codex 会在每次启动时自动读取并合并一条“指令链”：
 
 作用：把你每次都要重复说的“工作协议/目录说明/输出格式”固化下来。
 
-# codex exec
+## codex exec
 
 codex exec 命令是 Codex CLI 的非交互模式。
 

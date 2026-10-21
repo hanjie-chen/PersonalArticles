@@ -1,4 +1,4 @@
-# VM size
+## VM size
 
 参考这篇文章 [Virtual machine sizes overview - Azure Virtual Machines | Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/overview?tabs=breakdownseries%2Cgeneralsizelist%2Ccomputesizelist%2Cmemorysizelist%2Cstoragesizelist%2Cgpusizelist%2Cfpgasizelist%2Chpcsizelist)
 
@@ -18,7 +18,7 @@ Azure VM size的命名通常是有规律的，一般遵循以下格式：
 
 
 
-### **Azure VM 主要系列**
+#### **Azure VM 主要系列**
 
 不同系列的 VM 适用于不同的场景：
 
@@ -35,7 +35,7 @@ Azure VM size的命名通常是有规律的，一般遵循以下格式：
 
 
 
-# Azure VM Disk 的本质
+## Azure VM Disk 的本质
 
 为了理解 Azure VM Disk 的某些 setting option，例如 `caching`，需要理解Azure VM Disk的存储机制，
 
@@ -43,7 +43,7 @@ Azure VM size的命名通常是有规律的，一般遵循以下格式：
 
 以及你的 VM 配置（内存和 SSD 磁盘）跟它的关系。
 
-## Azure VM 磁盘的本质
+### Azure VM 磁盘的本质
 在 Azure 中，当你创建一个虚拟机并为它分配一个磁盘（比如 `os_disk` 使用 `StandardSSD_LRS`），这个磁盘并不是直接绑定到 VM 的物理硬件上，而是存储在 Azure 的云存储系统中。具体来说，所有 Azure VM 的磁盘（包括 OS Disk 和Data Disk）实际上都是基于 Azure Blob 存储 的 VHD（虚拟硬盘文件，Virtual Hard Disk）。
 
 你看到的配置：
@@ -58,7 +58,7 @@ Azure VM size的命名通常是有规律的，一般遵循以下格式：
 
 
 
-## Azure Blob 简单介绍
+### Azure Blob 简单介绍
 Azure Blob 存储是 Azure 提供的一种对象存储服务，用于存储大规模非结构化数据（比如文件、图片、视频，或者像这里一样的 VHD 文件）
 
 在 VM 的场景下：
@@ -67,7 +67,7 @@ Azure Blob 存储是 Azure 提供的一种对象存储服务，用于存储大�
 
 
 
-## 为什么看不到 Blob 存储？
+### 为什么看不到 Blob 存储？
 VM 配置中只定义了内存（`vm_size`）和磁盘（`StandardSSD_LRS`），没有显式提到 Blob 存储，这是因为：
 
 Azure 把底层的 Blob 存储管理隐藏起来了。你不需要手动创建一个存储账户或 Blob 容器，Azure 在你部署 VM 时自动完成这些步骤。
@@ -78,7 +78,7 @@ Azure 上面大部可选的 Disk type, e.g. `StandardSSD_LRS`，都是 [Azure Ma
 
 
 
-## Caching option
+### Caching option
 现在我们回到 `caching` 的问题，结合 Blob 存储来解释一下：
 
 VM 本地资源：

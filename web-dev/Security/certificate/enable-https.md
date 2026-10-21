@@ -14,10 +14,10 @@
 
 基于你的架构（`nginx` 作为反向代理），最合适的方案是使用 **Let's Encrypt** 获取免费的 SSL 证书，并通过 `certbot` 工具自动生成和续期证书。以下是详细步骤：
 
-## 选择 Let's Encrypt 获取证书
+### 选择 Let's Encrypt 获取证书
 Let's Encrypt 是一个免费、自动化的证书颁发机构，非常适合你的场景。它的证书有效期为 90 天，但可以通过自动化工具（如 `certbot`）实现自动续期。
 
-## 在主机上安装 `certbot`
+### 在主机上安装 `certbot`
 安装 `certbot` 和 `certbot-nginx` 插件：根据你的宿主机系统，安装 `certbot` 和适用于 `nginx` 的插件。
 
 Ubuntu/Debian：
@@ -87,15 +87,15 @@ sudo certbot renew --dry-run
 ```
 如果测试通过，`certbot` 会自动续期证书并更新 `/etc/letsencrypt/live/` 中的文件。
 
-# 总结
+## 总结
 
-#### HTTPS 配置
+##### HTTPS 配置
 - 使用 Let's Encrypt 和 `certbot` 获取免费 SSL 证书，推荐在宿主机上运行 `certbot` 并挂载证书到 `nginx` 容器。
 - 配置 `nginx` 使用 HTTPS，并将 HTTP 重定向到 HTTPS。
 
-# free certificate VS. charge certificate
+## free certificate VS. charge certificate
 
-## 为什么 Let's Encrypt 可以免费提供证书？
+### 为什么 Let's Encrypt 可以免费提供证书？
 
 Let's Encrypt 是一个由非营利组织 **Internet Security Research Group (ISRG)** 运营的证书颁发机构（CA），其目标是推动互联网安全，降低 HTTPS 的使用门槛。以下是它能免费提供证书的一些原因：
 
@@ -116,11 +116,11 @@ Let's Encrypt 是一个由非营利组织 **Internet Security Research Group (IS
 
 
 
-## 付费证书与 Let's Encrypt 免费证书的区别
+### 付费证书与 Let's Encrypt 免费证书的区别
 
 付费证书和 Let's Encrypt 的免费证书在技术上都是有效的 SSL/TLS 证书，都能为你的网站启用 HTTPS，加密通信数据。但它们在某些方面有明显的区别，以下是详细对比：
 
-### 证书类型和功能
+#### 证书类型和功能
 Let's Encrypt：
 
 - 提供 **DV（Domain Validated，域名验证）** 证书，仅验证域名的控制权。
@@ -133,14 +133,14 @@ Let's Encrypt：
 - **EV 证书**：最高级别的验证，浏览器地址栏会显示绿色锁和公司名称（如银行、金融类网站常用）。
 - 适合需要更高信任度的场景（如电商、金融机构）。
 
-### 有效期
+#### 有效期
    - **Let's Encrypt**：
      - 证书有效期为 90 天，需频繁续期（但可以通过自动化工具解决）。
    - **付费证书**：
      - 有效期通常为 1-2 年（部分 CA 可能更长），续期频率较低。
      - 注意：近年来，许多浏览器（如 Chrome）要求所有证书最大有效期不超过 398 天，因此差距正在缩小。
 
-### 验证流程
+#### 验证流程
 Let's Encrypt：
 - 完全自动化验证，支持 HTTP-01、DNS-01 和 TLS-ALPN-01 等挑战方式。
 - 只验证域名控制权（如通过上传文件或添加 DNS 记录），无需人工审核。
@@ -149,7 +149,7 @@ Let's Encrypt：
 - DV 证书的验证流程与 Let's Encrypt 类似，但 OV 和 EV 证书需要更多人工审核（如验证公司注册信息、电话联系等）。
 - 验证时间更长（EV 证书可能需要几天到几周）。
 
-### 成本
+#### 成本
    - **Let's Encrypt**：
      
      完全免费，且不限证书数量。
@@ -161,7 +161,7 @@ Let's Encrypt：
      - OV 证书：$50-$200/年。
      - EV 证书：$100-$500/年。
 
-#### 支持和客户服务
+##### 支持和客户服务
    - **Let's Encrypt**：
      - 没有官方的客户支持，主要依靠社区（论坛、文档）解决问题。
      - 如果遇到问题，可能需要自己排查（如自动化续期失败）。
@@ -169,7 +169,7 @@ Let's Encrypt：
      - 提供商通常提供专门的客户支持（如 Namecheap、DigiCert、GlobalSign）。
      - 支持团队可以协助安装、续期或处理复杂问题。
 
-### 通配符证书
+#### 通配符证书
    - **Let's Encrypt**：
      - 支持通配符证书（`*.example.com`），但需要通过 DNS-01 挑战验证（手动配置 DNS 记录或使用支持 DNS API 的工具）。
    - **付费证书**：
@@ -177,16 +177,16 @@ Let's Encrypt：
 
 
 
-## 总结：选择 Let's Encrypt 还是付费证书？
+### 总结：选择 Let's Encrypt 还是付费证书？
 
-#### 使用 Let's Encrypt 的场景
+##### 使用 Let's Encrypt 的场景
 - 你只需要基本的 HTTPS 加密（DV 证书）。
 - 你能接受 90 天有效期，并愿意设置自动化续期。
 - 你不需要额外的信任标识（如公司名称）。
 - 你希望节省成本，且对技术配置有一定掌控能力。
 - 你的网站是个人项目、中小型商业网站，或者内部系统。
 
-#### 使用付费证书的场景
+##### 使用付费证书的场景
 - 你需要 OV 或 EV 证书（如商业网站需要显示公司信息）。
 - 你希望更长的有效期（1-2 年），减少续期频率。
 - 你的客户群体对品牌信任度敏感（如银行、金融、电商）。

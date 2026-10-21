@@ -11,15 +11,15 @@
 
 而它们会盯着这些包，一旦有新版本，就自动在你的 GitHub/GitLab 上开一个 Pull Request (PR)。只需要点一下“合并”，代码就更新了。
 
-## Dependabot vs. Renovate
+### Dependabot vs. Renovate
 
-### Dependabot
+#### Dependabot
 
 - 优点：开箱即用。你不需要安装任何东西，只要在仓库里放个 `.github/dependabot.yml` 配置文件就行。
 - 体验：界面极其简洁，直接集成在 GitHub 的 Security 标签页里。
 - 缺点：配置的灵活性稍差，主要针对主流语言。
 
-### Renovate
+#### Renovate
 
 由 Mend 维护的开源工具，支持 GitHub, GitLab, Bitbucket, Azure DevOps。
 
@@ -27,7 +27,7 @@
 - 体验：适合大团队，如果你对 PR 的频率、分组、自动合并有严格要求，选它。
 - 缺点：配置项非常多（几百个参数），新手可能会看晕。
 
-## CI example
+### CI example
 
 为了让你理解它们怎么配合，这里有一个典型的自动化链条：
 
@@ -39,7 +39,7 @@
    - 运行 `Trivy`（如果是 Docker 项目，确保构建出的镜像安全）。
 4. 你看到所有绿灯通过，点下 Merge。
 
-# Dependabot
+## Dependabot
 
 对于 dependabot 来说，只需要在代码仓库里创建 `.github/dependabot.yml`，内容大概长这样：
 
@@ -97,7 +97,7 @@ updates:
 
 - 设置提交信息的开头（如 `deps(pip): ...`）。这对维护整洁的 Git 历史非常有帮助，一眼就能看出这是依赖更新。
 
-## 运行流程
+### 运行流程
 
 1. 每周一凌晨：Dependabot 准时起床。
 2. 扫描 `/web-app`：看看有没有 Python 包更新，把所有补丁级更新塞进一个名为 `deps(pip)` 的 PR。（new branch）

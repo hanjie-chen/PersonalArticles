@@ -6,7 +6,7 @@
 
 
 
-## pip-audit
+### pip-audit
 
 pip-audit 是一个专门针对 Python 生态系统的安全扫描工具。
 
@@ -56,7 +56,7 @@ jobs:
 
 如果发现漏洞，CI 会直接报错（Exit Code 1），阻止代码合并。
 
-## Trivy
+### Trivy
 
 Trivy 是目前 DevOps 领域最流行的开源安全扫描器之一，它不仅仅局限于某种编程语言。
 
@@ -98,7 +98,7 @@ Trivy 默认会报出一大堆微小的漏洞（可能有几百个），这会�
 trivy fs --severity HIGH,CRITICAL --exit-code 1 .
 ```
 
-### GitHub Actions
+#### GitHub Actions
 
 在 CI 流程里，不需要自己写 `sudo apt install`。官方已经做好了现成的组件（Action），直接调用
 

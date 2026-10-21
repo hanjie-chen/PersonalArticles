@@ -1,27 +1,18 @@
 ---
-Title: SSH 客户端完全使用指南
-Author: 陈翰杰
-Instructor: gemini3, GPT5
-CoverImage: ./resources/images/ssh.png
 RolloutDate: 2026-02-21
 ---
 
-```
-BriefIntroduction: 
-本文主要讲 client ssh 到 remote host。主要内容是 ssh config 的设置
-```
-
-<!-- split -->
+# SSH 客户端完全使用指南
 
 ![cover image](./resources/images/ssh.png)
 
-# Before we beginning
+## Before we beginning
 
 当我们使用 SSH 连接到一台远程服务器的时候，需要输入 username、password 来进行登录。比如
 
 但是这样子容易遇到一些安全问题，比如说一台 server（public ip）可能会遇到密码爆破攻击。出于安全考虑，我们通常会使用 SSH key。
 
-# Connection Basics
+## Connection Basics
 
 一次 SSH 连接通常由下面几个部分组成：
 
@@ -42,7 +33,7 @@ ssh <username>@<remote-server-ip>
 ssh -p <ssh-port> <username>@<remote-server-ip>
 ```
 
-# Create A Key Pair
+## Create A Key Pair
 
 使用下面的命令生成 SSH key：
 
@@ -106,11 +97,11 @@ The key's randomart image is:
 >
 > 例如 [Powershell does not expand '~' for external programs · Issue #20031 · PowerShell/PowerShell](https://github.com/PowerShell/PowerShell/issues/20031)
 
-# Install The Public Key
+## Install The Public Key
 
 既然已经生成了 SSH key，我们就需要将 public key 添加到 remote server 中去。
 
-## Use ssh-copy-id
+### Use ssh-copy-id
 
 ```shell
 ssh-copy-id -p <ssh-port> -i ~/.ssh/Singapore_Linux_VM_SSH_Key.pub <username>@<remote-server-ip>
@@ -137,13 +128,13 @@ and check to make sure that only the key(s) you wanted were added.
 >
 > 在 Windows PowerShell 环境下无法使用 `ssh-copy-id` 命令，此时可以打开 Git Bash 去运行这个命令。
 
-## Add authorized_keys Manually
+### Add authorized_keys Manually
 
 如果命令的方式行不通，那么我们可以手动将 public key 添加到 server 上去。
 
 先登录 server，打开 `~/.ssh/authorized_keys` 文件，将 `.pub` 结尾的内容复制进去。
 
-## Add Key in Cloud VM Console
+### Add Key in Cloud VM Console
 
 如果用的是 Azure Linux VM，可以在 Azure portal 中添加 SSH public key。
 
@@ -157,7 +148,7 @@ and check to make sure that only the key(s) you wanted were added.
 
 ![gcp ssh key setting](./resources/images/gcp-vm-ssh-2.png)
 
-# Connect With A Key
+## Connect With A Key
 
 如果我们直接用 `ssh username@remote-server-ip`，SSH 默认会仅尝试 `id_rsa` 这样默认命名的密钥。
 
@@ -169,11 +160,11 @@ ssh -i ~/.ssh/id_rsa_remote_server username@remote-server-ip
 
 当然为了方便起见，我们往往在 `~/.ssh/config` 中添加配置，让 SSH 自动知道该请求要用哪个 key。
 
-# SSH Config
+## SSH Config
 
 SSH client 可以通过 `~/.ssh/config` 保存连接参数。这样我们就不需要每次输入一系列复杂的参数，而是给这些连接参数起一个名字（ host entry ），然后用 `ssh <Host>` 快速登录。
 
-## Basic Host Entry
+### Basic Host Entry
 
 最小配置示例：
 
@@ -186,7 +177,7 @@ Host remote-server
 
 这个配置的意思是：当执行 `ssh remote-server` 时，SSH client 会自动使用这里指定的 host、user 和 key。
 
-## Option Reference
+### Option Reference
 
 实际使用时，一个 host entry 可能还会包含 port、agent、key selection、keepalive 等配置。
 
@@ -242,11 +233,11 @@ Host <name>
 >
 > 改完 `~/.ssh/config` 对新的 SSH 连接会立刻生效，不需要重启 Windows，也通常不需要重启 ssh-agent。
 
-# SSH Agent
+## SSH Agent
 
 如果我们的 ssh key 设置了密码，那么我们每次连接的时候都需要输入，为了更加方便，我们可以使用 ssh agent 存储解密后的私钥（在内存中缓存已解密的私钥），使得只需要输入一次 passphrase，就可以在会话期间重复使用。
 
-## Windows
+### Windows
 
 查看 ssh-agent 服务：
 
@@ -278,7 +269,7 @@ ssh-add C:\Users\<username>\.ssh\github-ssh-key
 ssh-add -l
 ```
 
-## Linux/Mac
+### Linux/Mac
 
 首先查看 ssh-agent 是否已经启动：
 
@@ -300,7 +291,7 @@ eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/<ssh-key-filename>
 ```
 
-## Persistence
+### Persistence
 
 为了实现 ssh-agent 持久化，可以将这些命令添加到 shell 配置文件中。
 
@@ -320,7 +311,7 @@ source ~/.bashrc  # 如果使用 bash
 
 这样设置后，每次打开新的终端会话时，ssh-agent 都会自动启动，并且会添加你的 SSH 密钥。
 
-# SSH Agent For AI Coding Agents
+## SSH Agent For AI Coding Agents
 
 在使用 Codex 这类 coding agent 的时候，SSH Agent 会遇到一个额外的问题：coding agent 执行 `ssh` 或 `git push` 的进程，不一定和我们手动操作的 terminal 是同一个 shell session。
 
@@ -330,7 +321,7 @@ source ~/.bashrc  # 如果使用 bash
 
 更好的做法是：让 coding agent 使用 ssh-agent，而不是直接持有没有 passphrase 的 private key。
 
-## The Core Idea
+### The Core Idea
 
 `SSH_AUTH_SOCK` 指向的是 ssh-agent 的 socket。这个 socket 不是用来存放解密后的 key 的文件，而是通往 ssh-agent 进程的入口。
 
@@ -344,7 +335,7 @@ private key file + passphrase -> ssh-agent process -> agent socket -> ssh/git/co
 
 也就是说，我们可以让 coding agent 访问 agent socket，让它在当前授权窗口内使用 key；当 key 从 agent 中移除、agent 退出、或者 socket 不再暴露时，coding agent 就不能继续使用这个 key。
 
-## Fixed Agent Socket
+### Fixed Agent Socket
 
 在普通 terminal 中，`SSH_AUTH_SOCK` 通常会指向当前 shell session 里的 agent socket。但是在 VS Code Remote-SSH、GUI app、extension host、task runner 这类场景下，不同进程不一定共享同一个 shell session。
 
@@ -368,7 +359,7 @@ fi
 
 如果希望每次打开 terminal 都自动使用这个固定 socket，可以把这段放到 `~/.bashrc` 或对应 shell 的配置文件中。
 
-## IdentityAgent
+### IdentityAgent
 
 除了在 shell 中设置 `SSH_AUTH_SOCK`，还可以在 `~/.ssh/config` 里使用 `IdentityAgent`，让 OpenSSH 固定使用某个 agent socket。
 
@@ -387,7 +378,7 @@ Host github.com
 
 `AddKeysToAgent yes` 的作用是：当这把 key 被成功使用后，SSH client 会尝试把解密后的 key 加入 agent。前提是 agent 已经存在，并且 SSH client 能找到它。
 
-## Temporary Authorization
+### Temporary Authorization
 
 如果我们希望 key 只在一段时间内可用，可以使用 `ssh-add -t`：
 
@@ -411,7 +402,7 @@ ssh-add -D
 
 这种方式比较适合 coding agent：我们仍然给 private key 设置 passphrase，但在需要的时候临时把 key 加进 ssh-agent。coding agent 可以在这个授权窗口内使用 key，窗口结束后就不能继续使用。
 
-## VS Code Remote-SSH
+### VS Code Remote-SSH
 
 在 VS Code Remote-SSH 场景中，VS Code 会在 remote machine 上启动 VS Code Server，extension 也可能运行在 remote machine 上。这个 extension host 和 integrated terminal 在同一台机器上，但不一定是同一个 shell session。
 
@@ -425,7 +416,7 @@ ssh-add -D
 
 这样即使 coding agent 和 terminal 不是同一个 session，它们执行 `ssh` 或 `git push` 时也会通过同一个 agent socket。
 
-## Security Notes
+### Security Notes
 
 使用 agent socket 比直接给 coding agent 一把没有 passphrase 的 private key 更安全，因为 private key 本身不会被交给 coding agent。
 

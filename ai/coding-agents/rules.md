@@ -6,13 +6,13 @@ keep simple, keep focus, keep update
 
 这里三个原则将用于 AGENTS.md/CLAUDE.md, README.md
 
-## keep simple
+### keep simple
 
 越简单越好，越简洁越好。
 
 
 
-## keep foucs
+### keep foucs
 
 保持聚焦
 
@@ -20,9 +20,9 @@ keep simple, keep focus, keep update
 
 
 
-## Keep update
+### Keep update
 
-## 迭代
+### 迭代
 
 从最精简的状态开始，然后逐步在和 coding agent 协作的过程中，形成自己的风格。
 
@@ -30,7 +30,7 @@ keep simple, keep focus, keep update
 
 特别是当模型更新的时候，要重新思考如何与 ai agent 协作，思考如何管理上下文，
 
-## review
+### review
 
 需要定期 review （做好清理， clean），按照 keep simple, keep foucs 的原则，重新审视一下最近可能对上下文有影响的东西，比如说 skill, agents.md 等
 

@@ -1,23 +1,14 @@
 ---
-Title: SQLAlchemy Basic Knowledge
-Author: 陈翰杰
-Instructor: chatGPT 3.5
-CoverImage: ./resources/images/cover_image.png
 RolloutDate: 2024-11-07
 ---
 
-```
-BriefIntroduction: 
-这是关于 SQLalchemy 基础知识的部分笔记总结
-```
-
-<!-- split -->
+# SQLAlchemy Basic Knowledge
 
 <img src="./resources/images/cover_image.png" alt="cover" style="zoom:60%;" />
 
-# SQLAlchemy Core Components
+## SQLAlchemy Core Components
 
-# 关于ORM(Object-Relational Mapping)
+## 关于ORM(Object-Relational Mapping)
 
 ORM是一种编程技术,用于在面向对象编程语言和关系型数据库之间建立映射关系，全称是Object-Relational Mapping,即对象关系映射。
 
@@ -29,7 +20,7 @@ ORM的基本概念
 - 属性(Property): 对应表中的列。
 - 关系(Relationship): 表示实体之间的关联(如一对多,多对多等)。
 
-## Python SQLAlchemy示例
+### Python SQLAlchemy示例
 
 假设我们有一个User类和一个对应的users表:
 
@@ -75,7 +66,7 @@ ORM与传统数据库操作的对比:
 
 ORM方式更接近于面向对象的编程思维,代码更加直观和易于维护。
 
-# Engine
+## Engine
 
 Sqlalchemy engine 使用函数`create_engine` 连接数据库
 
@@ -112,9 +103,9 @@ engine = create_engine('sqlite+pysqlite:///:memory:', echo=True)
 
    - `echo=True`是一个可选参数，表示SQLAlchemy将会打印所有生成的SQL语句到标准输出。这对于调试和学习SQLAlchemy的SQL生成过程非常有用。
 
-# Connection
+## Connection
 
-## Build connect and Execute SQL statement
+### Build connect and Execute SQL statement
 
 SQLAlchemy提供了一种简单而强大的方式来与数据库交互。让我们通过一个例子来了解基本的connect和SQL执行过程。
 
@@ -155,7 +146,7 @@ with engine.connect() as conn:
 
 ---
 
-### 代码解释 `text()`-->`execute()`
+#### 代码解释 `text()`-->`execute()`
 
 `text()` 用于创建一个可以执行的 SQL 文本对象，这个对象可以传递给连接对象的 `execute()` 来执行。
 
@@ -190,13 +181,13 @@ conn.execute(
 )
 ```
 
-### BEGIN (implicit) 事务管理
+#### BEGIN (implicit) 事务管理
 
 当 SQLAlchemy 记录“BEGIN (implicit)”时，它表示 SQLAlchemy 识别到一个事务的开始，但这是基于数据库驱动程序的行为，而不是因为 SQLAlchemy 或者应用程序显式地发送了 `BEGIN` 命令。
 
 许多数据库驱动程序会在你执行第一个需要事务的操作时自动开始一个事务。这种行为意味着你不需要显式地调用 `BEGIN` 来开始事务。
 
-## execute 查询返回值
+### execute 查询返回值
 
 让我们首先看一个基本的查询执行示例：
 
@@ -214,7 +205,7 @@ conn.execute(
 
 result 是一个列表`list` 在这个例子中result包含2个元组`tuple` (1, 1), (2, 4)
 
-### 参数查询
+#### 参数查询
 
 ```bash
 >>> with engine.connect() as conn:
@@ -244,7 +235,7 @@ x: 2  y: 4
 
 - `OLLBACK`: 结束事务并回滚。这通常是因为在 `with` 块结束时自动处理事务
 
-## ORM
+### ORM
 
 `Session` 是 SQLAlchemy ORM (对象关系映射) 的核心概念，它提供了一个更高级的抽象层来管理数据库交互。
 
@@ -273,7 +264,7 @@ x: 13  y: 14
 2024-09-07 16:06:34,300 INFO sqlalchemy.engine.Engine ROLLBACK
 ```
 
-# Metadata
+## Metadata
 
 想象一下你在设计一座房子：
 
@@ -285,7 +276,7 @@ x: 13  y: 14
 - 它记录了所有表的"设计图"（表名、列名、数据类型等）
 - 它还带有"施工说明书"（create_all、drop_all 等方法）来指导数据库按照设计图建表
 
-## Core define
+### Core define
 
 使用 Table 对象直接定义表结构，例如
 
@@ -317,7 +308,7 @@ metadata_obj.create_all(engine)
 
 ~~正常人都不会用的~~
 
-## ORM Declarative Forms define
+### ORM Declarative Forms define
 
 先看完整的代码
 
@@ -361,7 +352,7 @@ engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
 Base.metadata.create_all(engine)
 ```
 
-### 关于空的Base类
+#### 关于空的Base类
 
 通过定义空的 `Base` 类，可以在将来添加自定义方法或属性，而这些将被所有模型类继承，无需修改每个单独的模型类。
 
@@ -384,7 +375,7 @@ Base.metadata.create_all(engine)
 
 ---
 
-### Mapped 和 mapped_column
+#### Mapped 和 mapped_column
 
 `Mapped` 和 `mapped_column` 是 SQLAlchemy 2.0 中的新概念：类型注解 (type annotations)
 
@@ -539,7 +530,7 @@ class Address(Base):
     email_address2: Mapped[str] = mapped_column(String(255))
 ```
 
-### Metadata特性
+#### Metadata特性
 
 所有继承自 Base 的模型类的表信息都会自动注册到 Base.metadata
 
@@ -558,7 +549,7 @@ Base.metadata.reflect(engine)
 
 
 
-## Run ORM Declarative code
+### Run ORM Declarative code
 
 ```bash
 2024-09-13 10:11:23,848 INFO sqlalchemy.engine.Engine BEGIN (implicit)
@@ -603,13 +594,13 @@ PRAGMA main.table_info("address")
 PRAGMA temp.table_info("address")
 ```
 
-# CUDR Operation
+## CUDR Operation
 
 同样的，存在Core方式的CUDR和ORM方式的CUDR，我们会分别介绍这2种，当然着重于ORM
 
-## Core CUDR
+### Core CUDR
 
-### Insert()
+#### Insert()
 
 ```python
 from sqlalchemy import insert
@@ -624,7 +615,7 @@ INSERT INTO user_account (name) VALUES (:name)
 {'name': 'plain'}
 ```
 
-### Select()
+#### Select()
 
 ```python
 from sqlalchemy import select
@@ -636,7 +627,7 @@ FROM user_account
 WHERE user_account.name = :name_1
 ```
 
-### Update() and Delete()
+#### Update() and Delete()
 
 ```python
 # 1. 基本的UPDATE操作
@@ -654,9 +645,9 @@ basic_delete = (
 
 more details in [Basic.py file](./Basic.py)
 
-## ORM CUDR
+### ORM CUDR
 
-### Session.new() & session.add()
+#### Session.new() & session.add()
 
 session.new 是 SQLAlchemy Session 对象的一个属性，它表示所有已经被添加到 session 中但还没有被提交到数据库的新对象集合。
 
@@ -691,7 +682,7 @@ print(session.new)  # 输出：IdentitySet([])
 
 这些集合共同构成了 SQLAlchemy 的对象状态管理系统，帮助实现了高效的数据库操作和事务管理。
 
-### Session.get()
+#### Session.get()
 
 `session.get(entity, primary_key)` 接收两个主要参数:
 1. 第一个参数是实体类(在这个例子中是 `User` 类)
@@ -716,7 +707,7 @@ order = session.get(Order, (order_id, user_id))
 
 
 
-### Session.flush() & Session.commit()
+#### Session.flush() & Session.commit()
 
 flush 只是将当前 session 中的改动同步到数据库，但这些改动还在事务中，还没有真正提交
 
@@ -758,7 +749,7 @@ commit 会真正地提交事务，使改动永久保存到数据库，实际上c
 
 
 
-### Session.delete()
+#### Session.delete()
 
 ```python
 1. 标记删除
@@ -813,7 +804,7 @@ session.commit()
 
 
 
-### Rollback
+#### Rollback
 
 `session.rollback()` 会撤销所有未 commit 的改动，让我详细解释一下：
 
@@ -883,7 +874,7 @@ finally:
 - `rollback()` 是撤销所有未保存的改动
 - `flush()` 是预览改动效果，但还可以通过 `rollback()` 撤销
 
-### Session.close()
+#### Session.close()
 
 ```python
 ### session.close() 详解
@@ -964,7 +955,7 @@ finally:
     session.close()
 ```
 
-### 查询 query & select
+#### 查询 query & select
 
 查询对象类型
 
@@ -1097,7 +1088,7 @@ stmt = (
 
 记住，新版本SQLAlchemy推荐使用2.0风格的查询语法（使用`select()`），它提供了更好的类型提示和一致性。但是旧式的`query()`语法仍然可用，并在许多现有代码中使用。
 
-### Session.execute
+#### Session.execute
 
 在SQLAlchemy 2.x中，确实存在两种主要的查询执行方式：直接使用`scalar()`系列方法和使用`execute()`方法。这两种方式各有其适用场景，让我们来分析一下：
 
@@ -1141,7 +1132,7 @@ users = session.execute(select(User).where(User.age > 18)).scalars().all()
 
 这种方式既保持了代码的简洁性，又提供了足够的灵活性来处理各种查询场景。
 
-### 关于select更进一步的说明
+#### 关于select更进一步的说明
 
 当我们导入并且使用了``select`之后，就不需要导入其他的关键字了比如说`where`, `order_by` 等，因为select自带了：
 
@@ -1152,13 +1143,13 @@ users = session.execute(select(User).where(User.age > 18)).scalars().all()
 __init__(), add_columns(), add_cte(), alias(), as_scalar(), c, column(), column_descriptions, columns_clause_froms, correlate(), correlate_except(), corresponding_column(), cte(), distinct(), except_(), except_all(), execution_options(), exists(), exported_columns, fetch(), filter(), filter_by(), from_statement(), froms, get_children(), get_execution_options(), get_final_froms(), get_label_style(), group_by(), having(), inherit_cache, inner_columns, intersect(), intersect_all(), is_derived_from(), join(), join_from(), label(), lateral(), limit(), offset(), options(), order_by(), outerjoin(), outerjoin_from(), prefix_with(), reduce_columns(), replace_selectable(), scalar_subquery(), select(), select_from(), selected_columns, self_group(), set_label_style(), slice(), subquery(), suffix_with(), union(), union_all(), where(), whereclause, with_for_update(), with_hint(), with_only_columns(), with_statement_hint()
 ```
 
-## ORM CUDR <u>***SELECT***</u>
+### ORM CUDR <u>***SELECT***</u>
 
 source: [Using SELECT Statements — SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/en/20/tutorial/data_select.html)
 
 
 
-### `.where` usage
+#### `.where` usage
 
 在SQLAlchemy 2.0中，可以使用多个`.where()`子句，它们会以AND的方式连接起来
 
@@ -1225,11 +1216,11 @@ exist_check = db.session.execute(
 
 这些方法都是等价的，会生成相同的SQL查询。
 
-# ORM relationship
+## ORM relationship
 
 关于ORM relationship的相关特质
 
-## 关系加载策略
+### 关系加载策略
 
 我们可以通过具体例子来理解4个不同的关系加载策略，假设我们有这样的数据：
 
@@ -1238,7 +1229,7 @@ exist_check = db.session.execute(
 
 让我们比较不同加载策略的查询情况：
 
-### Select in load()
+#### Select in load()
 
 ```python
 # 使用 selectinload
@@ -1250,7 +1241,7 @@ users = session.execute(stmt).scalars().all()
 # Query 2: SELECT * FROM address WHERE user_id IN (1,2,3,4,5,6,7,8,9,10);  # 一次获取所有地址
 ```
 
-### Lazy Load(default) - N+1问题
+#### Lazy Load(default) - N+1问题
 
 ```python
 # 不使用 selectinload
@@ -1266,7 +1257,7 @@ for user in users:
 # ... （总共执行11次查询！）
 ```
 
-### Joined Load
+#### Joined Load
 
 ```python
 # 使用 joinedload
@@ -1308,7 +1299,7 @@ users = session.execute(stmt).scalars().all()
 
 
 
-## Session 执行方法
+### Session 执行方法
 
 ```python
 # 1. session.scalar(stmt)
@@ -1349,7 +1340,7 @@ for user in result.scalars():
 
 `session.execute()` 返回 Result 对象，提供更多控制和灵活性，适用于多行结果
 
-## Stmt 函数
+### Stmt 函数
 
 常见函数
 

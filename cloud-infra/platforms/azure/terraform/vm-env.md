@@ -4,7 +4,7 @@
 
 您提出了一个很好的问题！在 Azure 上使用 Terraform 部署 Windows 和 Linux VM 后，确实有多种方法可以自动化环境配置，不需要手动安装软件。
 
-#### Windows VM 自动化配置选项
+##### Windows VM 自动化配置选项
 
 对于 Windows 虚拟机，您可以使用以下方法：
 
@@ -46,7 +46,7 @@ choco install git -y
 # 可以添加更多需要的软件
 ```
 
-#### Linux VM 自动化配置选项
+##### Linux VM 自动化配置选项
 
 对于 Ubuntu Linux 虚拟机，最佳选项包括：
 
@@ -97,7 +97,7 @@ SETTINGS
 }
 ```
 
-#### 更高级的选项：Packer + Terraform
+##### 更高级的选项：Packer + Terraform
 
 另一种方法是使用 HashiCorp Packer 创建预配置的 VM 镜像，然后使用 Terraform 部署：
 

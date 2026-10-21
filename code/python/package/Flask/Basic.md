@@ -1,21 +1,12 @@
 ---
-Title: Flask basic knowledge
-Author: 陈翰杰
-Instructor: Sonnet 3.5
-CoverImage: ./resources/images/cover_image.png
 RolloutDate: 2024-11-22
 ---
 
-```
-BriefIntroduction: 
-Flask learning note, flask version >= 3.0.X
-```
-
-<!-- split -->
+# Flask basic knowledge
 
 ![cover](./resources/images/cover_image.png)
 
-# Flask Basic
+## Flask Basic
 
 Flask >= 3.0.X
 
@@ -53,7 +44,7 @@ def page_not_found(error_info):  # 接受异常对象作为参数
 
 ```
 
-## run the code
+### run the code
 
 如果之前的代码文件叫做 hello.py 那么使用下面的命令
 
@@ -93,7 +84,7 @@ Press CTRL+C to quit
 >
 > Flask 的 `--host` 参数并不支持直接指定 IP 地址段范围（如 CIDR 表示法 192.168.0.0/24）。`--host` 参数只能指定服务器要监听的具体 IP 地址。
 
-### enable debug mode
+#### enable debug mode
 
 当修改完代码之后，查看结果效果是否符合预期，那么需要 `ctrl+c` 然后再 `flask run` 一次，但是如果 enable debug mode 那么 server 会自动 reload 修改之后的代码， 而无需关闭重启
 
@@ -116,7 +107,7 @@ Press CTRL+C to quit
 
 需要注意的这里的 debug mode 不仅仅检测 `.py` 文件是否改变，而且同时检测templates 文件夹中 `.html` 文件是否改变[^flask-config]
 
-## HTML Escaping
+### HTML Escaping
 
 当处理用户输入时需要特别注意 XSS 攻击。HTML Escaping 是一种防御机制，将特殊字符转换为对应的 HTML 实体（如 `<` 变成 `&lt;`），防止恶意脚本执行。
 
@@ -140,7 +131,7 @@ def post():
 from markupsafe import escape
 escaped_content = escape(user_input)
 ```
-# Route Function
+## Route Function
 
 Flask 会基于 URL 匹配自动调用路由函数，我们只要在 app.py 中正确定义路由和相应的函数，并且在 templates 中使用 `url_for()` 正确引用这些函数。
 
@@ -188,7 +179,7 @@ def article_index():
 
 Flask 接收到这个请求后，会查找匹配 "/Articles" 路径的路由。它找到了定义的 `@app.route("/Articles")` 装饰器，因此会调用 `article_index()` 函数。
 
-## Variable Rules
+### Variable Rules
 
 example
 
@@ -224,7 +215,7 @@ Flask 提供了几种内置的转换器：
 @app.route('/user/<uuid:user_id>')  # 接受UUID字符串
 ```
 
-### 多变量路由
+#### 多变量路由
 
 ```python
 @app.route('/blog/<int:year>/<int:month>/<int:day>/<slug>')
@@ -256,7 +247,7 @@ def article_detail(category, title):
 </a>
 ```
 
-## Unique URL
+### Unique URL
 
 ```python
 @app.route('/projects/')
@@ -278,7 +269,7 @@ def about():
 
 这就像在文件系统中：`/home/user/` 是一个目录 `/home/user/file.txt` 是一个文件
 
-## `url_for()` function
+### `url_for()` function
 
 `url_for()` 是 Flask 提供的 URL 生成函数，它接受两种类型的参数：
 1. 第一个参数是 **endpoint**（通常是视图函数的名称）
@@ -327,7 +318,7 @@ url_for('index', _external=True, _scheme='https')
 # 输出: https://localhost/
 ```
 
-### best practice
+#### best practice
 
 始终使用 `url_for()`
 
@@ -356,7 +347,7 @@ url_for('static', filename='js/script.js')   # 输出: /static/js/script.js
 <a href="{{ url_for('profile', username='john') }}">John's Profile</a>
 ```
 
-## HTTP methods
+### HTTP methods
 
 flask 可以区分到同一个路径不同的 HTTP methods
 
@@ -383,11 +374,11 @@ def login_post():
     return do_the_login()    
 ```
 
-# Static folder
+## Static folder
 
 `static` 是 Flask 中的一个内置特殊 endpoint，Flask 默认会注册这个 endpoint 来处理静态文件，所以无法创建名为 'static' 的视图函数，因为这会与 Flask 的内置静态文件处理冲突
 
-## default static folder
+### default static folder
 
 可以通过改变配置 修改默认的静态文件夹
 
@@ -434,7 +425,7 @@ url_for('static', filename='css/style.css')    # 输出: /public/css/style.css
 url_for('static', filename='images/logo.png')  # 输出: /public/images/logo.png
 ```
 
-### Advantage
+#### Advantage
 
 使用这种设计可以隐藏实际的服务器文件结构，而且更加灵活
 
@@ -475,7 +466,7 @@ app.static_url_path = '/static'         # URL保持一致
 
 
 
-## add customize static folder
+### add customize static folder
 
 除了默认的 static 作为静态文件 如果想要再创建一个静态文件夹方便 `url_for()` 调用 可以这么做
 
@@ -491,7 +482,7 @@ def serve_uploads(filename):
 app.add_url_rule('/uploads/<path:filename>', 'serve_uploads', serve_uploads)
 ```
 
-### `send_from_directory()`
+#### `send_from_directory()`
 
 这两种方式能够添加额外的静态文件夹，核心在于 `send_from_directory` 函数，它是 Flask 提供的一个用于安全地发送文件的函数。
 
@@ -543,11 +534,11 @@ def view_file(filename):
     return send_from_directory('uploads', filename)
 ```
 
-### `@app.route` VS `add_url_rule`
+#### `@app.route` VS `add_url_rule`
 
 如果静态文件夹需要额外的处理逻辑（如权限检查、日志记录等）就用 @app.route 方式；如果只是单纯提供文件访问就用 add_url_rule 方式。
 
-## `add_url_rule` 详解
+### `add_url_rule` 详解
 
 ```python
 app.add_url_rule('/rendered_articles/<path:filename>',
@@ -561,7 +552,7 @@ app.add_url_rule('/rendered_articles/<path:filename>',
 - 当访问类似 `/rendered_articles/some-file.html` 的 URL 时，会自动调用指定的 `view_func`
 - `view_func` 使用 `send_from_directory` 来发送文件
 
-### 实际工作流程
+#### 实际工作流程
 
 在代码中，这个规则主要在 `article_details.html` 模板中被使用：
 
@@ -590,7 +581,7 @@ send_from_directory(app.config['RENDERED_ARTICLES_FOLDER'], filename)
 
 
 
-# Render Template
+## Render Template
 
 Flask 使用 `render_template` 函数加载 html 文件，默认会在 `templates` 文件夹中寻找模板文件。
 
@@ -636,7 +627,7 @@ def hello(name=None):
 
 
 
-## Jinja2
+### Jinja2
 
 Flask默认使用Jinja2作为模板引擎，因此拥有一些高级特性 
 
@@ -644,7 +635,7 @@ Flask默认使用Jinja2作为模板引擎，因此拥有一些高级特性
 >
 > 更详细的内容请看 [Template Designer Documentation — Jinja Documentation (3.1.x)](https://jinja.palletsprojects.com/en/stable/templates/)
 
-### delimiter
+#### delimiter
 
 `{{ }}` - 用于输出变量或表达式的值
 
@@ -677,9 +668,9 @@ Flask默认使用Jinja2作为模板引擎，因此拥有一些高级特性
 <p>Hello World</p>
 ```
 
-### Global variable
+#### Global variable
 
-### Template Inheritance
+#### Template Inheritance
 
 这是Jinja2最强大的特性之一，使用 `{% extends %}` 和 `{% block %}` 标签实现。
 
@@ -710,7 +701,7 @@ Flask默认使用Jinja2作为模板引擎，因此拥有一些高级特性
 {% endblock %}
 ```
 
-### Macros
+#### Macros
 
 宏类似于其他编程语言中的函数，可以重复使用模板代码。
 
@@ -753,7 +744,7 @@ Flask默认使用Jinja2作为模板引擎，因此拥有一些高级特性
 </form>
 ```
 
-### Include
+#### Include
 
 使用 `{% include %}` 可以包含其他模板文件：
 
@@ -784,7 +775,7 @@ Flask默认使用Jinja2作为模板引擎，因此拥有一些高级特性
 </html>
 ```
 
-### Import
+#### Import
 
 可以导入整个模板文件作为模块：
 
@@ -807,7 +798,7 @@ Flask默认使用Jinja2作为模板引擎，因此拥有一些高级特性
 </form>
 ```
 
-### Context Processors
+#### Context Processors
 
 在Flask中注册上下文处理器，使变量在所有模板中可用：
 
@@ -830,13 +821,13 @@ def utility_processor():
 <footer>&copy; {{ current_year }}</footer>
 ```
 
-# Redirects and Errors
+## Redirects and Errors
 
 next : [Quickstart — Flask Documentation (3.1.x)](https://flask.palletsprojects.com/en/stable/quickstart/#redirects-and-errors)
 
 
 
-# Reference
+## Reference
 
 [^flask-config]: 参考文档 [Configuration Handling — Flask Documentation (3.1.x)
 

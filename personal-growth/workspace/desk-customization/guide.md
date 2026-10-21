@@ -1,21 +1,12 @@
 ---
-Title: 工作桌定制指南
-Author: 陈翰杰
-Instructor: gpt5.5
-CoverImage: ./resources/images/2024/leg-chair.jpeg
 RolloutDate: 2026-06-14
 ---
 
-```
-BriefIntroduction: 
-本人定制工作桌面的经历
-```
-
-<!-- split -->
+# 工作桌定制指南
 
 ![cover image](./resources/images/2024/leg-chair.jpeg)
 
-# background
+## background
 
 因为工作学习的需求，我希望有一张自己的大桌子，第一次定制桌子的时候，当时是想要站着办公，所以定制了超高的桌腿，结果发现站着半小时就受不了了，算是比较失败的经历。
 
@@ -33,27 +24,27 @@ BriefIntroduction:
 
 如果以后有钱了的话可以选择，淘宝店铺：木小北家具（直接一步到位樱桃木和黑胡桃木）
 
-# version 1: 2023
+## version 1: 2023
 
 时间：2023-2024 年
 
 预算：500 CNY 以内，桌面面板和桌腿分开购买
 
-## desk panel
+### desk panel
 
 实木材质：松木。比较软（甚至指甲用力划一下就有痕迹），而且店家不支持中间打孔，但是便宜（花费 350 CNY）。如下图
 
 ![desktop](./resources/images/2023/3.jpg)
 
-## desk legs
+### desk legs
 
-### 桌腿高度
+#### 桌腿高度
 
 因为我比较矮，当时觉得既然桌子腿定制，那么就买的低一些，于是定制了 65cm，到手后发现太低了，坐在椅子上有点卡大腿。
 
 ![卡腿](./resources/images/2023/1.jpg)
 
-### 桌腿形状
+#### 桌腿形状
 
 桌腿最好不要把桌面四周全部都围起来（虽然这样子桌子会很稳定），这不利于其他设备的安装，特别是显示器支架。
 
@@ -63,24 +54,24 @@ BriefIntroduction:
 
 ![avatar](./resources/images/2023/new_leg.jpg)
 
-## review
+### review
 
-### 桌腿
+#### 桌腿
 
 1. 高度不要太低，直接默认高度（一般是 70cm ~ 75cm 左右）即可
 
-### 桌面
+#### 桌面
 
 1. 容易磕碰到的桌角和边缘需要打磨的圆滑一些，这样子磕碰到身体就不会痛，靠墙的倒是不必，因为可以和墙面合缝
 2. 面板中间最好打孔（大一些），用来安装显示器支架和走线。
 
-### 桌面设备
+#### 桌面设备
 
 1. 显示器支架：方便调节横向显示器的位置，并且显示器下方桌面空间可以空出来
 2. 桌面光源：如果只有一个显示器，那么选择屏幕挂灯（比如小米），如果有两个显示器，那么屏幕挂灯就不够用了，需要选择一个大的光源。
 3. 电源排插：购买了 PDU 排插，8 个插孔，目前勉强够用，感觉还可以再多两个孔位，或者增加 USB / Type-C 供电口。
 
-# version 2: 2024
+## version 2: 2024
 
 时间：2024 - 2026（至今）
 
@@ -88,7 +79,7 @@ BriefIntroduction:
 
 在 2023 年末换了工作之后，我来到上海（原来那个桌子留在了广东），于是重新定制了一张桌子，继续迭代
 
-## desk panel
+### desk panel
 
 材质：榆木（比松木硬一些，支持中间打孔）花费 560 CNY
 
@@ -98,7 +89,7 @@ BriefIntroduction:
 
 ![design desk panel](./resources/images/2024/structure.jpeg)
 
-## desk legs
+### desk legs
 
 吸取了上次高度和形状的教训，这次选择了下图的桌腿（花费 276 CNY），长度 115cm $\times$ 宽度 45cm $\times$ 高度 72.5cm 
 
@@ -108,19 +99,19 @@ BriefIntroduction:
 
 ![avatar](./resources/images/2024/leg-chair.jpeg)
 
-## review
+### review
 
-### 桌腿
+#### 桌腿
 
 这一次的桌腿吸取了上次的教训，采用标准高度、横梁靠后、椅子扶手能推入桌下，我比较满意。
 
-### 桌面
+#### 桌面
 
 榆木支持打孔，圆边处理减少磕碰，我也比较满意。
 
 我这里还有一个思考：桌面是否需要内凹弧度？目标是让手能够更容易触达桌面所有区域，关于这个弧度如何确定，还没有考虑好
 
-### 桌面设备
+#### 桌面设备
 
 1. 桌下理线
 
@@ -147,11 +138,11 @@ BriefIntroduction:
 
    个人更加倾向于第一个，尝试把台灯的灯管直接固定在墙面上。
 
-# next iteration
+## next iteration
 
 将预算提高到 1000 - 2000 CNY
 
-# references
+## references
 
 [^电脑桌选购指南]: [【建议收藏】电脑桌选购指南 宜家｜淘宝｜实木｜升降桌 哔哩哔哩 bilibili](https://www.bilibili.com/video/BV1W5411S7Lt/?spm_id_from=333.337.search-card.all.click&vd_source=617c4a2b4e326fc6b6269aada0d25986)
 [^桌面理线方案]: [不到百元的完美桌面理线方案，你不来了解下？_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1zP4y1T7RS/?spm_id_from=333.999.0.0&vd_source=617c4a2b4e326fc6b6269aada0d25986)

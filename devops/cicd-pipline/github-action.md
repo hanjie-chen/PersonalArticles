@@ -21,7 +21,7 @@ GitHub Actions 的强大之处在于：
 
 
 
-# CI
+## CI
 
 example:
 ```yaml
@@ -94,7 +94,7 @@ jobs:
 
 
 
-## `name` 字段
+### `name` 字段
 
 `name` 是给人类看的显示名称。
 
@@ -104,7 +104,7 @@ jobs:
 
 在别的地方，可以通过使用 `workflows: ["CI"]` （这里的 `"CI"` 对应的是那个文件里的 `name: CI`）的方式，给其他地方调用，就像是给程序起个名字。
 
-## Action 指令：`run` vs `uses`
+### Action 指令：`run` vs `uses`
 
 在 GitHub Actions 中，命令有两种执行方式：
 
@@ -131,7 +131,7 @@ jobs:
 - **`run: docker build`**：就像是**自己做饭**。你很清楚每一道工序（切菜、开火、翻炒），对应 Linux 里的每一个原生指令。
 - **`uses: actions/checkout@v4`**：就像是**点外卖**。你不需要知道外卖员是怎么骑车来的、厨师是怎么洗菜的，你只需要下达订单（`uses`），代码（饭菜）就会准时出现在你的 Ubuntu 虚拟机（餐桌）上。
 
-## 运行记录
+### 运行记录
 
 在 github Repo 的 Actions 界面可以看到运行记录
 
@@ -143,14 +143,14 @@ jobs:
 
 <img src="./images/ci-details.png" alt="ci details" style="zoom:50%;" />
 
-### 1. 顶部状态栏：概览信息
+#### 1. 顶部状态栏：概览信息
 
 - Triggered via push: 因为推送了代码到 `main` 分支触发。
 - Status: Success: 整个流顺利完成。
 - Total duration: 从开始拉取代码到镜像推送到云端，一共只花了 48 秒。
 - Artifacts: 代表产生了两个构建产物（即两个 Docker 镜像构建日志文件）。
 
-### 2. 中间部分：Docker Build Summary（核心看板）
+#### 2. 中间部分：Docker Build Summary（核心看板）
 
 因为在 `ci.yml` 中使用了 `docker/build-push-action`，它会自动在 GitHub 界面上生成这种可视化的表格。
 
@@ -159,13 +159,13 @@ jobs:
 - articles-sync: 耗时 6 秒。
 - web-app: 耗时 17 秒。
 
-### 3. 底部：Artifacts (构建附件)
+#### 3. 底部：Artifacts (构建附件)
 
 这里的两个文件（`.dockerbuild` 结尾）是构建报告。
 
 它们不是镜像本身（镜像已经去 GHCR 了），而是本次构建的详细过程记录。
 
-## action 执行日志
+### action 执行日志
 
 点击左侧那个带绿勾的 `compose-check-and-build` 就能看到 action 的执行日志
 

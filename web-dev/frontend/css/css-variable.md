@@ -25,7 +25,7 @@ body {
 }
 ```
 
-## varialbe inherit
+### varialbe inherit
 
 如果父元素定义了某个 CSS 变量，它的所有子元素将自动继承该变量值，子元素可以直接通过 `var()` 取用
 

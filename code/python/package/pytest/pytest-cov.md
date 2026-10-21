@@ -24,11 +24,11 @@ pytest -q
 
 --cov-fail-under=30 强制阈值（Gate）。如果总覆盖率低于 30%，pytest 将返回一个**非零退出码**，从而直接让你的 CI 流水线挂掉（变红）。
 
-#### A. 增加 HTML 报告 (本地调试神器)
+##### A. 增加 HTML 报告 (本地调试神器)
 
 在 CI 里你可以保留 `term-missing`，但在本地开发时，可以尝试： `--cov-report=html` 这会生成一个 `htmlcov/` 目录，点开 `index.html`，你可以像看地图一样看到代码里哪些 `if` 分支变红了（未覆盖）。
 
-#### B. 使用 `.coveragerc` 配置文件
+##### B. 使用 `.coveragerc` 配置文件
 
 当 `--cov` 参数太多时，命令会变得很难读。你可以创建一个 `.coveragerc` 文件：
 

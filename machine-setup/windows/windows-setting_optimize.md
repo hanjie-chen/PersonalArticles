@@ -1,21 +1,12 @@
 ---
-Title: Windows System Settings
-Author: 陈翰杰
-Instructor: chatGPT3.5, GPT4
-CoverImage: ./resources/images/setting.png
 RolloutDate: 2023-09-30
 ---
 
-```
-BriefIntroduction:
-重装windows系统之后，需要进行的对原生态系统的一些设置。
-```
-
-<!-- split -->
+# Windows System Settings
 
 ![cover-image](./resources/images/setting.png)
 
-# windows 10 setting
+## windows 10 setting
 
 首先是系统的一些设定，这个参考B站视频[^Bilibili]
 
@@ -33,7 +24,7 @@ BriefIntroduction:
 
    参考这篇文章[windows - 更改用户账户名称（windows10）_windows改用户名_王佳斌的博客-CSDN博客](https://blog.csdn.net/weixin_44198965/article/details/115689689)
 
-## 任务栏设置
+### 任务栏设置
 
 找到windows最下面的任务栏，右键点击。取消显示你不想要的内容。我一般为下面这个样子
 
@@ -47,7 +38,7 @@ BriefIntroduction:
 
 关于左下角的应用，按照自己喜好来即可
 
-## 系统设置
+### 系统设置
 
 打开系统设置（win+I）
 
@@ -73,7 +64,7 @@ win键打开开始菜单，选择设置图标，右键设置个性化，可以�
 
 ![start-menu](./resources/images/start-menu-setting-1.png)
 
-## 文件资源管理器设置
+### 文件资源管理器设置
 
 查看-->选项-->打开文件资源管理器时打开:此电脑
 
@@ -93,17 +84,17 @@ win键打开开始菜单，选择设置图标，右键设置个性化，可以�
 
    如上，我会将转移到Data盘的 下载、视频、图片、音乐给隐藏掉。这样子就可以通过侧边栏的此电脑直接访问，而不用进入Data盘查看。
 
-# 默认应用
+## 默认应用
 
 修改pdf文件默认为edge打开：[PDF默认用edge打开的修改方法_win10pdf老用edge打开-CSDN博客](https://blog.csdn.net/nofall_bird/article/details/138244710)
 
-# 激活windows系统
+## 激活windows系统
 
 [[微零微\]-Windows/Office全系列激活教程-KMS在线激活-KMS激活服务器-Windows11一句命令永久激活-Windows10一句命令永久激活 (jihuowin.com)](https://jihuowin.com/index.php)
 
 参考这个链接
 
-# 开机启动项
+## 开机启动项
 
 再这个路径中
 
@@ -113,6 +104,6 @@ C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
 
 可以放置 windows 10 开机启动程序，可以自己写一些程序，并且创建快捷方式放到这里
 
-# Reference
+## Reference
 
 [^Bilibili]: [电脑到手后你应该立刻修改的设置！_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1am4y1R7pi/?spm_id_from=333.880.my_history.page.click&vd_source=617c4a2b4e326fc6b6269aada0d25986)

@@ -10,7 +10,7 @@
 
 
 
-## `default.conf`
+### `default.conf`
 
 在 nginx:alpine 镜像中，默认会有一个配置文件：/etc/nginx/conf.d/default.conf。这个文件定义了默认的 server 块和 document root。
 
@@ -83,7 +83,7 @@ server_name  localhost;
 >
 > 这里的 **"main"** 实际上是指向一个日志格式的名称。在Nginx配置中，你可以预先定义多种不同的日志格式，并为每种格式指定一个名称。"main" 是在 Nginx 的主配置文件中（通常是 `/etc/nginx/nginx.conf`）预定义的一个标准日志格式。
 
-### `location /` block
+#### `location /` block
 
 ```nginx
 location / {
@@ -98,7 +98,7 @@ location / {
   - Nginx 会在 `/usr/share/nginx/html` 目录下查找 `index.html` 文件
   - 如果找不到 `index.html`，则会查找 `/usr/share/nginx/html/index.htm` 文件
 
-### error message
+#### error message
 
 ```nginx
 #error_page  404              /404.html;
@@ -116,7 +116,7 @@ location = /50x.html {
 
 
 
-# document root
+## document root
 
 Nginx 的 **document root** 是指服务器用来存放静态文件（如 HTML、CSS、JavaScript、图片等）的目录。当客户端请求一个静态资源时，Nginx 会从这个目录中查找并返回相应的文件。
 

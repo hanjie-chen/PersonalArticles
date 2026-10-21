@@ -1,6 +1,6 @@
 `chmod` 命令的全称是 change mode, 用于更改文件或目录的权限（Permissions）
 
-# 使用 `chmod` 给 `.sh` 脚本添加执行权限 
+## 使用 `chmod` 给 `.sh` 脚本添加执行权限 
 
 使用如下命令
 
@@ -50,11 +50,11 @@ bash script.sh
 
 注意：使用 `chmod` 命令时，需要确保你有修改文件权限的权限，如果没有可能需要使用 `sudo` 命令。
 
-# 文件权限
+## 文件权限
 
 在普通的 Linux 系统中，使用 `touch` 命令创建文件时，确实会自动赋予默认权限。让我详细解释一下这个问题：
 
-### 默认文件权限机制
+#### 默认文件权限机制
 
 1. **umask 机制**
    - Linux 系统使用 `umask` 来控制新建文件的默认权限
@@ -70,7 +70,7 @@ $ ls -l test.txt
 -rw-r--r-- 1 user group 0 Dec 25 08:30 test.txt
 ```
 
-### 为什么在 Dockerfile 中可能需要显式设置权限
+#### 为什么在 Dockerfile 中可能需要显式设置权限
 
 1. **容器环境的特殊性**
    - Docker 容器中的 umask 可能与普通系统不同
@@ -90,7 +90,7 @@ $ ls -l test.txt
 - 不同的进程可能使用不同的用户运行
 ```
 
-### 在你的场景中
+#### 在你的场景中
 
 实际上，在你的场景中，如果确认以下条件都满足：
 1. 文件创建后的默认权限是 644
@@ -108,7 +108,7 @@ RUN mkdir -p /var/log/personal-website && \
 RUN mkdir -p /var/log/personal-website
 ```
 
-### 建议的最佳实践
+#### 建议的最佳实践
 
 1. **开发环境**
    - 如果是个人开发环境，可以省略明确的权限设置
@@ -142,7 +142,7 @@ RUN mkdir -p /var/log/personal-website
 
 
 
-# `chmod u+s`
+## `chmod u+s`
 
 `chmod u+s` 是一个非常有用但容易让人误解的命令，它涉及到 Linux 中的 Setuid（Set User ID）权限位。我们来一步一步拆解：
 
@@ -153,7 +153,7 @@ RUN mkdir -p /var/log/personal-website
 
 
 
-## for example
+### for example
 
 ```bash
 ls -l /usr/bin/passwd
@@ -175,7 +175,7 @@ ls -l /usr/bin/passwd
 
 
 
-## 如何给一个程序设置 `Setuid`：
+### 如何给一个程序设置 `Setuid`：
 
 ```bash
 sudo chmod u+s my_program
@@ -202,7 +202,7 @@ s` 出现在原来的 `x` 位置，说明启用了 `Setuid
 >
 > 只有在 必须需要 并且 程序是安全可信的 情况下，才建议用 `chmod u+s`
 
-# `chmod o+x`
+## `chmod o+x`
 
 - `o`：代表「others」（即：不是文件所有者，也不在所属用户组的人）
 - `+x`：为目标增加「可执行（execute）」权限
@@ -217,7 +217,7 @@ chmod o+x /usr/bin/crontab
 
 
 
-## for example
+### for example
 
 原始权限（你当时的情况）：
 

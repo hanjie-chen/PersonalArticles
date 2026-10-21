@@ -54,7 +54,7 @@ k8s/
 - 你可能会改成 `Ingress`
 - 那时它就不一定还叫 `nginx-modsecurity/`，而可能变成 `ingress/`
 
-## deployment.yml
+### deployment.yml
 
 接下来，我们来写第一份文件 `deployment.yaml`
 

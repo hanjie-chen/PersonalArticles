@@ -66,7 +66,7 @@ print(arr_int)
 [0 0 0 0 0]
 ```
 
-# Compare `np.zeros(5)` and `np.zeros((1, 5))`
+## Compare `np.zeros(5)` and `np.zeros((1, 5))`
 
 1. 形状（Shape）：
    - `np.zeros(5)` 的形状是 (5,)，表示一个一维数组，有5个元素。

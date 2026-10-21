@@ -1,4 +1,4 @@
-# background
+## background
 
 当我们在一台 ubuntu server 中使用 pip install 命令的时候，可能会遇到这样子的报错
 
@@ -30,7 +30,7 @@ hint: See PEP 668 for the detailed specification.
 
 也就是说这个 python 其实是系统专用的，我们不能动它
 
-# Python virtual environment
+## Python virtual environment
 
 为了解决这个问题，可以使用 python virtual environment，创建一个独立的 Python 运行环境。
 
@@ -45,7 +45,7 @@ python3 -m venv <path/to/venv>
 
 执行该命令后，会在对应路径下生成一个 `<venv-name>` 文件夹。
 
-## 激活与退出
+### 激活与退出
 
 创建好虚拟环境后，需要激活它才能使用该环境内的 Python 和包管理工具（例如 pip）。
 
@@ -63,7 +63,7 @@ deactivate
 
 这会让你回到系统默认的 Python 环境。
 
-## best practice
+### best practice
 
 为了方便，可以将全局虚拟环境存放在的 home dir 下。使用 `~/.venv` 目录，然后在其中创建虚拟环境。
 
@@ -101,7 +101,7 @@ source base/bin/activate
 source ~/.venv/base/bin/activate
 ```
 
-## vscode setting
+### vscode setting
 
 vscode 可能无法主动搜索到这个 python virtual env, 需要手动添加路径，虚拟环境的 Python 解释器位于：
 

@@ -1,4 +1,4 @@
-# Remote - SSH
+## Remote - SSH
 
 链接远程主机的插件，例如一台linux server
 
@@ -14,15 +14,15 @@
 
 
 
-## remote 
+### remote 
 
 如果你使用 remote ssh 连接到一台 remote server ， 并且下载了某些插件，那么这些插件实际上是下载到这台 remote server 上卖弄的，而不是本地机器
 
-### VSCode Remote 模式的核心机制
+#### VSCode Remote 模式的核心机制
 
 当你通过 VSCode 的 Remote Development（例如 **Remote-SSH**）功能连接到远程服务器时，VSCode 会在远程宿主机上启动一个辅助的“VSCode 服务器”进程。这个“VSCode 服务器”是一个 Node.js 程序，它会为你的远程环境提供语言服务、插件管理等一系列功能。
 
-### 插件安装位置
+#### 插件安装位置
 
 在连接远程服务器后，你所安装的插件会分为两种：
 
@@ -33,7 +33,7 @@
 
 
 
-## remote server vscode windows scale up
+### remote server vscode windows scale up
 
 当我们连接到 remote server 的时候，往往发现窗口太小，需要使用 `ctrl +` 命令来将窗口放大一些，但是每次都需要手动放缩过于麻烦，所以我们可以将其写入 setting 中
 
@@ -49,19 +49,19 @@
 
 
 
-# HashiCorp Terraform
+## HashiCorp Terraform
 
 terrafrom 高亮和补全插件
 
 
 
-# Python
+## Python
 
 python 语法高亮
 
 
 
-# Docker
+## Docker
 
 查看正在运行的 container
 

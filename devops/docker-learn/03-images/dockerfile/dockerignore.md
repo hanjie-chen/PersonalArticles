@@ -76,7 +76,7 @@ temp
 
 使用 .dockerignore 文件可以让你的 Docker 镜像构建过程更加高效、安全，并且生成的镜像更加精简。建议在所有 Docker 项目中都使用这个文件来管理构建上下文。
 
-# `.dockerignore` 作用域
+## `.dockerignore` 作用域
 
 1. `.dockerignore` 文件**只对同目录下的 Dockerfile 生效**。它不会自动对子目录中的 Dockerfile 生效。
 
@@ -94,6 +94,6 @@ e.g.
     └── Dockerfile
 ```
 
-# `.dockerignore` 生效时机
+## `.dockerignore` 生效时机
 
 影响Dockerfile 中的COPY命令和ADD命令

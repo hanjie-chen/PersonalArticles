@@ -2,13 +2,13 @@
 
 类型注解是 Python 3.5+ 引入的特性，用于指定变量、函数参数和返回值的预期类型。
 
-### 基本语法：
+#### 基本语法：
 
 ```python
 variable: type
 ```
 
-### 示例：
+#### 示例：
 
 ```python
 # 变量注解
@@ -25,7 +25,7 @@ numbers: List[int] = [1, 2, 3]
 user_scores: Dict[str, int] = {"Alice": 95, "Bob": 87}
 ```
 
-### 在 SQLAlchemy 中的应用：
+#### 在 SQLAlchemy 中的应用：
 
 ```python
 from sqlalchemy.orm import Mapped, mapped_column
@@ -36,7 +36,7 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(30))
 ```
 
-### 注意事项：
+#### 注意事项：
 - 类型注解不影响运行时行为
 - 主要用于静态类型检查、代码可读性和 IDE 支持
 - 可以使用 mypy 等工具进行静态类型检查

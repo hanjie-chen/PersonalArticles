@@ -2,7 +2,7 @@
 
 
 
-## run container
+### run container
 
 我们可以使用 `docker run` 命令来将一个 image 启动为一个 container
 
@@ -19,7 +19,7 @@ docker run -i -t ubuntu /bin/sh
 
 当我们使用 exit 退出 container 之后，容器会停止运行，但是实际上这个 contianer 依然存在，在容器中做的所有更改都还保留在这个已停止的容器中
 
-## auto name
+### auto name
 
 虽然我们没有手动指定 container 的名字，但实际上每一个 container 都有 NAMES，这是 docker 的自动命名机制，Docker 会自动为容器生成一个名称，这个自动生成的名称由两部分组成：
 
@@ -38,7 +38,7 @@ e.g.
 docker run --name my-alpine -it alpine:3.19 /bin/sh
 ```
 
-## check container
+### check container
 
 当我们使用 `docker ps` 命令的时候，仅仅会显示正在运行的container
 
@@ -48,7 +48,7 @@ docker run --name my-alpine -it alpine:3.19 /bin/sh
 
 ![docker ps -a](./images/docker-ps-a.png)
 
-## interact running container
+### interact running container
 
 如果我们已经存在一个 container 正在运行，而我们想要进入正在运行的 Docker 容器的 bash 则可以使用如下命令
 
@@ -60,7 +60,7 @@ docker exec -it <container_id/container_name> /bin/sh
 - `-t`: 分配一个伪终端
 - `bash`: 要执行的命令（在这里是打开 bash shell）
 
-## stop container
+### stop container
 
 如果想要关闭一个正在 running 的 container 可以使用 `docker stop <container name/id>`
 
@@ -74,7 +74,7 @@ docker stop -t 3 <container_name>
 
 如果想要立即停止则是 `-t 0`
 
-## restart container
+### restart container
 
 如果想要重新启动之前停止的 container，可以使用 `docker start` 命令
 
@@ -86,7 +86,7 @@ docker start 922fa75a265a
 docker start thirsty_hodgkin
 ```
 
-## delete container
+### delete container
 
 只有使用 `docker rm` 命令才会真正删除 container
 
@@ -104,7 +104,7 @@ docker container prune
 docker rm -f 容器ID/名称
 ```
 
-## run container by pointed image
+### run container by pointed image
 
 如果想要从已经存在的 images 中运行一个指定的 image, 比如要运行 Python 3.9-slim 镜像，我们可以这么做
 

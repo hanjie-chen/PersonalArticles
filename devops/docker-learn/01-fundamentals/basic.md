@@ -48,7 +48,7 @@ sudo docker --version
 >
 > 简单来说，就是在 Linux 系统中，Docker 守护进程默认绑定到一个 Unix socket，该 socket 归属于 root 用户和 docker 组。因此，要在不使用 sudo 的情况下运行 docker 命令，需要将用户添加到 docker 组。
 
-# Docker Architecture
+## Docker Architecture
 
 ![architecture](./images/docker-architecture.webp)
 

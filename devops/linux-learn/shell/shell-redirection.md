@@ -1,6 +1,6 @@
 # 重定向符号 (Redirection Operator)
 
-## redirect append operator
+### redirect append operator
 
 在 shell 中，`>>` 被称为重定向追加符号 (redirection append operator)。它的作用是将命令的输出追加到一个文件中。具体来说:
 
@@ -15,7 +15,7 @@ echo "Hello, world!" >> output.txt
 
 这个命令会将 "Hello, world!" 追加写入到 output.txt 文件中。如果 output.txt 文件不存在，则会创建该文件。
 
-## redirect operator
+### redirect operator
 
 与 `>>` 对应的是 `>` 重定向符号，它会将命令的输出覆盖写入到文件中，而不是追加。例如:
 
@@ -25,7 +25,7 @@ echo "Hello, world!" > output.txt
 
 这个命令会将 "Hello, world!" 写入到 output.txt 文件中，如果该文件已存在，则会覆盖文件原有的内容。所以 `>>` 和 `>` 的区别在于，`>>` 是追加写入，`>` 是覆盖写入。
 
-## practice
+### practice
 
 在我们的 `init.sh` 脚本中，如果使用了以下方式添加定时任务：
 
@@ -72,7 +72,7 @@ fatal: Need to specify how to reconcile divergent branches.
 [2025-01-12 16:00:01] [SYNC] Git pull failed
 ```
 
-### resolution
+#### resolution
 
 为了防止定时任务被重复添加，我们需要确保每次脚本运行时，`crontab` 文件中的定时任务是唯一的，不会重复。这可以通过覆盖 `crontab` 文件来实现，而不是每次都向其中追加内容。
 
@@ -91,7 +91,7 @@ EOF
 
 
 
-# 关于 `2>&1` 重定向
+## 关于 `2>&1` 重定向
 
 先看这个 bash 脚本
 

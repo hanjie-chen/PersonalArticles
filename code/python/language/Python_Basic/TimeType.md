@@ -1,8 +1,8 @@
 # Python 时间类型
 
-## `date & time & datetime`
+### `date & time & datetime`
 
-### `date` - 仅表示日期
+#### `date` - 仅表示日期
 
 ```python
 from datetime import date
@@ -17,7 +17,7 @@ from sqlalchemy import Date
 birthday: Mapped[date] = mapped_column(Date)
 ```
 
-### `time` - 仅表示时间
+#### `time` - 仅表示时间
 
 ```python
 from datetime import time
@@ -32,7 +32,7 @@ from sqlalchemy import Time
 meeting_time: Mapped[time] = mapped_column(Time)
 ```
 
-### `datetime` - 同时表示日期和时间
+#### `datetime` - 同时表示日期和时间
 
 ```python
 from datetime import datetime
@@ -47,7 +47,7 @@ from sqlalchemy import DateTime
 created_at: Mapped[datetime] = mapped_column(DateTime)
 ```
 
-### 实际使用示例：
+#### 实际使用示例：
 
 ```python
 from datetime import date, time, datetime
@@ -80,7 +80,7 @@ event = Event(
 2. SQLAlchemy 的 DateTime 类型可以通过 timezone=True 参数支持时区
 3. 在处理时间时，建议总是考虑时区问题，特别是在跨地区的应用中
 
-## 非内置类型
+### 非内置类型
 
 `date`, `time`, `datetime` 实际上不是 Python 的内置类型（built-in types），它们是 Python 标准库中 `datetime` 模块提供的类型。这与 `int`, `str`, `float`, `bool` 等真正的内置类型是不同的。
 
@@ -147,7 +147,7 @@ class User(Base):
 1. 内置类型是最基础的，几乎所有 Python 程序都会用到
 2. 而时间相关的类型是相对特殊的功能，不是所有程序都需要，所以放在标准库中
 
-# 字符串转换为时间类型
+## 字符串转换为时间类型
 
 从 Python 3.7 开始，`date` 类（`datetime.date`）增加了一个类方法 `fromisoformat()`，用于直接从 ISO 格式的日期字符串创建 `date` 对象。
 
@@ -169,7 +169,7 @@ datetime.date(2024, 11, 4)
 datetime.date(2024, 11, 4)
 ```
 
-# 获取文件最后修改时间
+## 获取文件最后修改时间
 
 使用 `date.fromtimestamp()` 获取文件的最后修改日期
 

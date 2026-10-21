@@ -6,7 +6,7 @@
 
 如果没有这些 skill, 那么模型就会花费大量的上下文来寻找最终能够解决的方案，浪费 token 和 conext windows, 为了避免重复错误的尝试才需要 skill
 
-# rule
+## rule
 
 随着 agent 能力越来越强，skills 需要遵循一个原则，less is more
 
@@ -14,7 +14,7 @@
 
 当你的 skill 越来越多，就意味着你的上下文被占用的越多。如果一个 skill 可以帮你解决特定的问题。
 
-## 为什么 skill 越少越好
+### 为什么 skill 越少越好
 
 因为现在的模型 agent 能力越来越强了，
 
@@ -32,6 +32,6 @@
 
 
 
-# Reference
+## Reference
 
 https://x.com/systematicls/status/2028814227004395561

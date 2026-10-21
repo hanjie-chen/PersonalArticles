@@ -5,7 +5,7 @@
 1. 让 AI 读懂项目
 2. 让 AI 知道如何修改
 
-# Understand the project
+## Understand the project
 
 为了让 AI 更快读懂项目，我目前觉得最有效的方法，是把文档分成三个层次：
 
@@ -13,7 +13,7 @@
 - sub-folder README.md
 - project root docs/
 
-## project root README.md
+### project root README.md
 
 > project root README.md 后续简写为 README(root)
 
@@ -43,7 +43,7 @@ Start with the root `README.md`. Before planning or making non-trivial changes i
 
 1. 项目的总体架构图 / network traffic flow 等
 
-## sub-folder README.md
+### sub-folder README.md
 
 对于那些本身拥有独立子系统逻辑的目录，我们可以在目录下单独放一份 README.md，用来解释：
 
@@ -58,7 +58,7 @@ Start with the root `README.md`. Before planning or making non-trivial changes i
 
 同时这里的 README.md 主要是给 ai 读和维护的，所以最好和代码对齐使用纯英文。
 
-## project root docs/
+### project root docs/
 
 当一份文档同时跨越多个目录，或者本身就是较长的专题说明时，更适合放到 docs/ 目录里。
 
@@ -68,7 +68,7 @@ Start with the root `README.md`. Before planning or making non-trivial changes i
 2. 线上故障排查 runbook
 3. 设计决策记录（ADR）
 
-# Modify the project
+## Modify the project
 
 当我们解决了“让 AI 读懂 project”这个问题之后，下一步就是让 AI 知道该如何安全地修改它。
 
@@ -85,14 +85,14 @@ AGENTS.md 和 README.md 的区分：
 - project root AGENTS.md
 - sub-floder AGENTS.md
 
-## global AGENTS.md
+### global AGENTS.md
 
 通用协作偏好，跨仓库都成立。
 
-## project root AGENTS.md
+### project root AGENTS.md
 
 这个 repo 的跨子系统规则。
 
-## sub-folder AGENTS.md
+### sub-folder AGENTS.md
 
 只放该目录独有的约束；行为说明优先放 README.md，流程约束才放 AGENTS.md。

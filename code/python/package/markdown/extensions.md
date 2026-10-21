@@ -1,10 +1,10 @@
 关于 python markdown extension
 
-# official extensions
+## official extensions
 
 python-markdown 原始实现主要关注于 Gruber 定义的核心 Markdown 语法，而对于后来的一些扩展语法，则需要我们显式地启用相应的扩展，不过 python-markdown 这个库已经自带了一些常用的扩展 [^python-markdown-extensions]
 
-## `extra` extensions
+### `extra` extensions
 
 这个扩展包含 7 个扩展，使用 `extension=[‘extra’]` 就可以包含这 7 个扩展
 
@@ -36,7 +36,7 @@ python-markdown 原始实现主要关注于 Gruber 定义的核心 Markdown 语�
 
 
 
-### Fenced Code Blocks
+#### Fenced Code Blocks
 
 由 3 个反引号组成代码块， 例如
 
@@ -46,17 +46,17 @@ python code
 ```
 ````
 
-### Footnotes
+#### Footnotes
 
 markdown 脚注
 
-### Tables
+#### Tables
 
 markdown 表格
 
 
 
-## Other extensions
+### Other extensions
 
 除此之外还有 10 个自带的 extension
 
@@ -73,7 +73,7 @@ markdown 表格
 | Table of Contents | toc          | :x:                |
 | WikiLinks         | wikilinks    | :x:                |
 
-### Admonition
+#### Admonition
 
 对于 Admonition 我一般使用 github markdown makrdown 语法代替，如下所示
 
@@ -82,13 +82,13 @@ markdown 表格
 > note part
 ```
 
-### CodeHilite
+#### CodeHilite
 
 代码高亮
 
 CodeHilite 必须依赖 pygments 来解析代码，从而在相关位置插入 html 标签使得 css 生效，我目前常用的 code block 语法是围栏代码块语法，为了支持这个而语法需要 enable fenced_code 扩展
 
-### Legacy EM
+#### Legacy EM
 
 斜体
 
@@ -108,29 +108,29 @@ Legacy EM 扩展仅影响下划线 `_` 斜体，而不影响星号 `\*` 斜体
 > - 输出：`<em>connected</em>words_`
 > - 只强调了 `connected`，因为第一个 `_` 和随后遇到的第一个 `_` 之间的内容被视为强调。
 
-### New-Line-to-Break 
+#### New-Line-to-Break 
 
 可以通过添加 `<br>` 标签来实现段落内换行
 
-### Sane Lists 
+#### Sane Lists 
 
 有序列表和无序列表混合存在的时候 优化表现
 
-### SmartyPants 
+#### SmartyPants 
 
 智能标点 看上去没什么用，以后再考虑
 
-### Table of Contents
+#### Table of Contents
 
 在开头加上一段目录，无用，我会在侧边栏上展现目录
 
-### WikiLink
+#### WikiLink
 
 一段特别的链接，有用，但是我的 Typora 不支持， 所以实际上也没用
 
 
 
-# Third party extension
+## Third party extension
 
 对于官方不支持的 extension, 已经有了很多的实现，可以查看这个wiki
 
@@ -138,7 +138,7 @@ Legacy EM 扩展仅影响下划线 `_` 斜体，而不影响星号 `\*` 斜体
 
 比如说 GFM admonition 实现 可以参考这个 [dahlia/markdown-gfm-admonition: An extension of Python Markdown that enables the admonition syntax of GFM](https://github.com/dahlia/markdown-gfm-admonition)
 
-# Self-defined extension
+## Self-defined extension
 
 对于某些想要自定义的情况，我们需要写自己的插件。这篇文档讲了如何写自己的插件： [Extension API — Python-Markdown 3.7 documentation](https://python-markdown.github.io/extensions/api/)
 
@@ -185,6 +185,6 @@ class My_Extension_Processor(BlockProcessor):
 
 
 
-# Reference
+## Reference
 
 [^python-markdown-extensions]: [Extensions — Python-Markdown 3.7 documentation](https://python-markdown.github.io/extensions/)

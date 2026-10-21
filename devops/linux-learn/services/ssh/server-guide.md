@@ -2,7 +2,7 @@
 
 在 server 端的许多 ssh 配置，只需要修改 `/etc/ssh/sshd_config` 文件即可
 
-# ssh port
+## ssh port
 
 ssh 默认使用22号端口进行连接，有时候为了安全考虑，我们需要将其修改为其他的端口，为此我们需要修改 ssh 配置文件
 
@@ -40,7 +40,7 @@ ssh user@server_ip -p <port-number>
 
 如果发现 ssh 依然使用旧的22号端口监听，那么我们继续排查
 
-## 验证配置是否生效
+### 验证配置是否生效
 
 首先我们查看 sshd 的实际配置 --> `sudo sshd -T | grep -i port`
 
@@ -101,7 +101,7 @@ users:(("sshd",pid=2573,fd=3),("systemd",pid=1,fd=90))
 >
 > 这样做的好处是，只有在真正需要的时候，才会启动相应的服务进程，可以提升一定的系统效率；并且在一些依赖顺序复杂的场景下更灵活。
 
-## systemd 排查
+### systemd 排查
 
 通过之前命令发现，系统守护进程在监听这个 22 号端口，让我们进一步确认是否是因为 socket activation 机制劫持了10499端口
 
@@ -128,7 +128,7 @@ lines 1-11/11 (END)
 - 当 systemd 在 `ssh.socket` 中配置了 “ListenStream=22” 时，就会让 systemd 在 22 端口上监听，这时即使你在 `/etc/ssh/sshd_config` 中改为 Port 10499，也没有效果，因为 systemd 仍自动在 22 端口监听并触发 sshd。
 - 使用 socket-based activation 时，sshd 启动后会直接从 systemd 继承套接字，而不需要再绑定 22 端口。这样就形成一个冲突：明明 sshd_config 写了 10499，但实际被 systemd 传进来的，是已经绑定好的 22 端口。
 
-## 禁用并停止 ssh.socket
+### 禁用并停止 ssh.socket
 
 如果我们希望使用手动在 `sshd_config` 中指定的自定义端口，那么可以禁用 socket-based activation：
 
@@ -144,7 +144,7 @@ sudo systemctl enable ssh
 sudo systemctl start ssh
 ```
 
-## root cause
+### root cause
 
 当开启了 systemd 的 socket-based activation 功能时，systemd 会在 22 端口上先进行绑定和监听。
 
@@ -158,7 +158,7 @@ sudo systemctl start ssh
 2. 然后再由 sshd 自己调用 `bind()` 到 10499 端口并开始监听。
 3. 这时 `sshd -T | grep -i port` 和 `netstat`（或 `ss`）显示出来的端口就会一致。
 
-# Welcome message
+## Welcome message
 
 当我们使用原生的 ubuntu 系统的时候，会发现欢迎信息一大堆，但是真正有用的信息不多，如下所示
 
@@ -200,13 +200,13 @@ Last login: Fri May 31 07:41:57 2024 from 10.0.1.4
 
 显示顺序：SSH Banner (login成功之前) --> Dynamic Motd --> Static Motd
 
-## MOTD
+### MOTD
 
-### static motd
+#### static motd
 
 这个部分在 `/etc/motd` 文件中，这个文件通常不存在或者为空，我们可以自己创建他
 
-### dynamic motd
+#### dynamic motd
 
 这个部分在 `/etc/update-motd.d` 文件夹中，其中文件如下：
 ```shell
@@ -229,7 +229,7 @@ drwxr-xr-x 72 root root 4096 Feb 21 08:14 ../
 
 会跟据数字逐一生成 welcome message
 
-## SSH Banner
+### SSH Banner
 
 由 ssh deamon 中定义，方法如下
 

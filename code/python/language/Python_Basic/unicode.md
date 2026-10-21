@@ -27,7 +27,7 @@ with open("output.html", "w", encoding="utf-8") as f:
 
 所以，UTF-8 和 Unicode string 不是一回事，而是通过编码转换建立关联的两个概念。当我们使用 `encoding="utf-8"` 打开文件时，Python 会自动处理这个转换过程，确保我们在程序中使用的是 Unicode 字符串。
 
-# something related
+## something related
 
 [Library Reference — Python-Markdown 3.7 documentation](https://python-markdown.github.io/reference/#markdown)
 

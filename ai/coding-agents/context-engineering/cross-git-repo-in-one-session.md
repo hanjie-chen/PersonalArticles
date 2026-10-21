@@ -1,4 +1,4 @@
-# background
+## background
 
 当我们在一个 git repo 中启动了一个 coding agent session，但是我们最后发现如果它需要去修改另外一个 git repo(有自己的 agents.md, readme.md) 的内容的时候。
 
@@ -6,7 +6,7 @@
 
 是写一份 handoff.md, 然后在另外一个 repo 中启动 session 吗？
 
-# 从第一性原理出发
+## 从第一性原理出发
 
 一个 coding agent session，剥到最底层就三样东西：启动目录、加载的规则、对话记忆。而问题的根源可以用一句话说清：
 
@@ -24,7 +24,7 @@ session 锚在 A repo，工作发生在 B repo，于是 B repo 的规矩（AGETN
 
 > 只要改哪个仓库就加载哪个仓库的规则是有保障的，那么从 `projects/` 启动（视野广，适合跨仓库调查和排障）和从单个仓库启动（上下文精准，适合专注开发）都是安全的，你可以按当天的任务性质随便选，不需要立一个永久性的规矩。
 
-# 如何落实这条规则？
+## 如何落实这条规则？
 
 将其写入 global agents.md
 

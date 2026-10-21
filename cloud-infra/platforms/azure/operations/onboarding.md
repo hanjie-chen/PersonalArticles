@@ -1,18 +1,10 @@
 ---
-Title: 接手陌生 Azure 环境时如何开始
-Author: 陈翰杰
-Instructor: Claude Code[opus4.6]
 RolloutDate: 2026-05-24
 ---
 
-```
-BriefIntroduction:
-接手一个陌生 Azure 项目时，不要一开始就陷入 Azure Portal 中，而是先建立架构骨架，再用 CLI 盘点实际资源，最后带着具体问题找同事确认。
-```
+# 接手陌生 Azure 环境时如何开始
 
-<!-- split -->
-
-# Background
+## Background
 
 当我们从零接手一个已经存在的 Azure 项目时，应该如何开始？
 
@@ -22,7 +14,7 @@ BriefIntroduction:
 
 所以对于这种情况，我们应该怎么办？
 
-# Core principle
+## Core principle
 
 先建框架，再填细节。
 
@@ -37,7 +29,7 @@ BriefIntroduction:
 3. 接着让 AI 把文档和实际资源对照。
 4. 带着具体问题问同事。
 
-# Start from documents
+## Start from documents
 
 第一步让 AI 先快速翻文档，重点只看几个问题：
 
@@ -62,7 +54,7 @@ User
 
 即使这个骨架一开始不准确，也比没有骨架好。后面盘点资源和问同事时，可以不断修正它。
 
-# Inventory resources with CLI
+## Inventory resources with CLI
 
 第二步：用 CLI 做资源盘点，不用 Portal
 
@@ -80,7 +72,7 @@ az resource list --resource-group <name> --output table
 
 这样你拿到的是一个**结构化的清单**，比在 Portal 里点来点去高效得多。
 
-# Compare documents with reality
+## Compare documents with reality
 
 第三步把文档和实际资源对照。
 
@@ -94,7 +86,7 @@ az resource list --resource-group <name> --output table
 
 这些差异本身就是非常重要的信息。接手项目时，发现差异不是坏事，而是开始真正理解系统的入口。
 
-# Ask teammates with concrete questions
+## Ask teammates with concrete questions
 
 第四步再去问同事。
 
@@ -115,7 +107,7 @@ az resource list --resource-group <name> --output table
 
 这种问题更容易问出有价值的答案，也能让同事知道你已经做过基础功课。
 
-# Practical order
+## Practical order
 
 可以把流程压缩成下面这张表：
 

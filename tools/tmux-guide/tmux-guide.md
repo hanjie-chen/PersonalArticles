@@ -5,23 +5,23 @@
 掌握 `tmux` 的核心只有两个点：“挂起与恢复” 和 “快捷键前缀”。
 
 Tmux 所有的快捷键操作，都得先按一下 `Ctrl + b`（松开），然后再按具体的指令键。
-## session manage
+### session manage
 这是 Tmux 最核心的功能：可以在服务器上跑一个程序，断开连接回家，回家后再连上去，程序还在跑。
 
-### craete session：
+#### craete session：
 
 ```bash
 tmux new -s <process-name>
 # 例子: tmux new -s mywork
 ```
 
-### list session：
+#### list session：
 
 ```bash
 tmux ls
 ```
 
-### attach session：
+#### attach session：
 
 重新连上服务器，要看刚才那个任务跑得咋样了。
 
@@ -42,15 +42,15 @@ tmux attach -t <process-name>
 >
 > 那么通常 `tmux a -t k8s` 就够了，甚至 `k` 就可以，因为没有另一个以 `k` 开头的 session
 
-### detach session
+#### detach session
 
 程序跑起来了，要关掉 SSH 窗口或者去干别的，但不想程序断掉。先按 `Ctrl + b`，松开，再按 `d` (d = detach)
 
-### close session：
+#### close session：
 
 在 tmux 的窗口中按 `Ctrl + d`（就像关掉普通终端一样），会话就结束了。
 
-## windows manage
+### windows manage
 一个 Tmux 会话里可以有多个“窗口”（Window），就像浏览器里的多个标签页。
 
 *   新建一个窗口：
@@ -66,7 +66,7 @@ tmux attach -t <process-name>
 *   关闭当前窗口：
     *   输入命令 `exit` 即可。
 
-### 分屏（在一个屏幕里看两件事）
+#### 分屏（在一个屏幕里看两件事）
 不用开两个 SSH 终端，直接把屏幕切开。
 
 *   **左右分屏**：
@@ -78,7 +78,7 @@ tmux attach -t <process-name>
 *   **在分屏之间切换光标**：
     *   操作：`Ctrl + b`，然后按 **方向键**（上/下/左/右）
 
-### 翻页查看历史
+#### 翻页查看历史
 新手最大的困扰是：Tmux 里鼠标滚轮经常滚不上去，看不了之前的日志。
 
 *   **进入“翻页模式”**：
@@ -91,7 +91,7 @@ tmux attach -t <process-name>
 
 ---
 
-### 极简速查表
+#### 极简速查表
 
 | 功能                    | 命令 / 快捷键                   |
 | :---------------------- | :------------------------------ |
@@ -105,13 +105,13 @@ tmux attach -t <process-name>
 
 掌握这些，你就已经能覆盖 95% 的日常使用了！
 
-## 鼠标模式
+### 鼠标模式
 
 tmux 默认配置鼠标滚动被视为向终端发送“上/下方向键”信号，而不是滚动查看历史缓存。
 
 要实现像普通终端那样随心所欲地滚动，需要开启鼠标模式（Mouse Mode）。
 
-### 立刻开启
+#### 立刻开启
 
 如果现在就在会话中，想立刻滚动，可以按下快捷键进入命令模式：
 
@@ -125,7 +125,7 @@ tmux 默认配置鼠标滚动被视为向终端发送“上/下方向键”信�
    set -g mouse on
    ```
 
-### 永久开启
+#### 永久开启
 
 为了不用每次启动都重新设置，我们可以将其写入配置文件
 

@@ -1,21 +1,12 @@
 ---
-Title: cloudflare 使用指南
-Author: 陈翰杰
-Instructor: gpt, gemini
-CoverImage: ./resources/images/cf.jpg
 RolloutDate: 2026-04-06
 ---
 
-```
-BriefIntroduction: 
-cf 使用指南
-```
-
-<!-- split -->
+# cloudflare 使用指南
 
 ![cf](./resources/images/cf.jpg)
 
-# domian DNS hold
+## domian DNS hold
 
 当购买了一个 domain 之后，可以选择将 domian 的 DNS 托管在 cloudflare 上
 
@@ -23,7 +14,7 @@ cf 使用指南
 
 以 namecheap 为例，可以根据这篇文章将 domain 托管到 cf 上： [How to set up DNS records for your domain in a Cloudflare account - Hosting - Namecheap.com](https://www.namecheap.com/support/knowledgebase/article.aspx/9607/2210/how-to-set-up-dns-records-for-your-domain-in-a-cloudflare-account/)
 
-# enable cloudflare cdn
+## enable cloudflare cdn
 
 cloudflare 如何设置网站真正的 backend(origin)
 
@@ -49,7 +40,7 @@ cloudflare 如何设置网站真正的 backend(origin)
   - 如果有缓存，直接返回给用户；
   - 如果没有缓存，Cloudflare 会自动将请求回源至 `yoursite.azurefd.net`（你 DNS 中填写的目标地址），因此这个地址自动成为了 Cloudflare 的 backend(origin)。
 
-## https
+### https
 
 为了强制用户端全程 https, 我们可以打开这里两个设定：
 

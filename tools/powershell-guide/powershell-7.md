@@ -26,17 +26,17 @@ PowerShell Preview Microsoft.PowerShell.Preview 7.6.0.3 winget
 winget install --id Microsoft.Powershell --source winget
 ```
 
-# windows terminal setting
+## windows terminal setting
 
 如果使用 windows terminal, 可以将 powershell 7 设置为默认启动项
 
-# 加载Python 环境
+## 加载Python 环境
 
 如果使用anaconda 3创建的python环境，还需要使用命令`conda init powershell`来激活一些设定，否则anaconda 3的某些路径无法正确的载入Powershell 7的环境变量中，可以使用`echo $env:PATH` 来查看powershell 7的环境变量。可以拿来和正常的windows powershell进行对比。
 
 或许某些conda命令可以运行，比如说 `conda env list`，当然最重要的是能否运行激活python环境的命令`conda activate xxx`如果不行的话，那么就按照以上的步骤进行
 
-# 颜色加载问题
+## 颜色加载问题
 
 当第一次使用 powershell 7 的时候，文件夹会有蓝色的背景颜色，有人已经提过了github issue: https://github.com/PowerShell/PowerShell/issues/18550
 

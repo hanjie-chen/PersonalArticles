@@ -8,9 +8,9 @@ Primary Group：用户创建文件时默认使用的组
 
 Supplementary Groups：用户所属的其他组
 
-# group manage command
+## group manage command
 
-## `groups` command
+### `groups` command
 
 `groups` 命令默认显示当前登录用户所属的所有用户组 for example
 
@@ -45,7 +45,7 @@ Plain adm dialout cdrom floppy sudo audio dip video plugdev netdev lxd
 
 
 
-## check group exist
+### check group exist
 
 可以使用 `cat /etc/group | grep <group-name>` 命令查看某个特定的组是否存在，例如，如果想要查看 docker group 是否存在
 
@@ -66,7 +66,7 @@ docker:x:993:
 
 所以这个输出意味着 docker 组存在，但是目前没有任何用户被添加到这个组中
 
-## add user to group
+### add user to group
 
 可以使用命令 `sudo usermod -aG <group-name> <username>` 将用户添加到 group 中，例如将 Plain 用户添加到 docker group 中
 
@@ -94,19 +94,19 @@ docker:x:993:Plain
 >
 > 所以在这之后用户运行 docker 命令就无需添加 sudo
 
-# activate group permission
+## activate group permission
 
-## `newgrp` command
+### `newgrp` command
 
 `newgrp <group-name>` 命令的作用是在当前会话中切换用户的 primary group 到指定的 group 而不需要注销并重新登录
 
-### 工作原理
+#### 工作原理
 
 当 user 登录系统时，会获得一组初始的组成员资格
 
 `newgrp` 命令会启动一个新的 shell，在这个新 shell 中将指定的 group 设置为 primary group，这个改变只影响新启动的 shell 会话
 
-### 验证方式
+#### 验证方式
 
 可以通过以下方式观察 `newgrp` 的效果：
 
@@ -119,7 +119,7 @@ newgrp docker
 id
 ```
 
-### 实际应用场景
+#### 实际应用场景
 
 先使用 `usermod -aG docker $USER` 将用户添加到 docker 组
 

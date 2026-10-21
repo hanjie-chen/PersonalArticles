@@ -48,7 +48,7 @@ include /etc/nginx/conf.d/*.conf;
 
 
 
-## log format
+### log format
 
 在 nginx.conf 中，通常能找到 main 日志格式的定义
 
@@ -62,7 +62,7 @@ http {
 }
 ```
 
-#### 这个格式包含以下信息：
+##### 这个格式包含以下信息：
 
 1. `$remote_addr` - 客户端 IP 地址
 2. `$remote_user` - 客户端用户名称(通常为 "-")

@@ -6,7 +6,7 @@ Monitoring -> Alerting -> Edit notification channels -> Email -> Add new，
 
 填邮箱并确认邮件。
 
-## Uptime check
+### Uptime check
 
 Uptime Check（运行状况检查）是一个从外部模拟用户访问的“探测器”。它会定期向服务发送请求，确认服务是否活着以及响应速度。
 
@@ -27,7 +27,7 @@ Uptime Check 会从全球多个指定的区域（如北美、欧洲、亚太等�
 - 内容匹配 (Content Matching)：检查返回的 HTML 或 JSON 中是否包含（或不包含）特定的字符串。这非常有用，可以防止那种“网页能打开但内容报错”的尴尬情况。
 - 超时设置：如果响应超过预设秒数，也视为失败。
 
-### charge
+#### charge
 
 每个月前 1M 免费
 

@@ -4,7 +4,7 @@ logrotate 是 Linux 系统中一个用于管理日志文件的工具，它可以
 
 
 
-# config file and directory
+## config file and directory
 
 ```
 系统级别
@@ -17,7 +17,7 @@ logrotate 是 Linux 系统中一个用于管理日志文件的工具，它可以
         └── mysql                # mysql的日志轮转配置
 ```
 
-### `/etc/cron.daily/logrotate`
+#### `/etc/cron.daily/logrotate`
 
 这是一个**执行脚本**，不是配置文件。它的作用是：
 
@@ -30,7 +30,7 @@ logrotate 是 Linux 系统中一个用于管理日志文件的工具，它可以
 /usr/sbin/logrotate /etc/logrotate.conf
 ```
 
-### `/etc/logrotate.conf`
+#### `/etc/logrotate.conf`
 
 这是 logrotate 的**主配置文件**，用于设置全局默认参数：
 
@@ -50,7 +50,7 @@ compress
 include /etc/logrotate.d
 ```
 
-### `/etc/logrotate.d/` index
+#### `/etc/logrotate.d/` index
 
 这个目录包含**各个应用的具体配置文件**：
 
@@ -75,12 +75,12 @@ include /etc/logrotate.d
 }
 ```
 
-### 配置优先级
+#### 配置优先级
 
 1. **最低优先级**：`/etc/logrotate.conf` 中的全局设置
 2. **高优先级**：`/etc/logrotate.d/` 目录下的具体应用配置
 
-### 工作流程示例
+#### 工作流程示例
 
 1. **每天**，cron 执行 `/etc/cron.daily/logrotate` 脚本
 
@@ -98,7 +98,7 @@ include /etc/logrotate.d
 
 
 
-### 实际例子
+#### 实际例子
 
 假设系统中同时运行着 nginx 和 mysql：
 
@@ -142,7 +142,7 @@ include /etc/logrotate.d
 
 
 
-# Log Rotation
+## Log Rotation
 
 日志轮转是一个自动管理日志文件的过程，主要目的是防止单个日志文件过大，同时保留历史日志记录。简单来说，就是将当前正在写入的日志文件转移为备份文件，并创建新的空日志文件继续记录。
 
@@ -183,7 +183,7 @@ e.g. 假设有一个 nginx 访问日志文件 `access.log`：
 └── access.log.4.gz   # 最旧的日志
 ```
 
-# logrotate grammer
+## logrotate grammer
 
 e.g.
 
@@ -225,7 +225,7 @@ nginx.log in `/etc/logrotate.d`
 }
 ```
 
-## grammer
+### grammer
 
 path match
 

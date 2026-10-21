@@ -4,7 +4,7 @@
 
 
 
-# NSG rule
+## NSG rule
 
 reference: [azurerm_network_security_rule | Resources | hashicorp/azurerm | Terraform | Terraform Registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_rule)
 
@@ -46,14 +46,14 @@ resource "azurerm_network_security_group" "windows_subnet_nsg" {
 }
 ```
 
-### destination port 
+#### destination port 
 
 - destination_port_ranges –> 列表类型 –> 无论有几个端口，都必须写成 `["80", "443"]` 或 `["10499"]`
 - destination_port_range –> 字符串类型 → 只有一个端口或者分为时可以直接写 `"10499"` 或 `"20000~50000"`
 
 添加多条规则，只需定义多个 `security_rule` 即可
 
-# Network interface
+## Network interface
 
 reference [azurerm_network_interface | Resources | hashicorp/azurerm | Terraform | Terraform Registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_interface)
 

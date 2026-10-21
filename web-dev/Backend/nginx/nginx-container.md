@@ -56,7 +56,7 @@ nginx 目录
 
 
 
-## 为什么是 `nginx/conf.d`
+### 为什么是 `nginx/conf.d`
 
 Nginx 官方镜像默认的主配置文件（通常是 `/etc/nginx/nginx.conf`）中已经写好了一条指令：
 
@@ -70,18 +70,18 @@ include /etc/nginx/conf.d/*.conf;
 
 
 
-## `default.conf` file
+### `default.conf` file
 
 `default.conf` 是一个 Nginx 的配置文件，用于定义 Nginx 的行为，也就是告诉 Nginx 当它启动后如何处理传入的 HTTP 请求。详细来说，这个文件中通常会包含以下几部分内容：
 
-### Server Block
+#### Server Block
 
 这是 Nginx 的核心部分之一。在一个 server 块中，你可以指定 Nginx 应该监听哪个端口（例如：80 或 443），以及当请求匹配某个 server_name（域名）时，如何处理请求。例如，你可以设置：
 
 - **监听端口**：`listen 80;` 表示 Nginx 监听 80 端口。
 - **服务器名称**：`server_name localhost;` 指定了域名或主机名。
 
-### Location Block
+#### Location Block
 
 在 server 块内，你可以定义一个或多个 location 块来匹配特定的 URL 路径。例如：当请求路径为 `/` 或其他路径时应如何处理。
 在反向代理的场景下，location 块内通常会包含 `proxy_pass` 指令，用来将请求转发到后端的 Web 服务器或应用容器。例如：
@@ -96,7 +96,7 @@ location / {
 }
 ```
 
-### Upstream 模块
+#### Upstream 模块
 
 有时你需要定义一个后端服务组，这就是 upstream 模块的用途。通过 upstream，可以定义一个或多个后台服务器，Nginx 会将请求分发到这些服务器中。这在做负载均衡时非常有用。例如：
 
