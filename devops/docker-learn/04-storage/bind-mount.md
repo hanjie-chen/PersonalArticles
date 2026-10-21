@@ -50,7 +50,7 @@ rm: cannot remove 'articles-sync.log 2>&1': Permission denied
 >
 > Docker 默认情况下会将容器内用户的 UID (User ID) 和 GID (Group ID) 直接映射到宿主机上相同的 UID 和 GID。
 
-我们当然可以简单的使用 `sudo rm` 命令来删除这个文件，但是作为 best practice 我们最好使用 non-root user 去运行 container process: [Dockerfile best practice](./03-images/dockerfile/best-practice.md)
+我们当然可以简单的使用 `sudo rm` 命令来删除这个文件，但是作为 best practice 我们最好使用 non-root user 去运行 container process: [Dockerfile best practice](/devops/docker-learn/03-images/dockerfile/best-practice.md)
 
 并且这个用户的 UID/GID 最好能匹配你宿主机上的用户的 UID/GID。
 

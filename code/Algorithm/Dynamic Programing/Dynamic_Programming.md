@@ -111,7 +111,7 @@ print("答案是:", Calculate_Fibonacci(number))
 
 这个不用多说，学校里面老师似乎都是那这个例子来讲递归的。虽然这样子的代码简洁易懂，但是也十分的低效，我们画出当number=11时，算法的递归树
 
-![avatar](./image/brute-force_fibonacci_recursion.png)
+![avatar](./images/brute-force_fibonacci_recursion.png)
 
 分析其空间复杂度为O($$2^n$$)其时间复杂度为可从递归树的增长规律中得出为O($$2^n$$)，为何会如此低效。
 
@@ -145,7 +145,7 @@ print("答案是:", Calculate_Fibonacci(number))
 
 现在我们在画出递归树，就能明白备忘录做了什么
 
-![avatar](./image/cut_recursion.png)
+![avatar](./images/cut_recursion.png)
 
 实际上，带备忘录的递归算法将递归树的冗余部分给**剪枝**了，极大减少了子问题的个数。
 

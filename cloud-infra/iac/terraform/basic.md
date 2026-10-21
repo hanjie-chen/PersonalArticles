@@ -156,7 +156,7 @@ output "vm_public_ip" {
 
 ## Terraform Workflow
 
-在我们开始之前，要让 Terraform 操作 cloud 资源，还需要通过 cloud 认证：[Azure](../azure/terraform/auth.md) [GCP](../gcp/terraform/auth.md)
+在我们开始之前，要让 Terraform 操作 cloud 资源，还需要通过 cloud 认证：[Azure](/cloud-infra/platforms/azure/terraform/auth.md) [GCP](/cloud-infra/platforms/gcp/terraform/set-up.md)
 
 写好了上面这些 `.tf` 文件后，我们就可以按顺序执行 Terraform 命令“四部曲”了（code --> cloud resource）。在执行的过程中，Terraform 会自动生成一些极其重要的文件和文件夹。
 

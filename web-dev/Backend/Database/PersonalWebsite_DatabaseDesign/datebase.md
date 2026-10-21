@@ -1,6 +1,6 @@
 # 关系数据库实现树形结构
 
-![avatar](./image/cover_image.jpg)
+![avatar](./images/cover_image.jpg)
 
 ## 写在前面/Before we beginning
 
@@ -38,7 +38,7 @@
 
 根据chatGPT 3.5的提示和我检索到的资料显示，存在4种方法在关系数据库中实现树形结构，为了更好的说明这四种方法，接下来我会使用这些方法实现如下图所示的树形结构，这个结构在接下来的内容中称之为example
 
-![avatar](./image/example.png)
+![avatar](./images/example.png)
 
 #### 方法一：邻接表模型（Adjacency List Model）
 
@@ -55,7 +55,7 @@ class Category(db.Model):
 
 如果我们使用example实例化这个模型（往这张表中添加数据）那么我们将会得到这样子的一张表
 
-<img src="./image/AdjacencyTable.png" alt="avatar" style="zoom:50%;" />
+<img src="./images/AdjacencyTable.png" alt="avatar" style="zoom:50%;" />
 
 如果一个节点的`parent_id`为NULL说明其为根节点，想要添加一个节点的话只需要知道这个节点的父节点id即可。修改也很简单，无论是修改`parent_id`还是`name`
 
@@ -76,7 +76,7 @@ class Category(db.Model):
 
 如果我们example实例化这个模型，那么将会如下图所示
 
-<img src="./image/PathTable.png" alt="avatar" style="zoom:50%;" />
+<img src="./images/PathTable.png" alt="avatar" style="zoom:50%;" />
 
 对于这种方法，如果我们需要增加一个节点，比较简单，只要找到其需要加到哪一个结点之下，然后获取这个节点的`path`并且稍作修改即可得到这个节点的`path`
 
@@ -108,11 +108,11 @@ class Category(db.Model):
 
 接下来我将运用这个规则一步一步的实现example中的计算机技术这棵树，详细的过程请看下图
 
-![avatar](./image/calculate_process.png)
+![avatar](./images/calculate_process.png)
 
 当插入完毕之后，我们得到这棵树的所有节点的左右值是这个样子的
 
-![avatar](./image/calculate_final.png)
+![avatar](./images/calculate_final.png)
 
 各位有没有发现什么，如果我们的手指按照数字的大小在这棵树上面移动，那么我们将会发现，手指移动的路径是这棵树的前序遍历！
 
@@ -145,7 +145,7 @@ class CategoryClosure(db.Model):
 
 其中分类表非常简单，只需要单纯的存储分类名称就好，但是闭包表就非常的庞大了，如果我们使用example实例化这个模型，那么我们会得2张表
 
-![avatar](./image/ClosureTable.png)
+![avatar](./images/ClosureTable.png)
 
 可以看到Closure Table为每一对祖先关系都设置了一个表项，这会让我们的查询速度提高不少，但是对存储空间的占用会非常大，典型的空间换时间。
 

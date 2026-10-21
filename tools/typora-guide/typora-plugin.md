@@ -29,7 +29,7 @@ PS C:\Users\Plain\PersonalArticles
 
 但是当我想要引用其他的文章的时候，我想要使用基于基于仓库根目录的绝对路径，比如说我引用 Git 使用指南这篇文章，则是 `/tools-guide/git-guide/Git使用.md` 
 
-这 2 个方式在 github 上面是同时生效的 [test](/tools-guide/git-guide/git-usage.md)
+这 2 个方式在 github 上面是同时生效的 [test](/tools/git/commands.md)
 
 但是我阅读了 [Typora Links](https://support.typora.io/Links) 文章，其中这个格式含义则实际上是去找了系统根路径，而不是项目根路径，例如在这篇文档提供的示例中
 

@@ -152,7 +152,7 @@ Now, let’s have a look at another method for storing trees. Recursion can be s
 
 We’ll start by laying out our tree in a horizontal way. Start at the root node (‘Food’), and write a 1 to its left. Follow the tree to ‘Fruit’ and write a 2 next to it. In this way, you walk (traverse) along the edges of the tree while writing a number on the left and right side of each node. The last number is written at the right side of the ‘Food’ node. In this image, you can see the whole numbered tree, and a few arrows to indicate the numbering order.
 
-<img src="./image/sitepoint_numbering.gif" alt="1105_numbering"  />
+<img src="./images/sitepoint_numbering.gif" alt="1105_numbering"  />
 
 We’ll call these numbers left and right (e.g. the left value of ‘Food’ is 1, the right value is 18). As you can see, these numbers indicate the relationship between each node. Because ‘Red’ has the numbers 3 and 6, it is a descendant of the 1-18 ‘Food’ node. In the same way, we can say that all nodes with left values greater than 2 and right values less than 11, are descendants of 2-11 ‘Fruit’. The tree structure is now stored in the left and right values. This method of walking around the tree and counting nodes is called the ‘modified preorder tree traversal’ algorithm.
 
