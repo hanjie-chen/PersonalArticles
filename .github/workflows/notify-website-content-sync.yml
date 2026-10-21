@@ -1,5 +1,6 @@
 name: Notify Website Content Sync
 
+# Every change to main reaches the website, which decides what counts as a note.
 on:
   workflow_dispatch:
   push:
@@ -9,6 +10,7 @@ on:
 permissions:
   contents: read
 
+# Back-to-back pushes need only the latest notification.
 concurrency:
   group: notify-website-content-sync
   cancel-in-progress: true
@@ -17,37 +19,7 @@ jobs:
   notify-website:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Detect publish-affecting changes
-        id: detect
-        env:
-          BEFORE_SHA: ${{ github.event.before }}
-          CURRENT_SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-
-          if [ -z "${BEFORE_SHA}" ] || [ "${BEFORE_SHA}" = "0000000000000000000000000000000000000000" ]; then
-            git ls-files > /tmp/changed-files.txt
-          else
-            git diff --name-only "${BEFORE_SHA}" "${CURRENT_SHA}" > /tmp/changed-files.txt
-          fi
-
-          python3 .kb-tools/website_sync/detect_publish_affecting_changes.py \
-            --changed-file /tmp/changed-files.txt \
-            --github-output "${GITHUB_OUTPUT}"
-
-      - name: Log detection result
-        run: |
-          echo "should_trigger=${{ steps.detect.outputs.should_trigger }}"
-          echo "matched_count=${{ steps.detect.outputs.matched_count }}"
-          echo "matched_summary=${{ steps.detect.outputs.matched_summary }}"
-
       - name: Trigger website content sync workflow
-        if: steps.detect.outputs.should_trigger == 'true'
         env:
           WEBSITE_TRIGGER_TOKEN: ${{ secrets.WEBSITE_WORKFLOW_TRIGGER_TOKEN }}
         run: |
@@ -64,7 +36,7 @@ jobs:
               "source_repo": "${{ github.repository }}",
               "source_sha": "${{ github.sha }}",
               "source_before": "${{ github.event.before }}",
-              "trigger_reason": "knowledge-base publishable content changed"
+              "trigger_reason": "knowledge-base main updated"
             }
           }
           EOF
