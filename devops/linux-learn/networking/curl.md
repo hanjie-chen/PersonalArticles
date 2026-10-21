@@ -1,25 +1,16 @@
 ---
-Title: Curl Command
-Author: 陈翰杰
-Instructor: Sonnet 3.5
-CoverImage: ./resources/images/curl-cover-image.png
 RolloutDate: 2024-12-08
 ---
 
-```
-BriefIntroduction: 
-curl 命令详解
-```
-
-<!-- split -->
+# Curl Command
 
 ![curl](./resources/images/curl-cover-image.png)
 
-# Before we begin
+## Before we begin
 
 在当 Azure support enginner 的时候，会遇到 Azure Applicaiton Gateway (APG), Azure Front Door (AFD) 等产品，当然主要是这2个，总是会使用到 curl 命令来测试网站连通性等，于是专门研究了一下 curl 命令，在此记录
 
-# curl 命令
+## curl 命令
 
 我最常用的方式和参数是 `-i -v` 因为这样子可以看到所有的重要信息 for example
 
@@ -70,11 +61,11 @@ curl -i -v https://www.google.com:443
 HTTP/2 200
 ```
 
-# Output输出分析
+## Output输出分析
 
-## 初始链接
+### 初始链接
 
-### 1. 初始连接阶段
+#### 1. 初始连接阶段
 ```bash
 * Trying 209.85.203.104:443...
 * TCP_NODELAY set
@@ -84,7 +75,7 @@ HTTP/2 200
 - TCP_NODELAY被设置，这是一个TCP选项，用于禁用Nagle算法
 - 成功建立TCP连接
 
-### 2. ALPN（应用层协议协商）
+#### 2. ALPN（应用层协议协商）
 ```bash
 * ALPN, offering h2
 * ALPN, offering http/1.1
@@ -92,7 +83,7 @@ HTTP/2 200
 - 客户端告诉服务器它支持的协议：HTTP/2 (h2)和HTTP/1.1
 - ALPN是TLS的扩展，允许客户端和服务器在握手期间协商应用层协议
 
-### 3. SSL证书配置
+#### 3. SSL证书配置
 ```bash
 * successfully set certificate verify locations:
 *   CAfile: /etc/ssl/certs/ca-certificates.crt
@@ -101,7 +92,7 @@ HTTP/2 200
 - curl使用系统的CA证书存储来验证服务器证书
 - 指定了证书文件和证书目录的位置
 
-## TLS握手过程
+### TLS握手过程
 ```bash
 * TLSv1.3 (OUT), TLS handshake, Client hello (1):
 * TLSv1.3 (IN), TLS handshake, Server hello (2):
@@ -113,12 +104,12 @@ HTTP/2 200
 * TLSv1.3 (OUT), TLS handshake, Finished (20):
 ```
 
-### `(OUT)` 和 `(IN)` 
+#### `(OUT)` 和 `(IN)` 
 
 - `OUT`：表示数据从客户端发出（outgoing）
 - `IN`：表示数据从服务器接收（incoming）
 
-### Message Type
+#### Message Type
 
 括号中的数字是TLS协议中定义的 Message Type 在TLS协议中，消息被分为不同的协议类型（Content Type），每种类型下又有各自的消息类型（Message Type）。主要有以下几种协议类型：
 
@@ -152,7 +143,7 @@ TLS Protocol
 >
 > 在TLS 1.3中，Change Cipher Spec消息实际上已经成为了一个历史遗留消息，它在新版本中不再具有实际的密码学意义，但为了兼容性仍然保留着。这也是为什么在TLS 1.3的握手过程中，你仍然可以看到这个消息，尽管它在技术上已经不是必需的了。
 
-### 完整握手流程解析
+#### 完整握手流程解析
 
 ```
 客户端 (Client)                                服务器 (Server)
@@ -189,7 +180,7 @@ TLS Protocol
 >
 > 在TLS 1.3中，相比早期版本，握手过程被优化，减少了往返次数，提高了性能和安全性。整个过程中的大部分消息都是从服务器发往客户端（IN），客户端主要发送开始和结束的消息（OUT）
 
-### SSL连接信息
+#### SSL连接信息
 ```bash
 * SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384
 * ALPN, server accepted to use h2
@@ -198,7 +189,7 @@ TLS Protocol
 - 使用TLS_AES_256_GCM_SHA384加密套件
 - 服务器同意使用HTTP/2(h2)协议
 
-## server certificate
+### server certificate
 ```bash
 * Server certificate:
 *  subject: CN=www.google.com
@@ -208,7 +199,7 @@ TLS Protocol
 *  issuer: C=US; O=Google Trust Services; CN=WR2
 *  SSL certificate verify ok.
 ```
-### Subject（证书主体）
+#### Subject（证书主体）
 
 Subject 表示证书所有者的身份信息，使用DN（Distinguished Name）格式，可以包含以下字段：
 - `CN`（Common Name）：通用名称，通常是网站域名或服务器名称
@@ -220,7 +211,7 @@ Subject 表示证书所有者的身份信息，使用DN（Distinguished Name）�
 - `E`（Email）：电子邮件地址
 
 所以这里的 `CN=www.google.com` 中，表示这个证书是颁发给 www.google.com 这个域名的
-### Subject Alternative Name
+#### Subject Alternative Name
 ```bash
 subjectAltName: host "www.google.com" matched cert's "www.google.com"
 ```
@@ -241,7 +232,7 @@ DNS:*.google.com
 DNS:google.com
 ```
 
-### Issuer
+#### Issuer
 ```bash
 issuer: C=US; O=Google Trust Services; CN=WR2
 ```
@@ -278,7 +269,7 @@ Subject:
 
 这种层级化的命名结构确保了证书信息的完整性和唯一性，使得证书能够准确地标识其所有者和颁发者。
 
-### HTTP/2协议建立
+#### HTTP/2协议建立
 ```bash
 * Using HTTP2, server supports multi-use
 * Connection state changed (HTTP/2 confirmed)
@@ -289,7 +280,7 @@ Subject:
 - 建立HTTP/2流
 - 分配流ID为1
 
-### HTTP请求头
+#### HTTP请求头
 ```bash
 > GET / HTTP/2
 > Host: www.google.com
@@ -299,7 +290,7 @@ Subject:
 - 发送GET请求
 - 包含基本的HTTP头信息
 
-### 会话票证和响应
+#### 会话票证和响应
 ```bash
 * TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
 * TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):

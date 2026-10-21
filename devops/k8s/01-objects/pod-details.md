@@ -58,13 +58,13 @@ Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists fo
 Events:                      <none>
 ```
 
-### 1. 关键身份验证
+#### 1. 关键身份验证
 
 - Node: berrynode/192.168.31.184：明确告诉了你，这个 Pod 跑在你的哪台机器上。
 - IP: 10.42.0.11：这就是这个 Pod 的私人内网 IP。Service 就是把流量转发到这个 IP 的。
 - Controlled By: ReplicaSet/...：印证了我们之前的说法，它的“直接上级”是那个叫 ReplicaSet 的包工头。
 
-### 2. 容器状态：它曾经“死过”一次！
+#### 2. 容器状态：它曾经“死过”一次！
 
 注意看 `Containers` 这一块，这里隐藏了一个小故事：
 
@@ -75,7 +75,7 @@ Events:                      <none>
 - State: Running (Started: 18:41:55)：
   - 紧接着，K8s 发现它死了，立刻在几秒钟内（18:41:55）重新启动了一个新的容器实例。这就是 K8s 的自愈能力。
 
-### 3. Conditions（健康检查四部曲）
+#### 3. Conditions（健康检查四部曲）
 
 这几项全是 `True`，说明它已经通过了所有关卡：
 
@@ -84,14 +84,14 @@ Events:                      <none>
 3. ContainersReady：容器里的 Nginx 已经准备好了。
 4. Ready：整个 Pod 可以对外接客了。
 
-### 4. Mounts & Volumes（隐藏的通行证）
+#### 4. Mounts & Volumes（隐藏的通行证）
 
 你可能会奇怪：“我没挂载磁盘啊，怎么有个 `Mounts`？”
 
 - kube-api-access-8jlkc：这是 K8s 自动塞给每个 Pod 的“身份证明”。
 - 容器通过这个特殊的文件夹，可以拿到集群的证书，知道自己是谁，怎么跟 API Server 说话。
 
-### 5. QoS Class: BestEffort
+#### 5. QoS Class: BestEffort
 
 这代表了 Pod 的资源优先级。
 

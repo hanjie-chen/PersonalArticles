@@ -1,4 +1,4 @@
-#### Python re 模块是内置模块
+##### Python re 模块是内置模块
 
 是的, Python 的 re 正则表达式模块是 Python 标准库的一部分, 不需要额外下载安装。re 模块提供了类似 Perl 的正则表达式匹配操作, 可以用于对字符串进行复杂的搜索和替换。re 模块中一些常用的函数包括:
 
@@ -13,7 +13,7 @@
 
 `re.compile()` 是 Python 的 re 正则表达式模块中的一个重要函数, 用来预编译正则表达式, 生成一个正则表达式对象, 这个对象可以用于后续的匹配操作。
 
-## basic grammer
+### basic grammer
 
 ```python
 re.compile(pattern, flags)
@@ -35,7 +35,7 @@ re.compile(pattern, flags)
 - `findall(string)` - 查找字符串中所有匹配的子串
 - `sub(repl, string)` - 替换字符串中所有匹配的子串
 
-## `search()`
+### `search()`
 
 正则表达式对象的 `search()` 方法用于在字符串中搜索第一个匹配正则表达式的位置, 返回一个匹配对象(Match object)。如果没有找到匹配, 则返回 `None` 
 
@@ -58,7 +58,7 @@ return
 - `end()` - 返回匹配子串在原字符串中的结束位置
 - `span()` - 返回一个元组表示匹配子串的起止位置
 
-### `group()` 详解
+#### `group()` 详解
 
 假设有一个正则表达式`r'(\d{3})-(\d{4})'`,用于匹配电话号码格式,如"123-4567"。这个正则表达式包含两个捕获组:
 

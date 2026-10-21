@@ -14,7 +14,7 @@
 
 
 
-## best practice
+### best practice
 
 全局基准设置：在 CSS 开头定义根元素的字体大小（如 `16px`）。
 

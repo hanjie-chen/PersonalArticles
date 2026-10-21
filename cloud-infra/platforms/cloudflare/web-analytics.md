@@ -1,6 +1,6 @@
 # Web analytics
 
-## 原理
+### 原理
 
 Web Analytics 依赖一个 RUM beacon，也就是浏览器里运行的 JS snippet。
 
@@ -15,7 +15,7 @@ Web Analytics 依赖一个 RUM beacon，也就是浏览器里运行的 JS snippe
 
 这些只能靠浏览器执行 JS 后再回传 beacon。
 
-## enable web analytics
+### enable web analytics
 
 location: Cloudflare Dashboard --> Analytics & logs --> Web analytics
 
@@ -27,7 +27,7 @@ location: Cloudflare Dashboard --> Analytics & logs --> Web analytics
 
 如果一切正常，Cloudflare 就会对这个 proxied hostname 启用 automatic setup。
 
-## check status
+### check status
 
 之后你可以点 `Manage site` 看状态，通常会看到类似这些选项：
 
@@ -36,7 +36,7 @@ location: Cloudflare Dashboard --> Analytics & logs --> Web analytics
 - `Enable with JS Snippet installation`
 - `Disable`
 
-## free plan
+### free plan
 
 source: [Web Analytics limits](https://developers.cloudflare.com/web-analytics/limits/)
 

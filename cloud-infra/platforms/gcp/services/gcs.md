@@ -10,12 +10,12 @@
 
 点击页面顶部的 “+ CREATE” (或者图中的 “Create bucket”)，然后按照以下步骤操作：
 
-### 1. 命名你的存储桶 (Name your bucket)
+#### 1. 命名你的存储桶 (Name your bucket)
 
 - 输入名字：名字必须是全球唯一的。
 - 点击 CONTINUE。
 
-### 2. 选择存储位置 (Choose where to store your data)
+#### 2. 选择存储位置 (Choose where to store your data)
 
 > 这是免费的关键！
 
@@ -26,19 +26,19 @@
   - `us-west1` (Oregon)
 - 点击 CONTINUE。
 
-### 3. 选择存储类型 (Choose a storage class)
+#### 3. 选择存储类型 (Choose a storage class)
 
 - 选择 Standard。
 - 勾选下方可能出现的 “Default class” 确认。
 - 点击 CONTINUE。
 
-### 4. 控制访问权限 (Choose how to control access)
+#### 4. 控制访问权限 (Choose how to control access)
 
 - Enforce public access prevention on this bucket: 务必勾选（为了安全，不让别人乱看你的 tfstate）。
 - Access control: 选择 Uniform (统一访问控制)，这对 Terraform 来说更简单、更推荐。
 - 点击 CONTINUE。
 
-### 5. 保护数据 (Choose how to protect object data)
+#### 5. 保护数据 (Choose how to protect object data)
 
 - Object versioning: 强烈建议点击“开启” (Turn on)。这样万一你把 state 搞坏了，还能找回之前的版本。
 
@@ -50,13 +50,13 @@
 
 ------
 
-### 6. 完成创建
+#### 6. 完成创建
 
 点击底部的 **CREATE** 按钮。如果弹出关于“Public access”的警告，确认即可（因为我们已经选择了禁止公开访问）。
 
 ------
 
-### 💡 接下来该做什么？
+#### 💡 接下来该做什么？
 
 存储桶建好后，你就可以在你的 Terraform 代码中加入这段配置了：
 

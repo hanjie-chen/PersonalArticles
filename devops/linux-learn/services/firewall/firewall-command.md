@@ -1,4 +1,4 @@
-#### 可以使用 ufw 命令查看 Ubuntu Server 防火墙状态
+##### 可以使用 ufw 命令查看 Ubuntu Server 防火墙状态
 
 Ubuntu 默认安装了 ufw (Uncomplicated Firewall) 防火墙。可以使用以下命令查看 ufw 防火墙的状态:
 

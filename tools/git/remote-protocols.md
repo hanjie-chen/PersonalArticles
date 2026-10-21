@@ -10,7 +10,7 @@ Writing objects: 100% (35/35), 17.79 MiB | 36.00 KiB/s, done.
 
 Git 连接远程仓库时，`https://github.com/...` 和 `git@github.com:...` 不是同一条路径。它们使用不同的网络协议、不同的代理配置位置，也使用不同的认证方式。
 
-# Mental Model
+## Mental Model
 
 先看 remote：
 
@@ -46,7 +46,7 @@ git@github.com:user/repo.git
     -> SSH key authentication
 ```
 
-# HTTPS Remote
+## HTTPS Remote
 
 HTTPS remote 长这样：
 
@@ -87,7 +87,7 @@ git config --global --unset https.proxy
 
 如果没有显式配置 `http.proxy` 或 `https.proxy`，Git 的 HTTPS 请求仍然可能通过环境变量走代理。
 
-## HTTPS Authentication
+### HTTPS Authentication
 
 HTTPS remote 不使用 SSH key。
 
@@ -116,7 +116,7 @@ cmdkey /list | Select-String -Pattern 'git:https://github.com|github.com|GitHub'
 
 这里的 token 不等于 SSH key。它是 HTTPS 认证用的凭据，由 Git Credential Manager 管理。
 
-# SSH Remote
+## SSH Remote
 
 SSH remote 长这样：
 
@@ -148,7 +148,7 @@ ssh -G github.com | Select-String -Pattern '^(hostname|user|port|proxycommand|pr
 
 如果 Git remote 还是 SSH，那么即使 shell 里有 `HTTP_PROXY` 和 `HTTPS_PROXY`，也不代表 `git push` 会使用这些 HTTP 代理环境变量。SSH 是否走代理，要看 SSH 自己的配置。
 
-## SSH Authentication
+### SSH Authentication
 
 SSH remote 使用 SSH key 认证。
 
@@ -172,7 +172,7 @@ Hi user! You've successfully authenticated, but GitHub does not provide shell ac
 
 这说明认证成功，但不代表这条 SSH 网络路径一定快。
 
-# What We Measured
+## What We Measured
 
 下载方向的测试结果：
 
@@ -213,7 +213,7 @@ git remote -v
 git fetch --dry-run origin
 ```
 
-# Switch Between HTTPS and SSH
+## Switch Between HTTPS and SSH
 
 切换到 HTTPS：
 

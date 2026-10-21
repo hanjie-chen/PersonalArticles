@@ -44,12 +44,12 @@ resource "google_compute_firewall" "allow_cf_https" {
 
 
 
-### `data`
+#### `data`
 
 - 它的任务： 联网访问 Cloudflare 的官网，把那一串长长的 IP 地址列表抓取下来。
 - 关键点： 它不会改变任何云端资源，它只是把远程的一段文本（`response_body`）拉取到 Terraform 的内存里供后续使用。
 
-### `locals`
+#### `locals`
 
 由于 `data` 抓取回来的通常是一整块乱糟糟的文本（带换行符、可能有空格），直接给防火墙用会报错。这时 `locals` 就上场了。
 
@@ -59,7 +59,7 @@ resource "google_compute_firewall" "allow_cf_https" {
   - `if ... != ""`：剔除掉空行。
 - 为什么这么做： 提高代码的可读性和复用性。你在 `google_compute_firewall` 里只需要引用简洁的 `local.cloudflare_ipv4_cidrs`，而不需要把这一大串复杂的清洗逻辑写在防火墙资源里。
 
-### `check`
+#### `check`
 
 这是最精彩的部分。万一 Cloudflare 的服务器挂了，或者返回了一个空文件，怎么办？
 

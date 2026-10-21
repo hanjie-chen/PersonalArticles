@@ -36,7 +36,7 @@ jobs:
 
 核心逻辑：“当 CI 成功把镜像造出来后，GitHub 远程登录到你的服务器，把新代码拉下来，并把最新的镜像提前下载好。”
 
-### 1. 触发机制 (Workflow Chaining)
+#### 1. 触发机制 (Workflow Chaining)
 
 ```yaml
 on:
@@ -48,7 +48,7 @@ on:
 
 这是一种流水线联动。它不像 CI 那样监听 Git 代码变动，而是**监听 CI 的结果**。只有当 `main` 分支的 CI 跑完后，这个部署流程才会排队启动。
 
-### 2. 部署门槛
+#### 2. 部署门槛
 
 ```yaml
 if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -56,7 +56,7 @@ if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
 这是一道安全保险：如果 CI 失败了（比如代码报错或镜像构建失败），部署流程会自动取消，防止把有问题的版本拉取到生产服务器。
 
-### 3. SSH 远程操作
+#### 3. SSH 远程操作
 
 它使用了著名的 `appleboy/ssh-action`。这相当于在 GitHub 的虚拟服务器上打开了一个终端，然后通过 SSH 连到了你的私有服务器。
 

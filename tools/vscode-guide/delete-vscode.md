@@ -6,17 +6,17 @@
 
 
 
-# 具体步骤
+## 具体步骤
 
-## Step 1
+### Step 1
 
 在 control panel 中卸载 vscode
 
-## Step 2
+### Step 2
 
 win + R 输入 `%userprofile%` 删除其中 `.vscode` 文件夹
 
-## Step 3
+### Step 3
 
 win + R 输出 `%appdata%` 删除其中 `Visual Studio Code` & `Code` 文件夹
 

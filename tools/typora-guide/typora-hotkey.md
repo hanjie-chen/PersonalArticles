@@ -48,7 +48,7 @@ I change the `Comment` and `delete Line / Sentence` function shortcut, also chan
 
 
 
-# How to cancel the exist shortcut of the Typora
+## How to cancel the exist shortcut of the Typora
 
 After I wirte an Email to the Typora team hi@typora.io, and I get the resolution:
 

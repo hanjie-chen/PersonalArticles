@@ -4,7 +4,7 @@
 
 更多包含自己的思考和实践的整理，而不是完整的教程，因为通用的知识不会时直接问 AI 就行了，更快，更方便。
 
-这里的文章会同步到我的[个人网站](https://hanjie-chen.com/)
+所有笔记（包括草稿）都会同步到我的[个人网站](https://hanjie-chen.com/)。
 
 ## Navigation
 
@@ -29,29 +29,22 @@
 
 草稿只有图片资源时，可以直接使用 `images/`，不必预先创建完整的资源结构。
 
-准备发布时，统一使用以下结构：
+整理好的笔记统一使用以下结构：
 
 ```text
 content-dir/
 ├── example-1.md
 ├── example-2.md
 └── resources/
-    ├── images/
-    └── i18n/
-        ├── example-1-en.md
-        └── example-2-en.md
+    └── images/
 ```
 
 - `resources/images/` 存放正文使用的图片等资源
-- `resources/i18n/` 存放对应正文的翻译 sidecar
 
 ## Special Directories
 
-- `__template__/` — 存放可发布正文的模板
+- `__template__/` — 笔记模板；写笔记时参考 `note.md` 的格式，它也用来测试 Markdown 渲染效果
 - `.githooks/` — 存放仓库管理的 Git hooks
-- `.kb-tools/` — 存放仓库辅助工具；使用或修改前先阅读对应的 `README.md`
-  - `.kb-tools/translator/` — 生成或更新正文的英文翻译
-  - `.kb-tools/website_sync/` — 判断变更是否影响网站发布结果
 
 ## Setup
 
@@ -73,17 +66,12 @@ git config --get core.hooksPath
 git config core.ignorecase false
 ```
 
-翻译工具依赖 Python 3 和 Codex CLI。确保以下命令可以正常运行：
+Git hooks 依赖 Python 3。确保以下命令可以正常运行：
 
 ```shell
 python3 --version
-codex --version
 ```
-
-翻译模型的配置方式见 [translator README](.kb-tools/translator/README.md)。
 
 ## Publishing
 
-Push 到 `main` 时，GitHub Actions 会检查本次变更是否影响网站发布结果。如果存在相关变更，workflow 会通知 [website](https://github.com/hanjie-chen/website) 执行内容同步。
-
-路径判定规则见 [website sync README](.kb-tools/website_sync/README.md)，workflow 说明见 [GitHub workflows README](.github/workflows/README.md)。
+每次 push 到 `main`，GitHub Actions 都会通知 [website](https://github.com/hanjie-chen/website) 执行内容同步；哪些文件算笔记由 website 决定。workflow 说明见 [GitHub workflows README](.github/workflows/README.md)。

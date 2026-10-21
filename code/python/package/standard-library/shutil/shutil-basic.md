@@ -1,4 +1,4 @@
-#### shutil模块
+##### shutil模块
 
 **shutil**是Python标准库中的一个高级文件操作模块,提供了一些用于文件和目录管理的实用功能。它的名字是"shell utilities"的缩写,意为shell工具。shutil模块提供的主要功能包括:
 
@@ -39,7 +39,7 @@ shutil.rmtree("dir_to_remove")  # 删除整个目录树
 
 # `shutil.rmtree()` function
 
-#### shutil.rmtree()函数
+##### shutil.rmtree()函数
 
 `shutil.rmtree()`函数的功能与Linux/Unix系统中的`rm -rf`命令非常相似,它会递归地删除指定目录下的所有文件和子目录,最后删除目录本身。函数语法:
 
@@ -65,7 +65,7 @@ import shutil
 shutil.rmtree("dir_to_remove")  # 删除"dir_to_remove"目录及其所有内容
 ```
 
-#### 注意事项
+##### 注意事项
 
 - `shutil.rmtree()`是一个非常强大的函数,使用时需要格外小心,因为它会永久删除文件和目录,删除后无法恢复。
 - 在删除重要数据之前,请务必仔细检查路径是否正确,以免误删。

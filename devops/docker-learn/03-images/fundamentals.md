@@ -4,9 +4,9 @@
 
 这一章不再讲 container 操作，而是聚焦 image 本身的标识、拉取和本地管理
 
-# 如何标识一个 image
+## 如何标识一个 image
 
-## image name
+### image name
 
 Docker 镜像的命名通常遵循以下格式：
 
@@ -29,9 +29,9 @@ owasp/modsecurity:nginx-alpine
 - `modsecurity`: reposiroty该镜像的主要功能是提供 ModSecurity WAF
 - `nginx-alpine`: tag,表示这个镜像包含 Nginx Web 服务器，基础操作系统是 Alpine Linux。
 
-## Stable / Rolling Tags
+### Stable / Rolling Tags
 
-### Stable Tags
+#### Stable Tags
 
 Stable Tags 是固定的、版本化的标签，通常对应于某个特定的软件版本或镜像构建。它们不会随着新的更新而改变内容。
 
@@ -39,7 +39,7 @@ Stable Tags 是固定的、版本化的标签，通常对应于某个特定的�
 
 适合生产环境使用，因为它们提供了可预测性和稳定性。
 
-### Rolling Tags
+#### Rolling Tags
 
 Rolling Tags 是动态的标签，会随着新的版本发布而更新，指向最新的镜像内容。
 
@@ -47,9 +47,9 @@ Rolling Tags 是动态的标签，会随着新的版本发布而更新，指向�
 
 往往用于开发或测试环境中，快速获取最新版本的镜像。
 
-## registry-host
+### registry-host
 
-### Docker hub
+#### Docker hub
 
 Docker Hub 是 Docker 公司提供的官方云端容器镜像仓库服务。
 
@@ -59,7 +59,7 @@ Docker Hub 是 Docker 公司提供的官方云端容器镜像仓库服务。
 
 limitation: 免费用户只能拥有 1 个 private repository 和无限多的 public repository
 
-### GHCR
+#### GHCR
 
 github container registry(GHCR) 类似于 docker hub 是用于存储 image 的地方，与 docker hub 不同的是它并没有一个独立的网站，而是在 github 主页的 package 页面，
 
@@ -67,7 +67,7 @@ github container registry(GHCR) 类似于 docker hub 是用于存储 image 的�
 
 
 
-# pull images
+## pull images
 
 下载 Docker 镜像的基本命令是：
 
@@ -120,7 +120,7 @@ nginx                   alpine         1ff4bb4faebc   7 weeks ago   47.9MB
 owasp/modsecurity       nginx-alpine   89bf1ae1b8fa   2 years ago   73.8MB
 ```
 
-## docker.io
+### docker.io
 
 当使用 `docker pull/run` ，并且只提供了 `repository/image:tag`（如 `owasp/modsecurity:nginx-alpine`）或者只提供了 `image:tag`（对于官方镜像，如 `nginx:alpine`），Docker 客户端会默认去 `docker.io` (Docker Hub) 查找这个镜像。
 
@@ -134,7 +134,7 @@ owasp/modsecurity       nginx-alpine   89bf1ae1b8fa   2 years ago   73.8MB
 docker pull myregistry.example.com/myimage:latest
 ```
 
-## Digest hash
+### Digest hash
 
 Digest  是整个镜像清单的内容哈希值，通常使用 SHA256 算法计算（所以前缀是 `sha256:`）。
 
@@ -144,7 +144,7 @@ Digest  是整个镜像清单的内容哈希值，通常使用 SHA256 算法计�
 
 
 
-# 4. 如何理解 docker pull 的输出
+## 4. 如何理解 docker pull 的输出
 
 这里放：
 
@@ -155,7 +155,7 @@ Digest  是整个镜像清单的内容哈希值，通常使用 SHA256 算法计�
 
 这一节是把你现在 image-basic.md 里比较零碎但很有价值的解释，变成“命令输出阅读课”。
 
-## 多行哈希值？
+### 多行哈希值？
 
 在 `docker pull` 命令中我们可以看到多行的类似于哈希值一样的东西，它们其实是镜像层 (Image Layers) 的 ID
 
@@ -170,7 +170,7 @@ Docker 镜像不是一个单一的大文件，而是由多个只读层（Layers�
 *   **缓存和复用：** 如果你本地已经有了某个镜像层（可能来自另一个镜像），Docker 就不会重新下载它，你会看到 `Already exists` 而不是 `Pull complete`。这大大加快了镜像拉取和构建的速度，也节省了磁盘空间。
 *   **增量更新：** 当镜像更新时，通常只需要下载发生变化的层。
 
-# List Local Images
+## List Local Images
 
 我们可以使用 `docker image ls` 命令来查看本地存在的 images
 
@@ -203,7 +203,7 @@ nginx                   alpine    1ff4bb4faebc   7 weeks ago   47.9MB
 
 
 
-# dangling images
+## dangling images
 
 在我们使用 `docker image ls` 的时候，会发现一些奇怪的的 none images, 其实它们叫 dangling images
 
@@ -229,9 +229,9 @@ nginx                   alpine    1ff4bb4faebc   7 weeks ago   47.9MB
 
 那么我们要如何删除与清理 image 呢？
 
-# remove images
+## remove images
 
-## docker rmi
+### docker rmi
 
 要删除某个 Docker 镜像，可以使用以下命令：
 
@@ -262,13 +262,13 @@ Error response from daemon: conflict: unable to remove repository reference ...
 docker rmi -f <image_name_or_id>
 ```
 
-## docker prune
+### docker prune
 
 使用命令 `docker image prune` 这会删除所有没有被任何容器引用且没有标签的镜像
 
 或者使用命令`docker system prune` 一键全清理（镜像、容器、网络），这个命令会删除所有未被使用的资源（包括停止的容器、悬空镜像等），请确认没有重要数据后再执行。
 
-## 0B
+### 0B
 
 当我们使用 docker image purne 的时候发现
 

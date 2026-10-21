@@ -2,7 +2,7 @@
 
 
 
-## tree 只显示第一级目录
+### tree 只显示第一级目录
 
 要让 `tree` 命令只显示第一级目录，可以使用 `-L` 参数（Level的缩写）来指定要显示的目录层级深度。
 
@@ -58,7 +58,7 @@ Plain@Linux-VM:~/Personal_Project/test-website$ tree -L 2
 - `tree -L 1 -a`：显示所有文件，包括隐藏文件
 - `tree -L 1 -h`：显示文件和目录的大小
 
-## `tree -L <layer> -a`
+### `tree -L <layer> -a`
 
 显示所有的文件和目录，包括隐藏的文件
 

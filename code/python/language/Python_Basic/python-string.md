@@ -1,4 +1,4 @@
-# 切片操作
+## 切片操作
 
 从第一个字符开始截取到末尾
 
@@ -8,7 +8,7 @@ text = "Hello"
 new_text = text[1:]  # 结果: "ello"
 ```
 
-# f-string
+## f-string
 
 Python 的 f-string（格式化字符串字面值），是 Python 3.6+ 引入的一个很方便的特性。
 
@@ -65,11 +65,11 @@ message = f"""
 """
 ```
 
-# `split()` function
+## `split()` function
 
 `split()` 函数 Python String 对象的一个非常有用的内置方法。它的主要功能是将字符串分割成一个列表，其中每个元素都是原字符串的一个子串。
 
-## basic grammer
+### basic grammer
 
 ```python
 str.split(sep = None, maxsplit =-1)
@@ -78,7 +78,7 @@ str.split(sep = None, maxsplit =-1)
 - sep: 分隔符，默认为 None
 - maxsplit: 最大分割次数，默认为-1（表示不限制）
 
-## parameter
+### parameter
 
 如果不指定任何参数，split()会使用空白字符（空格、制表符、换行符等）作为分隔符，并且会删除字符串开头和结尾的空白字符。
 
@@ -88,7 +88,7 @@ result = text.split()
 print(result)  # 输出: ['Hello', 'World', 'Python']
 ```
 
-### sep parameter
+#### sep parameter
 
 可以指定一个字符串作为分隔符，例如：
 
@@ -98,7 +98,7 @@ result = text.split(',')
 print(result)  # 输出: ['apple', 'banana', 'orange', 'grape']
 ```
 
-### maxsplit parameter
+#### maxsplit parameter
 
 可以限制分割的次数，例如：
 
@@ -108,7 +108,7 @@ result = text.split(' ', 2)
 print(result)  # 输出: ['one', 'two', 'three four five']
 ```
 
-# raw string
+## raw string
 
 r-prefix 的作用
 
@@ -121,7 +121,7 @@ pattern2 = r'\d{3}'  # 使用r前缀,不需要转义
 
 `pattern1` 和 `pattern2` 表示的是同一个正则表达式, 但是使用 `r` 前缀更加简洁明了
 
-# `strip()` funciton
+## `strip()` funciton
 
 `strip()` 是Python字符串的一个内置方法,用于去除字符串首尾的空白字符(包括空格、制表符、换行符等)。语法如下:
 
@@ -142,7 +142,7 @@ text = 'www.example.com'
 print(text.strip('wmco.'))  # 输出 'example'
 ```
 
-# `lstrip()` function
+## `lstrip()` function
 
 lstrip() 是Python字符串对象的内置方法,用于返回原字符串的一个副本,其中前导空格或指定字符被移除。函数语法:
 
@@ -156,7 +156,7 @@ str.lstrip([chars])
 
 函数返回一个新的字符串,原字符串保持不变。
 
-#### 使用示例
+##### 使用示例
 
 不带参数使用lstrip(),移除字符串前面的空格:
 
@@ -174,7 +174,7 @@ print(text.lstrip("w."))  # 输出: "example.com"
 
 上例中,"w."作为参数传给lstrip(),它将移除字符串开头的所有'w'和'.'字符。
 
-#### 注意事项
+##### 注意事项
 
 - lstrip()只移除字符串开头(左侧)的指定字符,字符串末尾的字符不受影响。
 - 如果不指定chars参数,lstrip()默认移除空格,包括空格符、制表符和换行符等。

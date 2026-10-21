@@ -1,24 +1,27 @@
 ---
-Title: Articles Template
-Author: 陈翰杰
-Instructor: chatGPT 3.5
-CoverImage: ./resources/images/cover_image.jpeg
 RolloutDate: 2023-01-01
 ---
 
-```
-BriefIntroduction: 
-这里存放文章简介，原本的想法的类似与论文的摘要功能，我想着要不要把chatGPT3.5接入进来。让她帮我生成文章简介，看看我自己写的文章简介和她写的文章简介哪一个更好。
-封面图片存放在 ./resources/images/ 中；文件名可以按内容需要调整。
-```
-
-<!-- split -->
+# Note Template
 
 ![cover image](./resources/images/cover_image.jpeg)
 
-# Before we beginning/Background
+## Format
 
-介绍本文的背景和自己的想法，右边为文章目录，左边是同一个 category 目录下的文章 link 
+写笔记时以这篇模板的格式为准：
+
+- 第一行是笔记标题，也是全篇唯一的 `#` 一级标题；正文章节从 `##` 开始。没有 `#` 标题的笔记，网站显示文件名
+- 文件开头的 front matter 可以省略，只用来写 `RolloutDate: YYYY-MM-DD`，表示写作日期；更新日期由网站从 git 提交记录读取
+- 图片用相对路径引用，例如上面的封面图
+- 引用本仓库的其他笔记，使用从仓库根目录开始的路径，以 `/` 开头，这样在 GitHub 上也能正确跳转，例如 [git 命令速查](/tools/git/commands.md)
+
+```markdown
+[git 命令速查](/tools/git/commands.md)
+```
+
+## Before we beginning/Background
+
+介绍本文的背景和自己的想法，网站上右侧为本页目录
 
 这个结构参考 Microsoft Learn document 和 Docker document
 
@@ -34,17 +37,7 @@ BriefIntroduction:
 
 还有一些 Latex 数学公式的支持
 
-引用本仓库其他的已经存在的文章使用基于仓库根目录的绝对路径，例如
-
-[git 笔记](/tools-guide/git-guide/Git使用指南.md)
-
-```markdown
-[git 笔记](/tools-guide/git-guide/Git使用指南.md)
-```
-
-因为这在 github 上面也能正确解析 特别说明：以 `/` 开头代表从仓库根目录开始
-
-# Part1
+## Part1
 
 part 1 content
 
@@ -74,7 +67,7 @@ part 1 content
 > [!CAUTION] 
 > 这是一个危险警告
 
-# Part 2
+## Part 2
 
 emoji 表情支持 比如
 
@@ -92,14 +85,14 @@ emoji 表情支持 比如
 
 markdown emoji 大全 [Complete list of github markdown emoji markup](https://gist.github.com/rxaviers/7360908)
 
-# Part 3: Math formula support
+## Part 3: Math formula support
 
 - `$$...$$` 是传统的 LaTeX 分隔符
 - `math...` 是 GitHub Flavored Markdown (GFM) 的特定语法
 
 行内公式：这是一个行内公式 $f(x) = x^2$
 
-## 块级公式
+### 块级公式
 
 ````math
 \begin{bmatrix}
@@ -120,7 +113,7 @@ w_{(n-1)0}^{hidden} & w_{(n-1)1}^{hidden} & \cdots & w_{(n-1)(m-1)}^{hidden}
 - 行内公式：`$...$`
 - 块级公式：```` math ````
 
-## 行内公式
+### 行内公式
 
 不过这个块级公式在 Typora 中相比于行内公式似乎显示有点小，打算在 Typora css 中调整一下
 $$
@@ -138,7 +131,7 @@ w_{(n-1)0}^{hidden} & w_{(n-1)1}^{hidden} & \cdots & w_{(n-1)(m-1)}^{hidden}
 $$
 
 
-# Appendix
+## Appendix
 
 附加材料
 
@@ -146,6 +139,6 @@ $$
   - [ ] 子任务 1
   - [ ] 子任务 2
 
-# Reference
+## Reference
 
 [^引用 1]: chj is good

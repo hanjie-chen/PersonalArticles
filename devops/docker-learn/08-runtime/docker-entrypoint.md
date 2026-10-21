@@ -1,6 +1,6 @@
 本片笔记考虑放在 container-entrypoint.md 文章末尾 title: best practice
 
-# background
+## background
 
 在学习 `owasp/modsecurity:nginx-alpine` 的时候发现，在这个 image 的根路径中存在一个 `docker-entrypoint.sh` 文件用于初始化一些东西，从这个 container 启动的 log 中可以看出一些痕迹
 
@@ -16,7 +16,7 @@ nginx-modsecurity  | /docker-entrypoint.sh: Looking for shell scripts in /docker
 
 而接下来要探讨的就是这个 `docker-entrypoint.sh` 作为 best practice
 
-# `docker-entrypoint.sh`
+## `docker-entrypoint.sh`
 
 不是所有 Docker 镜像都有 `docker-entrypoint.sh`，但很多“设计良好的”、“生产用途”的镜像都会有，特别是：
 

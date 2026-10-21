@@ -1,23 +1,8 @@
----
-Title: Articles Template
-Author: 陈翰杰
-Instructor: GPT 5.2-thinking,gemini-3.0-flash
-CoverImage: 
-RolloutDate: 
----
-
-```
-BriefIntroduction: 
-本文介绍了 docker compose 常用命令
-```
-
-<!-- split -->
-
 # docker compose command
 
 Docker Compose 是一个用于定义和运行多容器的工具。使用 compose.yml 文件来配置应用程序的服务、网络和 Volume。
 
-# `docker compose up`
+## `docker compose up`
 
 ```shell
 docker compose -f <yaml-filename> up -d
@@ -37,7 +22,7 @@ docker compose -f <yaml-filename> up -d
 >
 > 这个命令并不会主动去 build image, 除非是没有 image, 如果有 image 就会使用旧的，也不管有 Dockerfile 中 `COPY` 指令中的文件是否变化。
 
-### multi-file
+#### multi-file
 
 ```
 docker compose -f compose.yml -f compose.dev.yml up
@@ -55,7 +40,7 @@ docker compose -f compose.yml -f compose.dev.yml up
 
 这是因为这个“合并后的最终配置”已经被发送给了 Docker Daemon（后台守护进程）。
 
-## rebuild image
+### rebuild image
 
 当我们更新了某些构建 image 的文件的时候，比如说 requirements.txt, source code 等，使用 `docker compose up` 结果发现这个修改并没有生效，反而是使用了旧的 image 去运行 container
 
@@ -68,7 +53,7 @@ docker compose build --no-cache
 docker compose up --build
 ```
 
-### rebuild pointed service image
+#### rebuild pointed service image
 
 如果我们遇到这样子一个问题：
 
@@ -103,7 +88,7 @@ docker compose build --no-cache articles-sync
 
 这个命令只会对指定服务重建镜像，并不会影响其他服务。
 
-## clean redundant container
+### clean redundant container
 
 在 docker 实践过程中，当我们更新了某些部分（yaml, code etc）的时候，为了没有 downtime 的部署，常用下面这个命令
 

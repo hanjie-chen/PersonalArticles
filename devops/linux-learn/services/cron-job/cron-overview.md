@@ -4,7 +4,7 @@ cron 是 Linux 系统中用于执行定时任务的守护进程，它可以让�
 
 
 
-## crontab command
+### crontab command
 
 `crontab` 是用于创建、编辑、查看和删除定时任务的命令行工具，用户通过 `crontab` 来定义定时任务。`crontab` 可以理解为“任务清单”的编辑器。
 
@@ -16,7 +16,7 @@ crontab -e  # 编辑当前用户的定时任务
 crontab -r  # 删除当前用户的定时任务
 ```
 
-### `crontab -u` command
+#### `crontab -u` command
 
 用于以指定用户的身份编辑或管理定时任务（cron jobs）。这个命令通常需要 root 权限，因为普通用户只能管理自己的定时任务。
 
@@ -32,7 +32,7 @@ crontab -u <username> <operation> # 指定用户身份执行操作
 sudo crontab -u alice -l
 ```
 
-### `crontab <crontab-file>` command
+#### `crontab <crontab-file>` command
 
 ```bash
 crontab <crontab-file>
@@ -71,7 +71,7 @@ crontab /tmp/mycron
 
 
 
-## crond
+### crond
 
 `crond` 是系统后台的守护进程，负责定时检查 crontab 文件，并在指定时间点执行任务。
 
@@ -79,7 +79,7 @@ crontab /tmp/mycron
 
 
 
-## Cron in different OS
+### Cron in different OS
 
 | 发行版        | 实现名称 | 特点                        |
 | ------------- | -------- | --------------------------- |
@@ -106,7 +106,7 @@ crontab /tmp/mycron
 
 这些不同的 cron 实现都能完成基本的定时任务功能，选择哪个主要取决于你的具体需求和使用的 OS。在容器环境中，Alpine 的 dcron 因其轻量级特性通常是个不错的选择。
 
-# cron expression syntax
+## cron expression syntax
 
 cron 表达式由 5 个时间字段和一个命令字段组成：
 
@@ -120,14 +120,14 @@ cron 表达式由 5 个时间字段和一个命令字段组成：
 └───────── 分钟 (0-59)
 ```
 
-### 特殊字符说明：
+#### 特殊字符说明：
 
 - `*`: 表示任意值
 - `,`: 表示列举，如 `1,3,5`
 - `-`: 表示范围，如 `1-5`
 - `/`: 表示间隔，如 `*/5`
 
-### for example
+#### for example
 
 每隔 5 分钟执行一次
 
@@ -153,7 +153,7 @@ cron 表达式由 5 个时间字段和一个命令字段组成：
 0 10 1,15 * * /path/to/script.sh
 ```
 
-## crontab 空格对齐
+### crontab 空格对齐
 
 如果直接编辑 cron 配置文件， 例如使用echo 命令+ `>>` 重定向
 
@@ -191,7 +191,7 @@ echo "0 16 * * * /usr/local/bin/update-articles.sh" >> /etc/crontabs/root
 2. 将每行按空格或制表符分割成 6 个字段（分钟、小时、日、月、星期、命令）
 3. 只要字段之间有分隔符即可，分隔符的数量不重要
 
-# system file
+## system file
 
 除了用户级的 crontab，系统还有以下特殊目录：
 
@@ -205,12 +205,12 @@ echo "0 16 * * * /usr/local/bin/update-articles.sh" >> /etc/crontabs/root
 
 
 
-## check system log
+### check system log
 
 ```bash
 sudo tail -f /var/log/syslog | grep CRON
 ```
 
-# best practice
+## best practice
 
 尽量使用用户级别的 cron jobs 而不要去修改系统级别的 cron 文件

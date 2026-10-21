@@ -238,7 +238,7 @@ Deployment
 - `Deployment.spec`：描述 Deployment 想怎么管理 Pod
 - `template.spec`：描述 Pod 里面到底跑什么
 
-## env
+### env
 
 很好，我们继续，而且这一步会开始真正和你这个 Flask 项目接上。
 
@@ -308,7 +308,7 @@ Deployment
 你先把这一段写进去。  
 写完后我们下一步只做一件事：加启动命令，也就是让这个容器知道“启动后到底执行什么”。这一步会直接对应你现在 `web-app` 镜像里的 Gunicorn 启动方式。
 
-## cmd
+### cmd
 
 好，我们继续。这一步是把“容器启动后做什么”写清楚。
 
@@ -404,7 +404,7 @@ gunicorn -w 2 -b 0.0.0.0:5000 app:app
 
 也就是 Kubernetes 怎么判断这个 Web 应用“活着没”“准备好没”。这一步会非常贴近真实场景。
 
-## healthe check
+### healthe check
 
 很好，我们继续。现在开始加 Kubernetes 里很重要的一块：**探针**。
 
@@ -487,7 +487,7 @@ gunicorn -w 2 -b 0.0.0.0:5000 app:app
 
 也就是把 `/articles/src`、`/articles/rendered`、`/app/instance` 这些目录在 Pod 里准备好。然后这第一版 `deployment.yaml` 就完整了。
 
-## volume
+### volume
 
 好，我们把这份 `Deployment` 的最后一块补上。
 

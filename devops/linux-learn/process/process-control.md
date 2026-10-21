@@ -1,6 +1,6 @@
-# 前台运行 vs 后台运行
+## 前台运行 vs 后台运行
 
-## 前台运行 (Foreground)
+### 前台运行 (Foreground)
 
 - 进程直接与终端关联
 - 占据当前终端会话
@@ -12,7 +12,7 @@ nginx              # 直接运行在前台
 crond -f          # -f 强制前台运行
 ```
 
-## 后台运行 (Background)
+### 后台运行 (Background)
 
 - 进程在后台执行
 - 不占据终端会话
@@ -24,14 +24,14 @@ nginx &           # & 符号使命令在后台运行
 crond -b         # -b 参数使进程在后台运行
 ```
 
-## 容器中的前台进程
+### 容器中的前台进程
 
 在 Docker 容器中，必须有一个前台进程，原因是：
 1. 容器的生命周期与其主进程（PID 1）绑定
 2. 当主进程结束时，容器也会停止
 3. 如果没有前台进程，容器会立即退出
 
-# 关于 tail 命令
+## 关于 tail 命令
 
 tail 命令的基本功能
 ```bash
@@ -50,7 +50,7 @@ tail -f file.log    # 实时查看文件末尾内容
 exec tail -f /var/log/personal-website/articles-sync.log /var/log/personal-website/crond.log
 ```
 
-### 在你的场景中
+#### 在你的场景中
 
 1. **当前情况分析**
    - 主要功能是定期 git pull
@@ -85,7 +85,7 @@ exec tail -f /var/log/personal-website/articles-sync.log /var/log/personal-websi
    - 资源占用极小
    - 日志管理更灵活
 
-### 最终建议
+#### 最终建议
 
 虽然你的容器主要功能是定期 git pull，但我还是推荐使用 tail 作为前台进程，原因是：
 

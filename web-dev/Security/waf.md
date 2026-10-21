@@ -8,7 +8,7 @@ WAF = engine + rule set
 
 所以 GitHub 上 ModSecurity 和 CRS 是两个独立项目，由不同团队维护。
 
-# OWASP 与 CRS
+## OWASP 与 CRS
 
 OWASP ( Open Worldwide Application Security Project ) 一个安全领域的非营利基金会：法律外壳是基金会（有资金、有全球分会），工作方式是开源社区（项目都在 GitHub 上，任何人可以提 issue / PR）。
 
@@ -23,7 +23,7 @@ OWASP ( Open Worldwide Application Security Project ) 一个安全领域的非�
 - CRS 覆盖的攻击类型远多于 10 个：SQLi, XSS, RCE, LFI/RFI, 协议违规, 扫描器探测等，共几百条规则
 - Top 10 里有些条目 CRS 管不了：如 Insecure Design、Vulnerable Components —— 这些是代码/架构层问题，WAF 在 HTTP 层看不出来
 
-# Cloud WAF 与 Managed Rule
+## Cloud WAF 与 Managed Rule
 
 云厂商的 WAF 产品中常见 managed rule，"managed" 指运维责任归厂商（厂商负责引擎运行和规则更新，用户只做开关配置），和 managed database / managed kubernetes 的 "managed" 是同一个意思。
 
@@ -38,7 +38,7 @@ OWASP ( Open Worldwide Application Security Project ) 一个安全领域的非�
 
 需要注意的是，Azure 的引擎并不是 ModSecurity 本体，而是微软自己的实现，只是执行的规则逻辑来自 CRS；此外微软还在 CRS 之外加了自家规则（Bot protection、Azure-specific 规则组）。
 
-# ModSecurity 与 WAF 容器
+## ModSecurity 与 WAF 容器
 
 前文一直把 engine 当作一个整体，这里展开讲.
 

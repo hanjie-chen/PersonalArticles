@@ -1,4 +1,4 @@
-# Cache Rules
+## Cache Rules
 
 free plan 用户拥有 10 条免费规则。
 
@@ -10,7 +10,7 @@ Cache Rules 的本质是告诉 Cloudflare：“当请求满足 XX 条件时，�
 - Bypass Cache（绕过缓存）：比如检测到登录 Cookie 时，直接穿透到源站，不走缓存。
 - Cache Everything：即使是没有后缀名的 URL，也可以强制缓存为静态页面（这对 web 小说或博客系统的 HTML 加速非常有用）。
 
-## config
+### config
 
 location: domian(click in) --> Caching --> Cache Rules
 
@@ -23,7 +23,7 @@ location: domian(click in) --> Caching --> Cache Rules
 
 
 
-# default cache behavior
+## default cache behavior
 
 即使一条 Cache Rule 都不写，Cloudflare 也会自动缓存一部分内容。
 
@@ -49,7 +49,7 @@ Cloudflare 有一套内置的 "Standard Caching"（标准缓存策略）。
 - 忽略源站错误：即使你的源站没配置缓存头，你也可以在 CF 侧强制设置 TTL（生存时间）。
 - 自定义逻辑：比如“只要是来自上海的请求，缓存 1 小时；其他的缓存 1 天”。
 
-# blog website
+## blog website
 
 对于我的个人博客网站，如何使用 cache rule 来缓存呢？
 

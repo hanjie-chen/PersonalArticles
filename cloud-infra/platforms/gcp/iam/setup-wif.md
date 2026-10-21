@@ -2,13 +2,13 @@
 
 以下是在 GCP 控制台配置 Workload Identity Federation (WIF) 的详细步骤：
 
-### 第一步：进入 WIF 配置界面
+#### 第一步：进入 WIF 配置界面
 
 1. 登录 [GCP Console](https://console.cloud.google.com/)。
 2. 在左侧导航菜单中，点击 “IAM & Admin” (IAM 和管理)。
 3. 在二级菜单中找到并点击 “Workload Identity Federation”。
 
-### 第二步：创建身份池 (Identity Pool)
+#### 第二步：创建身份池 (Identity Pool)
 
 1. 点击页面顶部的 “+ CREATE POOL”。
 2. Name: 输入一个名字（如 `github-actions-pool`）。
@@ -17,7 +17,7 @@
 
 <img src="./images/create-pool.png" alt="identity pool" style="zoom:50%;" />
 
-### 第三步：添加提供商 (Add Provider)
+#### 第三步：添加提供商 (Add Provider)
 
 在 “Add a provider to pool” 步骤中：
 
@@ -38,7 +38,7 @@
 > - 自动获取机制：正如提示所言，如果你不上传 JWK 文件，GCP 会自动去你填写的 `Issuer (URL)`（即 GitHub 的服务器）获取公钥。
 > - 标准做法：对于 GitHub Actions 这种成熟的 OIDC 提供商，它们会自动维护和轮换这些公钥。手动上传反而会导致密钥过期后认证失败。
 
-### 第四步：配置属性映射 (Attribute Mapping)
+#### 第四步：配置属性映射 (Attribute Mapping)
 
 这一步至关重要，它决定了 GCP 如何读取 GitHub 传过来的信息：
 
@@ -79,7 +79,7 @@
 > - 精细化授权：你可以限制只有来自 `main` 分支的任务才能部署生产环境。
 > - 审计追踪：在 GCP 的日志里，你可以看到具体是哪一个 GitHub 仓库、哪一个用户触发了这次 Terraform 操作。
 
-### 第五步：关联服务账号 (Connect Service Account)
+#### 第五步：关联服务账号 (Connect Service Account)
 
 池子建好了，现在要授权给特定的 Service Account：
 
@@ -91,7 +91,7 @@
    - Attribute value: 填入你的 GitHub 仓库路径（格式为：`你的用户名/仓库名`，例如 `myuser/knowledge-base`）。
 5. 点击 “SAVE”。
 
-## 关键参数
+### 关键参数
 
 workload_identity_provider：
 

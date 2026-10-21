@@ -36,7 +36,7 @@ Unicode-range 属性定义了每个字体文件所包含的 Unicode 字符范围
 
 
 
-# Pingfang SC
+## Pingfang SC
 
 目前完整的pingfang SC我只找到这一个ttf的格式 [zongren/font: 个人博客所用的中文字体](https://github.com/zongren/font) 其他的链接下载的似乎并没有包含所有的字体
 
@@ -44,7 +44,7 @@ Unicode-range 属性定义了每个字体文件所包含的 Unicode 字符范围
 
 
 
-# 开源字体
+## 开源字体
 
 考虑这个开源字体 [subframe7536/maple-font: Maple Mono: Open source monospace font with round corner, ligatures and Nerd-Font for IDE and terminal, fine-grained customization options. 带连字和控制台图标的圆角等宽字体，中英文宽度完美2:1，细粒度的自定义选项](https://github.com/subframe7536/maple-font?tab=readme-ov-file)
 

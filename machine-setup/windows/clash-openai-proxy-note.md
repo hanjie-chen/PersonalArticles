@@ -1,25 +1,16 @@
 ---
-Title: Codex app reconnect issue with windows clash
-Author: 陈翰杰
-Instructor: Codex(gpt-5.4)
-CoverImage: ./resources/images/codex-reconnect.png
 RolloutDate: 2026-03-21
 ---
 
-```
-BriefIntroduction:
-在 windows 10 环境下使用 codex app 的时候老是发现出现 reconnecting 的问题，失败5次之后才能 thinking，让 codex 自己分析了一下，下好了一半的 context windows(128k) 才修好。结论是 clash rule 没写好，走了 geo ip match 记录一下
-```
-
-<!-- split -->
+# Codex app reconnect issue with windows clash
 
 ![codex reconnect](./resources/images/codex-reconnect.png)
 
-# Issue Description
+## Issue Description
 
 在 Windows 10 环境中使用 Codex 时，频繁出现 `reconnect` 之后才能成功 thinking
 
-# Root Cause
+## Root Cause
 
 当前使用的 Clash 订阅规则里，存在：
 
@@ -36,7 +27,7 @@ BriefIntroduction:
 
 也就是说分流规则不够精确。
 
-# Resolution
+## Resolution
 
 在当前活动订阅文件中，把 OpenAI 相关域名规则放到 `GEOIP,CN,DIRECT` 前面。核心规则如下：
 
@@ -74,7 +65,7 @@ Set-Alias -Name clash-fix-openai -Value Fix-ClashOpenAIRules
 
 这样子我们，手动更新 clash 订阅之后，就可以使用命令 clash-fix-openai 把这些 rule 写进去了
 
-# Troubleshoot
+## Troubleshoot
 
 如果之后又出现 reconnect，如何判断 OpenAI 规则还在，以及脚本是否生效
 
@@ -109,7 +100,7 @@ rAddr=chatgpt.com:443 ... rule=GeoIP(CN) proxy=DIRECT
 
 那就说明旧问题又回来了。
 
-# powershell scripts
+## powershell scripts
 
 主维护脚本 ps 代码
 

@@ -2,7 +2,7 @@
 
 当你运行 `-f compose.yml -f compose.dev.yml` 时，Compose 会以第一个文件为基础，然后用第二个文件中的内容去**覆盖或补充**第一个文件。
 
-### 合并的具体逻辑
+#### 合并的具体逻辑
 
 合并规则通常遵循以下三个原则：
 
@@ -10,7 +10,7 @@
 2. 覆盖（Override）： 对于单值字段（如 `image`, `container_name`, `restart`），后一个文件（dev）的值会直接取代前一个文件（base）的值。
 3. 合并（Merge）： 对于多值列表或字典（如 `ports`, `volumes`, `environment`），两个文件的内容会结合在一起。
 
-### 举个例子
+#### 举个例子
 
 假设你的两个文件内容如下：
 
@@ -44,7 +44,7 @@ services:
 - ports: 包含 `80:80` 和 `3000:3000`。
 - environment: `NODE_ENV` 的值变为 `development`。
 
-### 关键注意事项
+#### 关键注意事项
 
 - 顺序非常重要： 越靠后的文件优先级越高。如果你写反了（`-f dev.yml -f base.yml`），基础配置就会覆盖掉你的开发配置。
 
@@ -54,7 +54,7 @@ services:
   docker compose -f compose.yml -f compose.dev.yml config
   ```
 
-## override
+### override
 
 有的时候，我们想要后面的配置覆盖而不仅仅是新增，比如说在 compose.yml 中存在
 

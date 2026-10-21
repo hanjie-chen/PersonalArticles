@@ -8,7 +8,7 @@
 
 
 
-## free plan
+### free plan
 
 - WAF custom rules：Free plan 5 条
 - Rate limiting rules：Free plan 1 条

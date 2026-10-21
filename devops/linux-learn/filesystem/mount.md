@@ -2,7 +2,7 @@
 
 
 
-## `/mnt` directory
+### `/mnt` directory
 
 在 Linux 文件系统层次结构（FHS - Filesystem Hierarchy Standard）中：
 
@@ -12,16 +12,16 @@
 
 
 
-## `mount` usage
+### `mount` usage
 
-#### 基本语法
+##### 基本语法
 ```bash
 mount [-t 文件系统类型] [-o 特殊选项] 设备源 挂载点
 ```
 
 查看当前所有挂载 `mount -l`
 
-#### 重要参数说明
+##### 重要参数说明
 
 **-t 文件系统类型**：
 
@@ -73,7 +73,7 @@ sudo mount --bind /source /destination
 > ```
 >
 
-## mount nature
+### mount nature
 
 ```plaintext
 用户空间（User Space）
@@ -94,7 +94,7 @@ sudo mount --bind /source /destination
 硬件层（Hardware）
 ```
 
-# Practice
+## Practice
 
 使用 mount 命令实现 Linux host 命令行实时访问 Windows host 文件夹
 
@@ -129,7 +129,7 @@ sudo mount -t cifs //WINDOWS_IP/共享文件夹名 /mnt/windows_share -o usernam
 cp -r /mnt/windows_share/* /你想要存放的目标路径/
 ```
 
-## mount 命令详解
+### mount 命令详解
 
 ```bash
 sudo mount -t cifs //10.0.1.4/PersonalArticles /mnt/windows-share -o username=Plain,password=xxx
@@ -171,7 +171,7 @@ sudo mount -t cifs //10.0.1.4/PersonalArticles /mnt/windows-share -o username=Pl
   - `dir_mode=0755`：设置目录权限
   - `file_mode=0644`：设置文件权限
 
-## 工作原理详解
+### 工作原理详解
 
 这个机制的工作原理涉及几个层面：
 
@@ -198,11 +198,11 @@ sudo mount -t cifs //10.0.1.4/PersonalArticles /mnt/windows-share -o username=Pl
 - 在 Windows 上删除文件 → Linux 挂载点立即反映
 - 在 Windows 上修改文件 → Linux 挂载点立即更新
 
-## 如何持久化挂载
+### 如何持久化挂载
 
 使用mount命令挂载完成之后是临时挂载，只在当前系统运行期间有效，可以通过编辑 `/etc/fstab` 可以实现持久化挂在
 
-### `/etc/fstab` 文件详解
+#### `/etc/fstab` 文件详解
 
 ```bash
 # 文件格式：
@@ -225,7 +225,7 @@ UUID=xxxxx            /                   ext4        defaults        						 0  
 
 `pass`：开机时是否检查磁盘（0不检查，1为根目录，2为其他）
 
-### 安全的持久化配置方法
+#### 安全的持久化配置方法
 
 对于网络共享，建议这样配置：
 
@@ -255,7 +255,7 @@ sudo chmod 600 /etc/samba/credentials
 //10.0.1.4/PersonalArticles /mnt/windows-share cifs credentials=/etc/samba/credentials,vers=3.0,iocharset=utf8,file_mode=0777,dir_mode=0777 0 0
 ```
 
-### 测试和验证
+#### 测试和验证
 
 在修改 /etc/fstab 后，建议：
 

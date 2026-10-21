@@ -2,7 +2,7 @@
 
 
 
-# Select语句
+## Select语句
 
 假设我们有以下 `employees` 表：
 
@@ -94,7 +94,7 @@ David      | 52000  | 57200
 
 
 
-# CREATE TABLE
+## CREATE TABLE
 
 CREATE TABLE 的基本语法：
 ```sql
@@ -192,7 +192,7 @@ CREATE TABLE 语句的其他重要特性：
 
 CREATE 语句是 SQL 中非常重要的一部分，它允许你定义数据库的结构。正确使用 CREATE TABLE 可以确保你的数据以一种有组织、高效和一致的方式存储。在实际应用中，创建表时要仔细考虑数据类型、约束和索引，以优化数据库性能和维护数据完整性。
 
-# INSERT 
+## INSERT 
 
 我们使用上面CREATE TABLE 创建的表格
 

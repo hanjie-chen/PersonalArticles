@@ -8,7 +8,7 @@
 
 这个时候，我们可以把这部分工作交给 subagent，让它完成任务，再把有用的结果带回来。main session 则继续负责目标、决策和最后的整合。
 
-## when to use?
+### when to use?
 
 什么时候使用 subagent 呢？我倾向于把边界清晰、可以独立完成的工作交给 subagent。
 
@@ -18,7 +18,7 @@
 
 所以，只有分出去有收益的任务才使用 subagent，而不是每个任务都使用。
 
-## what to bring back?
+### what to bring back?
 
 subagent 应该带回来什么结果？
 
@@ -34,9 +34,9 @@ main session 其实很难判断这个结论是否可靠。但如果把所有日�
 
 main session 不必读完整个探索过程，但需要知道判断从哪里来。
 
-# Configure subagent
+## Configure subagent
 
-## enable subagent in codex/chatgpt
+### enable subagent in codex/chatgpt
 
 在 codex 中的系统提示词中，有一句类似的表述：除非 user, agents.md, skill 主动要求使用 subagent 否则就绝不使用。
 
@@ -50,7 +50,7 @@ main session 不必读完整个探索过程，但需要知道判断从哪里来�
 - When a subagent completes its task, collect its result, then close its thread to release the slot; use a fresh subagent for unrelated work.
 ```
 
-## custom subagent model
+### custom subagent model
 
 使用 subagent 可以节省 main session 的上下文，使得我们可以聊的更久一些。
 
@@ -77,7 +77,7 @@ default_subagent_reasoning_effort = "medium"
 
 source: https://github.com/hanjie-chen/personal-config/blob/main/codex/config.shared.toml
 
-## keep simple first
+### keep simple first
 
 不过，子任务不一定简单。
 

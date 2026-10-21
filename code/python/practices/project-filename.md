@@ -1,6 +1,6 @@
 # Python Project file and folder name
 
-## python package name
+### python package name
 
 Python <u>package name</u> (folder name) and <u>module name</u> (`.py` filename)
 
@@ -29,7 +29,7 @@ project-root/
 
 
 
-### 为什么模块名不能使用 kebab-case
+#### 为什么模块名不能使用 kebab-case
 
 Python 模块名的本质：
 
@@ -44,7 +44,7 @@ Python 模块名的本质：
 "my-module".isidentifier()  # ➔ False ❌
 ```
 
-## python project file name
+### python project file name
 
 对于普通的 Python 文件（不涉及被其他模块导入），技术上可以使用连字符命名。但即便如此也强烈不推荐，有可能发生因命名问题引发的隐蔽错误和工具链兼容性问题。
 
@@ -52,7 +52,7 @@ Python 模块名的本质：
 
 
 
-## best practice
+### best practice
 
 所有 `.py` 文件都使用小写字母和下划线（`snake_case`）禁止使用连字符、空格、大写字母（避免跨平台问题）
 
@@ -60,7 +60,7 @@ Python 模块名的本质：
 
 
 
-## common filename
+### common filename
 
 非 Python 脚本的通用目录和文件，推荐使用 `kebab-case`（连字符分隔小写字母）
 

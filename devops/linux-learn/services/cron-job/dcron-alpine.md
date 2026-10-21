@@ -54,7 +54,7 @@
 
 
 
-## crond in busybox
+### crond in busybox
 
 首先我们查看 alpine linux 中是否存在 crond
 
@@ -82,17 +82,17 @@ Usage: crond [-fbS] [-l N] [-d N] [-L LOGFILE] [-c DIR]
 
 说明这是 BusyBox 自带的 `crond`（极简实现）
 
-## dcron (Dillon's Cron)
+### dcron (Dillon's Cron)
 
 `dcron` 是一个特定的 cron 实现，由 Matt Dillon 编写
 
 它是一个轻量级的 cron 守护进程实现，特别适合嵌入式系统和轻量级环境
 
-## Dillon's Cron VS. busybox cron
+### Dillon's Cron VS. busybox cron
 
 这就引申出一个问题，那就是使用 `busybox` 自带的 `crond` 还是使用我们新安装的 `dcron`
 
-### 选用 BusyBox 自带 `crond`：
+#### 选用 BusyBox 自带 `crond`：
 
 - 适合 简单任务、极简容器（如定时 git pull）
 - 不依赖日志系统，任务失败也不用详细排查
@@ -100,7 +100,7 @@ Usage: crond [-fbS] [-l N] [-d N] [-L LOGFILE] [-c DIR]
 
 
 
-### 选用 `dcron`：
+#### 选用 `dcron`：
 
 - 适合 正式部署环境 或 需要稳定日志记录/调试
 - 想使用 Alpine 的 `/etc/periodic` 机制（依赖 run-parts）
@@ -113,7 +113,7 @@ Usage: crond [-fbS] [-l N] [-d N] [-L LOGFILE] [-c DIR]
 - 想“能跑就行”：用 busybox 自带的
 - 想“跑得稳、好排错”：就用 dcron
 
-# 遗留问题：
+## 遗留问题：
 
 但是这里会出现一个问题：
 
@@ -121,7 +121,7 @@ Usage: crond [-fbS] [-l N] [-d N] [-L LOGFILE] [-c DIR]
 >
 > 还需要继续调查一下
 
-# How to use dcron in alpline linux
+## How to use dcron in alpline linux
 
 1. 首先需要安装 dcron 包：
 
@@ -145,9 +145,9 @@ echo "*/5 * * * * /my-script.sh" >> /etc/crontabs/root
 crond
 ```
 
-### 在 Alpine Linux 中使用 dcron（以容器环境为例）
+#### 在 Alpine Linux 中使用 dcron（以容器环境为例）
 
-### 安装和配置：
+#### 安装和配置：
 
 ```dockerfile
 FROM alpine:3.19
@@ -156,13 +156,13 @@ COPY crontab /etc/crontabs/root
 CMD ["crond", "-f", "-d", "8"]
 ```
 
-### 示例 crontab 文件：
+#### 示例 crontab 文件：
 
 ```cron
 */5 * * * * /usr/local/bin/update-articles.sh >> /var/log/git-pull.log 2>&1
 ```
 
-### 日志输出建议：
+#### 日志输出建议：
 
 - 在 crontab 中使用重定向：捕获标准输出和错误信息
 - 在脚本中写结构化日志：记录具体步骤与时间戳

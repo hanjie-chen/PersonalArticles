@@ -23,9 +23,9 @@ claude doctor
 claude update
 ```
 
-# 使用指南
+## 使用指南
 
-## 常用命令
+### 常用命令
 
 `/exit`: 退出对话
 
@@ -38,7 +38,7 @@ claude update
 
 `/export`: 导出对话（如果有遇到自动压缩，那么别被压缩的部分只有摘要）
 
-## 其他技巧
+### 其他技巧
 
 `ctrl + j:` 换行
 
@@ -48,7 +48,7 @@ claude update
 
 `!`: 执行终端命令
 
-# WebSearch vs WebFetch
+## WebSearch vs WebFetch
 
 |                    | WebSearch                                                | WebFetch                                            |
 | ------------------ | -------------------------------------------------------- | --------------------------------------------------- |
@@ -70,7 +70,7 @@ claude update
 
 这样 Claude Code 启动时会注入这两个环境变量，WebFetch 等网络工具就会走代理。一旦设置这个变量，那么平时的 claude code 链接api也会走这个代理
 
-# CLAUDE.md
+## CLAUDE.md
 
 一个好的 claude.md 需要包含这些内容
 
@@ -79,11 +79,11 @@ claude update
  3. 关键设定文件索引 — 按需读取
  4. 当前进度 — 做到那里，现在在解决什么问题
 
-# Context engineer
+## Context engineer
 
 参考这篇文章：https://www.zhihu.com/question/1945503640539333416/answer/2016306836769355199
 
-# 自动压缩造成的问题
+## 自动压缩造成的问题
 
 当我们的 ctx(context windows) 达到 95% 的时候，会出发自动压缩，这往往会造成一些问题，比如说忘记我们之前的约定，一个好的方案是，我们在达到这个限制之前主动使用 `/compact` 命令，压缩。
 
@@ -91,14 +91,14 @@ claude update
 
 直接使用 cc-usage 即可
 
-# claude code memory Mechanism
+## claude code memory Mechanism
 
 claude code memory 是两套并行系统。
 
 1. CLAUDE.md（你自己写的），用来放项目指令、编码规范、架构说明等。它有一整套层级结构——从组织级（managed policy）到用户级（`~/.claude/CLAUDE.md`）到项目级（`./CLAUDE.md`）再到本地个人级（`./CLAUDE.local.md`），启动时沿目录树向上逐级加载并拼接。还支持 `@path/to/file` 语法引入外部文件，以及 `.claude/rules/` 目录做按路径触发的条件规则。
 2. Auto Memory（Claude 自己写的）
 
-## Auto Memory
+### Auto Memory
 
 这是项目级别的的 memory
 

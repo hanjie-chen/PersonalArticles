@@ -6,7 +6,7 @@
 
 ![rdp port set](./images/win-rdp-port-set.png)
 
-## Step 2
+### Step 2
 
 然后填入你想要的 port 然后点击 run 等待一会时间就会在 Output 中出现设置成功
 

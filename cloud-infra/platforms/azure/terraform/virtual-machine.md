@@ -1,21 +1,12 @@
 ---
-Title: Terraform Azure VM 创建指南
-Author: 陈翰杰
-Instructor: grok3, chatGPt-4o
-CoverImage: ./resources/images/cover-image.png
 RolloutDate: 2025-02-27
 ---
 
-```
-BriefIntroduction: 
-这里讲了使用 terraform 创建 Azure virutal machine的一些细节
-```
-
-<!-- split -->
+# Terraform Azure VM 创建指南
 
 ![cover image](./resources/images/cover-image.png)
 
-# VM OS disk setting
+## VM OS disk setting
 
 当我们使用 terraform 创建一台 vm 的时候，会发现 `os_disk` block 是必须要选择的，实际上对对应的就是 Azure portal 创建 virutal machine 界面的 disk 部分
 
@@ -25,7 +16,7 @@ BriefIntroduction:
 
 这个 os_disk block 存在2个必选项 `caching` `storage_account_type`
 
-## caching
+### caching
 
 关于 `caching` 在 Azure portal 上面指的是 Host caching
 
@@ -43,7 +34,7 @@ BriefIntroduction:
 - **ReadWrite**：缓存加速读和写，但有风险。
 - **None**：不用缓存，慢但稳。
 
-## storage account type
+### storage account type
 
 而关于 `stroage_account_type` 部分实际上就是 OS disk type
 
@@ -53,7 +44,7 @@ BriefIntroduction:
 
 ![disk type](./resources/images/disk-type.png)
 
-# 关于默认的磁盘大小
+## 关于默认的磁盘大小
 
 因为我们实际上没有设置磁盘大小 `disk_size_gb` 所以会使用默认的大小
 
@@ -66,7 +57,7 @@ BriefIntroduction:
 
 
 
-# Vm image
+## Vm image
 
 在 Azure terraform 中 image 的确认由4个属性构成
 
@@ -120,7 +111,7 @@ output like
 
 可以从中提取到这些信息
 
-## MarketPlace
+### MarketPlace
 
 可以到到 Azure marketplace 稍微可以看到一些信息，比如说 publisher ID, product ID 这 2 个小大写可能对不上
 
@@ -128,7 +119,7 @@ output like
 
 不过可以将某些关键字放在 [Azure VM Image List](https://az-vm-image.info/) 网站进行搜索，在结合一下 grok3
 
-## Arm template
+### Arm template
 
 我们不必把这个 vm 真正的创建出来，仅仅设定到 review 界面，就可以看到右下角存在 `Downlaod a template for automation` 点击进入
 
@@ -138,13 +129,13 @@ output like
 
 ![arm tempalte image reference](./resources/images/arm-image-reference.png)
 
-# VM size
+## VM size
 
 可以看这篇[文档](../native/virtual-machine/virtual-machine.md)
 
 
 
-# Windows virtual machine
+## Windows virtual machine
 
 [azurerm_windows_virtual_machine | Resources | hashicorp/azurerm | Terraform | Terraform Registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine)
 

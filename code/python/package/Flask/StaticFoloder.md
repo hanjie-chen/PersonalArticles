@@ -1,6 +1,6 @@
 让我详细解释Flask中关于静态文件处理的机制：
 
-### 1. Flask的默认静态文件处理
+#### 1. Flask的默认静态文件处理
 
 Flask默认会在创建应用实例时自动设置一个静态文件处理器，默认配置如下：
 ```python
@@ -11,22 +11,22 @@ app = Flask(__name__,
            static_url_path='/static')  # URL中的路径前缀
 ```
 
-### 2. 静态文件处理的方式
+#### 2. 静态文件处理的方式
 
 在Flask中处理静态文件有几种方式：
 
-#### 方式1：使用默认static文件夹
+##### 方式1：使用默认static文件夹
 ```python
 app = Flask(__name__)
 # 这样会自动处理/static/开头的URL请求，指向static文件夹
 ```
 
-#### 方式2：修改默认static文件夹的位置
+##### 方式2：修改默认static文件夹的位置
 ```python
 app = Flask(__name__, static_folder='my_static_folder')
 ```
 
-#### 方式3：添加额外的静态文件夹
+##### 方式3：添加额外的静态文件夹
 ```python
 # 方法A：使用add_url_rule
 app.add_url_rule('/uploads/<path:filename>',
@@ -39,7 +39,7 @@ def uploads(filename):
     return send_from_directory('uploads', filename)
 ```
 
-### 3. 为什么需要注册？
+#### 3. 为什么需要注册？
 
 让我们通过一个完整的例子来说明不同方式的区别：
 
@@ -79,7 +79,7 @@ app.add_url_rule('/static2/<path:filename>',
    - 注册为静态文件夹后，可以更容易地修改文件服务的方式
    - 可以添加中间件或其他处理逻辑
 
-### 4. 实际应用建议
+#### 4. 实际应用建议
 
 考虑到您的需求，这里是一个更优化的方案：
 
@@ -128,7 +128,7 @@ def view_article(title):
     )
 ```
 
-### 5. 为什么保留原来的static文件夹？
+#### 5. 为什么保留原来的static文件夹？
 
 在我之前的代码中：
 ```python

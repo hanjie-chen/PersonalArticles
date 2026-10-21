@@ -20,7 +20,7 @@ Python 真正运行到 `print(username)` 的时候，才会报 `NameError: name 
 
 而相对的，Dynamic Analysis，则是真正运行程序，观察运行结果，比如说 pytest 测试。
 
-## lint
+### lint
 
 Lint 可以理解成：静态代码分析的一种，主要检查代码中可疑、不规范、容易出错的地方。
 
@@ -44,7 +44,7 @@ def hello():
 
 `x` 创建了，但是没有使用：`F841 Local variable x is assigned to but never used`
 
-## ruff
+### ruff
 
 Ruff 是现在 Python 生态里非常主流的一套代码质量工具，由 Astral 开发。
 
@@ -71,7 +71,7 @@ Ruff
 └── ruff format
 ```
 
-### what is `F401` ?
+#### what is `F401` ?
 
 `F401` 不是错误编号随机生成的，它叫 lint rule
 

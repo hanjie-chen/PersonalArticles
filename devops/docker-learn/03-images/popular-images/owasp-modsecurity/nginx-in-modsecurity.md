@@ -1,4 +1,4 @@
-# Background
+## Background
 
 本来我使用 nginx:alpine image 作为我的反向代理，但是处于安全考虑，我打算加一个 waf，最终选择 owasp/modsecurity-crs:nginx-alpine 因为它同时兼具 nginx + waf 的功能
 
@@ -20,7 +20,7 @@ nginx-modsecurity exited with code 1
 
 
 
-# Readme part
+## Readme part
 
 在 Readme 中的 `Nginx based images breaking change` 这个部分提到
 
@@ -35,7 +35,7 @@ nginx-modsecurity exited with code 1
 
 
 
-# source code part
+## source code part
 
 我们查看项目源代码，可以发现
 
@@ -72,7 +72,7 @@ modsecurity-crs-docker$ tree -L 2
 
 
 
-## nginx part
+### nginx part
 
 让我们先 focus on `nginx/` 这个目录（因为我目前用的就是 nginx-alpine）
 
@@ -113,7 +113,7 @@ modsecurity-crs-docker$ tree -L 2
 6 directories, 10 files
 ```
 
-## `docker-entrypoint.d` 
+### `docker-entrypoint.d` 
 
 这个目录包含一系列 Shell 脚本，这些脚本会在容器启动时，在 Nginx 主进程运行之前，由主入口点脚本 (`docker-entrypoint.sh`，虽然它不直接在这个目录下，但会调用这里的脚本) 按数字顺序依次执行。
 
@@ -121,7 +121,7 @@ modsecurity-crs-docker$ tree -L 2
 
 
 
-## `templates`
+### `templates`
 
 这个目录存放着 Nginx（以及可能相关的 ModSecurity）配置文件的模板。
 
@@ -144,7 +144,7 @@ README 中明确提到：
 
 
 
-# successful running log
+## successful running log
 
 最后，当运行成功的时候，就可以看到这样子的log
 

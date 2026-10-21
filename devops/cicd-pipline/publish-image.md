@@ -113,7 +113,7 @@ GitHub 并不是盲目地把镜像塞进你的仓库，它有三层逻辑来确�
 
 <img src="./images/package-settings.png" alt="package set" style="zoom: 50%;" />
 
-### Repository source
+#### Repository source
 
 这里显示了这个镜像对应的源代码仓库。
 
@@ -123,17 +123,17 @@ org.opencontainers.image.source = "https://github.com/hanjie-chen/website"
 
 这是 Docker 镜像的一种元数据（Labels）。虽然没在 `ci.yml` 里显式写这一行，但 `docker/build-push-action@v6` 非常智能，它会自动检测到自己在 GitHub Action 里运行，并自动给镜像打上这个“溯源标签”。
 
-### Manage Actions access (CI/CD 访问权)
+#### Manage Actions access (CI/CD 访问权)
 
 这里显示 `website` 仓库拥有 `Role: Admin`。
 
 这意味着 `website` 仓库里的任意 Action 脚本都有权更新、覆盖或删除这个镜像。
 
-### Inherit access from source repository
+#### Inherit access from source repository
 
 它默认继承了仓库的访问权限（仓库是 Public，镜像就是 Public）。
 
-### Danger Zone (危险区)
+#### Danger Zone (危险区)
 
 Change visibility：如果你想让代码开源，但镜像只给自己用，可以在这里单独把镜像改成 `Private`。
 

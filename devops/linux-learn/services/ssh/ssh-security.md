@@ -1,4 +1,4 @@
-# background
+## background
 
 今天查看邮件的时候发现，似乎有人尝试爆破我的 azure linux vm, 因为我的 azure linux vm 有一个 public ip, 所以其实我之前就考虑这个安全隐患
 
@@ -8,11 +8,11 @@
 
 所以这篇文章就来解决一下这个问题
 
-# check the brute-froce login
+## check the brute-froce login
 
 不过我们首先得做一些关于爆破登录的检查
 
-## successed login record
+### successed login record
 
 查看有哪些 IP 成功登录了系统，是否有你不认识的登录记录。
 
@@ -22,7 +22,7 @@ $ last -a
 
 一般来说你可以登录上，就代表对方还没有爆破成功，如果成功的话大概会直接劫持
 
-## failed login check
+### failed login check
 
 ```shell
 grep "Failed password" /var/log/auth.log | tail -n 50
@@ -57,7 +57,7 @@ grep "Failed password" /var/log/auth.log | tail -n 50
 >
 > 如果输出包含加密密码（如 `root:$6$...`），表示 root 有密码
 
-## user check
+### user check
 
 使用下面的命令检查是否存在陌生用户
 
@@ -92,17 +92,17 @@ mdatp:x:999:988::/home/mdatp:/usr/sbin/nologin
 
 
 
-# enhance ssh security
+## enhance ssh security
 
 接着我们需要加强一下我们 ssh server 的安全等级，同样是配置 `/etc/ssh/sshd_config` 文件
 
-### disable root user login
+#### disable root user login
 
 ```
 PermitRootLogin no
 ```
 
-### disable password login
+#### disable password login
 
 ```
 PasswordAuthentication no
@@ -110,7 +110,7 @@ PasswordAuthentication no
 
 记得之前要提前配置好 ssh key, 可以参考 [ssh authentication](./client-guide.md)
 
-### allow key auth
+#### allow key auth
 
 ```shell
 PubkeyAuthentication yes
@@ -118,13 +118,13 @@ PubkeyAuthentication yes
 
 仅允许密钥登录
 
-### change default ssh port
+#### change default ssh port
 
 ```
 Port <non-22-port>
 ```
 
-### allow specifical user
+#### allow specifical user
 
 ```shell
 AllowUsers <username>
@@ -132,7 +132,7 @@ AllowUsers <username>
 
 限制特定用户才能登录，也就是白名单。在原配中不存在，需要自己写
 
-## restart ssh services
+### restart ssh services
 
 检查一下是否存在语法错误：
 ```shell
@@ -168,7 +168,7 @@ sudo systemctl restart sshd/ssh
 >
 > 在大多数现代发行版中，即使输入 `sshd`，系统也会自动重定向到 `ssh`，但如果系统环境配置比较精简（比如某些 Docker 容器或轻量化固件），这种重定向可能不存在。
 
-## failed example
+### failed example
 
 如果这个时候发现，还是可以通过 password 登录，那么往往是因为有另一个配置项在偷偷给密码登录“放行”，或者配置并没有像你想象中那样真正生效。
 
@@ -195,17 +195,17 @@ kbdinteractiveauthentication no
 
 解决方案是，要么直接删除冲突的文件（例如 `50-cloud-init.conf`），要么干脆注释掉 Include 那一行
 
-## fail2ban
+### fail2ban
 
 fail2ban 是个非常实用的安全工具，特别适合这种在公网运行 Linux 服务器的场景（比如 Azure VM），来自动防止暴力破解登录（比如你前面提到的 SSH 爆破攻击）
 
 它是一个开源的入侵防御系统，它通过监控日志文件（如 `/var/log/auth.log`），发现多次失败登录尝试后，就会自动封锁攻击者的 IP 地址（原理是通过给 `iptables` 或 `firewalld` 添加规则，短时间内禁止那个 IP 再尝试连接）
 
-### 工作机制
+#### 工作机制
 
 它持续监控日志文件（如 `sshd` 的失败登录）一旦某个 IP 多次失败（如 5 次），就触发“ban”，把这个 IP 加入黑名单，添加防火墙规则屏蔽，经过一段时间（默认 10 分钟），自动解封（或者你也可以手动管理）。
 
-### for example
+#### for example
 
 假如某个 IP 不停尝试 SSH 登录失败，log 会长这样：
 
@@ -215,7 +215,7 @@ sshd[1234]: Failed password for root from 203.0.113.5 port 54321 ssh2
 
 fail2ban 检测到类似的日志，就会封锁 203.0.113.5 这个 IP。
 
-### install `fail2ban`
+#### install `fail2ban`
 
 以 Ubuntu 为例：
 
@@ -224,7 +224,7 @@ sudo apt update
 sudo apt install fail2ban
 ```
 
-### config `fail2ban`
+#### config `fail2ban`
 
 复制默认配置为自定义配置文件：
 
@@ -258,7 +258,7 @@ sudo systemctl start fail2ban
 sudo fail2ban-client status sshd
 ```
 
-### 常用命令
+#### 常用命令
 
 | command                                      | usage              |
 | -------------------------------------------- | ------------------ |
@@ -267,7 +267,7 @@ sudo fail2ban-client status sshd
 | `sudo fail2ban-client set sshd unbanip <IP>` | 手动解封一个 IP    |
 | `sudo fail2ban-client set sshd banip <IP>`   | 手动封锁一个 IP    |
 
-### apply changed config
+#### apply changed config
 
 只要你修改完 `/etc/fail2ban/jail.local` 文件，使其生效的方法很简单：
 

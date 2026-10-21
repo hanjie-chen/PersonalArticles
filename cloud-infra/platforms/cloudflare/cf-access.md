@@ -2,13 +2,13 @@
 
 Cloudflare Access 是一个给任何网页/服务加一把锁的工具，属于 Cloudflare Zero Trust 产品线。
 
-### 核心特性
+#### 核心特性
 
 - 零信任（Zero Trust）：不信任任何 IP 或网络。即便黑客知道了你的 IP，只要没有你的身份授权，他们连你的服务器登录框都看不见。
 - 多种登录方式：可以设置用 Google 账号、GitHub 账号，甚至是发送到你邮箱的 One-Time Pin（临时验证码）来登录。
 - 无需客户端：你不需要在电脑或手机上装任何软件，只要有浏览器就能登录。
 
-### 免费额度
+#### 免费额度
 
 Cloudflare Access 前 50 个用户完全免费。
 
@@ -22,7 +22,7 @@ Cloudflare Access 前 50 个用户完全免费。
 2. 你想让你的一个好朋友也帮你看一下小说初稿，你授权了他的邮箱 `friend@gmail.com`，占用额度是 2 个用户。
 3. 即便你和你的朋友同时访问了你域名下 100 个不同的加密路径，只要你们还是这两个账号，Cloudflare 依然只算你们 2 个用户。
 
-## 如何使用
+### 如何使用
 
 在左侧最外层的导航栏，找到 Zero Trust（通常在左侧边栏的中部）。
 
@@ -30,7 +30,7 @@ Cloudflare Access 前 50 个用户完全免费。
 
 会进入一个新的控制台（Zero Trust Dashboard）。在里面找到 Access controls -> Applications。
 
-## 配置钥匙 (Add an IdP)
+### 配置钥匙 (Add an IdP)
 
 Cloudflare 需要知道通过什么方式验证你的身份。在左侧边栏找到 Intergrations --> Identity providers
 
@@ -38,11 +38,11 @@ Cloudflare 需要知道通过什么方式验证你的身份。在左侧边栏找
 
 它不需要去 Google 或 GitHub 申请复杂的 API Key，只需要输入邮箱，CF 会发验证码给你。
 
-## add policy
+### add policy
 
 通常只需要填写 basci information, add rules 即可
 
-### Basic information
+#### Basic information
 
 policy: hanjie-only
 
@@ -50,20 +50,20 @@ action: allow
 
 session duration: same as application...
 
-### Add rules
+#### Add rules
 
 selector: emails
 
 value: （写上邮箱）
 
-### Connection context
+#### Connection context
 
 用来控制远程桌面（RDP）连接时的安全细节的。
 
 - Text clipboard control: 决定你是否可以把本地的文字复制粘贴到远程服务器里。
 - 建议：保持默认的 `Off` 即可。
 
-### Additional settings (optional) 
+#### Additional settings (optional) 
 
 这些是“地狱级”的安全增强选项
 
@@ -71,15 +71,15 @@ value: （写上邮箱）
 - Temporary authentication (Beta)：临时授权，需要专门的审批人同意你才能进去。
 - 建议：全部保持 OFF 状态。
 
-## add an application
+### add an application
 
 以保护我的网站后台界面为例也就是 hanjie-chen.com/web-log 这个 path
 
-### select type
+#### select type
 
 选择 self-hosted
 
-### configuration application
+#### configuration application
 
 application name: 随意
 
@@ -94,11 +94,11 @@ Add public hostname:
 
 Login methods: 选择默认的 Accept all availabe identity providers
 
-### Experience settings(optional)
+#### Experience settings(optional)
 
 这一页看作是“装修”页面，它决定了你的登录界面好不好看。可以指节诶跳过
 
-### Advanced settings(optional)
+#### Advanced settings(optional)
 
 这些是针对 Web 开发的高级安全策略，全部保持默认即可：
 
@@ -109,7 +109,7 @@ Login methods: 选择默认的 Accept all availabe identity providers
 
 
 
-# adjust page style
+## adjust page style
 
 location: Reusable components --> Access login page
 

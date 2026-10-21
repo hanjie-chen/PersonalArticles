@@ -6,7 +6,7 @@
 iptables -t nat -A PREROUTING -i eth0 -p udp --dport 20000:50000 -j REDIRECT --to-ports 443
 ```
 
-### 解析
+#### 解析
 
 | 片段                  | 含义                                                         |
 | --------------------- | ------------------------------------------------------------ |
@@ -29,7 +29,7 @@ iptables -t nat -A PREROUTING -i eth0 -p udp --dport 20000:50000 -j REDIRECT --t
 
 当我们使用 `iptables` 命令添加 rule 之后，为了使得下次重启之后也保存有这些 rule, 我们可以使用 `iptables-persistent`
 
-### 安装
+#### 安装
 
 如果你还没安装：
 
@@ -42,7 +42,7 @@ sudo apt install iptables-persistent
 
 
 
-### 保存当前规则到磁盘（持久化）
+#### 保存当前规则到磁盘（持久化）
 
 ```bash
 sudo netfilter-persistent save
@@ -62,7 +62,7 @@ sudo ip6tables-save > /etc/iptables/rules.v6
 
 
 
-### 验证保存是否成功
+#### 验证保存是否成功
 
 你可以查看文件内容确认你的规则是否已写入：
 

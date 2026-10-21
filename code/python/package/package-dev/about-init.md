@@ -56,11 +56,11 @@ from custom_md_extensions import Gfm_Admonition_Extension, Image_Path_Extension
 
 
 
-# 相对导入和绝对导入
+## 相对导入和绝对导入
 
 关于导入方式的区别：
 
-## 相对导入
+### 相对导入
 
 ```python
 from ._gfm_admonition_extension import Gfm_Admonition_Extension
@@ -68,7 +68,7 @@ from ._gfm_admonition_extension import Gfm_Admonition_Extension
 
 使用相对导入时，模块路径是相对于当前包而言的。这种方式更加简洁，而且当包的名称或位置改变时，不需要修改内部导入路径。因此，对于包内部模块之间的引用，推荐使用相对导入。
 
-## 绝对导入
+### 绝对导入
 
 ```python
 from custom_md_extensions._gfm_admonition_extension import Gfm_Admonition_Extension
@@ -82,7 +82,7 @@ from custom_md_extensions._gfm_admonition_extension import Gfm_Admonition_Extens
 
 
 
-# 关于隐藏模块名称
+## 关于隐藏模块名称
 
 会出现一个问题，那就是会同时显示 class 名称和模块名称
 
@@ -92,7 +92,7 @@ from custom_md_extensions._gfm_admonition_extension import Gfm_Admonition_Extens
 
 加上下划线（例如将文件名改为 **_gfm_admonition_extension.py**）是一种约定俗成的做法，用来表示该模块是私有的，不推荐直接导入使用。大多数 IDE（包括 VSCode）在自动补全时会优先展示公开的 API（也就是 **init**.py 中导出的名称），从而减少干扰。
 
-## 模块名称
+### 模块名称
 
 Python 中，每个 `.py` 文件都会被视为一个模块，而模块的默认名称就是该文件的名称（去掉 `.py` 后缀）。例如，文件 `gfm_admonition_extension.py` 的模块名称就是 `gfm_admonition_extension`。
 

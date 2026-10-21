@@ -28,7 +28,7 @@ services:
 
 
 
-# files permission in bind mount
+## files permission in bind mount
 
 我们有时候会遇到这样子的问题，那就是当我们使用 bind mount 将 host machine 的一个空目录挂载到 container 中，然后由这个 container 来创建和修改这个目录下的文件。
 
@@ -50,11 +50,11 @@ rm: cannot remove 'articles-sync.log 2>&1': Permission denied
 >
 > Docker 默认情况下会将容器内用户的 UID (User ID) 和 GID (Group ID) 直接映射到宿主机上相同的 UID 和 GID。
 
-我们当然可以简单的使用 `sudo rm` 命令来删除这个文件，但是作为 best practice 我们最好使用 non-root user 去运行 container process: [Dockerfile best practice](./03-images/dockerfile/best-practice.md)
+我们当然可以简单的使用 `sudo rm` 命令来删除这个文件，但是作为 best practice 我们最好使用 non-root user 去运行 container process: [Dockerfile best practice](/devops/docker-learn/03-images/dockerfile/best-practice.md)
 
 并且这个用户的 UID/GID 最好能匹配你宿主机上的用户的 UID/GID。
 
-## another situation: 
+### another situation: 
 
 如果 host machine 上面的目录不为空，里面存在文件，并且 container 中的进程需要修改这些文件。
 
@@ -62,7 +62,7 @@ rm: cannot remove 'articles-sync.log 2>&1': Permission denied
 
 如果是 host machine non-root user 创建（比如说 UID:1000），那么对于权限 644（rw-r--r--），container 中的 UID:1000 的 non-root user 有读写权限，因此可以修改。
 
-## another situation: no such a dir
+### another situation: no such a dir
 
 当我们再 `compose.yml` 中配置完 bind mount 将一个 host machine 的路径映射到 container 中，如果 host machine 没有这个路径，那么会发生什么呢？
 
@@ -74,7 +74,7 @@ rm: cannot remove 'articles-sync.log 2>&1': Permission denied
 
 
 
-# bind mount 生效时机
+## bind mount 生效时机
 
 首先我们看这个 compose.yml
 
@@ -118,7 +118,7 @@ RUN pip install -r requirements.txt
 
 也就是说 COPY 指令会先执行，将 `requirement.txt` 复制到 images 中去，然后当这个 image 运行起来，变成 container 的时候，bind mount 才会生效，将 host machine 中的 `./web-app` 目录覆盖 container 中的 `/app` 目录
 
-# bind mount 本质
+## bind mount 本质
 
 Bind mount 会将宿主机上的“一切”（包括目录、文件、权限等）覆盖或带入到容器中
 
@@ -130,7 +130,7 @@ Bind mount 会将宿主机上的“一切”（包括目录、文件、权限等
 >
 > 但是实际上如果解除了这个 bind mount, 反而就会出现权限问题 
 
-## what about the source file in container?
+### what about the source file in container?
 
 那么原来在 container 中的这个路径怎么办呢？
 

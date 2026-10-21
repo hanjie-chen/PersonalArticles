@@ -1,6 +1,6 @@
 # Python-Markdown vs Python-Markdown2
 
-## 优劣比较
+### 优劣比较
 
 A. Python-Markdown
 优势：
@@ -29,7 +29,7 @@ B. Python-Markdown2
 
 
 
-## Flask集成建议
+### Flask集成建议
 
 推荐使用Python-Markdown，示例代码：
 
@@ -63,7 +63,7 @@ def blog_post(post_id):
     return render_template('post.html', content=html_content)
 ```
 
-## 最佳实践建议
+### 最佳实践建议
 
 A. 性能优化：
 ```python

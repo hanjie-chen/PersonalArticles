@@ -1,22 +1,6 @@
----
-Title: 容器中的 PID 1、exec 和 crond 的那些坑
-Author: 陈翰杰
-Instructor: chatGPT 4o
-CoverImage: 
-RolloutDate: 
----
+# 容器中的 PID 1、exec 和 crond 的那些坑
 
-```
-BriefIntroduction: 
-容器中的 Entrypoint 与 PID 1 问题：以 Alpine crond 为例
-在容器中运行服务时，我们经常会在 Dockerfile 或启动脚本中使用 `ENTRYPOINT` 或 `CMD` 来指定默认的启动命令。然而，如果我们直接使用 `exec crond -f` 启动 `crond`，可能会遇到如下报错：
-setpgid: Operation not permitted
-这个问题与 Linux 中的 PID 1 特性有关。本文将结合我的项目实践，讲解容器中与进程管理相关的一些坑和最佳实践。
-```
-
-<!-- split -->
-
-# 背景：容器报错 `setpgid`
+## 背景：容器报错 `setpgid`
 
 今天遇到一个问题，当我使用 `docker compose up` 的时候容器报错 `setpgid` 然后退出。详细情况如下
 
@@ -142,7 +126,7 @@ articles-sync      | setpgid: Operation not permitted
 articles-sync exited with code 1
 ```
 
-## resolution
+### resolution
 
 咨询了 gpt4o 之后，他的建议是使用 `tini` 或者干脆删除 `exec`
 
@@ -150,13 +134,13 @@ articles-sync exited with code 1
 
 
 
-# 深入原理：容器中的 PID 1 有什么特别？
+## 深入原理：容器中的 PID 1 有什么特别？
 
 这个问题背后的核心，其实是跟 Linux & container 中 PID 1（即主进程）如何处理子进程 & 信号 有关，而不是你写的 shell 或 `crond` 本身的逻辑问题。
 
 我们来一波深层解析：为什么 `exec` 会出问题，而 `tini` 或普通调用没事？
 
-## 使用 `exec` 带来的问题
+### 使用 `exec` 带来的问题
 
 ```sh
 exec crond -f ...
@@ -166,7 +150,7 @@ exec crond -f ...
 
 接着就会进入到 `crond` 初始化
 
-## `crond` 初始化逻辑
+### `crond` 初始化逻辑
 
 `crond` 在启动时会尝试执行一套「传统守护进程」初始化逻辑：
 
@@ -191,7 +175,7 @@ setpgid: Operation not permitted
 
 
 
-## PID 1 在容器中的“特权”与陷阱
+### PID 1 在容器中的“特权”与陷阱
 
 容器内的第一个进程（PID 1）具有特殊行为：
 
@@ -205,11 +189,11 @@ setpgid: Operation not permitted
 
 
 
-# 最佳实践：怎么优雅地解决？
+## 最佳实践：怎么优雅地解决？
 
 
 
-## 方法一：去掉 exec（简单粗暴）
+### 方法一：去掉 exec（简单粗暴）
 
 原来：
 
@@ -225,7 +209,7 @@ crond -f -L "$CROND_LOG"
 
 这样，`crond` 就是子进程，shell 脚本成为容器的 PID 1
 
-### 原理
+#### 原理
 
 让 shell 脚本继续作为 PID 1，而 `crond` 是它的子进程，crond 就不会尝试去处理自己变成“会话领导者”等操作。
 
@@ -233,7 +217,7 @@ crond -f -L "$CROND_LOG"
 
 
 
-## 方法二：引入 tini（业界标准）
+### 方法二：引入 tini（业界标准）
 
 `tini` 是一个专为容器设计的最小 init system，它能：
 
@@ -247,7 +231,7 @@ crond -f -L "$CROND_LOG"
 
 
 
-## 总结对比：`exec` vs `非 exec` vs `tini`
+### 总结对比：`exec` vs `非 exec` vs `tini`
 
 | 方法                | 是否为 PID 1          | 是否推荐    | 原因                            |
 | ------------------- | --------------------- | ----------- | ------------------------------- |
@@ -257,7 +241,7 @@ crond -f -L "$CROND_LOG"
 
 
 
-# 实战：我的 Dockerfile 最终长这样
+## 实战：我的 Dockerfile 最终长这样
 
 Dockerfile 加这一行安装 tini：
 

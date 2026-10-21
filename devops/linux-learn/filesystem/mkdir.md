@@ -2,7 +2,7 @@
 
 
 
-### 举个例子：
+#### 举个例子：
 
 ```bash
 mkdir -p /home/user/projects/demo
@@ -12,7 +12,7 @@ mkdir -p /home/user/projects/demo
 
 
 
-### 如果不加 `-p`：
+#### 如果不加 `-p`：
 
 ```bash
 mkdir /home/user/projects/demo

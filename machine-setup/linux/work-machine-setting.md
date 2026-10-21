@@ -10,7 +10,7 @@
 
 
 
-# work dir settings
+## work dir settings
 
 在 non-root user 的 home dir (`~`) 目录下这样子设置
 

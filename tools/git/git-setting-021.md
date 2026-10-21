@@ -1,10 +1,10 @@
-# background
+## background
 
 从 0 开始的 git 设置指南，其实也不是非常的 0 基础，至少需要一个 github 账号，懂一些 ssh，其中 ssh 的部分可以看我之前写的关于 ssh 的文章
 
 当你拿到一台空白的 windows machine 的时候，应该如何设置 git 呢？
 
-# download git
+## download git
 
 为了方便，我们直接打开 cmd 使用 winget 下来 git
 
@@ -18,7 +18,7 @@ winget install --id Git.Git
 >
 > 如果使用 cmd 安装完成之后，使用 `git --version` 命令显示没有找到，那么新开一个 cmd 或者 powershell 一般就能看到
 
-# ssh key generate
+## ssh key generate
 
 为了使用 ssh-key 连接上 github , 我们的 windows machine 至少需要 1 个 ssh-key
 
@@ -35,7 +35,7 @@ ssh-keygen -t rsa -b 4096 -C "note" -f <key-filename>
 
 然后将 `<key-filename>.pub` 文件中的内容复制到 github 账号 settings 中的 `SSH and GPG keys` 中，记得起一个可以用于辨识这台 windows machine 的名字
 
-# ssh config
+## ssh config
 
 这是你虽然生成了 ssh key, 并且在 github 上面配置了你的公钥，但是这个时候，如果你使用下面的命令去测试，大概率依然会失败
 
@@ -67,7 +67,7 @@ Host github.com
   IdentityFile C:/Users/<username>/.ssh/github-ssh-key
 ```
 
-# ssh agent
+## ssh agent
 
 如果配置我们对 ssh key 配置了 passphrase 那么，最好将其加入到 ssh agent 中，这样子我们只需要输入一遍 passphrase即可，后面ssh agent 会帮我们加载密钥
 
@@ -108,7 +108,7 @@ ssh 的具体 path 可由下面的命令找到
 where.exe ssh
 ```
 
-## 如何判断 git for windows 使用哪个 ssh
+### 如何判断 git for windows 使用哪个 ssh
 
 首先我们使用下面的命令确认 ssh key 是否已经添加到 ssh-agent 中
 
@@ -130,7 +130,7 @@ $ which ssh
 
 就会发现，实际上 git 调用了目录下 `/usr/bin/ssh` 而不是widnows 系统的 s
 
-# download github repository
+## download github repository
 
 这是，我们就可以使用 git clone 下载 github repository 了
 
@@ -148,7 +148,7 @@ git clone git@github.com:hanjie-chen/PersonalArticles.git
 
 如果之前不小心 git clone https 的，可以使用 `git remote set-url origin` 命令重置为 ssh url
 
-# config git global settings
+## config git global settings
 
 做好了以上的这些还不够，不过这个时候你修改了 git reposotury 并且 git commit 就会发现
 

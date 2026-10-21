@@ -16,7 +16,7 @@ wordpress on app service: 预配置的 wordpress 部署模板，专供于 wordpr
 
 
 
-## web app VS. static web app
+### web app VS. static web app
 
 static web app 只能托管纯前端网站，也就是只能提供一开始就静态存在的 HTML、CSS、JS，而如果你的网站就算 html 是静态的，但是只要是生成的，那么就不适合
 

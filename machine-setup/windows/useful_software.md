@@ -1,25 +1,16 @@
 ---
-Title: Windows Extra Software & Software Settings
-Author: 陈翰杰
-Instructor: chatGPT3.5, GPT4
-CoverImage: ./resources/images/vertical-tab.png
 RolloutDate: 2023-09-30
 ---
 
-```
-BriefIntroduction:
-重装windows系统之后，在弄好了原生系统的设置之后，需要额外下载的一些软件，让系统使用起来更加的丝滑。个人更加的倾向于开源的软件。
-```
-
-<!-- split -->
+# Windows Extra Software & Software Settings
 
 ![cover-image](./resources/images/vertical-tab.png)
 
-# 写在前面
+## 写在前面
 
 作者最近组装了一台电脑，为了使得电脑更好用，所以额外下载了一些软件。本文用于当作者需要重装系统之后，依然可以将电脑设置为自己原来喜欢的和熟悉的风格。同时也为一些同样有着相同需求的人，供参考。
 
-# Windows Extra Software
+## Windows Extra Software
 
 本人目前正在使用的一些软件，使得windows系统更加的好用。
 
@@ -44,9 +35,9 @@ BriefIntroduction:
 | python3                      | 写一些小东西的依赖，代替 anaconda3（太笨重了）               |
 | git                          | 写笔记和代码的版本控制，一般同步到 githu                     |
 
-# Software Setting
+## Software Setting
 
-## Rime
+### Rime
 
 当我们使用 fu pan 来尝试打印「复盘」的时候，就会发现失败，因为一个bug（繁体字转简体字）
 
@@ -61,7 +52,7 @@ BriefIntroduction:
 
 然后右键单机小狼毫重新部署服务
 
-### 同步备份
+#### 同步备份
 
 Rime 官方推荐的多设备同步方式是给 `installation.yaml` 设置 `sync_dir`，然后使用“同步用户资料”。
 
@@ -81,7 +72,7 @@ sync_dir: 'D:\OneDrive\backup\Rime\backup'
 
 它会先从同步目录拉取已有的用户词典快照并合并到当前词典，然后把当前用户配置和新词典快照推回同步目录。如果同步目录是空的，它就单纯把当前配置备份过去；如果不空，它就先合并再备份。
 
-## Edge Settings
+### Edge Settings
 
 设置目的：防止搜索内容跳转cn.bing.com，而是使用new bing
 
@@ -111,23 +102,23 @@ sync_dir: 'D:\OneDrive\backup\Rime\backup'
 
    主页可以自己摸索其他的设置
 
-## Fliqlo Setting
+### Fliqlo Setting
 
 设置目的：使用全局快捷键启动桌面屏幕保护程序（注意无法在软件全屏模式生效）
 
-### 方法一：将Fliqlo快捷方式固定在开始菜单上
+#### 方法一：将Fliqlo快捷方式固定在开始菜单上
 
 1. 创建Fliqlo快捷方式，放到桌面
 2. 打开开始菜单的文件夹。这个文件夹通常位于“C:\ProgramData\Microsoft\Windows\Start Menu\Programs”。将快捷方式拖入（需要管理权限）
 3. 打开开始菜单栏，找到Fliqlo快捷方式，右键点击，固定到开始
 
-### 方法二：直接创建桌面快捷方式，然后设置快捷键
+#### 方法二：直接创建桌面快捷方式，然后设置快捷键
 
 1. 注意，这个方法不能隐藏桌面快捷方式，否则下次启动，快捷键将无法使用。这种方式会在桌面留下快捷方式，我更加喜欢简洁的桌面，于是这个方案就被我弃用了
 
 
 
-## Windows Terminal优化
+### Windows Terminal优化
 
 设置目的：美化终端，开启终端自带管理员权限
 
@@ -164,7 +155,7 @@ json代码如下
             }
 ```
 
-## PotPlayer Setting
+### PotPlayer Setting
 
 设置目的：使得播放器更加的好用。
 
@@ -172,11 +163,11 @@ json代码如下
 
 具体看参考视频[^4]
 
-# Visio
+## Visio
 
 下载和激活：[Microsoft Visio 专业版 2019_visio 2019-CSDN博客](https://blog.csdn.net/milkhq/article/details/105714076)
 
-# Reference
+## Reference
 
 [^1]: [how to setting the edge search bar](https://answers.microsoft.com/zh-hans/microsoftedge/forum/all/edge使用必应搜/6637cc55-5366-4a01-adc3-fd5db4b666fd)
 [^2]: [【教程】终端美化 Windows Terminal+oh-my-posh美化_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Qa411T7Au/?spm_id_from=333.337.search-card.all.click&vd_source=617c4a2b4e326fc6b6269aada0d25986)

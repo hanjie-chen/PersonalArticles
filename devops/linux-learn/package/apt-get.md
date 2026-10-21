@@ -24,29 +24,29 @@ sudo apt install -y nodejs npm
 
 
 
-# System configuration
+## System configuration
 
-### configuration file
+#### configuration file
 ```bash
 /etc/apt/sources.list          # 主要的软件源配置文件
 /etc/apt/sources.list.d/       # 额外的软件源配置目录
 ```
 
-### cache directories
+#### cache directories
 ```bash
 /var/cache/apt/archives/      # 下载的软件包缓存
 /var/lib/apt/lists/          # 软件包信息列表
 ```
 
-# Prefessional Usage
+## Prefessional Usage
 
 适用于 Dockerfile, auto-scripts, CI/CD flow
 
-## Dockerfile best practices
+### Dockerfile best practices
 
 在 Dockers 官方文档中 [Best practices | Docker Docs](https://docs.docker.com/build/building/best-practices/) 均使用 `apt-get` 
 
-### 基本安装模板
+#### 基本安装模板
 ```dockerfile
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -57,7 +57,7 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-### 最小化安装
+#### 最小化安装
 ```dockerfile
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -67,7 +67,7 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 ```
 
-### 指定版本安装
+#### 指定版本安装
 ```dockerfile
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \

@@ -1,29 +1,20 @@
 ---
-Title: Flask-SQLAlchemy 基础
-Author: 陈翰杰
-Instructor: Sonnet 3.5
-CoverImage: ./resources/images/cover_image.webp
 RolloutDate: 2024-11-14
 ---
 
-```
-BriefIntroduction: 
-flask-sqlalchemy 基础知识
-```
-
-<!-- split -->
+# Flask-SQLAlchemy 基础
 
 ![cover](./resources/images/cover_image.webp)
 
-# Before we beginning
+## Before we beginning
 
 最好可以先看完 [SQLAlchemy Basic](../SQLAlchemy/Basic.md) 然后再来看这部分
 
-# Flask-SQLAlchemy Basic
+## Flask-SQLAlchemy Basic
 
 for flask-sqlalchemy 3.x and sqlalchemy 2.x
 
-# Initialize
+## Initialize
 
 ```python
 from flask import Flask
@@ -36,9 +27,9 @@ class Base(DeclarativeBase):
 db = SQLAlchemy(model_class=Base)
 ```
 
-## 初始化代码详解
+### 初始化代码详解
 
-### `flask` VS `Flask`
+#### `flask` VS `Flask`
 
 `flask` (小写) 是Python包的名称，这是一个模块/包的标准命名方式
 
@@ -48,7 +39,7 @@ db = SQLAlchemy(model_class=Base)
 - 包名/模块名用小写（如：flask, os, sys）
 - 类名用大写开头（如：Flask, String, Dict）
 
-### `SQLAlchemy` in the flask_sqlalchemy
+#### `SQLAlchemy` in the flask_sqlalchemy
 
 `SQLAlchemy` 这个类是一个集成类，它的主要作用是：
 
@@ -56,9 +47,9 @@ db = SQLAlchemy(model_class=Base)
 
 数据库连接，会话管理，模型定义，查询构建
 
-## `db = SQLAlchemy(model_class=Base)`
+### `db = SQLAlchemy(model_class=Base)`
 
-### SQLAlchemy 原生用法
+#### SQLAlchemy 原生用法
 在原生 SQLAlchemy 中，我们是这样定义模型的：
 ```python
 # 1. 定义基类
@@ -73,7 +64,7 @@ class User(Base):
     email: Mapped[str]
 ```
 
-### Flask-SQLAlchemy 用法
+#### Flask-SQLAlchemy 用法
 在 Flask-SQLAlchemy 中：
 ```python
 # 1. 创建基类和db实例
@@ -89,7 +80,7 @@ class User(db.Model):  # 使用 db.Model 而不是 Base
     email: Mapped[str]
 ```
 
-### 关键点解释
+#### 关键点解释
 
 **db = SQLAlchemy(model_class=Base) 做了什么？**
 
@@ -147,9 +138,9 @@ Flask-SQLAlchemy
      └── ORM 功能
 ```
 
-# Define and Create Table
+## Define and Create Table
 
-## Define TABLE
+### Define TABLE
 
 ```python
 class Base(DeclarativeBase):
@@ -205,7 +196,7 @@ class Article_Meta_Data(db.Model):
 
 
 
-## Create Table
+### Create Table
 
 ```python
 with app.app_context():
@@ -219,7 +210,7 @@ with app.app_context():
 - 不会删除已存在的表
 - 不会覆盖现有数据
 
-### `db.create_all()`
+#### `db.create_all()`
 
 让我们看看 `create_all()` 的工作原理：
 
@@ -257,7 +248,7 @@ class User(db.Model):
 >
 > `db.create_all()` 会根据 `app.config['SQLALCHEMY_DATABASE_URI']` 自动创建数据库文件
 
-### 如何处理表结构更新？
+#### 如何处理表结构更新？
 
 **删除重建**（开发环境）：
 
@@ -286,9 +277,9 @@ $ flask db upgrade
 
 
 
-## `app.app_context()`
+### `app.app_context()`
 
-### Application instance and its context
+#### Application instance and its context
 
 首先，我们需要理解，每个 `Flask` 对象都代表一个独立的应用实例。当你创建一个 Flask 应用时，你实际上是在创建这个应用的实例：
 
@@ -363,7 +354,7 @@ with app1.app_context():
 >
 > 在测试中可以使用 `app.test_request_context()` 来模拟请求上下文。
 
-### 为什么 db.create_all() 需要应用上下文？
+#### 为什么 db.create_all() 需要应用上下文？
 
 `db.create_all()` 需要应用上下文的原因有几个：
 
@@ -373,7 +364,7 @@ with app1.app_context():
 
 3. **延迟初始化**：Flask-SQLAlchemy 使用延迟初始化模式，某些设置只有在应用上下文中才能完成。
 
-### 视图函数的自动处理
+#### 视图函数的自动处理
 
 在处理 Web 请求时，Flask 会自动为每个请求创建和管理应用上下文，所以在视图函数中不需要显式使用 `with app.app_context()`。
 
@@ -384,11 +375,11 @@ def index():
     return f"Current app: {current_app.name}"
 ```
 
-# CUDR
+## CUDR
 
 Flask-SQLAlchemy CUDR与sqlalchemy ORM CUDR非常相似.
 
-## Insert
+### Insert
 
 实例化Table class –> add –> commit
 
@@ -408,7 +399,7 @@ db.session.add(article_metadata)
 db.session.commit()
 ```
 
-## Query
+### Query
 
 query语句`stmt`需要放到`db.session.execute()`中执行，只需 `select` 前面加上 `db.` 即可，因为 `db.select` 本质就是`sqlalchemy.select`
 
@@ -423,7 +414,7 @@ result = db.session.execute(
 )
 ```
 
-### `db.select` 本质探索
+#### `db.select` 本质探索
 
 从 [flask-sqlalchemy extension.py](https://github.com/pallets-eco/flask-sqlalchemy/blob/3e3e92ba557649ab5251eda860a67656cc8c10af/src/flask_sqlalchemy/extension.py) 源码中我们可以看到，SQLAlchemy 类并没有直接定义 select 方法，而是通过 `__getattr__` 魔术方法来处理未定义的属性访问。这个机制非常巧妙，让我们看看具体是如何工作的：
 
@@ -472,7 +463,7 @@ class SQLALchemy:
 
 这种设计模式被称为代理模式（Proxy Pattern），Flask-SQLAlchemy 通过这种方式把 SQLAlchemy 的大部分功能都代理到了 `db` 对象上，使得我们可以直接通过 `db` 对象访问 SQLAlchemy 的功能。
 
-### `sqlalchemy.select` VS `db.select`
+#### `sqlalchemy.select` VS `db.select`
 
 既然我们考虑到实际上`db.select`就是`sqlalchemy.select`，那么直接使用`sqlalchemy.select`是否会因为节省了加载 `__getattr__()` 更快呢？
 
@@ -499,7 +490,7 @@ db.select(User)  # 通过__getattr__获取后调用sqlalchemy.select
 
 - 从软件工程的角度来看，使用 `db.select` 是更好的实践。这符合依赖注入和关注点分离的原则，也使得代码更容易维护和测试。
 
-## Delete & Update
+### Delete & Update
 
 首先使用query语句筛选出特定的条目，例如
 
@@ -510,20 +501,20 @@ article = db.session.execute(
 )
 ```
 
-### Delete
+#### Delete
 
 ```python
 db.session.delete(article)
 db.session.commit()
 ```
 
-### Update
+#### Update
 
 ```python
 article.author = Plain
 db.session.commit()
 ```
 
-# Reference
+## Reference
 
 [Flask-SQLAlchemy — Flask-SQLAlchemy Documentation (3.1.x)](https://flask-sqlalchemy.palletsprojects.com/en/latest/)

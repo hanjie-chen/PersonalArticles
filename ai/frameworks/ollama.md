@@ -32,7 +32,7 @@ irm https://ollama.com/install.ps1 | iex
 ollama --version
 ```
 
-## model select
+### model select
 
 可以去这个 [CanIRun.ai — Can your machine run AI models?](https://www.canirun.ai/) 网站看看本地有那些适合的模型可以跑
 
@@ -40,7 +40,7 @@ ollama --version
 
 我自己选择是 qwen 9b，最好可以选择你的显存能够装下的最大的模型（优先于跑一个小模型的高精度版本）
 
-## import model
+### import model
 
 我们可以下面的命令来拉取模型
 
@@ -72,7 +72,7 @@ ollama pull <model-name>
 - qwen3.5:9b 实际指向了一个 digest 为 `sha256:dec52a...` 的大文件
 - 这个文件大小是 `6594462816` 字节，也就是那个大约 `6.1~6.6 GB` 的 blob
 
-## run model
+### run model
 
 使用下面的命令运行
 
@@ -89,13 +89,13 @@ ollama run <model-name>
 - `ollama ps` 看当前有没有模型在跑、是在吃 CPU 还是 GPU。
 - `ollama list` 看你本地已经下载了哪些模型。
 
-### session manage
+#### session manage
 
 在 `Ollama` 的终端模式里，没有会话列表，当前会话上下文保存在显存中，退出就没了。
 
 但是会记住你以前输入过的 prompt，可以使用键盘 `↑ / ↓`  查看“上一条输入过什么”
 
-# next action
+## next action
 
 目前来说只能是在终端使用？或许要搭配一个 webui ? 或许不需要？等到有需求的时候直接调用 
 

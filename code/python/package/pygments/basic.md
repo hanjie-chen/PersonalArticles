@@ -1,4 +1,4 @@
-# Pygments 主题选择
+## Pygments 主题选择
 
 使用命令 `pygmentize -L style` 可以看到 pygments 的主题
 
@@ -114,7 +114,7 @@ Styles:
 
 Dracula, Monokai, One Dark, Github Dark
 
-# export css file
+## export css file
 
 为了导出这个 css 文件，我们可以使用命令
 
@@ -122,7 +122,7 @@ Dracula, Monokai, One Dark, Github Dark
 pygmentize -S default -f html -a .codehilite > styles.css
 ```
 
-## 命令详解
+### 命令详解
 
 `pygmentize` 是 **Pygments** 库的命令行接口（CLI）
 
@@ -160,6 +160,6 @@ pygmentize -S default -f html -a .codehilite > styles.css
 > - python-markdown 中使用 `CodeHilite` 扩展在渲染代码块时，默认会将代码包裹在一个具有 `.codehilite` 类的 `<div>` 或 `<pre>` 标签中。
 > - 通过在 CSS 中指定前缀 `.codehilite`，可以确保这些样式只应用于代码高亮的部分，不会影响到页面中其他代码。
 
-#### `> styles.css`
+##### `> styles.css`
 
 生成的 CSS 样式内容会被保存到 `styles.css`，以便您可以在 HTML 中引入。

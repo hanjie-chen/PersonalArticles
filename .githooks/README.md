@@ -14,12 +14,10 @@ git config core.hooksPath .githooks
 .githooks/
 ├── pre-commit
 ├── pre-commit.d/
-│   ├── 10-normalize-image-extensions.py
-│   └── 20-translate-staged-articles.py
+│   └── 10-normalize-image-extensions.py
 └── tests/
     ├── test_pre_commit.py
-    ├── test_normalize_image_extensions.py
-    └── test_translate_staged_articles.py
+    └── test_normalize_image_extensions.py
 ```
 
 ## Pre-Commit
@@ -39,63 +37,24 @@ Current order:
 1. `10-normalize-image-extensions.py`
    - lowercases staged image file extensions
    - asks for review if it changes staged files
-2. `20-translate-staged-articles.py`
-   - checks staged publishable articles
-   - moves matching English sidecars when staged source articles are renamed
-   - translates missing or outdated English sidecars
-   - stages generated translation files
-   - includes generated translation files in the current commit
 
 Typical successful output:
 
 ```text
 [pre-commit]
-├─ 10-normalize-image-extensions.py
-│  └─ [ok] image: no uppercase image extensions found
-└─ 20-translate-staged-articles.py
-   └─ [ok] translate: no staged articles need translation
+└─ 10-normalize-image-extensions.py
+   └─ [ok] image: no uppercase image extensions found
 ```
 
 Some hooks may ask for review after changing staged files. In that case, the runner keeps going and stops once at the end:
 
 ```text
 [pre-commit]
-├─ 10-normalize-image-extensions.py
-│  ├─ [fix] image: resources/images/Cover.PNG -> resources/images/Cover.png
-│  └─ [add] image: staged renamed image paths
-└─ 20-translate-staged-articles.py
-   └─ [ok] translate: no staged articles need translation
+└─ 10-normalize-image-extensions.py
+   ├─ [fix] image: resources/images/Cover.PNG -> resources/images/Cover.png
+   └─ [add] image: staged renamed image paths
 
 [pre-commit] review required: generated changes were staged
-```
-
-## Translation Hook
-
-The translation hook reuses `.kb-tools/translator/` instead of duplicating translation logic.
-
-Useful environment variables:
-
-```shell
-KB_TRANSLATOR_MODEL=gpt-5.4 git commit
-KB_TRANSLATOR_JOBS=2 git commit
-```
-
-By default, the staged translation hook starts one worker per staged article that needs translation.
-
-When translations run, job details are rendered as child nodes under the current run step:
-
-```text
-[pre-commit]
-└─ 20-translate-staged-articles.py
-   ├─ [run] translate: 2 staged article(s) need translation
-   │    ├─ [job] [1/2] outdated_translation personal-growth/first.md
-   │    └─ [job] [2/2] missing_translation personal-growth/second.md
-   ├─ [run] translate: starting 2 worker(s)
-   │    ├─ [job] worker-1 [1/2] translating: personal-growth/first.md
-   │    ├─ [job] worker-1 [1/2] translated: personal-growth/resources/i18n/first-en.md
-   │    ├─ [job] worker-2 [2/2] translating: personal-growth/second.md
-   │    └─ [job] worker-2 [2/2] translated: personal-growth/resources/i18n/second-en.md
-   └─ [add] translate: staged generated translations
 ```
 
 If a hook exits with a hard failure before creating its own detailed message, the runner renders
@@ -103,8 +62,8 @@ the exit status as a child node under the failed script:
 
 ```text
 [pre-commit]
-├─ 10-normalize-image-extensions.py
-│  └─ [fail] hook: exited with status 1
+└─ 10-normalize-image-extensions.py
+   └─ [fail] hook: exited with status 1
 ```
 
 ## Tests

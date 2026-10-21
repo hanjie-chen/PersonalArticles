@@ -1,17 +1,8 @@
 ---
-Title: Git Command 速查指南
-Author: 陈翰杰
-Instructor: GPT5, Sonnet3.5, gemini
-CoverImage: ./resources/images/cover_image.png
 RolloutDate: 2024-08-26
 ---
 
-```
-BriefIntroduction: 
-按工作流组织的 Git 常用命令、典型场景与常见坑
-```
-
-<!-- split -->
+# Git Command 速查指南
 
 ![cover image](./resources/images/cover_image.png)
 
@@ -19,17 +10,17 @@ BriefIntroduction:
 
 <img src="./resources/images/new-repo.png" alt="new repo" style="zoom:50%;" />
 
-# Local Workflow
+## Local Workflow
 
-## git status
+### git status
 
 可以查看目前仓库的状态
 
-## git add
+### git add
 
 我一般直接去 project root 目录使用 `git add .` 全都提交，这个命令的作用是将修改过的文件添加到暂存区（staging area）。
 
-## git commit
+### git commit
 
 ```shell
 git commit -m "add your specification of this commit"
@@ -37,7 +28,7 @@ git commit -m "add your specification of this commit"
 
 每次提交都会记录下谁在什么时间做了什么更改，并允许你回到这个状态。
 
-### commit id
+#### commit id
 
 - 每次 commit 成功后，Git 会生成一个唯一的 40 位十六进制字符串（称为 SHA-1 哈希值），作为这次提交的 ID。
 - 哪怕只改动一个空格，SHA ID 都会完全改变。
@@ -57,7 +48,7 @@ git show
 
 这个命令默认显示的是 `HEAD`（当前分支最后一次提交）的内容。也可以在后面加上特定的 SHA ID 来查看历史记录：`git show <SHA>`
 
-### git add + git commit
+#### git add + git commit
 
 对于已被跟踪的文件: 如果这些文件只是进行了修改，而没有新文件需要添加，那么可以直接使用 `git commit -a -m "message"` 来提交这些更改。这个命令会自动将所有已被跟踪文件的修改提交，而不需要先手动 `git add` 它们。
 
@@ -67,13 +58,13 @@ git show
 git add . && git commit -m "message"
 ```
 
-# Remote Sync
+## Remote Sync
 
-## git push
+### git push
 
 将本地内容推送到 github 上面同步
 
-### first push of a new branch
+#### first push of a new branch
 
 如果是本地新建的一个分支（即远程仓库上没有这个分支），并且是第一次推送这个分支到远程仓库，需要带上参数 `-u`
 
@@ -88,7 +79,7 @@ git push -u origin <branch-name>
 
 如果不带 `-u` 参数（仅使用 `git push origin <branch-name>` ），虽然也能在远程创建分支，但不会建立默认关联。这意味着以后的推送无法直接使用简短的 `git push`，Git 会因为不知道要把本地分支推送到远程的哪个分支而报错。
 
-### push rejected
+#### push rejected
 
 有时候当我们使用 `git push` 命令的时候会遇到如下的报错
 
@@ -106,7 +97,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 这意味着 remote repository 上已经有了你本地还没有的提交，所以需要先执行 git pull 把最新变化同步下来。
 
-## git pull
+### git pull
 
 和 git push 对应，git pull 用来将 remote repo (e.g. github) 的最新变化同步到本地。
 
@@ -114,7 +105,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 默认情况下，在某个 branch 上执行 git pull，只会更新当前本地分支；而不会自动更新其他分支，但通常会刷新远端跟踪分支的信息。
 
-### how git pull works
+#### how git pull works
 
 更准确地说：
 
@@ -125,7 +116,7 @@ git pull = git fetch + git merge
 
 所以 current local branch 会被真正更新，other local branch 不会自动前进，但远端跟踪分支的信息通常会被刷新
 
-### divergent branches
+#### divergent branches
 
 当我们在 remote(github) 上面最新的代码做了修改，而且在本地的代码也做了修改（git add + git commit）之后。
 
@@ -171,7 +162,7 @@ Successfully rebased and updated refs/heads/main.
 
 成功后再 `git push`
 
-# Git State Flow
+## Git State Flow
 
 为了理解前面这些命令的作用，可以先把 Git 看成几个不同的状态区域。
 
@@ -190,9 +181,9 @@ Working Directory     Staging Area       Local Repository    Remote Repository
 
 从这个角度看，`git add`、`git commit`、`git push` 分别负责把内容往后推进一层，而 `git pull` 则是把 remote repository 上面的最新状态同步回来。
 
-# Branch Management
+## Branch Management
 
-## List Branches
+### List Branches
 
 查看本地分支
 
@@ -226,7 +217,7 @@ Working Directory     Staging Area       Local Repository    Remote Repository
 >
 > 所以运行 `git branch` 时通常只能看到 `main` 分支，而运行 `git branch -r` 时则可以看到远程分支。
 
-## Switch Branch
+### Switch Branch
 
 `git checkout <branch-name>` 命令会先查找名为 `branch-name` 的本地分支, 如果找到了, 就切换到这个分支。
 
@@ -246,7 +237,7 @@ Switched to a new branch 'backend-development'
 branch 'backend-development' set up to track 'origin/backend-development'.
 ```
 
-## Create Branch
+### Create Branch
 
 `git checkout -b <branch-name>` 命令会创建新分支, 然后立即切换到这个新创建的分支（如果该分支已经存在, Git 会报错）
 
@@ -254,7 +245,7 @@ branch 'backend-development' set up to track 'origin/backend-development'.
 
 新创建的分支会基于当前所在的分支。例如, 如果你当前在 `main` 分支, 那么新分支 `branch-name` 就会基于 `main` 分支创建。
 
-### First Push to Remote
+#### First Push to Remote
 
 当我们创建好一个 branch 之后，它仅仅是在 local 的，remote 上面还没有建立起他的分支，所以第一次需要使用这个命令，将其推送到 remote 上去
 
@@ -270,7 +261,7 @@ git config --global push.default current
 
 设置后，只要你执行 `git push`，Git 会自动推送到远程同名的分支上（如果远程没有则创建）。
 
-## Parallel Branch Work
+### Parallel Branch Work
 
 如果我们遇到这样一个问题
 
@@ -348,7 +339,7 @@ git worktree remove ../website-k8s
 
 如果这个 worktree 里还有未提交改动，Git 默认可能会拒绝删除。
 
-## Merge Branch
+### Merge Branch
 
 当我们在一个分支上开发，并且开发的差不多了之后，比如说一个功能开发完成了，或者开发到了某个阶段，那么我们就可以把这个分支上面开发的内容同步到 main 上面去。
 
@@ -372,13 +363,13 @@ git merge <branch-name> -m "merge message"
 git push origin main
 ```
 
-## Delete Branch
+### Delete Branch
 
 当某个分支完成开发并合并到 main 分支后，为了保持仓库的整洁，我们可以选择将其删除
 
 首先，我们先删除本地分支
 
-### Delete Local Branch
+#### Delete Local Branch
 
 使用 `-d` 选项（小写的 d）可以安全地删除已经合并到当前分支的分支：
 
@@ -404,7 +395,7 @@ git branch -D <branch-name>
 
 接着，我们删除远程分支
 
-### Delete Remote Branch
+#### Delete Remote Branch
 
 使用以下命令：
 
@@ -412,9 +403,9 @@ git branch -D <branch-name>
 git push origin --delete <branch-name>
 ```
 
-# Rollback
+## Rollback
 
-## git restore
+### git restore
 
 如果修改了文件，但是没有进行 git add e.g.
 
@@ -452,11 +443,11 @@ git diff compose.yml
 
 如果修改已经进入暂存区，`git restore <file>` 就不够了，需要使用其他方式处理 staged changes。
 
-## git reset
+### git reset
 
 git reset 用来把当前状态退回到某个位置
 
-### reset to last commit
+#### reset to last commit
 
 如果只是想放弃还没有 commit 的本地修改可以用：
 
@@ -471,7 +462,7 @@ git reset --hard HEAD
 
 所以这个命令会清除工作区和暂存区的修改，但不会让本地分支回到更早的 commit。
 
-### reset to remote branch
+#### reset to remote branch
 
 如果你想放弃本地的所有修改和本地提交，只保留 remote repository 上面的最新状态，可以使用：
 
@@ -492,7 +483,7 @@ git reset --hard origin/main
 - Staging Area 的修改
 - Local Repository 中尚未推送的本地提交
 
-### rollback scope
+#### rollback scope
 
 ```text
 Working Directory 	  Staging Area 	 local repository     remote repository
@@ -503,9 +494,9 @@ Working Directory 	  Staging Area 	 local repository     remote repository
                 git reset --hard origin/main               
 ```
 
-# Remote Repository
+## Remote Repository
 
-## Clone Repository
+### Clone Repository
 
 如果我们想把某个 remote repository clone 到本地，可以使用 `git clone [url]` 命令。e.g.
 
@@ -542,7 +533,7 @@ git clone https://github.com/hanjie-chen/PersonalArticles.git ./articles-data
 >
 > 如果目标目录已经存在，那么它通常必须是空目录
 
-### Shallow Clone
+#### Shallow Clone
 
 有时候，我们只需要下载 remote repo 的当前代码（比如说对于一个 knowledge base repo）而不需要历史信息，我们可以使用这个命令只拿取当前内容
 
@@ -556,7 +547,7 @@ git clone --depth 1 [url]
 
 从而减少因为下载历史修改带来的存储空间和下载时间开销。
 
-### HTTPS vs. SSH
+#### HTTPS vs. SSH
 
 存在两种  git clone 的方式， 一种是使用 https, 另一种是使用 ssh, e.g.
 
@@ -572,9 +563,9 @@ git clone git@github.com:hanjie-chen/PersonalArticles.git
 
 一般来说选择第二种，也就是配置 ssh-key, 使用 git 的方式
 
-## Manage Remote
+### Manage Remote
 
-### View Remote
+#### View Remote
 
 可以使用以下命令查看当前 git 仓库关联的远程地址：
 
@@ -591,7 +582,7 @@ origin  https://github.com/username/repository.git (push)
 
 其中，`origin` 是默认的远程名称，后面跟着的就是远程仓库的 URL。如果你有多个远程仓库，都会在这里列出。
 
-### Change Remote URL
+#### Change Remote URL
 
 如果 GitHub 上的仓库名称改变了，或者你想把 remote 从 HTTPS 切换到 SSH，可以使用下面的命令修改远程仓库 URL：
 

@@ -1,4 +1,4 @@
-# Background Problem
+## Background Problem
 
 当我们使用 `git add` 有时候会看到这样子的 warning
 
@@ -17,7 +17,7 @@ warning: in the working copy of 'xxx', LF will be replaced by CRLF the next time
 
 Git 发现当前配置可能会在“工作区”把这个文本文件检出/写回成 CRLF，所以提醒你下一次 Git touches it 时，工作区内容可能从 LF 变成 CRLF。
 
-# Why It Matters
+## Why It Matters
 
 如果我们在 windows 环境中打开一个 Linux 脚本文件，并且将其复制到一个 Linux container 中，运行可能出现这样子的问题
 
@@ -37,7 +37,7 @@ exec /usr/local/bin/init.sh: no such file or directory
 
 ![lf](./resources/images/lf.png)
 
-# Use `.gitattributes`
+## Use `.gitattributes`
 
 为了防止将来再次出现此问题，可以配置 Git 处理换行符，添加 `.gitattributes` 文件，强制指定文本文件的换行符为 LF：
 

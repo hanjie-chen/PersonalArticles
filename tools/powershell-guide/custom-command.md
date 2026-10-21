@@ -1,21 +1,12 @@
 ---
-Title: PowerShell Custom Commands
-Author: 陈翰杰
-Instructor: Sonnet 3.5, chatgpt-4o
-CoverImage: ./resources/images/cover_image.webp
 RolloutDate: 2024-09-19
 ---
 
-```
-BriefIntroduction: 
-PowerShell custom commands usage note.
-```
-
-<!-- split -->
+# PowerShell Custom Commands
 
 ![cover](./resources/images/cover_image.webp)
 
-# Profile Source of Truth
+## Profile Source of Truth
 
 这些 custom commands 来自我的 PowerShell `$PROFILE`。
 
@@ -33,7 +24,7 @@ $env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
 
 因此，这篇文章只记录这些命令的用途和常见用法，不再复制完整实现。需要修改实现时，应修改 `personal-config` 中的 profile 文件。
 
-# Command `open`
+## Command `open`
 
 `open` 用来从 PowerShell 打开文件或目录。
 
@@ -49,7 +40,7 @@ open .\some-folder
 
 我通常用它来快速打开当前目录、Markdown 文件，或者需要用默认 app 查看和编辑的文件。
 
-# Command `touch`
+## Command `touch`
 
 `touch` 模拟 Linux 中的 `touch` 命令。
 
@@ -65,7 +56,7 @@ touch a.txt b.txt
 
 这个命令适合用在临时创建文件、初始化 Markdown 笔记、或者快速刷新文件时间戳的时候。
 
-# Command `tree`
+## Command `tree`
 
 `tree` 用来显示当前目录下的文件树。
 

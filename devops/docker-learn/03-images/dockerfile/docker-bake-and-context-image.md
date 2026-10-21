@@ -1,4 +1,4 @@
-# background
+## background
 
 在研究 owasp/modsecurity-crs:nginx-alpine 的时候发现在其 `nginx/` 目录下存在 2 个 dockerfile: `Dockerfile`, `Dockerfile-alpine`
 
@@ -10,7 +10,7 @@ FROM image AS build
 
 这让我百思不得其解，和 gpt-4o 讨论之后发现原来是使用了 docker buildx
 
-# Docker buildx
+## Docker buildx
 
 关键在于这句：
 
@@ -31,7 +31,7 @@ FROM alpine
 
 这个项目使用了 `docker-bake.hcl` 构建文件，它是 Docker 官方 [`docker buildx bake`](https://docs.docker.com/build/bake/) 功能的一部分，用来定义各种构建组合、变量、镜像版本等。
 
-## docker-bake.hcl
+### docker-bake.hcl
 
 打开 project root 中的 `docker-bake.hcl` 文件可以看到关于 nginx 的关键部分的代码
 
@@ -81,7 +81,7 @@ target "nginx" {
 
 
 
-### `FROM image` 如何绑定镜像？
+#### `FROM image` 如何绑定镜像？
 
 在 Dockerfile 中你看到的：
 
@@ -103,7 +103,7 @@ contexts = {
 FROM nginxinc/nginx-unprivileged:1.28.0-alpine （或 1.28.0）
 ```
 
-# continue
+## continue
 
 [Nginx Dockerfile 对比](https://chatgpt.com/c/68122799-8c60-800a-8b14-1a28398cc6fe)
 

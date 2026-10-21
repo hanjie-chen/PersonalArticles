@@ -1,27 +1,18 @@
 ---
-Title: docker compose.ymal services block 语法速查
-Author: 陈翰杰
-Instructor: o1-preview, grok3
-CoverImage: ./resources/images/cover-image.png
 RolloutDate: 2025-01-16
 ---
 
-```
-BriefIntroduction: 
-docker compose.ymal top level services block 语法速查
-```
-
-<!-- split -->
+# docker compose.ymal services block 语法速查
 
 ![docker compose](./resources/images/cover-image.png)
 
-# `compose.yml` –> services 语法详解
+## `compose.yml` –> services 语法详解
 
 [Services top-level elements | Docker Docs](https://docs.docker.com/reference/compose-file/services/)
 
 
 
-# `container name`
+## `container name`
 
 ```
 # 指定 contianer name
@@ -34,7 +25,7 @@ e.g. `test-website-articles-data-1 `
 
 
 
-# `develop-watch`
+## `develop-watch`
 
 [Use Compose Watch | Docker Docs](https://docs.docker.com/compose/how-tos/file-watch/)
 
@@ -42,7 +33,7 @@ e.g. `test-website-articles-data-1 `
 
 这个时候我们可以使用 `develop: watch` 字段
 
-## grammer
+### grammer
 
 ```yaml
 develp:
@@ -54,12 +45,12 @@ develp:
         - ignore-path/
 ```
 
-### `watch`
+#### `watch`
 
 - 除了 ignore 之外的所有的路径都是基于项目路径
 - `.dockerignore` rules 会自动生效，除此之外 `.git` 文件夹会自动忽略
 
-### `action`
+#### `action`
 
 - `sync` 将 project path 路径中变化复制到 container target 路径中
 - `rebuild` 重建一个新的 images 并且替换掉原来的 container
@@ -67,14 +58,14 @@ develp:
 
 action 只能为这 3 个值，而不能随意拆分组合，例如不能使用单独的 `restart` 
 
-### `path` and  `target`
+#### `path` and  `target`
 
 - `path` 主机项目路径
 - `target` container 路径
 
 如果没有指定 target, 那么 `sync` 动作将默认把主机上的 `path` 路径同步到容器内的相同路径
 
-### `ignore`
+#### `ignore`
 
 必须是一个 数组（列表），即使只有一个元素
 
@@ -129,7 +120,7 @@ volumes:
 
 PR: [Update file-watch.md: add ignore attribute path by hanjie-chen · Pull Request #21820 · docker/docs](https://github.com/docker/docs/pull/21820)
 
-## `compose watch` VS. `bind mounts`
+### `compose watch` VS. `bind mounts`
 
 我们可以使用 bind mount 来将一个 主机目录共享到 container 目录中去
 
@@ -137,7 +128,7 @@ PR: [Update file-watch.md: add ignore attribute path by hanjie-chen · Pull Requ
 
 但是这 2 者往往可以共存，比如说我需要实时查看 container 中一个目录所有的文件变化情况，还是需要 bind mount, 而不仅仅是 sync 源代码
 
-## start watch
+### start watch
 
 我们可以使用下面的命令启用 watch 模式
 
@@ -159,7 +150,7 @@ docker compose watch
 docker compose logs -f
 ```
 
-# `ports`
+## `ports`
 
 docker documents: [Services top-level elements | Docker Docs](https://docs.docker.com/reference/compose-file/services/#ports)
 
@@ -172,11 +163,11 @@ ports:
   - "8080:5000"  # "<host-machine port>":"<container port>"
 ```
 
-# `image` & `build`
+## `image` & `build`
 
 build: [Compose Build Specification | Docker Docs](https://docs.docker.com/reference/compose-file/build/)
 
-## build
+### build
 
 用于指定如何构建 image
 
@@ -207,7 +198,7 @@ image: articles-sync1.0
 >
 > 虽然字段顺序不影响功能，但为了代码的可读性和一致性，我们通常将 build 写在 image 之前：因为逻辑上，先构建（build）然后命名（image）更符合直觉。
 
-## image
+### image
 
 用于指定一个已经存在的镜像（可以是本地构建的，也可以是从远程镜像仓库拉取的）。Docker Compose 会直接使用这个镜像来启动容器，而不会去构建新的镜像。
 
@@ -215,7 +206,7 @@ image: articles-sync1.0
 image: nginx
 ```
 
-# `depends_on`
+## `depends_on`
 
 `depends_on` 用于定义服务之间的依赖关系，可以控制服务的启动顺序
 
@@ -227,7 +218,7 @@ nginx:
     - web
 ```
 
-# `healthcheck`
+## `healthcheck`
 
 用于定义容器健康检查的字段，它可以让 Docker 定期检查容器内部的运行状况，并根据检查结果决定该容器的健康状态。
 
@@ -238,7 +229,7 @@ nginx:
 - **在 Swarm 或 Compose 中实现更智能的容器管理**
    当服务不健康时，Swarm 可能会重新调度容器。
 
-## config
+### config
 
 `healthcheck` 主要由以下几个参数组成：
 
@@ -248,7 +239,7 @@ nginx:
 - **`retries`**：失败多少次后认为不健康（默认 `3`）。
 - **`start_period`**：容器启动后在这个时间段内不会触发健康检查，适用于启动较慢的应用。
 
-## example
+### example
 
 检查 Flask 应用是否正常运行
 
@@ -272,7 +263,7 @@ services:
 - `retries: 3`: 连续 3 次失败后，容器被标记为 `unhealthy`。
 - `start_period: 10s`: 容器启动后，前 10 秒内不会进行健康检查，给 Flask 预留启动时间。
 
-# `command`
+## `command`
 
 compose.yml 文件的中 command 字段会覆盖 dockerfile 中的 CMD 启动命令，例如如果我们有 compose.yml如下
 
@@ -294,7 +285,7 @@ CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "app:app"]
 
 那么最红，实际上会使用 flask run 作为启动命令，这个特点可以用于开发环境的设定，比如说你可以做一个 compose.dev.yml 用于覆盖 dockerfile 中的命令
 
-# 自定义字段
+## 自定义字段
 
 `x-` 开头的字段会被 Docker 视为“用户自定义扩展”。Compose 会完全忽略它们的内容，这使得它们成为存放 YAML 锚点的绝佳位置。
 

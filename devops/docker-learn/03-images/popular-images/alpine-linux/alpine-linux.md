@@ -12,7 +12,7 @@
 - Debian/Ubuntu 使用 `apt`/`apt-get`
 - RHEL/CentOS 使用 `yum`/`dnf`
 
-### 常见的基础镜像对比：
+#### 常见的基础镜像对比：
 
 ```plaintext
 1. Alpine Linux
@@ -36,7 +36,7 @@
    - 特点: 企业级稳定性
 ```
 
-### 为什么选择 Alpine？
+#### 为什么选择 Alpine？
 
 1. **体积优势**：
    ```bash
@@ -56,7 +56,7 @@
    - 启动更快
    - 适合容器化应用
 
-### 选择建议：
+#### 选择建议：
 
 1. **使用 Alpine 的场景**：
    - 简单的应用
@@ -73,7 +73,7 @@
    - 需要长期支持
    - 特定的企业软件要求
 
-### 注意事项：
+#### 注意事项：
 
 1. **包名差异**：
    ```dockerfile
@@ -98,7 +98,7 @@
 
 总的来说，Alpine 是容器化应用的优秀选择，但要根据具体需求选择合适的基础镜像。如果你的应用没有特殊要求，使用 Alpine 是个不错的选择，因为它轻量、安全、资源占用少。
 
-# alpine shell
+## alpine shell
 
 Alpine Linux 为了保持轻量级，默认使用的是 `sh`（具体是 `ash`，来自 BusyBox），而不是 `bash`。
 
@@ -133,7 +133,7 @@ bash
 补充说明：
 - 如果您的应用不特别需要 bash，建议直接使用 sh，这样可以保持镜像的轻量级特性
 
-# alpine in other image
+## alpine in other image
 
 许多官方镜像基于 Alpine Linux 构建，以提供轻量化的运行环境。
 

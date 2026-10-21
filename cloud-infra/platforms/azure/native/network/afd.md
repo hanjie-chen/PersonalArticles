@@ -1,20 +1,20 @@
-# AFD pricing
+## AFD pricing
 
 [Pricing - Front Door | Microsoft Azure](https://azure.microsoft.com/en-us/pricing/details/frontdoor/)
 
 
 
-# AFD configuration
+## AFD configuration
 
 [Add a new endpoint with Front Door manager - Azure Front Door | Microsoft Learn](https://learn.microsoft.com/en-us/azure/frontdoor/how-to-configure-endpoints)
 
 
 
-# Standard VS Premium
+## Standard VS Premium
 
 standard AFD 和 Premium AFD 的区别除了在价格之上，还有一些地方存在区别
 
-## waf
+### waf
 
 首先 standard afd waf 和 premium afd waf 是不同的 2 个 sku
 

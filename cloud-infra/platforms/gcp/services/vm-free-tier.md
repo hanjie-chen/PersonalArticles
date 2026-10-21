@@ -31,17 +31,17 @@ free usage: Free Tier `e2-micro` instance limit is by time, not by instance. fre
 
 
 
-## region and zone
+### region and zone
 
 你可以把它们想象成“城市”和“机房大楼”的关系。
 
-#### Region (区域) —— 城市级
+##### Region (区域) —— 城市级
 
 - 定义： 这是一个独立的地理区域，比如“新加坡” (`asia-southeast1`) 或“爱荷华州” (`us-central1`)。
 - 距离： 区域之间通常相隔几百甚至几千公里。
 - 用途： 主要是为了合规性（数据存在哪个国家）和延迟（选离用户近的地方）。
 
-#### Zone (可用区) —— 机房级
+##### Zone (可用区) —— 机房级
 
 - 定义： 它是 Region 内部的一个或多个数据中心。一个 Region 通常包含至少 3 个 Zone。
 - 命名： 名字是在 Region 后面加个字母，例如 `us-central1-a`。

@@ -1,6 +1,6 @@
-# `python -m ` 命令和 `-m` 参数：
+# `python -m ` 命令和 `-m` 参数
 
-## -m 参数的含义
+### -m 参数的含义
 `-m` 参数是 Python 的一个命令行选项，它的全称是 "module-name"，作用是将一个模块当做脚本来运行。当你使用 `-m` 参数时，Python 会:
 
 1. 先搜索这个模块的位置
@@ -9,7 +9,7 @@
 
 例如
 
-### python -m flask vs flask 命令
+#### python -m flask vs flask 命令
 
 1. `flask` 命令：
    - 这是一个独立的可执行文件
@@ -21,7 +21,7 @@
    - 更明确地指定使用哪个 Python 环境
    - 在某些环境下可能更可靠（比如在虚拟环境中）
 
-### 实际使用示例
+#### 实际使用示例
 ```bash
 # 两种方式都可以启动 Flask 应用
 flask --app hello run
@@ -36,7 +36,7 @@ flask --app hello run --host=0.0.0.0 --port=8000
 python -m flask --app hello run --host=0.0.0.0 --port=8000
 ```
 
-### -m 参数的其他例子
+#### -m 参数的其他例子
 Python 的 `-m` 参数不仅可以用于 Flask，还可以用于其他很多场景：
 
 ```bash
@@ -53,7 +53,7 @@ python -m unittest test_file.py
 python -m site
 ```
 
-### 为什么要使用 python -m？
+#### 为什么要使用 python -m？
 1. **环境明确性**：确保使用正确的 Python 环境，特别是在有多个 Python 版本或虚拟环境的情况下
 
 2. **路径处理**：Python 会自动处理模块的导入路径，避免一些路径相关的问题
@@ -62,7 +62,7 @@ python -m site
 
 4. **跨平台兼容**：在不同操作系统下都能保持一致的行为
 
-### 最佳实践建议
+#### 最佳实践建议
 1. 在开发环境中，两种方式都可以使用，选择你觉得更方便的即可
 
 2. 在生产环境或自动化脚本中，建议使用 `python -m flask`，因为它更明确且可控

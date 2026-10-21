@@ -1,21 +1,12 @@
 ---
-Title: docker volume 使用简介
-Author: 陈翰杰
-Instructor: chatgpt-4o
-CoverImage: ./resources/images/cover-image.jpg
 RolloutDate: 2025-03-18
 ---
 
-```
-BriefIntroduction: 
-本人对 docker volume 使用的一些思考和疑惑
-```
-
-<!-- split -->
+# docker volume 使用简介
 
 ![cover image](./resources/images/cover-image.jpg)
 
-# Docker Volume 
+## Docker Volume 
 
 Docker volume 实际上是一个独立于 container 的存储空间，它的生命周期独立于 container 也就是说
 
@@ -58,11 +49,11 @@ volumes:
 /var/lib/docker/volumes/[volume-name]/_data
 ```
 
-## docker volume command
+### docker volume command
 
 可以通过以下命令去查看 docker volume 的细节
 
-### `docker volume ls`
+#### `docker volume ls`
 
 列出所有 Volume
 
@@ -72,7 +63,7 @@ DRIVER    VOLUME NAME
 local     website_articles_data
 ```
 
-### `docker volume inspect <volume-name>`
+#### `docker volume inspect <volume-name>`
 
 查看 Volume 详细信息
 
@@ -98,11 +89,11 @@ $ docker volume inspect website_articles_data
 
 其中 `Mountpoint` 就是 Volume 在宿主机上的存储位置。
 
-### `docker volume rm <volume-name>`
+#### `docker volume rm <volume-name>`
 
 删除 Volume, 如果使用 `docker compose down -v` 也可以删除 volume
 
-# when volume mounted?
+## when volume mounted?
 
 如果我们在 compose.yml 中定义某个 container 挂载了 volume， 那么这个挂载发生在什么时候呢？
 
@@ -130,7 +121,7 @@ $ docker volume inspect website_articles_data
 
 
 
-## CMD first? or volume mount first?
+### CMD first? or volume mount first?
 
 docker volume 将在 container 启动的时候挂载，但是同样的，我们在 Dockerfile 中定义 CMD/ENTRYPOINT 命令同样也会在 container 启动的时候挂载，那么这个时候我们就会遇到一个问题，谁先执行？
 
@@ -148,7 +139,7 @@ Docker 先挂载 Volume，然后才执行 `CMD` 或 `ENTRYPOINT`
 
 
 
-## next action
+### next action
 
 似乎找不到对应的 docker document 来支持我的论点
 
@@ -158,6 +149,6 @@ Docker 先挂载 Volume，然后才执行 `CMD` 或 `ENTRYPOINT`
 
 
 
-# Docker volume VS. bind mount
+## Docker volume VS. bind mount
 
 和 bind mount 一样，当 docker volume 挂载上去的路径会被覆盖。而且甚至权限管理都和其类似，bind mount 由宿主机的文件系统决定，而 docker volume 由卷的初始创建者和后续操作决定

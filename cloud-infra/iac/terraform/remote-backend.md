@@ -36,7 +36,7 @@ terraform {
   - 因为你现在处于默认状态，所以 Workspace 的名字是 `default`。
   - 最终在 GCS 里的文件名就会变成 **`default.tfstate`**。
 
-## 优势：
+### 优势：
 
 1. 唯一事实来源 (Single Source of Truth)：
    团队里所有人、以及 CI/CD 流水线，运行 Terraform 时都会去这个 GCS 桶里读取同一个状态文件。无论谁修改了基础设施，状态都是实时同步的。
